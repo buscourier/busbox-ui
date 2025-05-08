@@ -2,7 +2,7 @@ name: Pull Request Checks
 
 on:
   pull_request:
-    branches: [develop, main]
+    branches: [ develop, main ]
 
 jobs:
   determine-environment:
@@ -51,10 +51,12 @@ jobs:
 
       - name: Update environment.test.ts
         env:
-          STRAPI_URL: ${{ secrets.STRAPI_URL }}
+          API_URL: ${{ secrets.API_URL }}
+          API_KEY: ${{ secrets.API_KEY }}
           DOPPLER_CONFIG: ${{ secrets.DOPPLER_CONFIG }}
         run: |
-          sed -i.bak "s#\\\$STRAPI_URL#$STRAPI_URL#g" src/environments/environment.test.ts
+          sed -i.bak "s#\\\$API_URL#$API_URL#g" src/environments/environment.test.ts
+          sed -i.bak "s#\\\$API_KEY#$API_KEY#g" src/environments/environment.test.ts
           sed -i.bak "s#\\\$DOPPLER_CONFIG#$DOPPLER_CONFIG#g" src/environments/environment.test.ts
 
       - name: Run Tests
@@ -116,6 +118,7 @@ jobs:
           build-args: |
             NODE_ENV=${{ env.NODE_ENV }}
             DOPPLER_CONFIG=${{ secrets.DOPPLER_CONFIG }}
-            STRAPI_URL=${{ secrets.STRAPI_URL }}
+            API_URL=${{ secrets.API_URL }}
+            API_KEY=${{ secrets.API_KEY }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

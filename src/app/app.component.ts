@@ -20,7 +20,6 @@ export class AppComponent {
 
   constructor() {
     this.configName = environment.dopplerConfig;
-    this.environment = environment.name;
     this.apiUrl = environment.apiUrl;
     console.log('production', environment.production);
   }
