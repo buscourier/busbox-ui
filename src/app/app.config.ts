@@ -28,6 +28,8 @@ import {
 } from '@core/tokens';
 import { CustomDateTransformer } from '@core/transformers';
 
+import { AuthEffects, authFeature } from '@auth';
+
 import { BookingEffects, bookingFeature } from '@delivery/booking';
 import { DeliveryDetailsEffects, deliveryDetailsFeature } from '@delivery/delivery-details';
 import { DeliveryPointEffects, deliveryPointFeature } from '@delivery/delivery-point';
@@ -48,12 +50,14 @@ export const appConfig: ApplicationConfig = {
     provideState(deliveryDetailsFeature),
     provideState(deliverySummaryFeature),
     provideState(bookingFeature),
+    provideState(authFeature),
     provideEffects(
       PickupPointEffects,
       DeliveryPointEffects,
       DeliveryDetailsEffects,
       DeliverySummaryEffects,
       BookingEffects,
+      AuthEffects,
     ),
     provideRouterStore(),
     provideHttpClient(),

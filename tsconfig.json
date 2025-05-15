@@ -40,6 +40,12 @@
       "@delivery/*": [
         "./src/app/features/delivery/*"
       ],
+      "@auth": [
+        "./src/app/features/auth/index.ts"
+      ],
+      "@auth/*": [
+        "./src/app/features/auth/*"
+      ],
       "@env/*": [
         "src/environments/*"
       ]

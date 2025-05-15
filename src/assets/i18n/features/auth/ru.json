@@ -1,0 +1,29 @@
+{
+  "pages": {
+    "login": "Авторизация",
+    "register": "Регистрация",
+    "forgotPassword": "Восстановление пароля"
+  },
+  "labels": {
+    "login": "Логин",
+    "email": "Email",
+    "username": "Имя пользователя",
+    "password": "Пароль",
+    "confirmPassword": "Подтвердите пароль"
+  },
+  "placeholders": {
+    "login": "Введите логин или email",
+    "email": "Введите email",
+    "username": "Введите имя пользователя",
+    "password": "Введите пароль",
+    "confirmPassword": "Введите пароль"
+  },
+  "buttons": {
+    "login": "Войти",
+    "register": "Создать аккаунт",
+    "forgotPassword": "Восстановить пароль"
+  },
+  "validation": {
+    "passwordMismatch": "Пароли не совпадают"
+  }
+}
