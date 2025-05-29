@@ -46,6 +46,12 @@
       "@auth/*": [
         "./src/app/features/auth/*"
       ],
+      "@account": [
+        "./src/app/features/account/index.ts"
+      ],
+      "@account/*": [
+        "./src/app/features/account/*"
+      ],
       "@env/*": [
         "src/environments/*"
       ]

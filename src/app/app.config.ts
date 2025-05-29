@@ -28,6 +28,7 @@ import {
 } from '@core/tokens';
 import { CustomDateTransformer } from '@core/transformers';
 
+import { ProfileEffects, profileFeature } from '@account/profile';
 import { AuthEffects, authFeature } from '@auth';
 
 import { BookingEffects, bookingFeature } from '@delivery/booking';
@@ -51,6 +52,7 @@ export const appConfig: ApplicationConfig = {
     provideState(deliverySummaryFeature),
     provideState(bookingFeature),
     provideState(authFeature),
+    provideState(profileFeature),
     provideEffects(
       PickupPointEffects,
       DeliveryPointEffects,
@@ -58,6 +60,7 @@ export const appConfig: ApplicationConfig = {
       DeliverySummaryEffects,
       BookingEffects,
       AuthEffects,
+      ProfileEffects,
     ),
     provideRouterStore(),
     provideHttpClient(),

@@ -1,0 +1,58 @@
+<div class="flex flex-col md:flex-row md:space-x-10 lg:space-x-13">
+  <main class="order-2 flex-grow md:order-1">
+    <!-- item-1-->
+    <div
+      [routerLink]="['report']"
+      class="mb-2 flex border-y border-gray-200 py-5 px-4 hover:cursor-pointer hover:border-yellow sm:space-x-13 sm:py-9 sm:px-6 md:space-x-0 md:rounded-sm md:border-x md:px-8 lg:space-x-13 lg:pl-13 lg:pr-10"
+    >
+      <div class="hidden sm:block md:hidden lg:block">
+        <!--          <tui-svg src="icons::catalog" class="!h-[53px] !w-[68px]"></tui-svg>-->
+      </div>
+      <div class="basis-full">
+        <h2 class="mb-2 text-lg font-bold">Мои заказы</h2>
+        <p>Удобное формирование отчета с применением фильтров.</p>
+      </div>
+      <div class="hidden items-center sm:flex">
+        <!--          <tui-svg-->
+        <!--            src="icons::caret-right"-->
+        <!--            class="!h-[26px] !w-[13px]"-->
+        <!--          ></tui-svg>-->
+      </div>
+    </div>
+    <!-- item-2-->
+    <div
+      [routerLink]="['./profile']"
+      class="mb-2 flex border-y border-gray-200 py-5 px-4 hover:cursor-pointer hover:border-yellow sm:space-x-13 sm:py-9 sm:px-6 md:space-x-0 md:rounded-sm md:border-x md:px-8 lg:space-x-13 lg:pl-13 lg:pr-10"
+    >
+      <div class="hidden sm:block md:hidden lg:block">
+        <!--          <tui-svg src="icons::profile" class="!h-[54px] !w-[65px]"></tui-svg>-->
+      </div>
+      <div class="basis-full">
+        <h2 class="mb-2 text-lg font-bold">Персональные данные</h2>
+        <p>Данные вашего личного кабинета и платежного лица.</p>
+      </div>
+      <div class="hidden items-center sm:flex">
+        <!--          <tui-svg-->
+        <!--            src="icons::caret-right"-->
+        <!--            class="!h-[26px] !w-[13px]"-->
+        <!--          ></tui-svg>-->
+      </div>
+    </div>
+  </main>
+  <!-- aside-->
+  <aside class="order-1 mb-8 flex flex-shrink-0 flex-col items-start px-4 md:mb-0 md:px-0">
+    <!--      <app-balance></app-balance>-->
+    <button
+      tuiButton
+      type="button"
+      class="mb-4 w-[270px]"
+      [routerLink]="['/new-order', 'checkout', '1']"
+    >
+      Оформить заказ
+    </button>
+    <a href="#" class="space-x-1 md:text-xs lg:text-base">
+      <span> Выйти из личного кабинета </span>
+      <!--        <tui-svg src="icons::logout" class="!h-[27px] !w-[27px]"></tui-svg>-->
+    </a>
+  </aside>
+</div>
