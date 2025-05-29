@@ -1,12 +1,18 @@
 @let currentUser = currentUser$ | async;
 
 <tui-root>
-  <main class="bg-mint-500 flex items-center justify-center bg-gray-300">
+  <div class="bg-mint-500 flex items-center justify-center bg-gray-300">
     <div class="text-center">
       userName: {{ currentUser?.user_name }}
       <h1 class="text-6xl font-bold text-gray-800 mb-4 opacity-0">{{ title }}</h1>
       <button type="button" (click)="logout()">Выйти</button>
     </div>
+  </div>
+
+  <main class="container mx-auto">
+    <div class="mt-4 mb-10">
+      <app-breadcrumbs />
+    </div>
+    <router-outlet />
   </main>
-  <router-outlet />
 </tui-root>

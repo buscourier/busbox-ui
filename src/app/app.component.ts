@@ -4,6 +4,8 @@ import { RouterOutlet } from '@angular/router';
 import { TuiRoot } from '@taiga-ui/core';
 import type { Observable } from 'rxjs';
 
+import { BreadcrumbsComponent } from '@shared/components/breadcrumbs';
+
 import { environment } from '@env/environment';
 
 import { AuthFacade } from '@auth';
@@ -11,7 +13,7 @@ import type { AuthResponse } from '@auth/types';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, TuiRoot, AsyncPipe],
+  imports: [RouterOutlet, TuiRoot, AsyncPipe, BreadcrumbsComponent],
   templateUrl: './app.component.html',
   standalone: true,
   styleUrl: './app.component.css',
