@@ -11,6 +11,7 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { tuiButtonOptionsProvider, tuiTextfieldOptionsProvider } from '@taiga-ui/core';
 import { NG_EVENT_PLUGINS } from '@taiga-ui/event-plugins';
 import {
+  TUI_DATE_RANGE_VALUE_TRANSFORMER,
   TUI_DATE_VALUE_TRANSFORMER,
   tuiCheckboxOptionsProvider,
   tuiInputNumberOptionsProvider,
@@ -26,7 +27,7 @@ import {
   TELEGRAM_ACCOUNT,
   VALIDATION_LIMITS,
 } from '@core/tokens';
-import { CustomDateTransformer } from '@core/transformers';
+import { CustomDateTransformer, CustomDateRangeTransformer } from '@core/transformers';
 
 import { LocationsEffects, locationsFeature } from '@shared/store';
 
@@ -76,6 +77,10 @@ export const appConfig: ApplicationConfig = {
     {
       provide: TUI_DATE_VALUE_TRANSFORMER,
       useClass: CustomDateTransformer,
+    },
+    {
+      provide: TUI_DATE_RANGE_VALUE_TRANSFORMER,
+      useClass: CustomDateRangeTransformer,
     },
     {
       provide: VALIDATION_LIMITS,
