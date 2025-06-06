@@ -21,6 +21,7 @@ export const accountRoutes: Routes = [
       {
         path: 'orders',
         loadComponent: () => import('./orders').then((c) => c.OrdersComponent),
+        data: { title: 'Мои заказы' },
       },
     ],
   },
