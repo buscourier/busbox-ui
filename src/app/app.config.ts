@@ -28,6 +28,9 @@ import {
 } from '@core/tokens';
 import { CustomDateTransformer } from '@core/transformers';
 
+import { LocationsEffects, locationsFeature } from '@shared/store';
+
+import { OrdersEffects, ordersFeature } from '@account/orders';
 import { ProfileEffects, profileFeature } from '@account/profile';
 import { AuthEffects, authFeature } from '@auth';
 
@@ -46,6 +49,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideStore(),
+    provideState(locationsFeature),
     provideState(pickupPointFeature),
     provideState(deliveryPointFeature),
     provideState(deliveryDetailsFeature),
@@ -53,7 +57,9 @@ export const appConfig: ApplicationConfig = {
     provideState(bookingFeature),
     provideState(authFeature),
     provideState(profileFeature),
+    provideState(ordersFeature),
     provideEffects(
+      LocationsEffects,
       PickupPointEffects,
       DeliveryPointEffects,
       DeliveryDetailsEffects,
@@ -61,6 +67,7 @@ export const appConfig: ApplicationConfig = {
       BookingEffects,
       AuthEffects,
       ProfileEffects,
+      OrdersEffects,
     ),
     provideRouterStore(),
     provideHttpClient(),

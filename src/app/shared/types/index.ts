@@ -1,5 +1,6 @@
 export * from './api-error.types';
 export * from './cities-filter.types';
+export * from './collection.types';
 export * from './delivery-city.types';
 export * from './form.types';
 export * from './loading.types';
@@ -7,3 +8,5 @@ export * from './office.types';
 export * from './pickup-city.types';
 export * from './preferred-time-slot.types';
 export * from './tab.types';
+export * from './pagination.types';
+export * from './error-status.types';
