@@ -1,0 +1,97 @@
+@if (list.totalCount && +list.totalCount > 0) {
+  <div class="flex justify-end mb-4">
+    <label>
+      <span class="block text-sm text-gray-700 mb-1">Заказов на странице</span>
+      <tui-textfield tuiChevron class="w-44">
+        <select tuiTextfield [formControl]="pageSize"></select>
+        <tui-data-list-wrapper *tuiTextfieldDropdown [items]="PAGE_SIZE_OPTIONS" />
+      </tui-textfield>
+    </label>
+  </div>
+}
+
+@if (!list.isLoaded || list.isLoading) {
+  @for (item of getSkeletonArray(); track $index) {
+    <div class="h-12 mb-0.5" [tuiSkeleton]="true"></div>
+  }
+} @else if (list.totalCount && +list.totalCount > 0) {
+  <div class="mb-7 flex flex-col overflow-x-hidden print:hidden">
+    <div class="mb-4 overflow-x-auto">
+      <table tuiTable [columns]="columns" class="w-full whitespace-nowrap">
+        @if (pagination.isVisible) {
+          <caption tuiCaption>
+            <tui-pagination
+              [length]="pagination.totalPages"
+              [index]="pagination.currentPage - 1"
+              (indexChange)="onPageChange($event)"
+            />
+          </caption>
+        }
+        <thead>
+          <tr tuiThGroup>
+            <th *tuiHead="'order_id'" tuiTh [sorter]="null" [sticky]="true">№ Заказа</th>
+            <th *tuiHead="'date'" tuiTh [sticky]="true">Дата заказа</th>
+            <th *tuiHead="'sender_name'" tuiTh [sorter]="null" [sticky]="true">Отправитель</th>
+            <th *tuiHead="'recipient_name'" tuiTh [sticky]="true">Получатель</th>
+            <th *tuiHead="'start_city'" tuiTh [sticky]="true">Город отправления</th>
+            <th *tuiHead="'end_city'" tuiTh [sticky]="true">Город получения</th>
+            <th *tuiHead="'order_price'" tuiTh [sticky]="true">Цена</th>
+            <th *tuiHead="'status'" tuiTh [sticky]="true">Статус</th>
+            <th *tuiHead="'print'" tuiTh [sorter]="null" [sticky]="true">Печать</th>
+          </tr>
+        </thead>
+        <tbody tuiTbody [data]="list.orders">
+          @for (order of list.orders; track order.order_id) {
+            <tr tuiTr>
+              <td *tuiCell="'order_id'" tuiTd>
+                <button
+                  type="button"
+                  class="hover:cursor-pointer"
+                  (click)="onOpenOrder(order.order_id)"
+                >
+                  {{ order.order_id }}
+                </button>
+              </td>
+              <td *tuiCell="'date'" tuiTd>
+                {{ order.date }}
+              </td>
+              <td *tuiCell="'sender_name'" tuiTd>
+                {{ order.sender_name }}
+              </td>
+              <td *tuiCell="'recipient_name'" tuiTd>
+                {{ order.recipient_name }}
+              </td>
+              <td *tuiCell="'start_city'" tuiTd>
+                {{ order.start_city }}
+              </td>
+              <td *tuiCell="'end_city'" tuiTd>
+                {{ order.end_city }}
+              </td>
+              <td *tuiCell="'order_price'" tuiTd>
+                {{ order.order_price }} {{ 'RUB' | tuiCurrency }}
+              </td>
+              <td *tuiCell="'status'" tuiTd>
+                {{ order.status }}
+              </td>
+              <td *tuiCell="'print'" tuiTd>
+                <!--              <button-->
+                <!--                tuiIconButton-->
+                <!--                type="button"-->
+                <!--                appearance="icon"-->
+                <!--                icon="tuiIconPrintLarge"-->
+                <!--                (click)="printOrder(order.order_id)"-->
+                <!--              ></button>-->
+
+                <!--                      <b class="text-yellow hover:cursor-pointer">Напечатать</b>-->
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+} @else {
+  <div class="flex justify-center">
+    <b class="text-gray-300 text-2xl">Заказы не найдены...</b>
+  </div>
+}

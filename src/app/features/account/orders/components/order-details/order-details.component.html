@@ -1,0 +1,115 @@
+@let vm = vm$ | async;
+
+@if (vm) {
+  @if (vm.order.isLoading) {
+    <b>Loading</b>
+  } @else {
+    @if (vm.order.details; as details) {
+      <div class="flex flex-col text-left font-base">
+        <b class="text-2xl font-bold">№ {{ details.order.order_id }}</b>
+        <div class="flex text-xs">
+          <small class="mr-2">от {{ details.order.order_date.date }}</small>
+          <b class="lowercase text-yellow">{{ details.order.order_name }}</b>
+        </div>
+
+        <div class="mt-6">
+          <p class="text-2xs text-gray-600">Направление перевозки:</p>
+          <p class="mb-3 text-2xs">
+            г. {{ details.order.city_from }} &#8212; г. {{ details.order.city_to }}
+          </p>
+          <p class="text-2xs text-gray-600">Получатель:</p>
+          <p class="mb-3 text-2xs">
+            {{ details.order.recipient_name }}
+          </p>
+          <p class="text-2xs text-gray-600">Телефон получателя:</p>
+          <p class="mb-3 text-2xs">
+            {{ details.order.recipient_phone }}
+          </p>
+          <p class="text-2xs text-gray-600">Тип груза:</p>
+          <p class="mb-3 text-2xs">
+            {{ details.order.cargo_type }} (мест: {{ details.order.cargo_count }})
+          </p>
+
+          @if (details.order.dimensions_raw.length) {
+            <tui-scrollbar class="scroll-yellow max-h-[142px]">
+              @for (dim of details.order.dimensions_raw; let i = $index; track i) {
+                <div class="mb-4 flex items-end text-2xs">
+                  <div class="mr-10">
+                    <p class="mb-1.5 text-2xs text-gray-600">Габариты груза:</p>
+                    <div class="flex items-center space-x-4">
+                      <span class="flex flex-col">
+                        <small>Ширина:</small>
+                        <b>{{ dim.width }} см</b>
+                      </span>
+                      <b>x</b>
+                      <span class="flex flex-col">
+                        <small>Длина:</small> <b>{{ dim.length }} см</b>
+                      </span>
+                      <b>x</b>
+                      <span class="flex flex-col">
+                        <small>Высота:</small> <b>{{ dim.height }} см</b>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex flex-col items-center">
+                    <p class="mb-3 text-2xs text-gray-600">Вес груза:</p>
+                    <b class="text-[24px] leading-[24px]">{{ dim.weight }} кг</b>
+                  </div>
+                </div>
+              }
+            </tui-scrollbar>
+          }
+
+          @if (details.order.cargo_description) {
+            <p class="text-2xs text-gray-600">Описание:</p>
+            <p class="mb-3 text-2xs">
+              {{ details.order.cargo_description }}
+            </p>
+          }
+
+          @if (details.carrier_info; as carrier) {
+            <div class="flex justify-between">
+              @if (carrier.time_departure; as departure) {
+                <div>
+                  <p class="text-2xs text-gray-600">Время отправки:</p>
+                  <p class="mb-3 text-2xs">
+                    {{ departure.date }}
+                    {{ departure.time }}
+                  </p>
+                </div>
+              }
+
+              @if (carrier.time_arrival; as arrival) {
+                <div>
+                  <p class="text-2xs text-gray-600">Время доставки:</p>
+                  <p class="mb-3 text-2xs">
+                    {{ arrival.date }}
+                    {{ arrival.time }}
+                  </p>
+                </div>
+              }
+            </div>
+          }
+
+          <div class="mt-5 text-xl">
+            <span class="text-gray-500">Итого: </span>
+            <b>{{ details.order.order_price }} руб.</b>
+          </div>
+        </div>
+
+        @if (vm.order.isNew) {
+          <button
+            tuiButton
+            type="button"
+            size="m"
+            [loading]="vm.order.isCanceling"
+            class="col-span-2 mt-6 sm:col-span-1"
+            (click)="cancelOrder()"
+          >
+            Отменить заказ
+          </button>
+        }
+      </div>
+    }
+  }
+}

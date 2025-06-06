@@ -1,0 +1,13 @@
+@let vm = vm$ | async;
+
+@if (vm) {
+  <app-filter (filterChange)="applyFilter($event)" (filterClear)="clearFilter()" />
+
+  <app-order-list
+    [list]="vm.list"
+    [pagination]="vm.pagination"
+    (pageChange)="navigateToPage($event)"
+    (pageSizeChange)="onPageSizeChange($event)"
+    (openOrder)="showOrderDetails($event)"
+  />
+}

@@ -1,0 +1,30 @@
+import type { MemoizedSelector } from '@ngrx/store';
+
+import type { ApiError } from '@shared/types';
+
+import type { Order, OrderDetails } from '../../types';
+
+import type { FilterState } from '../state';
+
+export interface BaseSelectors {
+  selectIsOrderListLoading: MemoizedSelector<object, boolean>;
+  selectIsOrderListLoaded: MemoizedSelector<object, boolean>;
+  selectOrderListError: MemoizedSelector<object, ApiError | null>;
+  selectOrderList: MemoizedSelector<object, Order[]>;
+
+  selectTotalCount: MemoizedSelector<object, string | null>;
+  selectSelectedOrderId: MemoizedSelector<object, string | null>;
+
+  selectIsOrderLoading: MemoizedSelector<object, boolean>;
+  selectIsOrderLoaded: MemoizedSelector<object, boolean>;
+  selectOrderError: MemoizedSelector<object, ApiError | null>;
+  selectOrderDetails: MemoizedSelector<object, OrderDetails | null>;
+
+  selectIsOrderCanceling: MemoizedSelector<object, boolean>;
+  selectOrderCancelError: MemoizedSelector<object, ApiError | null>;
+
+  selectCurrentPage: MemoizedSelector<object, number>;
+  selectPageSize: MemoizedSelector<object, number>;
+
+  selectFilter: MemoizedSelector<object, FilterState>;
+}

@@ -1,0 +1,52 @@
+<div class="flex flex-col">
+  <button type="button" (click)="onClearFilter()" class="self-end text-red-400">Очистить</button>
+  <form
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    class="items-bottom mb-8 grid grid-cols-1 items-end gap-4 print:hidden sm:grid-cols-2 md:mb-9 lg:mb-20 lg:grid-cols-4 lg:pt-4 lg:pr-7 lg:pb-9 lg:pl-10 lg:shadow-xl"
+  >
+    <label>
+      <span class="block text-sm text-gray-700 mb-1">Период:</span>
+      <tui-input-date-range
+        formControlName="range"
+        tuiUnfinishedValidator="Finish filling the field"
+      >
+        Выберите период
+        <input placeholder="From - To" tuiTextfieldLegacy />
+      </tui-input-date-range>
+    </label>
+
+    <label tuiLabel>
+      <span class="block text-sm text-gray-700 mb-1"> Город отправления </span>
+      <tui-textfield tuiChevron [stringify]="'name' | tuiStringify" [tuiTextfieldCleaner]="false">
+        <select tuiTextfield [formControl]="pickupCity" [placeholder]="'Выберите город'"></select>
+        <tui-data-list-wrapper
+          *tuiTextfieldDropdown
+          [items]="pickupCities$ | async"
+          [itemContent]="'name' | tuiStringify | tuiStringifyContent"
+        />
+      </tui-textfield>
+    </label>
+    <label tuiLabel>
+      <span class="block text-sm text-gray-700 mb-1"> Город получения </span>
+      <tui-textfield tuiChevron [stringify]="'name' | tuiStringify" [tuiTextfieldCleaner]="false">
+        <select tuiTextfield [formControl]="deliveryCity" [placeholder]="'Выберите город'"></select>
+        <tui-data-list-wrapper
+          *tuiTextfieldDropdown
+          [items]="deliveryCities$ | async"
+          [itemContent]="'name' | tuiStringify | tuiStringifyContent"
+        />
+      </tui-textfield>
+    </label>
+    <button
+      tuiButton
+      type="submit"
+      appearance="primary"
+      [loading]="false"
+      [disabled]="false"
+      class="mt-2 sm:mt-0"
+    >
+      Показать
+    </button>
+  </form>
+</div>
