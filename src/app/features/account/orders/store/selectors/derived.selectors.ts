@@ -28,9 +28,16 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
     return details.order.order_status_charcode === 'ORDER_POSTING';
   });
 
+  const selectIsFilterActive = createSelector(baseSelectors.selectFilter, (filter) => {
+    const { pickupCity, deliveryCity, range } = filter;
+
+    return !!pickupCity || !!deliveryCity || !!range;
+  });
+
   return {
     selectTotalPages,
     selectIsPaginationVisible,
     selectIsNewOrder,
+    selectIsFilterActive,
   };
 };

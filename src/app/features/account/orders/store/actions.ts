@@ -3,7 +3,7 @@ import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import type { ApiError } from '@shared/types';
 
 import type {
-  UrlParams,
+  QueryParams,
   CancelOrderPayload,
   CancelOrderResponse,
   Filter,
@@ -35,10 +35,10 @@ export const OrdersActions = createActionGroup({
     'Go To Next Page': emptyProps(),
     'Go To Previous Page': emptyProps(),
 
-    'Set Filter': props<{ filter: Partial<Filter> }>(),
+    // 'Set Filter': props<{ filter: Partial<Filter> }>(),
     'Clear Filter': emptyProps(),
-    'Apply Filter': props<{ filter: Filter }>(),
+    'Set Filter': props<{ filter: Filter }>(),
 
-    'Restore From Url': props<{ params: Partial<UrlParams> }>(),
+    'Restore From Url': props<{ params: Partial<QueryParams> }>(),
   },
 });

@@ -156,17 +156,6 @@ export const ordersReducer = createReducer(
   ),
 
   on(
-    OrdersActions.setFilter,
-    (state, { filter }): OrdersFeatureState => ({
-      ...state,
-      filter: {
-        ...state.filter,
-        ...filter,
-      },
-    }),
-  ),
-
-  on(
     OrdersActions.clearFilter,
     (state): OrdersFeatureState => ({
       ...state,
@@ -183,7 +172,7 @@ export const ordersReducer = createReducer(
   ),
 
   on(
-    OrdersActions.applyFilter,
+    OrdersActions.setFilter,
     (state, { filter }): OrdersFeatureState => ({
       ...state,
       filter,

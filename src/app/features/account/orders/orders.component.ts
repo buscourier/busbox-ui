@@ -9,8 +9,7 @@ import { OrderDetailsComponent } from './components/order-details';
 import { OrderListComponent } from './components/order-list';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS } from './constants';
 import { OrdersFacade } from './orders.facade';
-import type { FilterState } from './store';
-import type { OrdersViewModel, Filter, UrlParams } from './types';
+import type { OrdersViewModel, Filter, QueryParams } from './types';
 
 const FILTER_QUERY_PARAMS = {
   PAGE: 'page',
@@ -42,16 +41,16 @@ export class OrdersComponent implements OnInit {
 
   ngOnInit(): void {
     this.vm$ = this.ordersFacade.getViewModel();
-    this.ensureUrlParams();
+    this.initializeUrl();
   }
 
-  applyFilter(filter: Filter): void {
+  setFilter(filter: Filter): void {
     this.updateUrlWithFilter(filter);
-    // this.ordersFacade.applyFilter(filter);
+    // this.ordersFacade.setFilter(filter);
   }
 
   clearFilter() {
-    this.resetUrlToDefaults();
+    this.setUrlToDefaults();
   }
 
   showOrderDetails(orderId: string): void {
@@ -68,19 +67,19 @@ export class OrdersComponent implements OnInit {
   onPageSizeChange(pageSize: number): void {
     const validatedPageSize = PAGE_SIZE_OPTIONS.includes(pageSize) ? pageSize : DEFAULT_PAGE_SIZE;
 
-    this.updateUrlParams({
+    this.updateUrl({
       [FILTER_QUERY_PARAMS.PAGE]: DEFAULT_PAGE,
       [FILTER_QUERY_PARAMS.PAGE_SIZE]: validatedPageSize,
     });
   }
 
   navigateToPage(page: number): void {
-    this.updateUrlParams({ [FILTER_QUERY_PARAMS.PAGE]: page });
+    this.updateUrl({ [FILTER_QUERY_PARAMS.PAGE]: page });
     // this.ordersFacade.loadPage(page);
   }
 
-  private resetUrlToDefaults(): void {
-    const defaultParams: Partial<UrlParams> = {
+  private setUrlToDefaults(): void {
+    const defaultParams: Partial<QueryParams> = {
       page: DEFAULT_PAGE,
       size: DEFAULT_PAGE_SIZE,
     };
@@ -91,19 +90,16 @@ export class OrdersComponent implements OnInit {
     });
   }
 
-  private ensureUrlParams(): void {
+  private initializeUrl(): void {
     const queryParams = this.route.snapshot.queryParams;
 
     if (Object.keys(queryParams).length === 0) {
-      this.router.navigate([], {
-        queryParams: { page: DEFAULT_PAGE, size: DEFAULT_PAGE_SIZE },
-        replaceUrl: true,
-      });
+      this.setUrlToDefaults();
     }
   }
 
-  private updateUrlWithFilter(filter: FilterState): void {
-    const queryParams: Record<string, string | number> = {
+  private updateUrlWithFilter(filter: Filter): void {
+    const queryParams: Partial<QueryParams> = {
       [FILTER_QUERY_PARAMS.PAGE]: DEFAULT_PAGE,
     };
 
@@ -119,10 +115,10 @@ export class OrdersComponent implements OnInit {
       queryParams[FILTER_QUERY_PARAMS.DATE_RANGE] = filter.range;
     }
 
-    this.updateUrlParams(queryParams);
+    this.updateUrl(queryParams);
   }
 
-  private updateUrlParams(params: Record<string, string | number>): void {
+  private updateUrl(params: Partial<QueryParams>): void {
     this.router.navigate([], {
       queryParams: params,
       queryParamsHandling: 'merge',

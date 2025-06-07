@@ -2,9 +2,7 @@ import type { MemoizedSelector } from '@ngrx/store';
 
 import type { ApiError } from '@shared/types';
 
-import type { Order, OrderDetails } from '../../types';
-
-import type { FilterState } from '../state';
+import type { Filter, Order, OrderDetails } from '../../types';
 
 export interface BaseSelectors {
   selectIsOrderListLoading: MemoizedSelector<object, boolean>;
@@ -26,5 +24,5 @@ export interface BaseSelectors {
   selectCurrentPage: MemoizedSelector<object, number>;
   selectPageSize: MemoizedSelector<object, number>;
 
-  selectFilter: MemoizedSelector<object, FilterState>;
+  selectFilter: MemoizedSelector<object, Filter>;
 }

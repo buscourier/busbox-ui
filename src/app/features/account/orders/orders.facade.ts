@@ -2,7 +2,6 @@ import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { type Observable } from 'rxjs';
 
-import type { FilterState } from './store';
 import { OrdersActions, ordersFeature } from './store';
 import type { OrdersViewModel, Filter } from './types';
 
@@ -42,9 +41,9 @@ export class OrdersFacade {
     return this.store.select(ordersFeature.selectPageSize);
   }
 
-  applyFilter(filter: Filter): void {
+  setFilter(filter: Filter): void {
     this.store.dispatch(
-      OrdersActions.applyFilter({
+      OrdersActions.setFilter({
         filter,
       }),
     );
@@ -54,7 +53,7 @@ export class OrdersFacade {
     this.store.dispatch(OrdersActions.clearFilter());
   }
 
-  getFilter(): Observable<FilterState> {
+  getFilter(): Observable<Filter> {
     return this.store.select(ordersFeature.selectFilter);
   }
 }

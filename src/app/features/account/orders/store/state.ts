@@ -1,13 +1,7 @@
-import {
-  type ApiError,
-  type DeliveryCity,
-  LoadingStatus,
-  type PaginationState,
-  type PickupCity,
-} from '@shared/types';
+import { type ApiError, LoadingStatus, type Pagination } from '@shared/types';
 
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '../constants';
-import type { Order, OrderDetails } from '../types';
+import type { Filter, Order, OrderDetails } from '../types';
 
 export interface OrderListState {
   status: LoadingStatus;
@@ -25,18 +19,11 @@ export interface OrderState {
   cancelError: ApiError | null;
 }
 
-export interface FilterState {
-  range: string | null;
-  pickupCity: PickupCity | null;
-  deliveryCity: DeliveryCity | null;
-  // isActive: boolean;
-}
-
 export interface OrdersFeatureState {
   list: OrderListState;
   order: OrderState;
-  pagination: PaginationState;
-  filter: FilterState;
+  pagination: Pagination;
+  filter: Filter;
 }
 
 export const initialState: OrdersFeatureState = {
@@ -62,6 +49,5 @@ export const initialState: OrdersFeatureState = {
     range: null,
     pickupCity: null,
     deliveryCity: null,
-    // isActive: false,
   },
 };

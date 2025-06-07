@@ -1,6 +1,6 @@
 import type { ApiError } from '@shared/types';
 
-import type { Order, OrderDetails } from '../types';
+import type { Filter, Order, OrderDetails } from '../types';
 
 export interface OrderListViewModel {
   isLoading: boolean;
@@ -19,6 +19,11 @@ export interface PaginationViewModel {
   isVisible: boolean;
 }
 
+export interface FilterViewModel {
+  currentFilter: Filter;
+  isActive: boolean;
+}
+
 export interface OrderViewModel {
   isLoading: boolean;
   isLoaded: boolean;
@@ -33,4 +38,5 @@ export interface OrdersViewModel {
   list: OrderListViewModel;
   order: OrderViewModel;
   pagination: PaginationViewModel;
+  filter: FilterViewModel;
 }

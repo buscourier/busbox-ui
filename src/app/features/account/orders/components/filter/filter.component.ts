@@ -5,8 +5,11 @@ import {
   DestroyRef,
   EventEmitter,
   inject,
+  Input,
+  type OnChanges,
   type OnInit,
   Output,
+  type SimpleChanges,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, type FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -24,8 +27,7 @@ import { filter, type Observable } from 'rxjs';
 import { LocationsFacade } from '@shared/store';
 import type { DeliveryCity, PickupCity } from '@shared/types';
 
-import { OrdersFacade } from '../../orders.facade';
-import type { Filter } from '../../types';
+import type { Filter, FilterViewModel } from '../../types';
 
 import type { FilterForm } from './filter.types';
 
@@ -50,7 +52,9 @@ import type { FilterForm } from './filter.types';
   styleUrl: './filter.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilterComponent implements OnInit {
+export class FilterComponent implements OnInit, OnChanges {
+  @Input({ required: true }) filter!: FilterViewModel;
+
   @Output() filterChange = new EventEmitter<Filter>();
   @Output() filterClear = new EventEmitter<void>();
 
@@ -61,7 +65,6 @@ export class FilterComponent implements OnInit {
 
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly ordersFacade = inject(OrdersFacade);
   private readonly locationsFacade = inject(LocationsFacade);
 
   get range(): FormControl<string | null> {
@@ -83,6 +86,14 @@ export class FilterComponent implements OnInit {
     this.loadDeliveryCities();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    const { currentFilter } = this.filter;
+
+    if (changes['filter'] && currentFilter) {
+      this.form.patchValue(currentFilter, { emitEvent: false });
+    }
+  }
+
   onSubmit(): void {
     if (this.form.valid) {
       const filterValue = this.form.value as Filter;
@@ -97,7 +108,7 @@ export class FilterComponent implements OnInit {
 
   private initializeForm(): void {
     this.form = this.fb.group({
-      range: '',
+      range: this.fb.control<string | null>(null),
       pickupCity: this.fb.control<PickupCity | null>(null),
       deliveryCity: this.fb.control<DeliveryCity | null>(null),
     });
@@ -109,12 +120,9 @@ export class FilterComponent implements OnInit {
   }
 
   private restoreInitialFilter(): void {
-    this.ordersFacade
-      .getFilter()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((filter) => {
-        this.form.patchValue(filter, { emitEvent: false });
-      });
+    if (this.filter.currentFilter) {
+      this.form.patchValue(this.filter.currentFilter, { emitEvent: false });
+    }
   }
 
   private loadDeliveryCities(): void {

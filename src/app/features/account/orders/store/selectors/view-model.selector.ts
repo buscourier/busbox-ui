@@ -1,6 +1,7 @@
 import { createSelector } from '@ngrx/store';
 
 import type {
+  FilterViewModel,
   OrderListViewModel,
   OrdersViewModel,
   OrderViewModel,
@@ -41,19 +42,6 @@ export const createViewModelSelector = (
     }),
   );
 
-  const selectPaginationViewModel = createSelector(
-    baseSelectors.selectCurrentPage,
-    baseSelectors.selectPageSize,
-    derivedSelectors.selectTotalPages,
-    derivedSelectors.selectIsPaginationVisible,
-    (currentPage, pageSize, totalPages, isVisible): PaginationViewModel => ({
-      currentPage,
-      pageSize,
-      totalPages,
-      isVisible,
-    }),
-  );
-
   const selectOrderViewModel = createSelector(
     baseSelectors.selectIsOrderLoading,
     baseSelectors.selectIsOrderLoaded,
@@ -73,15 +61,39 @@ export const createViewModelSelector = (
     }),
   );
 
+  const selectPaginationViewModel = createSelector(
+    baseSelectors.selectCurrentPage,
+    baseSelectors.selectPageSize,
+    derivedSelectors.selectTotalPages,
+    derivedSelectors.selectIsPaginationVisible,
+    (currentPage, pageSize, totalPages, isVisible): PaginationViewModel => ({
+      currentPage,
+      pageSize,
+      totalPages,
+      isVisible,
+    }),
+  );
+
+  const selectFilterViewModel = createSelector(
+    baseSelectors.selectFilter,
+    derivedSelectors.selectIsFilterActive,
+    (currentFilter, isActive): FilterViewModel => ({
+      currentFilter,
+      isActive,
+    }),
+  );
+
   return {
     selectViewModel: createSelector(
       selectOrderListViewModel,
       selectOrderViewModel,
       selectPaginationViewModel,
-      (list, order, pagination): OrdersViewModel => ({
+      selectFilterViewModel,
+      (list, order, pagination, filter): OrdersViewModel => ({
         list,
         order,
         pagination,
+        filter,
       }),
     ),
   };

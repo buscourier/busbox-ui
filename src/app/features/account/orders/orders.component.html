@@ -1,7 +1,11 @@
 @let vm = vm$ | async;
 
 @if (vm) {
-  <app-filter (filterChange)="applyFilter($event)" (filterClear)="clearFilter()" />
+  <app-filter
+    [filter]="vm.filter"
+    (filterChange)="setFilter($event)"
+    (filterClear)="clearFilter()"
+  />
 
   <app-order-list
     [list]="vm.list"

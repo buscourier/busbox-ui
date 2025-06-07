@@ -1,4 +1,4 @@
-export interface UrlParams {
+export interface QueryParams {
   from: string;
   to: string;
   range: string;
