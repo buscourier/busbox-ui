@@ -21,6 +21,10 @@ export interface BaseSelectors {
   selectIsOrderCanceling: MemoizedSelector<object, boolean>;
   selectOrderCancelError: MemoizedSelector<object, ApiError | null>;
 
+  selectIsOrdersExporting: MemoizedSelector<object, boolean>;
+  selectIsOrdersExported: MemoizedSelector<object, boolean>;
+  selectOrdersExportError: MemoizedSelector<object, ApiError | null>;
+
   selectCurrentPage: MemoizedSelector<object, number>;
   selectPageSize: MemoizedSelector<object, number>;
 

@@ -22,6 +22,7 @@ import { TuiTable, TuiTableCell, TuiTableDirective, TuiTableHead } from '@taiga-
 import type { TuiContext, TuiStringHandler } from '@taiga-ui/cdk';
 import { TuiButton, TuiScrollbarDirective, TuiTextfield } from '@taiga-ui/core';
 import {
+  TuiButtonLoading,
   TuiButtonSelect,
   TuiDataListWrapperComponent,
   TuiPagination,
@@ -31,7 +32,7 @@ import { TuiTextfieldControllerModule } from '@taiga-ui/legacy';
 import { debounceTime, distinctUntilChanged, filter, fromEvent } from 'rxjs';
 
 import { DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS } from '../../constants';
-import type { OrderListViewModel, PaginationViewModel } from '../../types';
+import type { OrderListViewModel, OrdersExportViewModel, PaginationViewModel } from '../../types';
 
 @Component({
   selector: 'app-order-list',
@@ -51,6 +52,7 @@ import type { OrderListViewModel, PaginationViewModel } from '../../types';
     TuiButton,
     TuiButtonSelect,
     TuiScrollbarDirective,
+    TuiButtonLoading,
   ],
   templateUrl: './order-list.component.html',
   styleUrl: './order-list.component.css',
@@ -59,6 +61,7 @@ import type { OrderListViewModel, PaginationViewModel } from '../../types';
 export class OrderListComponent implements OnInit, OnChanges, AfterViewInit {
   @Input({ required: true }) list!: OrderListViewModel;
   @Input({ required: true }) pagination!: PaginationViewModel;
+  @Input({ required: true }) export!: OrdersExportViewModel;
 
   @Output() pageChange = new EventEmitter<number>();
   @Output() pageSizeChange = new EventEmitter<number>();

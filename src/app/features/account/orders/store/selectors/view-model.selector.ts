@@ -3,6 +3,7 @@ import { createSelector } from '@ngrx/store';
 import type {
   FilterViewModel,
   OrderListViewModel,
+  OrdersExportViewModel,
   OrdersViewModel,
   OrderViewModel,
   PaginationViewModel,
@@ -87,17 +88,30 @@ export const createViewModelSelector = (
     }),
   );
 
+  const selectExportViewModel = createSelector(
+    baseSelectors.selectIsOrdersExporting,
+    baseSelectors.selectOrdersExportError,
+    derivedSelectors.selectCanExportOrders,
+    (isExporting, error, canExport): OrdersExportViewModel => ({
+      isExporting,
+      error,
+      canExport,
+    }),
+  );
+
   return {
     selectViewModel: createSelector(
       selectOrderListViewModel,
       selectOrderViewModel,
       selectPaginationViewModel,
       selectFilterViewModel,
-      (list, order, pagination, filter): OrdersViewModel => ({
+      selectExportViewModel,
+      (list, order, pagination, filter, exportStatus): OrdersViewModel => ({
         list,
         order,
         pagination,
         filter,
+        exportStatus,
       }),
     ),
   };

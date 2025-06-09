@@ -19,6 +19,10 @@ export const OrdersActions = createActionGroup({
     'Get Order List Success': props<{ response: OrderListResponse }>(),
     'Get Order List Failure': props<{ error: ApiError }>(),
 
+    'Export Orders To Excel': emptyProps(),
+    'Export Orders To Excel Success': props<{ response: OrderListResponse }>(),
+    'Export Orders To Excel Failure': props<{ error: ApiError }>(),
+
     'Select Order': props<{ orderId: string }>(),
     'Clear Selection': emptyProps(),
 

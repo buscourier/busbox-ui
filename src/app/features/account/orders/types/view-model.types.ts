@@ -26,6 +26,12 @@ export interface FilterViewModel {
   isActive: boolean;
 }
 
+export interface OrdersExportViewModel {
+  isExporting: boolean;
+  error: ApiError | null;
+  canExport: boolean;
+}
+
 export interface OrderViewModel {
   isLoading: boolean;
   isLoaded: boolean;
@@ -41,4 +47,5 @@ export interface OrdersViewModel {
   order: OrderViewModel;
   pagination: PaginationViewModel;
   filter: FilterViewModel;
+  exportStatus: OrdersExportViewModel;
 }

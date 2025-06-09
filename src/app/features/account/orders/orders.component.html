@@ -10,6 +10,7 @@
   <app-order-list
     [list]="vm.list"
     [pagination]="vm.pagination"
+    [export]="vm.exportStatus"
     (pageChange)="navigateToPage($event)"
     (pageSizeChange)="onPageSizeChange($event)"
     (exportToExcel)="onExportToExcel()"

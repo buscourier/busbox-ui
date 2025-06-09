@@ -19,9 +19,15 @@ export interface OrderState {
   cancelError: ApiError | null;
 }
 
+export interface ExportState {
+  status: LoadingStatus;
+  error: ApiError | null;
+}
+
 export interface OrdersFeatureState {
   list: OrderListState;
   order: OrderState;
+  export: ExportState;
   pagination: Pagination;
   filter: Filter;
 }
@@ -40,6 +46,10 @@ export const initialState: OrdersFeatureState = {
     isCanceling: false,
     error: null,
     cancelError: null,
+  },
+  export: {
+    status: LoadingStatus.IDLE,
+    error: null,
   },
   pagination: {
     currentPage: DEFAULT_PAGE,

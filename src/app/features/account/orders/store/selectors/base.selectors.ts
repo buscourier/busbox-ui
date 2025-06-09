@@ -13,6 +13,8 @@ export const createBaseSelectors = (
 ): BaseSelectors => {
   const selectListState = createSelector(selectOrdersFeatureState, (state) => state.list);
   const selectOrderState = createSelector(selectOrdersFeatureState, (state) => state.order);
+  const selectExportState = createSelector(selectOrdersFeatureState, (state) => state.export);
+
   const selectPaginationState = createSelector(
     selectOrdersFeatureState,
     (state) => state.pagination,
@@ -46,6 +48,16 @@ export const createBaseSelectors = (
 
     selectIsOrderCanceling: createSelector(selectOrderState, (state) => state.isCanceling),
     selectOrderCancelError: createSelector(selectOrderState, (state) => state.cancelError),
+
+    selectIsOrdersExporting: createSelector(
+      selectExportState,
+      (state) => state.status === LoadingStatus.LOADING,
+    ),
+    selectIsOrdersExported: createSelector(
+      selectExportState,
+      (state) => state.status === LoadingStatus.LOADED,
+    ),
+    selectOrdersExportError: createSelector(selectExportState, (state) => state.error),
 
     selectCurrentPage: createSelector(selectPaginationState, (state) => state.currentPage),
     selectPageSize: createSelector(selectPaginationState, (state) => state.pageSize),

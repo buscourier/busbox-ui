@@ -56,6 +56,13 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
     return !!pickupCity || !!deliveryCity || !!range;
   });
 
+  const selectCanExportOrders = createSelector(
+    baseSelectors.selectOrderList,
+    baseSelectors.selectIsOrdersExporting,
+    baseSelectors.selectIsOrderListLoading,
+    (orders, isExporting, isListLoading) => orders.length > 0 && !isExporting && !isListLoading,
+  );
+
   return {
     selectTotalPages,
     selectIsPaginationVisible,
@@ -63,5 +70,6 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
     selectIsFilterActive,
     selectStartItem,
     selectEndItem,
+    selectCanExportOrders,
   };
 };

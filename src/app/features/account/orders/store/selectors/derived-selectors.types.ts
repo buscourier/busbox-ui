@@ -7,4 +7,5 @@ export interface DerivedSelectors {
   selectIsFilterActive: MemoizedSelector<object, boolean>;
   selectStartItem: MemoizedSelector<object, number>;
   selectEndItem: MemoizedSelector<object, number>;
+  selectCanExportOrders: MemoizedSelector<object, boolean>;
 }

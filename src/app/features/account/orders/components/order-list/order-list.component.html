@@ -113,8 +113,9 @@
         tuiButton
         appearance="outline"
         iconStart="@tui.download"
+        [loading]="export.isExporting"
         (click)="onExportToExcel()"
-        [disabled]="!list.orders.length"
+        [disabled]="!export.canExport || export.isExporting"
       >
         Экспорт в Excel
       </button>

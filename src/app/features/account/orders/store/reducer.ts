@@ -182,4 +182,36 @@ export const ordersReducer = createReducer(
       },
     }),
   ),
+  on(
+    OrdersActions.exportOrdersToExcel,
+    (state): OrdersFeatureState => ({
+      ...state,
+      export: {
+        ...state.export,
+        status: LoadingStatus.LOADING,
+        error: null,
+      },
+    }),
+  ),
+  on(
+    OrdersActions.exportOrdersToExcelSuccess,
+    (state): OrdersFeatureState => ({
+      ...state,
+      export: {
+        ...state.export,
+        status: LoadingStatus.LOADED,
+      },
+    }),
+  ),
+  on(
+    OrdersActions.exportOrdersToExcelFailure,
+    (state, { error }): OrdersFeatureState => ({
+      ...state,
+      export: {
+        ...state.export,
+        status: LoadingStatus.ERROR,
+        error,
+      },
+    }),
+  ),
 );
