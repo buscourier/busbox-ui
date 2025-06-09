@@ -89,7 +89,7 @@ export class FilterComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     const { currentFilter } = this.filter;
 
-    if (changes['filter'] && currentFilter) {
+    if (changes['filter'] && currentFilter && this.form) {
       this.form.patchValue(currentFilter, { emitEvent: false });
     }
   }

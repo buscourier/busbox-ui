@@ -66,11 +66,15 @@ export const createViewModelSelector = (
     baseSelectors.selectPageSize,
     derivedSelectors.selectTotalPages,
     derivedSelectors.selectIsPaginationVisible,
-    (currentPage, pageSize, totalPages, isVisible): PaginationViewModel => ({
+    derivedSelectors.selectStartItem,
+    derivedSelectors.selectEndItem,
+    (currentPage, pageSize, totalPages, isVisible, startItem, endItem): PaginationViewModel => ({
       currentPage,
       pageSize,
       totalPages,
       isVisible,
+      startItem,
+      endItem,
     }),
   );
 

@@ -78,6 +78,10 @@ export class OrdersComponent implements OnInit {
     // this.ordersFacade.loadPage(page);
   }
 
+  onExportToExcel(): void {
+    this.ordersFacade.exportOrdersToExcel();
+  }
+
   private setUrlToDefaults(): void {
     const defaultParams: Partial<QueryParams> = {
       page: DEFAULT_PAGE,

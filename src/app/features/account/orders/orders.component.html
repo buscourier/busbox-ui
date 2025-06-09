@@ -12,6 +12,7 @@
     [pagination]="vm.pagination"
     (pageChange)="navigateToPage($event)"
     (pageSizeChange)="onPageSizeChange($event)"
+    (exportToExcel)="onExportToExcel()"
     (openOrder)="showOrderDetails($event)"
   />
 }

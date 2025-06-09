@@ -1,0 +1,40 @@
+.table-scroll-container {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: visible;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 60px;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &::before {
+    left: 0;
+    background: linear-gradient(to right, var(--tui-background-base, white) 0%, transparent 100%);
+  }
+
+  &::after {
+    right: 0;
+    background: linear-gradient(to left, var(--tui-background-base, white) 0%, transparent 100%);
+  }
+
+  &.show-left-fade::before {
+    opacity: 1;
+  }
+
+  &.show-right-fade::after {
+    opacity: 1;
+  }
+
+  table {
+    min-width: 800px;
+  }
+}

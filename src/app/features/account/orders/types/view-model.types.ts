@@ -17,6 +17,8 @@ export interface PaginationViewModel {
   pageSize: number;
   totalPages: number;
   isVisible: boolean;
+  startItem: number;
+  endItem: number;
 }
 
 export interface FilterViewModel {

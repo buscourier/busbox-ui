@@ -5,4 +5,6 @@ export interface DerivedSelectors {
   selectIsPaginationVisible: MemoizedSelector<object, boolean>;
   selectIsNewOrder: MemoizedSelector<object, boolean>;
   selectIsFilterActive: MemoizedSelector<object, boolean>;
+  selectStartItem: MemoizedSelector<object, number>;
+  selectEndItem: MemoizedSelector<object, number>;
 }

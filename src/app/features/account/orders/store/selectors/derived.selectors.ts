@@ -22,6 +22,28 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
     (totalPages): boolean => totalPages > 1,
   );
 
+  const selectStartItem = createSelector(
+    baseSelectors.selectCurrentPage,
+    baseSelectors.selectPageSize,
+    baseSelectors.selectTotalCount,
+    (currentPage, pageSize, totalCount) => {
+      if (!totalCount) return 0;
+
+      return Number(totalCount) > 0 ? (currentPage - 1) * pageSize + 1 : 0;
+    },
+  );
+
+  const selectEndItem = createSelector(
+    baseSelectors.selectCurrentPage,
+    baseSelectors.selectPageSize,
+    baseSelectors.selectTotalCount,
+    (currentPage, pageSize, totalCount) => {
+      if (!totalCount) return 0;
+
+      return Math.min(currentPage * pageSize, Number(totalCount));
+    },
+  );
+
   const selectIsNewOrder = createSelector(baseSelectors.selectOrderDetails, (details) => {
     if (!details) return false;
 
@@ -39,5 +61,7 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
     selectIsPaginationVisible,
     selectIsNewOrder,
     selectIsFilterActive,
+    selectStartItem,
+    selectEndItem,
   };
 };
