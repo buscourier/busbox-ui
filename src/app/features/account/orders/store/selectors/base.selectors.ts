@@ -1,6 +1,7 @@
+import type { EntityAdapter } from '@ngrx/entity';
 import { createSelector, type MemoizedSelector } from '@ngrx/store';
 
-import { LoadingStatus } from '@shared/types';
+import type { Order } from '../../types';
 
 import type { OrdersFeatureState } from '../state';
 
@@ -10,58 +11,61 @@ type OrdersFeatureStateSelector = MemoizedSelector<object, OrdersFeatureState>;
 
 export const createBaseSelectors = (
   selectOrdersFeatureState: OrdersFeatureStateSelector,
+  adapter: EntityAdapter<Order>,
 ): BaseSelectors => {
   const selectListState = createSelector(selectOrdersFeatureState, (state) => state.list);
-  const selectOrderState = createSelector(selectOrdersFeatureState, (state) => state.order);
-  const selectExportState = createSelector(selectOrdersFeatureState, (state) => state.export);
 
-  const selectPaginationState = createSelector(
+  const entitySelectors = adapter.getSelectors(selectListState);
+
+  const selectAll = entitySelectors.selectAll;
+  const selectEntities = entitySelectors.selectEntities;
+  const selectIds = entitySelectors.selectIds;
+  // const selectTotal = entitySelectors.selectTotal;
+
+  const selectDetailsState = createSelector(selectOrdersFeatureState, (state) => state.details);
+  const selectOperationsState = createSelector(
     selectOrdersFeatureState,
-    (state) => state.pagination,
+    (state) => state.operations,
   );
 
+  const selectCancelOperationState = createSelector(selectOperationsState, (state) => state.cancel);
+
+  const selectExportOperationState = createSelector(selectOperationsState, (state) => state.export);
+
+  const selectQueryState = createSelector(selectOrdersFeatureState, (state) => state.query);
+
   return {
-    selectIsOrderListLoading: createSelector(
-      selectListState,
-      (state) => state.status === LoadingStatus.LOADING,
-    ),
-    selectIsOrderListLoaded: createSelector(
-      selectListState,
-      (state) => state.status === LoadingStatus.LOADED,
-    ),
-    selectOrderListError: createSelector(selectListState, (state) => state.error),
-    selectOrderList: createSelector(selectListState, (state) => state.orders),
+    // ===== ENTITY SELECTORS =====
+    selectAll,
+    selectEntities,
+    selectIds,
+    // selectTotal,
 
+    // ===== LIST SELECTORS =====
+    selectListStatus: createSelector(selectListState, (state) => state.status),
+    selectListError: createSelector(selectListState, (state) => state.error),
     selectTotalCount: createSelector(selectListState, (state) => state.totalCount),
-    selectSelectedOrderId: createSelector(selectListState, (state) => state.selectedId),
+    selectSelectedId: createSelector(selectListState, (state) => state.selectedId),
 
-    selectIsOrderLoading: createSelector(
-      selectOrderState,
-      (state) => state.status === LoadingStatus.LOADING,
-    ),
-    selectIsOrderLoaded: createSelector(
-      selectOrderState,
-      (state) => state.status === LoadingStatus.LOADED,
-    ),
-    selectOrderError: createSelector(selectOrderState, (state) => state.error),
-    selectOrderDetails: createSelector(selectOrderState, (state) => state.details),
+    // ===== DETAILS SELECTORS =====
+    selectDetailsStatus: createSelector(selectDetailsState, (state) => state.status),
+    selectDetailsError: createSelector(selectDetailsState, (state) => state.error),
+    selectOrderDetails: createSelector(selectDetailsState, (state) => state.data),
 
-    selectIsOrderCanceling: createSelector(selectOrderState, (state) => state.isCanceling),
-    selectOrderCancelError: createSelector(selectOrderState, (state) => state.cancelError),
+    // ===== CANCEL SELECTORS =====
 
-    selectIsOrdersExporting: createSelector(
-      selectExportState,
-      (state) => state.status === LoadingStatus.LOADING,
-    ),
-    selectIsOrdersExported: createSelector(
-      selectExportState,
-      (state) => state.status === LoadingStatus.LOADED,
-    ),
-    selectOrdersExportError: createSelector(selectExportState, (state) => state.error),
+    selectCancelStatus: createSelector(selectCancelOperationState, (state) => state.status),
+    selectCancelError: createSelector(selectCancelOperationState, (state) => state.error),
+    selectCancelData: createSelector(selectCancelOperationState, (state) => state.data),
 
-    selectCurrentPage: createSelector(selectPaginationState, (state) => state.currentPage),
-    selectPageSize: createSelector(selectPaginationState, (state) => state.pageSize),
+    // ===== EXPORT SELECTORS =====
 
-    selectFilter: createSelector(selectOrdersFeatureState, (state) => state.filter),
+    selectExportStatus: createSelector(selectExportOperationState, (state) => state.status),
+    selectExportError: createSelector(selectExportOperationState, (state) => state.error),
+    selectExportData: createSelector(selectExportOperationState, (state) => state.data),
+
+    // ===== QUERY SELECTORS =====
+    selectFilter: createSelector(selectQueryState, (state) => state.filter),
+    selectPagination: createSelector(selectQueryState, (state) => state.pagination),
   };
 };

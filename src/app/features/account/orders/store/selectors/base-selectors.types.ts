@@ -1,32 +1,41 @@
-import type { MemoizedSelector } from '@ngrx/store';
+import type { Dictionary } from '@ngrx/entity';
+import { type MemoizedSelector } from '@ngrx/store';
 
-import type { ApiError } from '@shared/types';
+import type { ApiError, AsyncStatus, Pagination } from '@shared/types';
 
 import type { Filter, Order, OrderDetails } from '../../types';
 
 export interface BaseSelectors {
-  selectIsOrderListLoading: MemoizedSelector<object, boolean>;
-  selectIsOrderListLoaded: MemoizedSelector<object, boolean>;
-  selectOrderListError: MemoizedSelector<object, ApiError | null>;
-  selectOrderList: MemoizedSelector<object, Order[]>;
+  // Entity selectors
+  selectAll: MemoizedSelector<object, Order[]>;
+  selectEntities: MemoizedSelector<object, Dictionary<Order>>;
+  selectIds: MemoizedSelector<object, string[] | number[]>;
+  // selectTotal: MemoizedSelector<object, number>;
 
-  selectTotalCount: MemoizedSelector<object, string | null>;
-  selectSelectedOrderId: MemoizedSelector<object, string | null>;
+  // ===== LIST SELECTORS =====
+  selectListStatus: MemoizedSelector<object, AsyncStatus>;
+  selectListError: MemoizedSelector<object, ApiError | null>;
+  selectTotalCount: MemoizedSelector<object, number>;
+  selectSelectedId: MemoizedSelector<object, string | null>;
 
-  selectIsOrderLoading: MemoizedSelector<object, boolean>;
-  selectIsOrderLoaded: MemoizedSelector<object, boolean>;
-  selectOrderError: MemoizedSelector<object, ApiError | null>;
+  // ===== DETAILS SELECTORS =====
+  selectDetailsStatus: MemoizedSelector<object, AsyncStatus>;
+  selectDetailsError: MemoizedSelector<object, ApiError | null>;
   selectOrderDetails: MemoizedSelector<object, OrderDetails | null>;
 
-  selectIsOrderCanceling: MemoizedSelector<object, boolean>;
-  selectOrderCancelError: MemoizedSelector<object, ApiError | null>;
+  // ===== CANCEL SELECTORS =====
 
-  selectIsOrdersExporting: MemoizedSelector<object, boolean>;
-  selectIsOrdersExported: MemoizedSelector<object, boolean>;
-  selectOrdersExportError: MemoizedSelector<object, ApiError | null>;
+  selectCancelStatus: MemoizedSelector<object, AsyncStatus>;
+  selectCancelError: MemoizedSelector<object, ApiError | null>;
+  selectCancelData: MemoizedSelector<object, Record<string, boolean>>;
 
-  selectCurrentPage: MemoizedSelector<object, number>;
-  selectPageSize: MemoizedSelector<object, number>;
+  // ===== EXPORT SELECTORS =====
 
+  selectExportStatus: MemoizedSelector<object, AsyncStatus>;
+  selectExportError: MemoizedSelector<object, ApiError | null>;
+  selectExportData: MemoizedSelector<object, boolean>;
+
+  // ===== QUERY SELECTORS =====
   selectFilter: MemoizedSelector<object, Filter>;
+  selectPagination: MemoizedSelector<object, Pagination>;
 }

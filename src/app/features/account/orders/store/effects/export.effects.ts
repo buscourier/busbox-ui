@@ -18,7 +18,7 @@ import { OrdersActions } from '../actions';
 import { ordersFeature } from '../feature';
 
 export const exportEffects = {
-  exportOrdersToExcel: createEffect(
+  exportToExcel: createEffect(
     (
       actions$ = inject(Actions),
       authFacade = inject(AuthFacade),
@@ -26,7 +26,7 @@ export const exportEffects = {
       store = inject(Store),
     ) => {
       return actions$.pipe(
-        ofType(OrdersActions.exportOrdersToExcel),
+        ofType(OrdersActions.exportToExcel),
         switchMap(() =>
           authFacade.getCurrentUser().pipe(
             filter((user) => !!user),
@@ -47,8 +47,8 @@ export const exportEffects = {
 
               return ordersService.getOrderList(payload).pipe(
                 mapResponse({
-                  next: (response) => OrdersActions.exportOrdersToExcelSuccess({ response }),
-                  error: (error: ApiError) => OrdersActions.exportOrdersToExcelFailure({ error }),
+                  next: (response) => OrdersActions.exportToExcelSuccess({ response }),
+                  error: (error: ApiError) => OrdersActions.exportToExcelFailure({ error }),
                 }),
               );
             }),
@@ -62,7 +62,7 @@ export const exportEffects = {
   exportAfterLoad: createEffect(
     (actions$ = inject(Actions), excelService = inject(ExcelService), store = inject(Store)) => {
       return actions$.pipe(
-        ofType(OrdersActions.exportOrdersToExcelSuccess),
+        ofType(OrdersActions.exportToExcelSuccess),
         withLatestFrom(store.select(ordersFeature.selectFilter)),
         tap(([{ response }, filter]) => {
           const orders = response.orders;

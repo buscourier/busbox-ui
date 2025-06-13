@@ -4,7 +4,6 @@ import type { ApiError } from '@shared/types';
 
 import type {
   QueryParams,
-  CancelOrderPayload,
   CancelOrderResponse,
   Filter,
   OrderDetails,
@@ -15,33 +14,30 @@ import type {
 export const OrdersActions = createActionGroup({
   source: 'Account/Orders',
   events: {
-    'Get Order List': props<{ payload: OrderListPayload }>(),
-    'Get Order List Success': props<{ response: OrderListResponse }>(),
-    'Get Order List Failure': props<{ error: ApiError }>(),
+    'Load List': props<{ payload: OrderListPayload }>(),
+    'Load List Success': props<{ response: OrderListResponse }>(),
+    'Load List Failure': props<{ error: ApiError }>(),
 
-    'Export Orders To Excel': emptyProps(),
-    'Export Orders To Excel Success': props<{ response: OrderListResponse }>(),
-    'Export Orders To Excel Failure': props<{ error: ApiError }>(),
+    'Export To Excel': emptyProps(),
+    'Export To Excel Success': props<{ response: OrderListResponse }>(),
+    'Export To Excel Failure': props<{ error: ApiError }>(),
 
     'Select Order': props<{ orderId: string }>(),
     'Clear Selection': emptyProps(),
 
-    'Get Order': props<{ orderId: string }>(),
-    'Get Order Success': props<{ details: OrderDetails }>(),
-    'Get Order Failure': props<{ error: ApiError }>(),
+    'Load Details': props<{ orderId: string }>(),
+    'Load Details Success': props<{ data: OrderDetails }>(),
+    'Load Details Failure': props<{ error: ApiError }>(),
 
-    'Cancel Order': props<{ payload: CancelOrderPayload }>(),
-    'Cancel Order Success': props<{ response: CancelOrderResponse }>(),
-    'Cancel Order Failure': props<{ error: ApiError }>(),
+    Cancel: props<{ orderId: string }>(),
+    'Cancel Success': props<{ response: CancelOrderResponse }>(),
+    'Cancel Failure': props<{ error: ApiError }>(),
 
-    'Set Current Page': props<{ page: number }>(),
+    'Set page': props<{ page: number }>(),
     'Set Page Size': props<{ pageSize: number }>(),
-    'Go To Next Page': emptyProps(),
-    'Go To Previous Page': emptyProps(),
 
-    // 'Set Filter': props<{ filter: Partial<Filter> }>(),
-    'Clear Filter': emptyProps(),
     'Set Filter': props<{ filter: Filter }>(),
+    'Clear Filter': emptyProps(),
 
     'Restore From Url': props<{ params: Partial<QueryParams> }>(),
   },

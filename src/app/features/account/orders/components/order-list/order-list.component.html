@@ -1,5 +1,5 @@
-@if (list.totalCount && +list.totalCount > 0) {
-  <div class="flex gap-3 items-center text-sm">
+@if (list.totalCount && list.totalCount > 0) {
+  <div class="mb-1 flex gap-3 items-center text-sm">
     <div class="flex items-center gap-1">
       <span class="text-gray-600">
         Всего {{ list.totalCount }} {{ getOrdersWord(+list.totalCount) }}
@@ -19,7 +19,7 @@
     >
       <span class="text-gray-500">Показано:</span>
       <span class="font-medium text-gray-700">
-        {{ pagination.startItem }}-{{ pagination.endItem }}
+        {{ list.pagination.startItem }}-{{ list.pagination.endItem }}
       </span>
 
       <tui-data-list-wrapper
@@ -48,60 +48,62 @@
       <table tuiTable [columns]="columns" class="w-full whitespace-nowrap">
         <thead>
           <tr tuiThGroup>
-            <th *tuiHead="'order_id'" tuiTh [sorter]="null" [sticky]="true">№ Заказа</th>
-            <th *tuiHead="'date'" tuiTh [sticky]="true">Дата заказа</th>
-            <th *tuiHead="'sender_name'" tuiTh [sorter]="null" [sticky]="true">Отправитель</th>
-            <th *tuiHead="'recipient_name'" tuiTh [sticky]="true">Получатель</th>
-            <th *tuiHead="'start_city'" tuiTh [sticky]="true">Город отправления</th>
-            <th *tuiHead="'end_city'" tuiTh [sticky]="true">Город получения</th>
-            <th *tuiHead="'order_price'" tuiTh [sticky]="true">Цена</th>
-            <th *tuiHead="'status'" tuiTh [sticky]="true">Статус</th>
-            <th *tuiHead="'print'" tuiTh [sorter]="null" [sticky]="true">Печать</th>
+            <th *tuiHead="'order_id'" tuiTh [sorter]="null">№ Заказа</th>
+            <th *tuiHead="'date'" tuiTh [sorter]="null">Дата заказа</th>
+            <th *tuiHead="'sender_name'" tuiTh [sorter]="null">Отправитель</th>
+            <th *tuiHead="'recipient_name'" tuiTh [sorter]="null">Получатель</th>
+            <th *tuiHead="'start_city'" tuiTh [sorter]="null">Город отправления</th>
+            <th *tuiHead="'end_city'" tuiTh [sorter]="null">Город получения</th>
+            <th *tuiHead="'order_price'" tuiTh [sorter]="null">Цена</th>
+            <th *tuiHead="'status'" tuiTh [sorter]="null">Статус</th>
+            <th *tuiHead="'print'" tuiTh [sorter]="null">Печать</th>
           </tr>
         </thead>
         <tbody tuiTbody [data]="list.orders">
           @for (order of list.orders; track order.order_id) {
             <tr tuiTr>
-              <td *tuiCell="'order_id'" tuiTd>
+              <td *tuiCell="'order_id'" tuiTd [class.!bg-gray-50]="$even">
                 <button
                   type="button"
                   class="hover:cursor-pointer"
-                  (click)="onOpenOrder(order.order_id)"
+                  (click)="onOrderSelect(order.order_id)"
                 >
                   {{ order.order_id }}
                 </button>
               </td>
-              <td *tuiCell="'date'" tuiTd>
+              <td *tuiCell="'date'" tuiTd [class.!bg-gray-50]="$even">
                 {{ order.date }}
               </td>
-              <td *tuiCell="'sender_name'" tuiTd>
+              <td *tuiCell="'sender_name'" tuiTd [class.!bg-gray-50]="$even">
                 {{ order.sender_name }}
               </td>
-              <td *tuiCell="'recipient_name'" tuiTd>
+              <td *tuiCell="'recipient_name'" tuiTd [class.!bg-gray-50]="$even">
                 {{ order.recipient_name }}
               </td>
-              <td *tuiCell="'start_city'" tuiTd>
+              <td *tuiCell="'start_city'" tuiTd [class.!bg-gray-50]="$even">
                 {{ order.start_city }}
               </td>
-              <td *tuiCell="'end_city'" tuiTd>
+              <td *tuiCell="'end_city'" tuiTd [class.!bg-gray-50]="$even">
                 {{ order.end_city }}
               </td>
-              <td *tuiCell="'order_price'" tuiTd>
+              <td *tuiCell="'order_price'" tuiTd [class.!bg-gray-50]="$even">
                 {{ order.order_price }} {{ 'RUB' | tuiCurrency }}
               </td>
-              <td *tuiCell="'status'" tuiTd>
+              <td *tuiCell="'status'" tuiTd [class.!bg-gray-50]="$even">
                 {{ order.status }}
               </td>
-              <td *tuiCell="'print'" tuiTd>
-                <!--              <button-->
-                <!--                tuiIconButton-->
-                <!--                type="button"-->
-                <!--                appearance="icon"-->
-                <!--                icon="tuiIconPrintLarge"-->
-                <!--                (click)="printOrder(order.order_id)"-->
-                <!--              ></button>-->
-
-                <!--                      <b class="text-yellow hover:cursor-pointer">Напечатать</b>-->
+              <td *tuiCell="'print'" tuiTd [class.!bg-gray-50]="$even">
+                <div class="flex justify-center">
+                  <button
+                    tuiIconButton
+                    type="button"
+                    appearance="icon"
+                    iconStart="@tui.printer"
+                    (click)="onOrderPrint(order.order_id)"
+                  >
+                    &nbsp;
+                  </button>
+                </div>
               </td>
             </tr>
           }
@@ -113,18 +115,18 @@
         tuiButton
         appearance="outline"
         iconStart="@tui.download"
-        [loading]="export.isExporting"
-        (click)="onExportToExcel()"
-        [disabled]="!export.canExport || export.isExporting"
+        [loading]="list.isExporting"
+        (click)="onExport()"
+        [disabled]="!list.canExport || list.isExporting"
       >
         Экспорт в Excel
       </button>
 
-      @if (pagination.isVisible) {
+      @if (list.pagination.isVisible) {
         <tui-pagination
           [style.float]="'right'"
-          [length]="pagination.totalPages"
-          [index]="pagination.currentPage - 1"
+          [length]="list.pagination.totalPages"
+          [index]="list.pagination.currentPage - 1"
           (indexChange)="onPageChange($event)"
         />
       }

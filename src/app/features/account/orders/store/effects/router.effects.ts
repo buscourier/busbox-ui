@@ -43,7 +43,7 @@ export const routerEffects = {
           if (!pickupCityId && !deliveryCityId && !range) {
             return of(
               OrdersActions.clearFilter(),
-              OrdersActions.setCurrentPage({ page: page || DEFAULT_PAGE }),
+              OrdersActions.setPage({ page: page || DEFAULT_PAGE }),
               OrdersActions.setPageSize({ pageSize: pageSize || DEFAULT_PAGE_SIZE }),
             );
           }
@@ -58,7 +58,7 @@ export const routerEffects = {
 
             return of(
               OrdersActions.setFilter({ filter }),
-              OrdersActions.setCurrentPage({ page: page || DEFAULT_PAGE }),
+              OrdersActions.setPage({ page: page || DEFAULT_PAGE }),
               OrdersActions.setPageSize({ pageSize: pageSize || DEFAULT_PAGE_SIZE }),
             );
           }
@@ -96,7 +96,7 @@ export const routerEffects = {
 
                   return of(
                     OrdersActions.setFilter({ filter }),
-                    OrdersActions.setCurrentPage({ page: page || DEFAULT_PAGE }),
+                    OrdersActions.setPage({ page: page || DEFAULT_PAGE }),
                     OrdersActions.setPageSize({ pageSize: pageSize || DEFAULT_PAGE_SIZE }),
                   );
                 }),

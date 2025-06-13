@@ -106,7 +106,6 @@ export interface CarrierInfo {
 }
 
 export interface CancelOrderPayload {
-  'api-key': string;
   'user-id': string;
   'order-id': string;
 }

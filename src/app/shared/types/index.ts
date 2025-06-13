@@ -10,3 +10,4 @@ export * from './preferred-time-slot.types';
 export * from './tab.types';
 export * from './pagination.types';
 export * from './error-status.types';
+export * from './async.types';

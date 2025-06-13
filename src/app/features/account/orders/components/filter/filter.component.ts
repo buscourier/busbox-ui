@@ -87,10 +87,10 @@ export class FilterComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const { currentFilter } = this.filter;
+    const { params } = this.filter;
 
-    if (changes['filter'] && currentFilter && this.form) {
-      this.form.patchValue(currentFilter, { emitEvent: false });
+    if (changes['filter'] && params && this.form) {
+      this.form.patchValue(params, { emitEvent: false });
     }
   }
 
@@ -120,8 +120,8 @@ export class FilterComponent implements OnInit, OnChanges {
   }
 
   private restoreInitialFilter(): void {
-    if (this.filter.currentFilter) {
-      this.form.patchValue(this.filter.currentFilter, { emitEvent: false });
+    if (this.filter.params) {
+      this.form.patchValue(this.filter.params, { emitEvent: false });
     }
   }
 

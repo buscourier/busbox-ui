@@ -1,15 +1,17 @@
 import type { ApiError } from '@shared/types';
 
-import type { Filter, Order, OrderDetails } from '../types';
+import type { Errors, Filter, Order, OrderDetails } from '../types';
 
 export interface OrderListViewModel {
   isLoading: boolean;
   isLoaded: boolean;
+  isExporting: boolean;
+  isEmpty: boolean;
   orders: Order[];
-  totalCount: string | null;
-  totalPages: number;
-  selectedOrderId: string | null;
-  error: ApiError | null;
+  totalCount: number;
+  selectedId: string | null;
+  canExport: boolean;
+  pagination: PaginationViewModel;
 }
 
 export interface PaginationViewModel {
@@ -22,7 +24,7 @@ export interface PaginationViewModel {
 }
 
 export interface FilterViewModel {
-  currentFilter: Filter;
+  params: Filter;
   isActive: boolean;
 }
 
@@ -35,17 +37,14 @@ export interface OrdersExportViewModel {
 export interface OrderViewModel {
   isLoading: boolean;
   isLoaded: boolean;
-  isCanceling: boolean;
   details: OrderDetails | null;
-  isNew: boolean;
-  error: ApiError | null;
-  cancelError: ApiError | null;
+  canCancel: boolean;
+  isCanceling: boolean;
 }
 
 export interface OrdersViewModel {
   list: OrderListViewModel;
   order: OrderViewModel;
-  pagination: PaginationViewModel;
   filter: FilterViewModel;
-  exportStatus: OrdersExportViewModel;
+  errors: Errors;
 }

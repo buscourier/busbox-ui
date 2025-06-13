@@ -21,17 +21,18 @@ export const orderListEffects = {
   setPayload: createEffect(
     (actions$ = inject(Actions), store = inject(Store), authFacade = inject(AuthFacade)) => {
       return actions$.pipe(
-        ofType(OrdersActions.setFilter, OrdersActions.setCurrentPage, OrdersActions.setPageSize),
+        ofType(OrdersActions.setFilter, OrdersActions.setPage, OrdersActions.setPageSize),
         switchMap(() =>
           authFacade.getCurrentUser().pipe(
             filter((user) => !!user),
             first(),
             withLatestFrom(
               store.select(ordersFeature.selectFilter),
-              store.select(ordersFeature.selectCurrentPage),
-              store.select(ordersFeature.selectPageSize),
+              store.select(ordersFeature.selectPagination),
             ),
-            map(([user, filter, currentPage, pageSize]) => {
+            map(([user, filter, pagination]) => {
+              const { currentPage, pageSize } = pagination;
+
               const payload: OrderListPayload = {
                 'user-id': user.id,
                 'page-num': currentPage.toString(),
@@ -44,7 +45,7 @@ export const orderListEffects = {
                 ...(filter.deliveryCity && { 'end-city': filter.deliveryCity.id }),
               };
 
-              return OrdersActions.getOrderList({ payload });
+              return OrdersActions.loadList({ payload });
             }),
           ),
         ),
@@ -56,13 +57,13 @@ export const orderListEffects = {
   loadList: createEffect(
     (actions$ = inject(Actions), ordersService = inject(OrdersService)) => {
       return actions$.pipe(
-        ofType(OrdersActions.getOrderList),
+        ofType(OrdersActions.loadList),
         distinctUntilChanged((prev, curr) => isObjectsEqual(prev, curr)),
         switchMap(({ payload }) =>
           ordersService.getOrderList(payload).pipe(
             mapResponse({
-              next: (response) => OrdersActions.getOrderListSuccess({ response }),
-              error: (error: ApiError) => OrdersActions.getOrderListFailure({ error }),
+              next: (response) => OrdersActions.loadListSuccess({ response }),
+              error: (error: ApiError) => OrdersActions.loadListFailure({ error }),
             }),
           ),
         ),

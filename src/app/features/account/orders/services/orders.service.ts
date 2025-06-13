@@ -23,7 +23,6 @@ export class OrdersService extends ApiService {
   }
 
   getOrderList(payload: OrderListPayload): Observable<OrderListResponse> {
-    console.log('PAYLOOAD', payload);
     return this.http
       .post<OrderListResponse>(
         `${this.baseUrl}/order/getorders/`,
@@ -43,7 +42,13 @@ export class OrdersService extends ApiService {
 
   cancelOrder(payload: CancelOrderPayload): Observable<CancelOrderResponse> {
     return this.http
-      .post<CancelOrderResponse>(`${this.baseUrl}/order/ordercancel`, payload)
+      .post<CancelOrderResponse>(
+        `${this.baseUrl}/order/ordercancel`,
+        JSON.stringify({
+          'api-key': environment.apiKey,
+          ...payload,
+        }),
+      )
       .pipe(catchError(this.handleError.bind(this)));
   }
 }

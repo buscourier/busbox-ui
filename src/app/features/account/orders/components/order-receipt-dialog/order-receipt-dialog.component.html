@@ -1,0 +1,305 @@
+@let vm = vm$ | async;
+
+@if (vm) {
+  <div class="relative block overflow-x-auto p-6 pt-12 print:p-0 md:p-8">
+    <div class="min-h-[460px] w-[783px] print:block print:min-h-min print:w-auto">
+      @if (vm.order.details?.order; as order) {
+        <div class="grid grid-cols-1 gap-8 print:flex print:flex-wrap print:gap-0">
+          <div class="break-inside-avoid print:scale-75 print:w-[20cm] print:h-auto">
+            <table class="w-full border border-zinc-600 print:h-[18mm]">
+              <tr class="print:h-[9mm]">
+                <td class="w-[25mm] h-[18mm] text-center border border-zinc-600 text-xs p-0.5">
+                  <img
+                    src="/assets/images/print-logo.png"
+                    class="inline-block w-[20mm] h-auto"
+                    alt="Logo"
+                  />
+                </td>
+                <td class="w-[45mm] border border-zinc-600 text-xs p-0.5">
+                  <b>ЗАКАЗ {{ order.order_id }}</b
+                  ><br />
+                  <b>ДАТА {{ order.order_date.date }}</b>
+                </td>
+                <td rowspan="2" class="w-[80mm] text-center border border-zinc-600 text-xs p-0.5">
+                  <span class="text-[8px]">
+                    Баскурьер, Приморский край, г. Владивосток, ул. Русская 2а, корп 3
+                  </span>
+                  <br />
+                  <div class="text-xs pt-[1.5mm]">
+                    Единая справочная: +7 (423) 293 78 79<br />
+                    e-mail: inbox&#64;busbox.guru сайт: баскурьер.рф / www.busbox.guru
+                  </div>
+                </td>
+                <td class="w-16 border border-zinc-600 text-xs p-0.5">
+                  <img [src]="getQrCodeUrl(order.order_id)" alt="QR Code" />
+                </td>
+                <td rowspan="2" class="border border-zinc-600 text-xs p-0.5">
+                  <img alt="Barcode" [src]="getBarcodeUrl(order.order_id)" />
+                </td>
+              </tr>
+            </table>
+
+            <!-- Main Content Table -->
+            <table class="w-full border border-zinc-600 print:h-[72mm] print:w-full">
+              <!-- Sender Section -->
+              <tr class="print:h-[9mm]">
+                <!-- Vertical Label Cell -->
+                <td
+                  class="w-[4mm] bg-zinc-400 border-t border-b border-black text-xs p-0.5 pl-0 pr-0"
+                  rowspan="4"
+                >
+                  <span
+                    class="block h-[120px] text-center text-[10px] [writing-mode:vertical-lr] rotate-180"
+                    >отправитель</span
+                  >
+                </td>
+                <!-- Info Cell -->
+                <td
+                  class="align-top border-b border-r border-black text-xs p-0.5 w-[95mm] relative h-9"
+                >
+                  <span class="text-xs font-bold">Компания:</span>
+                  <br />
+                  <span class="text-base absolute bottom-0.5 right-1.5 leading-[15px] text-right">{{
+                    order.sender_company
+                  }}</span>
+                </td>
+                <td class="border-b border-black text-xs p-0.5 relative">
+                  <span class="text-xs font-bold">Мест: </span>
+                  <span class="text-xl font-bold">{{ order.cargo_count }}</span>
+                  &nbsp;&nbsp;&nbsp;
+                  <span class="text-xs font-bold">Тип отправления: </span>
+                  <span class="text-base absolute bottom-0.5 right-1.5 leading-[15px] text-right">{{
+                    order.cargo_type
+                  }}</span>
+                </td>
+                <!-- Vertical Label Cell -->
+                <td
+                  class="w-[4mm] bg-zinc-400 border-t border-b border-black text-xs p-0.5 pl-0 pr-0"
+                  rowspan="4"
+                >
+                  <span
+                    class="block h-[120px] text-center text-[10px] [writing-mode:vertical-lr] rotate-180"
+                    >описание отправления</span
+                  >
+                </td>
+              </tr>
+
+              <tr class="print:h-[9mm]">
+                <td
+                  class="align-top border-b border-r border-black text-xs p-0.5 w-[95mm] relative h-9"
+                >
+                  <span class="text-xs font-bold">ФИО отправителя:</span>
+                  <br />
+                  <span class="text-base absolute bottom-0.5 right-1.5 leading-[15px] text-right">{{
+                    order.sender_name
+                  }}</span>
+                </td>
+                <td class="border-b border-black text-xs p-0.5 relative align-top">
+                  <span class="text-xs font-bold">Описание вложения:</span>
+                  <span class="text-base absolute bottom-0.5 right-1.5 leading-[15px] text-right">{{
+                    order.cargo_description
+                  }}</span>
+                </td>
+              </tr>
+
+              <tr class="print:h-[9mm]">
+                <td
+                  class="align-top border-b border-r border-black text-xs p-0.5 w-[95mm] relative h-9"
+                >
+                  <span class="text-xs font-bold">Пункт отправления:</span>
+                  <br />
+                  <span class="text-base absolute bottom-0.5 right-1.5 leading-[15px] text-right">{{
+                    order.city_from
+                  }}</span>
+                </td>
+                <td class="border-b border-black text-[10px] p-0.5">
+                  @for (dim of order.dimensions_raw; track dim) {
+                    <span>
+                      мест:{{ dim.count }} {{ dim.width }}x{{ dim.height }}x{{ dim.length }}(см)
+                      {{ dim.weight }}кг
+                    </span>
+                  }
+                </td>
+              </tr>
+
+              <tr class="print:h-[9mm]">
+                <td
+                  class="align-top border-b border-r border-black text-xs p-0.5 w-[95mm] relative h-9 border-b"
+                >
+                  <span class="text-xs font-bold">Телефон отправителя:</span>
+                  <br />
+                  <span class="text-base absolute bottom-0.5 right-1.5 leading-[15px] text-right">{{
+                    order.sender_phone
+                  }}</span>
+                </td>
+                <td class="border-b border-black align-top text-xs p-0 pb-1.5">
+                  <div class="ml-1.5 max-h-7 overflow-hidden">
+                    <span class="text-xs font-bold">Привязанные типы услуг:</span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Recipient Section -->
+              <tr class="print:h-[9mm]">
+                <!-- Vertical Label Cell -->
+                <td class="w-[4mm] bg-zinc-400 text-xs p-0.5 pl-0 pr-0" rowspan="4">
+                  <span
+                    class="block h-[120px] text-center text-[10px] [writing-mode:vertical-lr] rotate-180"
+                    >получатель</span
+                  >
+                </td>
+                <td
+                  class="align-top border-b border-r border-black text-xs p-0.5 w-[95mm] relative h-9"
+                >
+                  <span class="text-xs font-bold">Компания:</span>
+                  <br />
+                  <span class="text-base absolute bottom-0.5 right-1.5 leading-[15px] text-right">{{
+                    order.recipient_company
+                  }}</span>
+                </td>
+                <!-- Payment Section -->
+                <td colspan="2" rowspan="2" class="p-0">
+                  <!-- Payment Header -->
+                  <div class="relative w-full mb-4">
+                    <div class="absolute text-center w-full -top-1.5 bg-zinc-400 text-[10px]">
+                      Информация об оплате
+                    </div>
+                  </div>
+                  <!-- Payment Content -->
+                  <div class="pb-2">
+                    <div class="inline-block pl-4">
+                      <label class="flex items-center justify-between">
+                        <span class="text-xs font-semibold flex-1 mr-1">
+                          {{ isPayerSender() ? 'Оплата отправителем' : 'Оплата получателем' }}
+                        </span>
+                        <input
+                          type="checkbox"
+                          [checked]="isPayerSender()"
+                          disabled
+                          class="h-4 w-4 bg-blue-600"
+                        />
+                      </label>
+                    </div>
+                    <div class="inline-block pl-4">
+                      <label class="flex items-center justify-between">
+                        <span class="text-xs font-bold flex-1 mr-1">
+                          {{ isCashPayment() ? 'Наличный расчет' : 'Безналичный расчет' }}
+                        </span>
+                        <input
+                          type="checkbox"
+                          [checked]="isCashPayment()"
+                          disabled
+                          class="h-4 w-4 bg-blue-600"
+                        />
+                      </label>
+                    </div>
+                    <div class="inline-block w-[49%] pl-4">
+                      <div class="w-full text-center text-[10px]">
+                        <span class="font-semibold block">СТОИМОСТЬ ДОСТАВКИ:</span>
+                        <span class="text-base font-medium block"
+                          >{{ order.order_price }} руб.</span
+                        >
+                      </div>
+                    </div>
+                    <div class="inline-block w-[49%] pl-4">
+                      <div class="w-full text-center text-[10px]">
+                        <span class="font-semibold block">ДАТА ОТПРАВКИ:</span>
+                        <span class="text-xl font-bold block">{{
+                          formatDate(order.sending_date)
+                        }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <tr class="print:h-[9mm]">
+                <td
+                  class="align-top border-b border-r border-black text-xs p-0.5 w-[95mm] relative h-9"
+                >
+                  <span class="text-xs font-bold">ФИО получателя:</span>
+                  <br />
+                  <span class="text-base absolute bottom-0.5 right-1.5 leading-[15px] text-right">{{
+                    order.recipient_name
+                  }}</span>
+                </td>
+              </tr>
+
+              <tr class="print:h-[9mm]">
+                <td
+                  class="align-top border-b border-r border-black text-xs p-0.5 w-[95mm] relative h-9"
+                >
+                  <span class="text-xs font-bold">Пункт назначения:</span>
+                  <br />
+                  <span
+                    class="text-xl font-bold absolute bottom-1.5 right-1.5 leading-[15px] text-right"
+                    >{{ order.city_to }}</span
+                  >
+                </td>
+                <!-- Terms Section -->
+                <td
+                  colspan="2"
+                  rowspan="2"
+                  class="text-justify align-top border-t border-black text-xs p-0.5"
+                >
+                  <div class="text-[7px] leading-tight mb-2">
+                    Настоящим я подтверждаю, что отправление не содержит предметы, запрещенные к
+                    пересылке. Согласен со всеми правилами перевозки грузов компании Баскурьер.
+                    Ознакомиться с правилами и отследить посылку можно на сайте или отсканировав
+                    QR-код на квитанции. Обязуюсь соблюдать все правила и условия. Соглашение между
+                    Исполнителем и заказчиком о приемке Груза на условиях, изложенных в Договоре и
+                    правилах перевозки грузов Баскурьер, считается заключенным с момента подписания
+                    Отправителем бланка накладной.
+                  </div>
+                  <!-- Signature Section -->
+                  <div class="w-full text-left space-y-1">
+                    <div class="text-xs font-bold">
+                      ФИО и подпись отправителя: ________________________________________
+                    </div>
+                    <div class="text-xs font-bold">
+                      Менеджер: {{ order.manager }} Подпись: ______________
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <tr class="print:h-[9mm]">
+                <td class="align-top border-r border-black text-xs p-0.5 w-[95mm] relative h-9">
+                  <span class="text-xs font-bold">Телефон получателя:</span>
+                  <br />
+                  <span class="text-base absolute bottom-0.5 right-1.5 leading-[15px] text-right">{{
+                    order.recipient_phone
+                  }}</span>
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <!-- Print spacing -->
+          <div class="print:h-10"></div>
+
+          <!-- Action Buttons -->
+          <div class="space-x-2 print:invisible print:h-0">
+            <button
+              type="button"
+              tuiButton
+              (click)="handlePrint()"
+              class="bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              Напечатать
+            </button>
+            <button
+              type="button"
+              appearance="accent"
+              tuiButton
+              (click)="handleClose()"
+              class="bg-green-600 hover:bg-green-700 text-white"
+            >
+              Закрыть
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+}

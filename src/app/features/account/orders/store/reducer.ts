@@ -1,44 +1,45 @@
 import { createReducer, on } from '@ngrx/store';
 
-import { LoadingStatus } from '@shared/types';
+import { AsyncStatus, LoadingStatus } from '@shared/types';
 
 import { DEFAULT_PAGE } from '../constants';
 
 import { OrdersActions } from './actions';
-import { initialState, type OrdersFeatureState } from './state';
+import { adapter, initialState, type OrdersFeatureState } from './state';
 
 export const ordersReducer = createReducer(
   initialState,
   on(
-    OrdersActions.getOrderList,
+    OrdersActions.loadList,
     (state): OrdersFeatureState => ({
       ...state,
       list: {
         ...state.list,
-        status: LoadingStatus.LOADING,
+        status: AsyncStatus.LOADING, // ← используйте AsyncStatus
         error: null,
       },
     }),
   ),
+
   on(
-    OrdersActions.getOrderListSuccess,
+    OrdersActions.loadListSuccess,
     (state, { response }): OrdersFeatureState => ({
       ...state,
-      list: {
+      list: adapter.setAll(response.orders, {
         ...state.list,
-        status: LoadingStatus.LOADED,
-        orders: response.orders,
-        totalCount: response.rows,
-      },
+        status: AsyncStatus.LOADED,
+        totalCount: Number(response.rows) || 0,
+      }),
     }),
   ),
+
   on(
-    OrdersActions.getOrderListFailure,
+    OrdersActions.loadListFailure,
     (state, { error }): OrdersFeatureState => ({
       ...state,
       list: {
         ...state.list,
-        status: LoadingStatus.ERROR,
+        status: AsyncStatus.ERROR,
         error,
       },
     }),
@@ -66,33 +67,33 @@ export const ordersReducer = createReducer(
   ),
 
   on(
-    OrdersActions.getOrder,
+    OrdersActions.loadDetails,
     (state): OrdersFeatureState => ({
       ...state,
-      order: {
-        ...state.order,
+      details: {
+        ...state.details,
         status: LoadingStatus.LOADING,
         error: null,
       },
     }),
   ),
   on(
-    OrdersActions.getOrderSuccess,
-    (state, { details }): OrdersFeatureState => ({
+    OrdersActions.loadDetailsSuccess,
+    (state, { data }): OrdersFeatureState => ({
       ...state,
-      order: {
-        ...state.order,
+      details: {
+        ...state.details,
         status: LoadingStatus.LOADED,
-        details,
+        data,
       },
     }),
   ),
   on(
-    OrdersActions.getOrderFailure,
+    OrdersActions.loadDetailsFailure,
     (state, { error }): OrdersFeatureState => ({
       ...state,
-      order: {
-        ...state.order,
+      details: {
+        ...state.details,
         status: LoadingStatus.ERROR,
         error,
       },
@@ -100,45 +101,58 @@ export const ordersReducer = createReducer(
   ),
 
   on(
-    OrdersActions.cancelOrder,
+    OrdersActions.cancel,
     (state): OrdersFeatureState => ({
       ...state,
-      order: {
-        ...state.order,
-        isCanceling: true,
-        cancelError: null,
+      operations: {
+        ...state.operations,
+        cancel: {
+          ...state.operations.cancel,
+          status: LoadingStatus.LOADING,
+          error: null,
+        },
       },
     }),
   ),
   on(
-    OrdersActions.cancelOrderSuccess,
+    OrdersActions.cancelSuccess,
     (state): OrdersFeatureState => ({
       ...state,
-      order: {
-        ...state.order,
-        isCanceling: false,
+      operations: {
+        ...state.operations,
+        cancel: {
+          ...state.operations.cancel,
+          status: LoadingStatus.LOADED,
+          // data: ???
+        },
       },
     }),
   ),
   on(
-    OrdersActions.cancelOrderFailure,
+    OrdersActions.cancelFailure,
     (state, { error }): OrdersFeatureState => ({
       ...state,
-      order: {
-        ...state.order,
-        isCanceling: false,
-        cancelError: error,
+      operations: {
+        ...state.operations,
+        cancel: {
+          ...state.operations.cancel,
+          status: LoadingStatus.ERROR,
+          error,
+        },
       },
     }),
   ),
 
   on(
-    OrdersActions.setCurrentPage,
+    OrdersActions.setPage,
     (state, { page }): OrdersFeatureState => ({
       ...state,
-      pagination: {
-        ...state.pagination,
-        currentPage: page,
+      query: {
+        ...state.query,
+        pagination: {
+          ...state.query.pagination,
+          currentPage: page,
+        },
       },
     }),
   ),
@@ -147,70 +161,87 @@ export const ordersReducer = createReducer(
     OrdersActions.setPageSize,
     (state, { pageSize }): OrdersFeatureState => ({
       ...state,
-      pagination: {
-        ...state.pagination,
-        pageSize,
-        // currentPage: DEFAULT_PAGE, //!!!!!
+      query: {
+        ...state.query,
+        pagination: {
+          ...state.query.pagination,
+          pageSize,
+        },
       },
     }),
   ),
-
-  on(
-    OrdersActions.clearFilter,
-    (state): OrdersFeatureState => ({
-      ...state,
-      filter: {
-        range: null,
-        pickupCity: null,
-        deliveryCity: null,
-      },
-      pagination: {
-        ...state.pagination,
-        currentPage: DEFAULT_PAGE,
-      },
-    }),
-  ),
-
   on(
     OrdersActions.setFilter,
     (state, { filter }): OrdersFeatureState => ({
       ...state,
-      filter,
-      pagination: {
-        ...state.pagination,
-        currentPage: DEFAULT_PAGE,
+      query: {
+        ...state.query,
+        filter,
+        pagination: {
+          ...state.query.pagination,
+          currentPage: DEFAULT_PAGE,
+        },
       },
     }),
   ),
   on(
-    OrdersActions.exportOrdersToExcel,
+    OrdersActions.clearFilter,
     (state): OrdersFeatureState => ({
       ...state,
-      export: {
-        ...state.export,
-        status: LoadingStatus.LOADING,
-        error: null,
+      query: {
+        ...state.query,
+        filter: {
+          pickupCity: null,
+          deliveryCity: null,
+          range: null,
+        },
+        pagination: {
+          ...state.query.pagination,
+          currentPage: DEFAULT_PAGE,
+        },
       },
     }),
   ),
+
   on(
-    OrdersActions.exportOrdersToExcelSuccess,
+    OrdersActions.exportToExcel,
     (state): OrdersFeatureState => ({
       ...state,
-      export: {
-        ...state.export,
-        status: LoadingStatus.LOADED,
+      operations: {
+        ...state.operations,
+        export: {
+          ...state.operations.export,
+          status: AsyncStatus.LOADING,
+          error: null,
+        },
       },
     }),
   ),
   on(
-    OrdersActions.exportOrdersToExcelFailure,
+    OrdersActions.exportToExcelSuccess,
+    (state): OrdersFeatureState => ({
+      ...state,
+      operations: {
+        ...state.operations,
+        export: {
+          ...state.operations.export,
+          status: AsyncStatus.LOADED,
+          // data: ???
+        },
+      },
+    }),
+  ),
+  on(
+    OrdersActions.exportToExcelFailure,
     (state, { error }): OrdersFeatureState => ({
       ...state,
-      export: {
-        ...state.export,
-        status: LoadingStatus.ERROR,
-        error,
+      operations: {
+        ...state.operations,
+        export: {
+          ...state.operations.export,
+          status: AsyncStatus.ERROR,
+          error,
+        },
       },
     }),
   ),

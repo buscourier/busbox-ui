@@ -32,7 +32,7 @@ import { TuiTextfieldControllerModule } from '@taiga-ui/legacy';
 import { debounceTime, distinctUntilChanged, filter, fromEvent } from 'rxjs';
 
 import { DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS } from '../../constants';
-import type { OrderListViewModel, OrdersExportViewModel, PaginationViewModel } from '../../types';
+import type { OrderListViewModel } from '../../types';
 
 @Component({
   selector: 'app-order-list',
@@ -60,13 +60,12 @@ import type { OrderListViewModel, OrdersExportViewModel, PaginationViewModel } f
 })
 export class OrderListComponent implements OnInit, OnChanges, AfterViewInit {
   @Input({ required: true }) list!: OrderListViewModel;
-  @Input({ required: true }) pagination!: PaginationViewModel;
-  @Input({ required: true }) export!: OrdersExportViewModel;
 
   @Output() pageChange = new EventEmitter<number>();
   @Output() pageSizeChange = new EventEmitter<number>();
-  @Output() openOrder = new EventEmitter<string>();
-  @Output() exportToExcel = new EventEmitter<void>();
+  @Output() orderSelect = new EventEmitter<string>();
+  @Output() orderPrint = new EventEmitter<string>();
+  @Output() export = new EventEmitter<void>();
 
   @ViewChild('tableContainer') tableContainer!: ElementRef;
 
@@ -99,16 +98,21 @@ export class OrderListComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['pagination'] && this.pagination?.pageSize) {
-      this.pageSize.setValue(this.pagination.pageSize, { emitEvent: false });
+    if (changes['pagination'] && this.list.pagination?.pageSize) {
+      this.pageSize.setValue(this.list.pagination.pageSize, { emitEvent: false });
     }
 
     if (changes['list'] && this.tableContainer) {
       setTimeout(() => this.checkScrollState(), 0);
     }
+
+    if (changes['list'] && this.list?.orders?.length) {
+      setTimeout(() => this.initScrollState(), 0);
+    }
   }
 
   ngAfterViewInit(): void {
+    this.initScrollState();
     this.checkScrollState();
 
     if (isPlatformBrowser(this.platformId)) {
@@ -130,16 +134,20 @@ export class OrderListComponent implements OnInit, OnChanges, AfterViewInit {
     this.pageChange.emit(pageIndex + 1);
   }
 
-  onOpenOrder(id: string) {
-    this.openOrder.emit(id);
+  onOrderSelect(id: string) {
+    this.orderSelect.emit(id);
+  }
+
+  onOrderPrint(id: string) {
+    this.orderPrint.emit(id);
   }
 
   getSkeletonArray(): number[] {
     return Array(DEFAULT_PAGE_SIZE).fill(0);
   }
 
-  onExportToExcel(): void {
-    this.exportToExcel.emit();
+  onExport(): void {
+    this.export.emit();
   }
 
   getOrdersWord(count: number): string {
@@ -182,5 +190,16 @@ export class OrderListComponent implements OnInit, OnChanges, AfterViewInit {
       this.showLeftFade = element.scrollLeft > 5;
       this.showRightFade = element.scrollLeft < element.scrollWidth - element.clientWidth - 5;
     }
+  }
+
+  private initScrollState(): void {
+    if (!this.tableContainer) return;
+
+    const element = this.tableContainer.nativeElement;
+    const canScrollRight = element.scrollWidth > element.clientWidth;
+
+    // Если можно прокручивать вправо - показываем тень сразу
+    this.showRightFade = canScrollRight;
+    this.showLeftFade = false;
   }
 }

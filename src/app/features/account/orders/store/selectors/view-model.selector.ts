@@ -3,7 +3,6 @@ import { createSelector } from '@ngrx/store';
 import type {
   FilterViewModel,
   OrderListViewModel,
-  OrdersExportViewModel,
   OrdersViewModel,
   OrderViewModel,
   PaginationViewModel,
@@ -16,86 +15,80 @@ export const createViewModelSelector = (
   baseSelectors: BaseSelectors,
   derivedSelectors: DerivedSelectors,
 ) => {
-  const selectOrderListViewModel = createSelector(
-    baseSelectors.selectIsOrderListLoading,
-    baseSelectors.selectIsOrderListLoaded,
-    baseSelectors.selectOrderList,
-    baseSelectors.selectTotalCount,
-    derivedSelectors.selectTotalPages,
-    baseSelectors.selectSelectedOrderId,
-    baseSelectors.selectOrderListError,
-    (
-      isLoading,
-      isLoaded,
-      orders,
-      totalCount,
-      totalPages,
-      selectedOrderId,
-      error,
-    ): OrderListViewModel => ({
-      isLoading,
-      isLoaded,
-      orders,
-      totalCount,
-      totalPages,
-      selectedOrderId,
-      error,
-    }),
-  );
-
-  const selectOrderViewModel = createSelector(
-    baseSelectors.selectIsOrderLoading,
-    baseSelectors.selectIsOrderLoaded,
-    baseSelectors.selectOrderError,
-    baseSelectors.selectOrderDetails,
-    derivedSelectors.selectIsNewOrder,
-    baseSelectors.selectIsOrderCanceling,
-    baseSelectors.selectOrderCancelError,
-    (isLoading, isLoaded, error, details, isNew, isCanceling, cancelError): OrderViewModel => ({
-      isLoading,
-      isLoaded,
-      error,
-      details,
-      isNew,
-      isCanceling,
-      cancelError,
-    }),
-  );
-
   const selectPaginationViewModel = createSelector(
-    baseSelectors.selectCurrentPage,
-    baseSelectors.selectPageSize,
+    baseSelectors.selectPagination,
     derivedSelectors.selectTotalPages,
     derivedSelectors.selectIsPaginationVisible,
     derivedSelectors.selectStartItem,
     derivedSelectors.selectEndItem,
-    (currentPage, pageSize, totalPages, isVisible, startItem, endItem): PaginationViewModel => ({
-      currentPage,
-      pageSize,
-      totalPages,
-      isVisible,
-      startItem,
-      endItem,
-    }),
+    (pagination, totalPages, isVisible, startItem, endItem): PaginationViewModel => {
+      const { currentPage, pageSize } = pagination;
+
+      return {
+        currentPage,
+        pageSize,
+        totalPages,
+        isVisible,
+        startItem,
+        endItem,
+      };
+    },
   );
 
   const selectFilterViewModel = createSelector(
     baseSelectors.selectFilter,
     derivedSelectors.selectIsFilterActive,
-    (currentFilter, isActive): FilterViewModel => ({
-      currentFilter,
+    (params, isActive): FilterViewModel => ({
+      params,
       isActive,
     }),
   );
 
-  const selectExportViewModel = createSelector(
-    baseSelectors.selectIsOrdersExporting,
-    baseSelectors.selectOrdersExportError,
-    derivedSelectors.selectCanExportOrders,
-    (isExporting, error, canExport): OrdersExportViewModel => ({
+  const selectOrderListViewModel = createSelector(
+    derivedSelectors.selectIsListLoading,
+    derivedSelectors.selectIsListLoaded,
+    derivedSelectors.selectIsListExporting,
+    derivedSelectors.selectIsListEmpty,
+    baseSelectors.selectAll,
+    baseSelectors.selectTotalCount,
+    baseSelectors.selectSelectedId,
+    derivedSelectors.selectCanExport,
+    selectPaginationViewModel,
+    (
+      isLoading,
+      isLoaded,
       isExporting,
-      error,
+      isEmpty,
+      orders,
+      totalCount,
+      selectedId,
       canExport,
+      pagination,
+    ): OrderListViewModel => ({
+      isLoading,
+      isLoaded,
+      isExporting,
+      isEmpty,
+      orders,
+      totalCount,
+      selectedId,
+      canExport,
+      pagination,
+    }),
+  );
+
+  const selectOrderViewModel = createSelector(
+    derivedSelectors.selectIsDetailsLoading,
+    derivedSelectors.selectIsDetailsLoaded,
+    baseSelectors.selectOrderDetails,
+    derivedSelectors.selectCanCancel,
+    derivedSelectors.selectIsCanceling,
+    (isLoading, isLoaded, details, canCancel, isCanceling): OrderViewModel => ({
+      isLoading,
+      isLoaded,
+      details,
+      canCancel,
+      isCanceling,
     }),
   );
 
@@ -103,15 +96,13 @@ export const createViewModelSelector = (
     selectViewModel: createSelector(
       selectOrderListViewModel,
       selectOrderViewModel,
-      selectPaginationViewModel,
       selectFilterViewModel,
-      selectExportViewModel,
-      (list, order, pagination, filter, exportStatus): OrdersViewModel => ({
+      derivedSelectors.selectErrors,
+      (list, order, filter, errors): OrdersViewModel => ({
         list,
         order,
-        pagination,
         filter,
-        exportStatus,
+        errors,
       }),
     ),
   };
