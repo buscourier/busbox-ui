@@ -1,26 +1,54 @@
 import { AsyncPipe } from '@angular/common';
-import { computed, type OnInit } from '@angular/core';
+import { computed, type ElementRef, type OnInit, ViewChild } from '@angular/core';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { TuiButton, type TuiDialogContext, TuiLoader } from '@taiga-ui/core';
+import { TuiButton, type TuiDialogContext } from '@taiga-ui/core';
 import { injectContext } from '@taiga-ui/polymorpheus';
 import type { Observable } from 'rxjs';
 
 import { OrdersFacade } from '../../orders.facade';
-import type { OrdersViewModel } from '../../types';
+import { PdfGeneratorService } from '../../services/pdf-generator.service';
+import type { OrderInfo, OrdersViewModel } from '../../types';
 
 @Component({
   selector: 'app-order-receipt-dialog',
-  imports: [TuiLoader, AsyncPipe, TuiButton],
+  imports: [AsyncPipe, TuiButton],
   templateUrl: './order-receipt-dialog.component.html',
   styleUrl: './order-receipt-dialog.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrderReceiptDialogComponent implements OnInit {
+  @ViewChild('invoiceContainer', { static: false }) invoiceContainer!: ElementRef;
+
   readonly context = injectContext<TuiDialogContext<string, string>>();
 
   vm$!: Observable<OrdersViewModel>;
 
+  isGeneratingPdf = false;
+
   private readonly ordersFacade = inject(OrdersFacade);
+  private readonly pdfService = inject(PdfGeneratorService);
+
+  async handlePrint(order: OrderInfo) {
+    if (!order || !this.invoiceContainer) {
+      alert('Данные для печати не найдены');
+      return;
+    }
+
+    try {
+      this.isGeneratingPdf = true;
+
+      const filename = `Накладная_${order.order_id}.pdf`;
+
+      await this.pdfService.generateInvoicePDF(this.invoiceContainer.nativeElement, order, {
+        filename,
+      });
+    } catch (error) {
+      console.error('Ошибка при создании PDF:', error);
+      alert('Не удалось создать PDF. Попробуйте еще раз.');
+    } finally {
+      this.isGeneratingPdf = false;
+    }
+  }
 
   protected get orderId(): string {
     return this.context.data;
@@ -47,11 +75,6 @@ export class OrderReceiptDialogComponent implements OnInit {
 
   isPayerSender = computed(() => true);
   isCashPayment = computed(() => true);
-
-  // Event handlers
-  handlePrint(): void {
-    window.print();
-  }
 
   handleClose(): void {
     // Implement close logic

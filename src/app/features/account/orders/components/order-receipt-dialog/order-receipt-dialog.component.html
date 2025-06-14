@@ -1,19 +1,19 @@
 @let vm = vm$ | async;
 
 @if (vm) {
-  <div class="relative block overflow-x-auto p-6 pt-12 print:p-0 md:p-8">
-    <div class="min-h-[460px] w-[783px] print:block print:min-h-min print:w-auto">
+  <div class="relative block overflow-x-auto p-6 pt-12 md:p-8">
+    <div class="min-h-[460px] w-[783px]">
       @if (vm.order.details?.order; as order) {
-        <div class="grid grid-cols-1 gap-8 print:flex print:flex-wrap print:gap-0">
-          <div class="break-inside-avoid print:scale-75 print:w-[20cm] print:h-auto">
-            <table class="w-full border border-zinc-600 print:h-[18mm]">
-              <tr class="print:h-[9mm]">
+        <div class="grid grid-cols-1 gap-8">
+          <div #invoiceContainer class="break-inside-avoid">
+            <table class="w-full border border-zinc-600">
+              <tr>
                 <td class="w-[25mm] h-[18mm] text-center border border-zinc-600 text-xs p-0.5">
-                  <img
-                    src="/assets/images/print-logo.png"
-                    class="inline-block w-[20mm] h-auto"
-                    alt="Logo"
-                  />
+                  <!--                  <img-->
+                  <!--                    src="/assets/images/print-logo.png"-->
+                  <!--                    class="inline-block w-[20mm] h-auto"-->
+                  <!--                    alt="Logo"-->
+                  <!--                  />-->
                 </td>
                 <td class="w-[45mm] border border-zinc-600 text-xs p-0.5">
                   <b>ЗАКАЗ {{ order.order_id }}</b
@@ -40,9 +40,9 @@
             </table>
 
             <!-- Main Content Table -->
-            <table class="w-full border border-zinc-600 print:h-[72mm] print:w-full">
+            <table class="w-full border border-zinc-600">
               <!-- Sender Section -->
-              <tr class="print:h-[9mm]">
+              <tr>
                 <!-- Vertical Label Cell -->
                 <td
                   class="w-[4mm] bg-zinc-400 border-t border-b border-black text-xs p-0.5 pl-0 pr-0"
@@ -84,7 +84,7 @@
                 </td>
               </tr>
 
-              <tr class="print:h-[9mm]">
+              <tr>
                 <td
                   class="align-top border-b border-r border-black text-xs p-0.5 w-[95mm] relative h-9"
                 >
@@ -102,7 +102,7 @@
                 </td>
               </tr>
 
-              <tr class="print:h-[9mm]">
+              <tr>
                 <td
                   class="align-top border-b border-r border-black text-xs p-0.5 w-[95mm] relative h-9"
                 >
@@ -122,7 +122,7 @@
                 </td>
               </tr>
 
-              <tr class="print:h-[9mm]">
+              <tr>
                 <td
                   class="align-top border-b border-r border-black text-xs p-0.5 w-[95mm] relative h-9 border-b"
                 >
@@ -140,7 +140,7 @@
               </tr>
 
               <!-- Recipient Section -->
-              <tr class="print:h-[9mm]">
+              <tr>
                 <!-- Vertical Label Cell -->
                 <td class="w-[4mm] bg-zinc-400 text-xs p-0.5 pl-0 pr-0" rowspan="4">
                   <span
@@ -176,7 +176,7 @@
                           type="checkbox"
                           [checked]="isPayerSender()"
                           disabled
-                          class="h-4 w-4 bg-blue-600"
+                          class="h-4 w-4"
                         />
                       </label>
                     </div>
@@ -189,7 +189,7 @@
                           type="checkbox"
                           [checked]="isCashPayment()"
                           disabled
-                          class="h-4 w-4 bg-blue-600"
+                          class="h-4 w-4"
                         />
                       </label>
                     </div>
@@ -213,7 +213,7 @@
                 </td>
               </tr>
 
-              <tr class="print:h-[9mm]">
+              <tr>
                 <td
                   class="align-top border-b border-r border-black text-xs p-0.5 w-[95mm] relative h-9"
                 >
@@ -225,7 +225,7 @@
                 </td>
               </tr>
 
-              <tr class="print:h-[9mm]">
+              <tr>
                 <td
                   class="align-top border-b border-r border-black text-xs p-0.5 w-[95mm] relative h-9"
                 >
@@ -263,7 +263,7 @@
                 </td>
               </tr>
 
-              <tr class="print:h-[9mm]">
+              <tr>
                 <td class="align-top border-r border-black text-xs p-0.5 w-[95mm] relative h-9">
                   <span class="text-xs font-bold">Телефон получателя:</span>
                   <br />
@@ -275,15 +275,12 @@
             </table>
           </div>
 
-          <!-- Print spacing -->
-          <div class="print:h-10"></div>
-
           <!-- Action Buttons -->
-          <div class="space-x-2 print:invisible print:h-0">
+          <div class="space-x-2">
             <button
               type="button"
               tuiButton
-              (click)="handlePrint()"
+              (click)="handlePrint(order)"
               class="bg-blue-600 hover:bg-blue-700 text-white"
             >
               Напечатать
