@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
-import type { OrderInfo } from '../types';
-
 export interface PdfOptions {
   scale?: number;
   filename?: string;
@@ -20,53 +18,51 @@ export interface PdfGenerationResult {
   error?: string;
   pageCount?: number;
   fileSize?: number;
-  blob?: Blob; // Добавляем Blob в результат
+  blob?: Blob;
 }
 
 @Injectable({
   providedIn: 'root',
 })
-export class PdfGeneratorService {
-  private readonly defaultOptions: Required<PdfOptions> = {
-    scale: 2.5,
-    filename: 'Накладная.pdf',
-    showProgress: true,
-    copyLabels: ['Отправитель', 'Получатель', 'Архив'],
-    quality: 0.95,
-    format: 'a4',
-    orientation: 'portrait',
-  };
+export abstract class PdfGeneratorService {
+  protected get defaultOptions(): Required<PdfOptions> {
+    return {
+      scale: 2.5,
+      filename: 'document.pdf',
+      showProgress: true,
+      copyLabels: ['Копия 1', 'Копия 2', 'Копия 3'],
+      quality: 0.95,
+      format: 'a4',
+      orientation: 'portrait',
+    };
+  }
 
   private loadingIndicatorId = 'pdf-loader';
 
-  /**
-   * Генерирует PDF накладной с тремя экземплярами
-   */
-  async generateInvoicePDF(
+  async generatePDF<T>(
     sourceElement: HTMLElement,
-    invoiceData: OrderInfo,
+    data: T,
     options: Partial<PdfOptions> = {},
   ): Promise<PdfGenerationResult> {
     const config = { ...this.defaultOptions, ...options };
 
     try {
-      this.validateInputs(sourceElement, invoiceData);
+      this.validateInputs(sourceElement, data);
 
       if (config.showProgress) {
         this.showLoadingIndicator();
       }
 
-      const containers = await this.createPageContainers(sourceElement, invoiceData, config);
+      const containers = await this.createPageContainers(sourceElement, data, config);
 
       try {
         const pdfBlob = await this.generateMultiPagePDF(containers, config);
-
         return {
           success: true,
           filename: config.filename,
           pageCount: containers.length,
           fileSize: pdfBlob.size,
-          blob: pdfBlob, // Возвращаем Blob в результате
+          blob: pdfBlob,
         };
       } finally {
         this.cleanupContainers(containers);
@@ -84,10 +80,16 @@ export class PdfGeneratorService {
     }
   }
 
+  protected abstract createPageContainers(
+    sourceElement: HTMLElement,
+    data: unknown,
+    config: Required<PdfOptions>,
+  ): Promise<HTMLElement[]>;
+
   /**
    * Валидация входных параметров
    */
-  private validateInputs(sourceElement: HTMLElement, invoiceData: OrderInfo): void {
+  protected validateInputs(sourceElement: HTMLElement, data: unknown): void {
     if (!sourceElement) {
       throw new Error('Исходный элемент не найден');
     }
@@ -96,49 +98,15 @@ export class PdfGeneratorService {
       throw new Error('Исходный элемент имеет нулевые размеры');
     }
 
-    if (!invoiceData?.order_id) {
+    if (!data) {
       throw new Error('Некорректные данные накладной');
-    }
-  }
-
-  /**
-   * Создает все контейнеры страниц асинхронно
-   */
-  private async createPageContainers(
-    sourceElement: HTMLElement,
-    invoiceData: OrderInfo,
-    config: Required<PdfOptions>,
-  ): Promise<HTMLElement[]> {
-    const containers: HTMLElement[] = [];
-
-    try {
-      // Создаем контейнеры для страниц
-      const page1Container = this.createPageContainer(sourceElement, config, 1);
-      const page2Container = this.createPageContainer(sourceElement, config, 2);
-
-      containers.push(page1Container, page2Container);
-
-      // Добавляем в DOM
-      containers.forEach((container) => document.body.appendChild(container));
-
-      // Ждем загрузки изображений в контейнерах
-      await Promise.all(containers.map((container) => this.ensureImagesLoaded(container)));
-
-      // Ждем рендеринга
-      await this.waitForRender(300);
-
-      return containers;
-    } catch (error) {
-      // Очищаем уже созданные контейнеры в случае ошибки
-      this.cleanupContainers(containers);
-      throw error;
     }
   }
 
   /**
    * Очистка контейнеров из DOM
    */
-  private cleanupContainers(containers: HTMLElement[]): void {
+  protected cleanupContainers(containers: HTMLElement[]): void {
     containers.forEach((container) => {
       if (container.parentNode) {
         container.parentNode.removeChild(container);
@@ -149,7 +117,7 @@ export class PdfGeneratorService {
   /**
    * Создает контейнер для одной страницы
    */
-  private createPageContainer(
+  protected createPageContainer(
     sourceElement: HTMLElement,
     config: Required<PdfOptions>,
     pageNumber: number,
@@ -160,14 +128,6 @@ export class PdfGeneratorService {
     container.id = `pdf-container-page-${pageNumber}-${Date.now()}`;
 
     this.setupPageContainerStyles(container, pageNumber, config.format);
-
-    if (pageNumber === 1) {
-      this.addInvoiceCopy(container, sourceElement, 1, config.copyLabels[0]);
-      this.addPageSeparator(container);
-      this.addInvoiceCopy(container, sourceElement, 2, config.copyLabels[1]);
-    } else {
-      this.addInvoiceCopy(container, sourceElement, 3, config.copyLabels[2]);
-    }
 
     return container;
   }
@@ -201,7 +161,7 @@ export class PdfGeneratorService {
   /**
    * Добавляет копию накладной в контейнер
    */
-  private addInvoiceCopy(
+  protected addSourceCopy(
     container: HTMLElement,
     sourceElement: HTMLElement,
     copyNumber: number,
@@ -210,15 +170,15 @@ export class PdfGeneratorService {
     const header = this.createCopyHeader(copyNumber, label);
     container.appendChild(header);
 
-    const invoiceCopy = this.createInvoiceCopy(sourceElement);
-    this.applyCopyStyles(invoiceCopy, copyNumber === 3); // Третий экземпляр на полную страницу
-    container.appendChild(invoiceCopy);
+    const copy = this.createSourceCopy(sourceElement);
+    this.applyCopyStyles(copy, copyNumber === 3); // Третий экземпляр на полную страницу
+    container.appendChild(copy);
   }
 
   /**
    * Добавляет разделитель между накладными
    */
-  private addPageSeparator(container: HTMLElement): void {
+  protected addPageSeparator(container: HTMLElement): void {
     const separator = document.createElement('div');
     Object.assign(separator.style, {
       borderTop: '1px dashed #999',
@@ -251,7 +211,7 @@ export class PdfGeneratorService {
   /**
    * Создает копию накладной с очисткой от интерактивных элементов
    */
-  private createInvoiceCopy(sourceElement: HTMLElement): HTMLElement {
+  private createSourceCopy(sourceElement: HTMLElement): HTMLElement {
     const copy = sourceElement.cloneNode(true) as HTMLElement;
 
     this.removeInteractiveElements(copy);
@@ -459,7 +419,7 @@ export class PdfGeneratorService {
   /**
    * Ожидание рендеринга с прогрессом
    */
-  private async waitForRender(ms = 200): Promise<void> {
+  protected async waitForRender(ms = 200): Promise<void> {
     return new Promise((resolve) => {
       setTimeout(() => {
         // Проверяем что все изображения загружены
@@ -483,7 +443,7 @@ export class PdfGeneratorService {
   /**
    * Генерация PDF с возвратом Blob
    */
-  private async generateMultiPagePDF(
+  protected async generateMultiPagePDF(
     containers: HTMLElement[],
     options: Required<PdfOptions>,
   ): Promise<Blob> {
@@ -536,7 +496,7 @@ export class PdfGeneratorService {
   /**
    * Дополнительная обработка изображений перед созданием PDF (если потребуется)
    */
-  private ensureImagesLoaded(container: HTMLElement): Promise<void> {
+  protected ensureImagesLoaded(container: HTMLElement): Promise<void> {
     const images = container.querySelectorAll('img');
     const imagePromises = Array.from(images).map((img) => {
       return new Promise<void>((resolve) => {
@@ -577,7 +537,7 @@ export class PdfGeneratorService {
   }
 
   /**
-   * Создает URL для Blob объекта (для просмотра в PDF viewer)
+   * Создает URL для Blob объекта
    */
   createBlobUrl(blob: Blob): string {
     return URL.createObjectURL(blob);
@@ -624,7 +584,7 @@ export class PdfGeneratorService {
   /**
    * Улучшенный индикатор загрузки
    */
-  private showLoadingIndicator(): void {
+  protected showLoadingIndicator(): void {
     if (document.getElementById(this.loadingIndicatorId)) {
       return; // Уже показан
     }
@@ -664,7 +624,7 @@ export class PdfGeneratorService {
   /**
    * Скрытие индикатора загрузки
    */
-  private hideLoadingIndicator(): void {
+  protected hideLoadingIndicator(): void {
     const loader = document.getElementById(this.loadingIndicatorId);
     if (loader) {
       loader.remove();

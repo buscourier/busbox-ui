@@ -9,8 +9,8 @@ import { map, takeUntil } from 'rxjs/operators';
 
 import { FilterComponent } from './components/filter';
 import { OrderDetailsDialogComponent } from './components/order-details-dialog';
+import { OrderInvoiceDialogComponent } from './components/order-invoice-dialog';
 import { OrderListComponent } from './components/order-list';
-import { OrderReceiptDialogComponent } from './components/order-receipt-dialog';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS } from './constants';
 import { OrdersFacade } from './orders.facade';
 import type { OrdersViewModel, Filter, QueryParams } from './types';
@@ -39,7 +39,7 @@ export class OrdersComponent implements OnInit {
     size: 's',
   });
 
-  orderReceiptDialog = tuiDialog(OrderReceiptDialogComponent, {
+  orderInvoiceDialog = tuiDialog(OrderInvoiceDialogComponent, {
     closeable: true,
     dismissible: true,
     size: 'auto',
@@ -82,8 +82,8 @@ export class OrdersComponent implements OnInit {
       });
   }
 
-  showOrderReceipt(orderId: string): void {
-    this.orderReceiptDialog(orderId)
+  showOrderInvoice(orderId: string): void {
+    this.orderInvoiceDialog(orderId)
       .pipe(takeUntil(this.closeOrderReceiptDialog$))
       .subscribe({
         next: () => {
