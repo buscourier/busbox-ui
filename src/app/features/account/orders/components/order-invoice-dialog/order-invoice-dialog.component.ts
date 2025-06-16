@@ -12,6 +12,8 @@ import { TuiButton, type TuiDialogContext } from '@taiga-ui/core';
 import { injectContext } from '@taiga-ui/polymorpheus';
 import type { Observable } from 'rxjs';
 
+import { QrCodeService } from '@core/services/qr-code.service';
+
 import { OrdersFacade } from '../../orders.facade';
 import { InvoiceViewerService } from '../../services/invoice-viewer.service';
 import type { OrderInfo, OrdersViewModel } from '../../types';
@@ -31,9 +33,11 @@ export class OrderInvoiceDialogComponent implements OnInit {
   vm$!: Observable<OrdersViewModel>;
 
   isGenerating = false;
+  qrCodeUrl = '';
 
   private readonly ordersFacade = inject(OrdersFacade);
   private readonly invoiceViewer = inject(InvoiceViewerService);
+  private readonly qrCodeService = inject(QrCodeService);
 
   handlePrint(order: OrderInfo): void {
     this.isGenerating = true;
@@ -78,6 +82,7 @@ export class OrderInvoiceDialogComponent implements OnInit {
     this.vm$ = this.ordersFacade.getViewModel();
 
     this.ordersFacade.loadOrderDetails(this.orderId);
+    this.generateQrCode();
   }
 
   getQrCodeUrl(orderId: number): string {
@@ -99,5 +104,23 @@ export class OrderInvoiceDialogComponent implements OnInit {
   handleClose(): void {
     // Implement close logic
     // this.router.navigate(['/orders']);
+  }
+
+  private async generateQrCode(): Promise<void> {
+    try {
+      const qrDataUrl = await this.qrCodeService.generateQrCodeWithTheme(
+        this.orderId,
+        'invoice', // Используем тему для накладной
+        {
+          // Дополнительные опции при необходимости
+          size: 100,
+          errorCorrectionLevel: 'high',
+        },
+      );
+
+      this.qrCodeUrl = qrDataUrl;
+    } catch (error) {
+      console.error('Ошибка генерации QR-кода:', error);
+    }
   }
 }
