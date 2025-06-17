@@ -12,6 +12,7 @@ import { TuiButton, type TuiDialogContext } from '@taiga-ui/core';
 import { injectContext } from '@taiga-ui/polymorpheus';
 import type { Observable } from 'rxjs';
 
+import { BarcodeService } from '@core/services/barcode.service';
 import { QrCodeService } from '@core/services/qr-code.service';
 
 import { OrdersFacade } from '../../orders.facade';
@@ -34,10 +35,12 @@ export class OrderInvoiceDialogComponent implements OnInit {
 
   isGenerating = false;
   qrCodeUrl = '';
+  barcodeUrl = '';
 
   private readonly ordersFacade = inject(OrdersFacade);
   private readonly invoiceViewer = inject(InvoiceViewerService);
   private readonly qrCodeService = inject(QrCodeService);
+  private barcodeService = inject(BarcodeService);
 
   handlePrint(order: OrderInfo): void {
     this.isGenerating = true;
@@ -48,7 +51,6 @@ export class OrderInvoiceDialogComponent implements OnInit {
         order,
         `Накладная №${order.order_id}`,
         {
-          // options
           autoDownload: true,
           downloadLabel: 'Скачать накладную',
           generationOptions: {
@@ -82,15 +84,9 @@ export class OrderInvoiceDialogComponent implements OnInit {
     this.vm$ = this.ordersFacade.getViewModel();
 
     this.ordersFacade.loadOrderDetails(this.orderId);
+
     this.generateQrCode();
-  }
-
-  getQrCodeUrl(orderId: number): string {
-    return `https://api.busbox.guru/qrcode/?chl=https://xn--80abnt4abdr6f.xn--p1ai/find-order?id=${orderId}`;
-  }
-
-  getBarcodeUrl(orderId: number): string {
-    return `https://api.busbox.guru/barcode/?code=${orderId}`;
+    this.generateBarcode();
   }
 
   // Date formatting
@@ -108,19 +104,20 @@ export class OrderInvoiceDialogComponent implements OnInit {
 
   private async generateQrCode(): Promise<void> {
     try {
-      const qrDataUrl = await this.qrCodeService.generateQrCodeWithTheme(
-        this.orderId,
-        'invoice', // Используем тему для накладной
-        {
-          // Дополнительные опции при необходимости
-          size: 100,
-          errorCorrectionLevel: 'high',
-        },
-      );
-
-      this.qrCodeUrl = qrDataUrl;
+      this.qrCodeUrl = await this.qrCodeService.generateQrCodeWithTheme(this.orderId, 'invoice', {
+        size: 100,
+        errorCorrectionLevel: 'high',
+      });
     } catch (error) {
       console.error('Ошибка генерации QR-кода:', error);
+    }
+  }
+
+  private async generateBarcode(): Promise<void> {
+    try {
+      this.barcodeUrl = await this.barcodeService.generateBarcodeWithTheme(this.orderId, 'invoice');
+    } catch (error) {
+      console.error('Ошибка генерации Bar-кода:', error);
     }
   }
 }
