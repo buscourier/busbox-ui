@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import html2canvas from 'html2canvas';
+import * as htmlToImage from 'html-to-image';
 import jsPDF from 'jspdf';
 
 export interface PdfOptions {
@@ -10,6 +10,10 @@ export interface PdfOptions {
   quality?: number;
   format?: 'a4' | 'letter';
   orientation?: 'portrait' | 'landscape';
+  imageFormat?: 'png' | 'jpeg' | 'webp';
+  pixelRatio?: number;
+  skipFonts?: boolean;
+  includeQueryParams?: boolean;
 }
 
 export interface PdfGenerationResult {
@@ -34,6 +38,10 @@ export abstract class PdfGeneratorService {
       quality: 0.95,
       format: 'a4',
       orientation: 'portrait',
+      imageFormat: 'png',
+      pixelRatio: window.devicePixelRatio || 1,
+      skipFonts: false,
+      includeQueryParams: false,
     };
   }
 
@@ -96,7 +104,7 @@ export abstract class PdfGeneratorService {
     }
 
     if (!data) {
-      throw new Error('Некорректные данные накладной');
+      throw new Error('Некорректные данные документа');
     }
   }
 
@@ -114,11 +122,8 @@ export abstract class PdfGeneratorService {
     pageNumber: number,
   ): HTMLElement {
     const container = document.createElement('div');
-
     container.id = `pdf-container-page-${pageNumber}-${Date.now()}`;
-
     this.setupPageContainerStyles(container, pageNumber, config.format);
-
     return container;
   }
 
@@ -131,9 +136,6 @@ export abstract class PdfGeneratorService {
       format === 'a4' ? { width: '210mm', height: '297mm' } : { width: '8.5in', height: '11in' };
 
     Object.assign(container.style, {
-      position: 'absolute',
-      left: '-9999px',
-      top: `${(pageNumber - 1) * 3000}px`,
       ...dimensions,
       backgroundColor: 'white',
       fontFamily: 'Arial, sans-serif',
@@ -145,9 +147,6 @@ export abstract class PdfGeneratorService {
     });
   }
 
-  /**
-   * Adds element copy to container
-   */
   protected addSourceCopy(
     container: HTMLElement,
     sourceElement: HTMLElement,
@@ -158,7 +157,7 @@ export abstract class PdfGeneratorService {
     container.appendChild(header);
 
     const copy = this.createSourceCopy(sourceElement);
-    this.applyCopyStyles(copy, copyNumber === 3); // Третий экземпляр на полную страницу
+    // this.applyCopyStyles(copy, copyNumber === 3);
     container.appendChild(copy);
   }
 
@@ -189,21 +188,13 @@ export abstract class PdfGeneratorService {
     return header;
   }
 
-  /**
-   * Creates element copy with interactive elements removed
-   */
   private createSourceCopy(sourceElement: HTMLElement): HTMLElement {
     const copy = sourceElement.cloneNode(true) as HTMLElement;
-
     this.removeInteractiveElements(copy);
-    this.applyPrintStyles(copy);
-
+    // this.applyPrintStyles(copy);
     return copy;
   }
 
-  /**
-   * Applies specific styles to the copy
-   */
   private applyCopyStyles(copy: HTMLElement, isFullPage = false): void {
     const scale = isFullPage ? 1 : 0.95;
 
@@ -229,7 +220,7 @@ export abstract class PdfGeneratorService {
       '[tuiButton]',
       '.space-x-2',
       '[type="button"]:not([disabled])',
-      'a[href]:not([target="_blank"])', // Убираем ссылки кроме внешних
+      'a[href]:not([target="_blank"])',
     ];
 
     selectorsToRemove.forEach((selector) => {
@@ -242,8 +233,7 @@ export abstract class PdfGeneratorService {
     });
 
     this.removeButtonContainers(element);
-
-    this.replaceInputsWithValues(element);
+    // this.replaceInputsWithValues(element);
   }
 
   private replaceInputsWithValues(element: HTMLElement): void {
@@ -294,11 +284,11 @@ export abstract class PdfGeneratorService {
       colorAdjust: 'exact',
     });
 
-    this.styleTablesForPrint(element);
-    this.styleCellsForPrint(element);
-    this.applyBackgroundColors(element);
-    this.optimizeImages(element);
-    this.improveTextContrast(element);
+    // this.styleTablesForPrint(element);
+    // this.styleCellsForPrint(element);
+    // this.applyBackgroundColors(element);
+    // this.optimizeImages(element);
+    // this.improveTextContrast(element);
   }
 
   private improveTextContrast(element: HTMLElement): void {
@@ -367,13 +357,9 @@ export abstract class PdfGeneratorService {
     });
   }
 
-  /**
-   * Waits for rendering with progress
-   */
   protected async waitForRender(ms = 200): Promise<void> {
     return new Promise((resolve) => {
       setTimeout(() => {
-        // Check all images loaded
         const images = document.querySelectorAll('img');
         const imagePromises = Array.from(images).map((img) => {
           return new Promise((resolve) => {
@@ -391,12 +377,6 @@ export abstract class PdfGeneratorService {
     });
   }
 
-  /**
-   * Generates multi-page PDF and returns Blob
-   * @param containers - Array of container elements for each page
-   * @param options - PDF generation options
-   * @returns Promise that resolves to PDF Blob
-   */
   protected async generateMultiPagePDF(
     containers: HTMLElement[],
     options: Required<PdfOptions>,
@@ -409,27 +389,19 @@ export abstract class PdfGeneratorService {
       const container = containers[i];
 
       try {
-        const canvas = await html2canvas(container, {
-          scale: options.scale,
-          useCORS: true,
-          allowTaint: true,
-          backgroundColor: '#ffffff',
-          width: container.scrollWidth,
-          height: container.scrollHeight,
-          logging: false,
-          removeContainer: true,
-          imageTimeout: 15000,
-        });
+        await this.ensureImagesLoaded(container);
 
-        if (canvas.width === 0 || canvas.height === 0) {
-          throw new Error(`Canvas имеет нулевые размеры для страницы ${i + 1}`);
+        const dataUrl = await this.containerToDataUrl(container, options);
+
+        if (!dataUrl) {
+          throw new Error(`Не удалось создать изображение для страницы ${i + 1}`);
         }
 
         if (!isFirstPage) {
           pdf.addPage();
         }
 
-        await this.addCanvasToPDF(pdf, canvas, options);
+        await this.addImageToPDF(pdf, dataUrl, options);
         isFirstPage = false;
       } catch (error) {
         console.error(`Ошибка при обработке страницы ${i + 1}:`, error);
@@ -437,13 +409,99 @@ export abstract class PdfGeneratorService {
       }
     }
 
-    // Return Blob instead of saving file
     const pdfBlob = pdf.output('blob');
-
-    // Create download link
     this.downloadBlob(pdfBlob, options.filename);
-
     return pdfBlob;
+  }
+
+  private async containerToDataUrl(
+    container: HTMLElement,
+    options: Required<PdfOptions>,
+  ): Promise<string> {
+    const htmlToImageOptions = {
+      width: container.scrollWidth * options.scale,
+      height: container.scrollHeight * options.scale,
+      style: {
+        transform: `scale(${options.scale})`,
+        transformOrigin: 'top left',
+        width: container.scrollWidth + 'px',
+        height: container.scrollHeight + 'px',
+      },
+      quality: options.quality,
+      pixelRatio: options.pixelRatio,
+      backgroundColor: '#ffffff',
+      cacheBust: true,
+      skipFonts: options.skipFonts,
+      includeQueryParams: options.includeQueryParams,
+      filter: (node: Node) => {
+        // Фильтруем ненужные элементы
+        if (node instanceof Element && node.classList) {
+          return !node.classList.contains('no-print');
+        }
+        return true;
+      },
+      onCloneDocument: (document: Document, node: HTMLElement) => {
+        console.log('node', node);
+        const styles = document.createElement('style');
+        styles.textContent = `
+          * {
+            -webkit-print-color-adjust: exact !important;
+            color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+        `;
+        document.head.appendChild(styles);
+      },
+    };
+
+    try {
+      let dataUrl: string;
+
+      switch (options.imageFormat) {
+        case 'jpeg':
+          dataUrl = await htmlToImage.toJpeg(container, htmlToImageOptions);
+          break;
+        case 'webp':
+          if (this.isWebPSupported()) {
+            // dataUrl = await htmlToImage.toWebp?.(container, htmlToImageOptions) ||
+            //   await htmlToImage.toPng(container, htmlToImageOptions);
+
+            dataUrl = await htmlToImage.toPng(container, htmlToImageOptions);
+          } else {
+            dataUrl = await htmlToImage.toPng(container, htmlToImageOptions);
+          }
+          break;
+        default:
+          dataUrl = await htmlToImage.toPng(container, htmlToImageOptions);
+      }
+
+      return dataUrl;
+    } catch (error) {
+      console.error('Ошибка html-to-image:', error);
+
+      try {
+        console.log('Попытка fallback с базовыми настройками...');
+        return await htmlToImage.toPng(container, {
+          quality: options.quality,
+          backgroundColor: '#ffffff',
+          cacheBust: true,
+        });
+      } catch (fallbackError) {
+        console.error('Fallback тоже не сработал:', fallbackError);
+        throw new Error('Не удалось создать изображение элемента');
+      }
+    }
+  }
+
+  /**
+   * Проверяет поддержку WebP
+   */
+  private isWebPSupported(): boolean {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1;
+    canvas.height = 1;
+    const dataURL = canvas.toDataURL('image/webp');
+    return dataURL.indexOf('data:image/webp') === 0;
   }
 
   protected ensureImagesLoaded(container: HTMLElement): Promise<void> {
@@ -457,17 +515,19 @@ export abstract class PdfGeneratorService {
           imgElement.onload = () => resolve();
           imgElement.onerror = () => {
             console.warn('Изображение не загрузилось:', imgElement.src);
-            resolve(); // Continue even if image failed to load
+            resolve(); // Продолжаем даже если изображение не загрузилось
           };
-          if (!imgElement.src) {
-            // imgElement.src = imgElement.src;
-          }
+
+          setTimeout(() => {
+            console.warn('Timeout для изображения:', imgElement.src);
+            resolve();
+          }, 5000);
         }
       });
     });
 
     return Promise.all(imagePromises).then(() => {
-      console.log('images loaded');
+      console.log(`Загружено ${images.length} изображений`);
     });
   }
 
@@ -490,37 +550,58 @@ export abstract class PdfGeneratorService {
     URL.revokeObjectURL(url);
   }
 
-  private async addCanvasToPDF(
+  private async addImageToPDF(
     pdf: jsPDF,
-    canvas: HTMLCanvasElement,
+    dataUrl: string,
     options: Required<PdfOptions>,
   ): Promise<void> {
-    const imgData = canvas.toDataURL('image/jpeg', options.quality);
+    return new Promise((resolve, reject) => {
+      const img = new Image();
 
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = pdf.internal.pageSize.getHeight();
-    const margin = 5; // Уменьшенные отступы
+      img.onload = () => {
+        try {
+          const pdfWidth = pdf.internal.pageSize.getWidth();
+          const pdfHeight = pdf.internal.pageSize.getHeight();
+          const margin = 5;
 
-    const availableWidth = pdfWidth - margin * 2;
-    const availableHeight = pdfHeight - margin * 2;
+          const availableWidth = pdfWidth - margin * 2;
+          const availableHeight = pdfHeight - margin * 2;
 
-    let finalWidth = availableWidth;
-    let finalHeight = (canvas.height * finalWidth) / canvas.width;
+          let finalWidth = availableWidth;
+          let finalHeight = (img.height * finalWidth) / img.width;
 
-    if (finalHeight > availableHeight) {
-      finalHeight = availableHeight;
-      finalWidth = (canvas.width * finalHeight) / canvas.height;
-    }
+          if (finalHeight > availableHeight) {
+            finalHeight = availableHeight;
+            finalWidth = (img.width * finalHeight) / img.height;
+          }
 
-    const x = (pdfWidth - finalWidth) / 2;
-    const y = (pdfHeight - finalHeight) / 2;
+          const x = (pdfWidth - finalWidth) / 2;
+          const y = (pdfHeight - finalHeight) / 2;
 
-    pdf.addImage(imgData, 'JPEG', x, y, finalWidth, finalHeight, undefined, 'FAST');
+          // Определяем формат изображения для jsPDF
+          let format: 'JPEG' | 'PNG' | 'WEBP' = 'PNG';
+          if (options.imageFormat === 'jpeg') format = 'JPEG';
+          else if (options.imageFormat === 'webp') format = 'WEBP';
+
+          pdf.addImage(dataUrl, format, x, y, finalWidth, finalHeight, undefined, 'FAST');
+
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      };
+
+      img.onerror = () => {
+        reject(new Error('Не удалось загрузить изображение в PDF'));
+      };
+
+      img.src = dataUrl;
+    });
   }
 
   protected showLoadingIndicator(): void {
     if (document.getElementById(this.loadingIndicatorId)) {
-      return; // Already visible
+      return;
     }
 
     const loader = document.createElement('div');
