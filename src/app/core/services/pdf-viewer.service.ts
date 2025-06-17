@@ -20,9 +20,6 @@ export class PdfViewerService {
 
   private activeBlobUrls = new Set<string>();
 
-  /**
-   * Показывает готовый PDF в Viewer
-   */
   showPdf(pdfUrl: string, label: string, options: PdfViewerOptions = {}): Observable<void> {
     return new Observable<void>((subscriber) => {
       const viewerConfig: TuiPdfViewerOptions = {
@@ -51,9 +48,6 @@ export class PdfViewerService {
     });
   }
 
-  /**
-   * Показывает PDF из Blob
-   */
   showPdfFromBlob(blob: Blob, label: string, options: PdfViewerOptions = {}): Observable<void> {
     return new Observable<void>((subscriber) => {
       const blobUrl = this.createBlobUrl(blob);
@@ -73,9 +67,6 @@ export class PdfViewerService {
     });
   }
 
-  /**
-   * Скачивает PDF по URL
-   */
   downloadPdf(url: string, filename: string): void {
     const link = document.createElement('a');
     link.href = url;
@@ -86,9 +77,6 @@ export class PdfViewerService {
     document.body.removeChild(link);
   }
 
-  /**
-   * Скачивает PDF из Blob
-   */
   downloadPdfFromBlob(blob: Blob, filename: string): void {
     const url = this.createBlobUrl(blob);
     this.downloadPdf(url, filename);
@@ -97,9 +85,6 @@ export class PdfViewerService {
     setTimeout(() => this.revokeBlobUrl(url), 1000);
   }
 
-  /**
-   * Печать PDF
-   */
   printPdf(url: string): void {
     if (!this.isPrintSupported()) {
       console.warn('Печать не поддерживается на данном устройстве');
@@ -127,9 +112,6 @@ export class PdfViewerService {
     }
   }
 
-  /**
-   * Управление Blob URLs
-   */
   createBlobUrl(blob: Blob): string {
     return URL.createObjectURL(blob);
   }
@@ -139,7 +121,7 @@ export class PdfViewerService {
   }
 
   /**
-   * Очистка всех активных URLs
+   * Cleans up all active blob URLs to prevent memory leaks
    */
   cleanup(): void {
     console.log(`Cleaning up ${this.activeBlobUrls.size} blob URLs`);
@@ -148,23 +130,19 @@ export class PdfViewerService {
   }
 
   /**
-   * Создает безопасный URL для просмотра
+   * Creates safe URL for viewing
    */
   protected createSafeUrl(pdfUrl: string) {
     const finalUrl = this.isMobile ? this.getMobileViewerUrl(pdfUrl) : pdfUrl;
     return this.sanitizer.bypassSecurityTrustResourceUrl(finalUrl);
   }
 
-  /**
-   * Создает действия для PDF viewer
-   */
   protected createViewerActions(
     pdfUrl: string,
     options: PdfViewerOptions,
   ): { text: string; click: () => void }[] {
     const actions: { text: string; click: () => void }[] = [];
 
-    // Действие скачивания
     if (options.autoDownload !== false) {
       actions.push({
         text: options.downloadLabel || 'Скачать PDF',
@@ -172,7 +150,6 @@ export class PdfViewerService {
       });
     }
 
-    // Действие печати
     if (options.printSupport !== false && this.isPrintSupported()) {
       actions.push({
         text: 'Печать',
@@ -183,27 +160,18 @@ export class PdfViewerService {
     return actions;
   }
 
-  /**
-   * Проверка поддержки печати
-   */
   protected isPrintSupported(): boolean {
     return !this.isMobile && typeof window !== 'undefined' && typeof window.open === 'function';
   }
 
-  /**
-   * URL для мобильного просмотра
-   */
   protected getMobileViewerUrl(pdfUrl: string): string {
-    // Для blob URLs Google Viewer не сработает, возвращаем оригинал
+    // Google Viewer won't work for blob URLs, return original
     if (pdfUrl.startsWith('blob:')) {
       return pdfUrl;
     }
     return `https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl)}&embedded=true`;
   }
 
-  /**
-   * Очистка конкретного Blob URL
-   */
   protected cleanupBlobUrl(url: string): void {
     if (this.activeBlobUrls.has(url)) {
       this.revokeBlobUrl(url);
@@ -212,9 +180,6 @@ export class PdfViewerService {
     }
   }
 
-  /**
-   * Имя файла по умолчанию
-   */
   protected getDefaultFilename(): string {
     const timestamp = new Date().toISOString().split('T')[0];
     return `document_${timestamp}.pdf`;

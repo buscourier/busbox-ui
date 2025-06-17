@@ -8,9 +8,7 @@ export interface QrCodeOptions {
     dark?: string;
     light?: string;
   };
-  /** Уровень коррекции ошибок */
   errorCorrectionLevel?: 'low' | 'medium' | 'quartile' | 'high';
-  /** Отступы вокруг QR-кода */
   margin?: number;
 }
 
@@ -67,7 +65,7 @@ export class QrCodeService {
   };
 
   /**
-   * Генерирует QR-код как Data URL
+   * Generates QR code as Data URL
    */
   async generateQrCode(id: string | number, options: Partial<QrCodeOptions> = {}): Promise<string> {
     const config = { ...this.defaultOptions, ...options };
@@ -89,9 +87,6 @@ export class QrCodeService {
     }
   }
 
-  /**
-   * Генерирует QR-код как Canvas элемент
-   */
   async generateQrCodeCanvas(
     id: string | number,
     options: Partial<QrCodeOptions> = {},
@@ -117,7 +112,7 @@ export class QrCodeService {
   }
 
   /**
-   * Генерирует QR-код с использованием темы
+   * Generates QR code as Data URL with Theme
    */
   async generateQrCodeWithTheme(
     id: string | number,
@@ -138,7 +133,7 @@ export class QrCodeService {
   }
 
   /**
-   * Создает QR-код и вставляет его в указанный контейнер
+   * Creates QR code and inserts it into specified container
    */
   async insertQrCodeIntoElement(
     targetElement: HTMLElement,
@@ -148,11 +143,9 @@ export class QrCodeService {
     try {
       const qrCanvas = await this.generateQrCodeCanvas(id, options);
 
-      // Очищаем контейнер и вставляем QR-код
       targetElement.innerHTML = '';
       targetElement.appendChild(qrCanvas);
 
-      // Применяем стили для правильного отображения
       Object.assign(qrCanvas.style, {
         maxWidth: '100%',
         height: 'auto',
@@ -164,38 +157,30 @@ export class QrCodeService {
     }
   }
 
-  /**
-   * Заменяет все QR-код плейсхолдеры в элементе на реальные QR-коды
-   */
   async processQrCodesInElement(
     element: HTMLElement,
     id: string | number,
     options: Partial<QrCodeOptions> = {},
   ): Promise<void> {
-    // Ищем все элементы с data-qr-placeholder
     const qrPlaceholders = element.querySelectorAll('[data-qr-placeholder]');
 
     const promises = Array.from(qrPlaceholders).map(async (placeholder) => {
       try {
-        // Получаем опции из data-атрибутов
         const elementOptions = this.extractOptionsFromElement(placeholder as HTMLElement);
         const finalOptions = { ...options, ...elementOptions };
 
         const qrDataUrl = await this.generateQrCode(id, finalOptions);
 
-        // Создаем img элемент с QR-кодом
         const img = document.createElement('img');
         img.src = qrDataUrl;
         img.alt = `QR Code for order ${id}`;
 
-        // Применяем стили
         Object.assign(img.style, {
           maxWidth: '100%',
           height: 'auto',
           display: 'block',
         });
 
-        // Заменяем плейсхолдер на изображение
         placeholder.parentNode?.replaceChild(img, placeholder);
       } catch (error) {
         console.error('Ошибка при обработке QR-код плейсхолдера:', error);
@@ -206,17 +191,11 @@ export class QrCodeService {
     await Promise.all(promises);
   }
 
-  /**
-   * Генерирует URL для отслеживания заказа
-   */
   buildTrackingUrl(id: string | number, baseUrl?: string): string {
     const url = baseUrl || this.defaultOptions.baseUrl;
     return `${url}${id}`;
   }
 
-  /**
-   * Извлекает опции из data-атрибутов элемента
-   */
   private extractOptionsFromElement(element: HTMLElement): Partial<QrCodeOptions> {
     const options: Partial<QrCodeOptions> = {};
 
@@ -242,7 +221,7 @@ export class QrCodeService {
   }
 
   /**
-   * Fallback при ошибке генерации QR-кода
+   * Fallback
    */
   private insertQrCodeFallback(element: HTMLElement, options: Partial<QrCodeOptions> = {}): void {
     const size = options.size || this.defaultOptions.size;

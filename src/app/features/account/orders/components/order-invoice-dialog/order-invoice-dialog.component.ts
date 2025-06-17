@@ -89,7 +89,6 @@ export class OrderInvoiceDialogComponent implements OnInit {
     this.generateBarcode();
   }
 
-  // Date formatting
   formatDate(date: string): string {
     return new Date(date).toLocaleDateString('ru-RU');
   }

@@ -86,9 +86,6 @@ export abstract class PdfGeneratorService {
     config: Required<PdfOptions>,
   ): Promise<HTMLElement[]>;
 
-  /**
-   * Валидация входных параметров
-   */
   protected validateInputs(sourceElement: HTMLElement, data: unknown): void {
     if (!sourceElement) {
       throw new Error('Исходный элемент не найден');
@@ -103,9 +100,6 @@ export abstract class PdfGeneratorService {
     }
   }
 
-  /**
-   * Очистка контейнеров из DOM
-   */
   protected cleanupContainers(containers: HTMLElement[]): void {
     containers.forEach((container) => {
       if (container.parentNode) {
@@ -114,9 +108,6 @@ export abstract class PdfGeneratorService {
     });
   }
 
-  /**
-   * Создает контейнер для одной страницы
-   */
   protected createPageContainer(
     sourceElement: HTMLElement,
     config: Required<PdfOptions>,
@@ -124,7 +115,6 @@ export abstract class PdfGeneratorService {
   ): HTMLElement {
     const container = document.createElement('div');
 
-    // Устанавливаем уникальный ID для контейнера
     container.id = `pdf-container-page-${pageNumber}-${Date.now()}`;
 
     this.setupPageContainerStyles(container, pageNumber, config.format);
@@ -132,9 +122,6 @@ export abstract class PdfGeneratorService {
     return container;
   }
 
-  /**
-   * Настройка стилей контейнера страницы с поддержкой форматов
-   */
   private setupPageContainerStyles(
     container: HTMLElement,
     pageNumber: number,
@@ -159,7 +146,7 @@ export abstract class PdfGeneratorService {
   }
 
   /**
-   * Добавляет копию накладной в контейнер
+   * Adds element copy to container
    */
   protected addSourceCopy(
     container: HTMLElement,
@@ -175,9 +162,6 @@ export abstract class PdfGeneratorService {
     container.appendChild(copy);
   }
 
-  /**
-   * Добавляет разделитель между накладными
-   */
   protected addPageSeparator(container: HTMLElement): void {
     const separator = document.createElement('div');
     Object.assign(separator.style, {
@@ -189,9 +173,6 @@ export abstract class PdfGeneratorService {
     container.appendChild(separator);
   }
 
-  /**
-   * Создает заголовок для копии накладной
-   */
   private createCopyHeader(copyNumber: number, label: string): HTMLElement {
     const header = document.createElement('div');
     Object.assign(header.style, {
@@ -209,7 +190,7 @@ export abstract class PdfGeneratorService {
   }
 
   /**
-   * Создает копию накладной с очисткой от интерактивных элементов
+   * Creates element copy with interactive elements removed
    */
   private createSourceCopy(sourceElement: HTMLElement): HTMLElement {
     const copy = sourceElement.cloneNode(true) as HTMLElement;
@@ -221,7 +202,7 @@ export abstract class PdfGeneratorService {
   }
 
   /**
-   * Применяет специфичные стили к копии
+   * Applies specific styles to the copy
    */
   private applyCopyStyles(copy: HTMLElement, isFullPage = false): void {
     const scale = isFullPage ? 1 : 0.95;
@@ -237,9 +218,6 @@ export abstract class PdfGeneratorService {
     });
   }
 
-  /**
-   * Улучшенное удаление интерактивных элементов
-   */
   private removeInteractiveElements(element: HTMLElement): void {
     const selectorsToRemove = [
       'button:not([disabled])',
@@ -263,16 +241,11 @@ export abstract class PdfGeneratorService {
       }
     });
 
-    // Убираем текст кнопок
     this.removeButtonContainers(element);
 
-    // Заменяем input поля их значениями
     this.replaceInputsWithValues(element);
   }
 
-  /**
-   * Заменяет input поля их значениями для статичного отображения
-   */
   private replaceInputsWithValues(element: HTMLElement): void {
     const inputs = element.querySelectorAll('input[type="text"], input[type="checkbox"]');
     inputs.forEach((input) => {
@@ -297,9 +270,6 @@ export abstract class PdfGeneratorService {
     });
   }
 
-  /**
-   * Удаляет контейнеры с кнопками
-   */
   private removeButtonContainers(element: HTMLElement): void {
     const buttonTexts = ['Напечатать', 'Закрыть', 'Сохранить', 'Отменить'];
     const allDivs = element.querySelectorAll('div');
@@ -312,9 +282,6 @@ export abstract class PdfGeneratorService {
     });
   }
 
-  /**
-   * Улучшенные стили для печати
-   */
   private applyPrintStyles(element: HTMLElement): void {
     Object.assign(element.style, {
       width: '100%',
@@ -334,9 +301,6 @@ export abstract class PdfGeneratorService {
     this.improveTextContrast(element);
   }
 
-  /**
-   * Улучшает контрастность текста
-   */
   private improveTextContrast(element: HTMLElement): void {
     const grayTexts = element.querySelectorAll('.text-gray-500, .text-gray-600, .text-gray-400');
     grayTexts.forEach((el) => {
@@ -346,9 +310,6 @@ export abstract class PdfGeneratorService {
     });
   }
 
-  /**
-   * Стилизация таблиц для печати
-   */
   private styleTablesForPrint(element: HTMLElement): void {
     const tables = element.querySelectorAll('table');
     tables.forEach((table) => {
@@ -362,9 +323,6 @@ export abstract class PdfGeneratorService {
     });
   }
 
-  /**
-   * Стилизация ячеек для печати
-   */
   private styleCellsForPrint(element: HTMLElement): void {
     const cells = element.querySelectorAll('td, th');
     cells.forEach((cell) => {
@@ -380,9 +338,6 @@ export abstract class PdfGeneratorService {
     });
   }
 
-  /**
-   * Применение фоновых цветов
-   */
   private applyBackgroundColors(element: HTMLElement): void {
     const grayBgElements = element.querySelectorAll('.bg-zinc-400, .bg-gray-400, .bg-gray-100');
     grayBgElements.forEach((el) => {
@@ -396,9 +351,6 @@ export abstract class PdfGeneratorService {
     });
   }
 
-  /**
-   * Оптимизация изображений
-   */
   private optimizeImages(element: HTMLElement): void {
     const images = element.querySelectorAll('img');
     images.forEach((img) => {
@@ -409,7 +361,6 @@ export abstract class PdfGeneratorService {
         border: '1px solid #ccc',
       });
 
-      // Обработка ошибок загрузки изображений
       (img as HTMLImageElement).onerror = () => {
         console.warn('Не удалось загрузить изображение:', img.src);
       };
@@ -417,12 +368,12 @@ export abstract class PdfGeneratorService {
   }
 
   /**
-   * Ожидание рендеринга с прогрессом
+   * Waits for rendering with progress
    */
   protected async waitForRender(ms = 200): Promise<void> {
     return new Promise((resolve) => {
       setTimeout(() => {
-        // Проверяем что все изображения загружены
+        // Check all images loaded
         const images = document.querySelectorAll('img');
         const imagePromises = Array.from(images).map((img) => {
           return new Promise((resolve) => {
@@ -441,7 +392,10 @@ export abstract class PdfGeneratorService {
   }
 
   /**
-   * Генерация PDF с возвратом Blob
+   * Generates multi-page PDF and returns Blob
+   * @param containers - Array of container elements for each page
+   * @param options - PDF generation options
+   * @returns Promise that resolves to PDF Blob
    */
   protected async generateMultiPagePDF(
     containers: HTMLElement[],
@@ -465,7 +419,6 @@ export abstract class PdfGeneratorService {
           logging: false,
           removeContainer: true,
           imageTimeout: 15000,
-          // Убираем onclone - он не критичен для большинства случаев
         });
 
         if (canvas.width === 0 || canvas.height === 0) {
@@ -484,18 +437,15 @@ export abstract class PdfGeneratorService {
       }
     }
 
-    // Возвращаем Blob вместо сохранения файла
+    // Return Blob instead of saving file
     const pdfBlob = pdf.output('blob');
 
-    // Создаем ссылку для скачивания
+    // Create download link
     this.downloadBlob(pdfBlob, options.filename);
 
     return pdfBlob;
   }
 
-  /**
-   * Дополнительная обработка изображений перед созданием PDF (если потребуется)
-   */
   protected ensureImagesLoaded(container: HTMLElement): Promise<void> {
     const images = container.querySelectorAll('img');
     const imagePromises = Array.from(images).map((img) => {
@@ -507,9 +457,8 @@ export abstract class PdfGeneratorService {
           imgElement.onload = () => resolve();
           imgElement.onerror = () => {
             console.warn('Изображение не загрузилось:', imgElement.src);
-            resolve(); // Продолжаем даже если изображение не загрузилось
+            resolve(); // Continue even if image failed to load
           };
-          // Перезагружаем если нужно
           if (!imgElement.src) {
             // imgElement.src = imgElement.src;
           }
@@ -522,9 +471,6 @@ export abstract class PdfGeneratorService {
     });
   }
 
-  /**
-   * Скачивание Blob как файла
-   */
   private downloadBlob(blob: Blob, filename: string): void {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -536,23 +482,14 @@ export abstract class PdfGeneratorService {
     URL.revokeObjectURL(url);
   }
 
-  /**
-   * Создает URL для Blob объекта
-   */
   createBlobUrl(blob: Blob): string {
     return URL.createObjectURL(blob);
   }
 
-  /**
-   * Освобождает URL объекта
-   */
   revokeBlobUrl(url: string): void {
     URL.revokeObjectURL(url);
   }
 
-  /**
-   * Добавляет canvas в PDF
-   */
   private async addCanvasToPDF(
     pdf: jsPDF,
     canvas: HTMLCanvasElement,
@@ -581,12 +518,9 @@ export abstract class PdfGeneratorService {
     pdf.addImage(imgData, 'JPEG', x, y, finalWidth, finalHeight, undefined, 'FAST');
   }
 
-  /**
-   * Улучшенный индикатор загрузки
-   */
   protected showLoadingIndicator(): void {
     if (document.getElementById(this.loadingIndicatorId)) {
-      return; // Уже показан
+      return; // Already visible
     }
 
     const loader = document.createElement('div');
@@ -621,9 +555,6 @@ export abstract class PdfGeneratorService {
     document.body.appendChild(loader);
   }
 
-  /**
-   * Скрытие индикатора загрузки
-   */
   protected hideLoadingIndicator(): void {
     const loader = document.getElementById(this.loadingIndicatorId);
     if (loader) {

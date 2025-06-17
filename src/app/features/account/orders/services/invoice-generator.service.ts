@@ -35,16 +35,16 @@ export class InvoiceGeneratorService extends PdfGeneratorService {
     console.log('invoiceData', invoiceData);
 
     try {
-      // Создаем контейнеры для страниц накладной
+      // Create containers for invoice pages
       const page1Container = this.createInvoicePage(sourceElement, config, 1);
       const page2Container = this.createInvoicePage(sourceElement, config, 2);
 
       containers.push(page1Container, page2Container);
 
-      // Добавляем в DOM
+      // Insert in DOM
       containers.forEach((container) => document.body.appendChild(container));
 
-      // Ждем загрузки изображений
+      // Wait images loading
       await Promise.all(containers.map((container) => this.ensureImagesLoaded(container)));
       await this.waitForRender(300);
 

@@ -16,9 +16,6 @@ export interface InvoiceViewerOptions extends PdfViewerOptions {
 export class InvoiceViewerService extends PdfViewerService {
   private readonly invoiceGenerator = inject(InvoiceGeneratorService);
 
-  /**
-   * Генерирует PDF и показывает в viewer
-   */
   generateAndShowPdf<T>(
     sourceElement: HTMLElement,
     data: T,
@@ -34,7 +31,7 @@ export class InvoiceViewerService extends PdfViewerService {
             return;
           }
 
-          // Показываем сгенерированный PDF
+          // Show the generated PDF
           this.showPdfFromBlob(result.blob, label, options).subscribe({
             next: () => subscriber.next(),
             error: (error) => subscriber.error(error),
@@ -45,9 +42,6 @@ export class InvoiceViewerService extends PdfViewerService {
     });
   }
 
-  /**
-   * Генерирует PDF и сразу скачивает
-   */
   generateAndDownloadPdf<T>(
     sourceElement: HTMLElement,
     data: T,
