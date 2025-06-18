@@ -2,15 +2,45 @@ import { Injectable } from '@angular/core';
 import * as htmlToImage from 'html-to-image';
 import jsPDF from 'jspdf';
 
+export const PageFormat = {
+  A4: 'a4',
+  LETTER: 'letter',
+} as const;
+
+export type PageFormat = (typeof PageFormat)[keyof typeof PageFormat];
+
+export const PageOrientation = {
+  PORTRAIT: 'portrait',
+  LANDSCAPE: 'landscape',
+} as const;
+
+export type PageOrientation = (typeof PageOrientation)[keyof typeof PageOrientation];
+
+export const ImageFormat = {
+  PNG: 'png',
+  JPEG: 'jpeg',
+  WEBP: 'webp',
+} as const;
+
+export type ImageFormat = (typeof ImageFormat)[keyof typeof ImageFormat];
+
+export const JsPdfFormat = {
+  JPEG: 'JPEG',
+  PNG: 'PNG',
+  WEBP: 'WEBP',
+} as const;
+
+export type JsPdfFormat = (typeof JsPdfFormat)[keyof typeof JsPdfFormat];
+
 export interface PdfOptions {
   scale?: number;
   filename?: string;
   showProgress?: boolean;
   copyLabels?: string[];
   quality?: number;
-  format?: 'a4' | 'letter';
-  orientation?: 'portrait' | 'landscape';
-  imageFormat?: 'png' | 'jpeg' | 'webp';
+  format?: PageFormat;
+  orientation?: PageOrientation;
+  imageFormat?: ImageFormat;
   pixelRatio?: number;
   skipFonts?: boolean;
   includeQueryParams?: boolean;
@@ -36,11 +66,11 @@ export abstract class PdfGeneratorService {
       showProgress: true,
       copyLabels: ['Копия 1', 'Копия 2', 'Копия 3'],
       quality: 0.95,
-      format: 'a4',
-      orientation: 'portrait',
-      imageFormat: 'png',
+      format: PageFormat.A4,
+      orientation: PageOrientation.PORTRAIT,
+      imageFormat: ImageFormat.PNG,
       pixelRatio: window.devicePixelRatio || 1,
-      skipFonts: false,
+      skipFonts: true,
       includeQueryParams: false,
     };
   }
@@ -134,10 +164,12 @@ export abstract class PdfGeneratorService {
   private setupPageContainerStyles(
     container: HTMLElement,
     pageNumber: number,
-    format: 'a4' | 'letter',
+    format: PageFormat,
   ): void {
     const dimensions =
-      format === 'a4' ? { width: '210mm', height: '297mm' } : { width: '8.5in', height: '11in' };
+      format === PageFormat.A4
+        ? { width: '210mm', height: '297mm' }
+        : { width: '8.5in', height: '11in' };
 
     Object.assign(container.style, {
       ...dimensions,
@@ -165,7 +197,6 @@ export abstract class PdfGeneratorService {
     }
 
     const copy = this.createSourceElementCopy(sourceElement);
-    // this.applyCopyStyles(copy, copyNumber === 3);
     item.appendChild(copy);
 
     container.appendChild(item);
@@ -201,22 +232,7 @@ export abstract class PdfGeneratorService {
   private createSourceElementCopy(sourceElement: HTMLElement): HTMLElement {
     const copy = sourceElement.cloneNode(true) as HTMLElement;
     this.removeInteractiveElements(copy);
-    // this.applyPrintStyles(copy);
     return copy;
-  }
-
-  private applyCopyStyles(copy: HTMLElement, isFullPage = false): void {
-    const scale = isFullPage ? 1 : 0.95;
-
-    Object.assign(copy.style, {
-      transform: `scale(${scale})`,
-      transformOrigin: 'top center',
-      marginBottom: isFullPage ? '0' : '2mm',
-      width: '100%',
-      height: isFullPage ? 'auto' : '120mm',
-      overflow: 'hidden',
-      pageBreakInside: 'avoid',
-    });
   }
 
   private removeInteractiveElements(element: HTMLElement): void {
@@ -243,7 +259,7 @@ export abstract class PdfGeneratorService {
     });
 
     this.removeButtonContainers(element);
-    // this.replaceInputsWithValues(element);
+    this.replaceInputsWithValues(element);
   }
 
   private replaceInputsWithValues(element: HTMLElement): void {
@@ -259,11 +275,7 @@ export abstract class PdfGeneratorService {
       }
 
       Object.assign(span.style, {
-        display: 'inline-block',
-        border: '1px solid #000',
-        padding: '1px 3px',
-        minWidth: '20px',
-        minHeight: '12px',
+        fontSize: '24px',
       });
 
       inputEl.parentNode?.replaceChild(span, inputEl);
@@ -279,91 +291,6 @@ export abstract class PdfGeneratorService {
       if (buttonTexts.some((btnText) => text.includes(btnText))) {
         div.remove();
       }
-    });
-  }
-
-  private applyPrintStyles(element: HTMLElement): void {
-    Object.assign(element.style, {
-      width: '100%',
-      fontSize: '11px',
-      lineHeight: '1.2',
-      color: '#000',
-      backgroundColor: '#fff',
-      fontFamily: 'Arial, Helvetica, sans-serif',
-      webkitPrintColorAdjust: 'exact',
-      colorAdjust: 'exact',
-    });
-
-    // this.styleTablesForPrint(element);
-    // this.styleCellsForPrint(element);
-    // this.applyBackgroundColors(element);
-    // this.optimizeImages(element);
-    // this.improveTextContrast(element);
-  }
-
-  private improveTextContrast(element: HTMLElement): void {
-    const grayTexts = element.querySelectorAll('.text-gray-500, .text-gray-600, .text-gray-400');
-    grayTexts.forEach((el) => {
-      Object.assign((el as HTMLElement).style, {
-        color: '#333 !important',
-      });
-    });
-  }
-
-  private styleTablesForPrint(element: HTMLElement): void {
-    const tables = element.querySelectorAll('table');
-    tables.forEach((table) => {
-      Object.assign((table as HTMLElement).style, {
-        borderCollapse: 'collapse',
-        width: '100%',
-        fontSize: '10px',
-        border: '2px solid #000',
-        pageBreakInside: 'auto',
-      });
-    });
-  }
-
-  private styleCellsForPrint(element: HTMLElement): void {
-    const cells = element.querySelectorAll('td, th');
-    cells.forEach((cell) => {
-      Object.assign((cell as HTMLElement).style, {
-        border: '1px solid #000',
-        padding: '3px',
-        verticalAlign: 'top',
-        fontSize: '9px',
-        lineHeight: '1.1',
-        wordWrap: 'break-word',
-        pageBreakInside: 'avoid',
-      });
-    });
-  }
-
-  private applyBackgroundColors(element: HTMLElement): void {
-    const grayBgElements = element.querySelectorAll('.bg-zinc-400, .bg-gray-400, .bg-gray-100');
-    grayBgElements.forEach((el) => {
-      Object.assign((el as HTMLElement).style, {
-        backgroundColor: '#e5e5e5 !important',
-        color: '#000 !important',
-        fontWeight: 'bold',
-        webkitPrintColorAdjust: 'exact',
-        colorAdjust: 'exact',
-      });
-    });
-  }
-
-  private optimizeImages(element: HTMLElement): void {
-    const images = element.querySelectorAll('img');
-    images.forEach((img) => {
-      Object.assign((img as HTMLElement).style, {
-        maxWidth: '100%',
-        height: 'auto',
-        imageRendering: 'crisp-edges',
-        border: '1px solid #ccc',
-      });
-
-      (img as HTMLImageElement).onerror = () => {
-        console.warn('Не удалось загрузить изображение:', img.src);
-      };
     });
   }
 
@@ -468,10 +395,10 @@ export abstract class PdfGeneratorService {
       let dataUrl: string;
 
       switch (options.imageFormat) {
-        case 'jpeg':
+        case ImageFormat.JPEG:
           dataUrl = await htmlToImage.toJpeg(container, htmlToImageOptions);
           break;
-        case 'webp':
+        case ImageFormat.WEBP:
           if (this.isWebPSupported()) {
             // dataUrl = await htmlToImage.toWebp?.(container, htmlToImageOptions) ||
             //   await htmlToImage.toPng(container, htmlToImageOptions);
@@ -503,9 +430,6 @@ export abstract class PdfGeneratorService {
     }
   }
 
-  /**
-   * Проверяет поддержку WebP
-   */
   private isWebPSupported(): boolean {
     const canvas = document.createElement('canvas');
     canvas.width = 1;
@@ -588,9 +512,9 @@ export abstract class PdfGeneratorService {
           const x = (pdfWidth - finalWidth) / 2;
           const y = (pdfHeight - finalHeight) / 2;
 
-          let format: 'JPEG' | 'PNG' | 'WEBP' = 'PNG';
-          if (options.imageFormat === 'jpeg') format = 'JPEG';
-          else if (options.imageFormat === 'webp') format = 'WEBP';
+          let format: JsPdfFormat = JsPdfFormat.PNG;
+          if (options.imageFormat === ImageFormat.JPEG) format = JsPdfFormat.JPEG;
+          else if (options.imageFormat === ImageFormat.WEBP) format = JsPdfFormat.WEBP;
 
           pdf.addImage(dataUrl, format, x, y, finalWidth, finalHeight, undefined, 'FAST');
 
@@ -621,6 +545,7 @@ export abstract class PdfGeneratorService {
     });
 
     const hSeparator = document.createElement('div');
+
     Object.assign(hSeparator.style, {
       position: 'absolute',
       top: '50%',
@@ -643,31 +568,12 @@ export abstract class PdfGeneratorService {
     const loader = document.createElement('div');
     loader.id = this.loadingIndicatorId;
     loader.innerHTML = `
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <div style="width: 20px; height: 20px; border: 2px solid #fff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-        <span>Создание PDF...</span>
-      </div>
-      <style>
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      </style>
-    `;
-
-    Object.assign(loader.style, {
-      position: 'fixed',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      background: 'rgba(0,0,0,0.8)',
-      color: 'white',
-      padding: '20px 30px',
-      borderRadius: '8px',
-      zIndex: '10000',
-      fontFamily: 'Arial, sans-serif',
-      fontSize: '14px',
-    });
+      <div class="fixed inset-0 flex items-center justify-center">
+        <div class="bg-black opacity-90 text-sm rounded-lg px-7 py-5 flex items-center gap-2.5 text-white">
+          <div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          <span>Создание PDF...</span>
+        </div>
+      </div>`;
 
     document.body.appendChild(loader);
   }
