@@ -47,6 +47,10 @@ export abstract class PdfGeneratorService {
 
   private loadingIndicatorId = 'pdf-loader';
 
+  protected get isPortraitOrientation() {
+    return this.defaultOptions.orientation === 'portrait';
+  }
+
   async generatePDF<T>(
     sourceElement: HTMLElement,
     data: T,
@@ -147,18 +151,24 @@ export abstract class PdfGeneratorService {
     });
   }
 
-  protected addSourceCopy(
+  protected addSourceElementCopy(
     container: HTMLElement,
     sourceElement: HTMLElement,
-    copyNumber: number,
-    label: string,
+    copyNumber?: number,
+    label?: string,
   ): void {
-    const header = this.createCopyHeader(copyNumber, label);
-    container.appendChild(header);
+    const item = document.createElement('div');
 
-    const copy = this.createSourceCopy(sourceElement);
+    if (copyNumber && label) {
+      const header = this.createCopyHeader(copyNumber, label);
+      item.appendChild(header);
+    }
+
+    const copy = this.createSourceElementCopy(sourceElement);
     // this.applyCopyStyles(copy, copyNumber === 3);
-    container.appendChild(copy);
+    item.appendChild(copy);
+
+    container.appendChild(item);
   }
 
   protected addPageSeparator(container: HTMLElement): void {
@@ -188,7 +198,7 @@ export abstract class PdfGeneratorService {
     return header;
   }
 
-  private createSourceCopy(sourceElement: HTMLElement): HTMLElement {
+  private createSourceElementCopy(sourceElement: HTMLElement): HTMLElement {
     const copy = sourceElement.cloneNode(true) as HTMLElement;
     this.removeInteractiveElements(copy);
     // this.applyPrintStyles(copy);
@@ -434,7 +444,7 @@ export abstract class PdfGeneratorService {
       skipFonts: options.skipFonts,
       includeQueryParams: options.includeQueryParams,
       filter: (node: Node) => {
-        // Фильтруем ненужные элементы
+        // Filter unnecessary nodes
         if (node instanceof Element && node.classList) {
           return !node.classList.contains('no-print');
         }
@@ -578,7 +588,6 @@ export abstract class PdfGeneratorService {
           const x = (pdfWidth - finalWidth) / 2;
           const y = (pdfHeight - finalHeight) / 2;
 
-          // Определяем формат изображения для jsPDF
           let format: 'JPEG' | 'PNG' | 'WEBP' = 'PNG';
           if (options.imageFormat === 'jpeg') format = 'JPEG';
           else if (options.imageFormat === 'webp') format = 'WEBP';
@@ -597,6 +606,33 @@ export abstract class PdfGeneratorService {
 
       img.src = dataUrl;
     });
+  }
+
+  protected addGridSeparators(container: HTMLElement): void {
+    const vSeparator = document.createElement('div');
+    Object.assign(vSeparator.style, {
+      position: 'absolute',
+      left: '50%',
+      top: '0',
+      bottom: '0',
+      width: '1px',
+      border: '1px dashed #e6e6e6',
+      transform: 'translateX(-50%)',
+    });
+
+    const hSeparator = document.createElement('div');
+    Object.assign(hSeparator.style, {
+      position: 'absolute',
+      top: '50%',
+      left: '0',
+      right: '0',
+      height: '1px',
+      border: '1px dashed #e6e6e6',
+      transform: 'translateY(-50%)',
+    });
+
+    container.appendChild(vSeparator);
+    container.appendChild(hSeparator);
   }
 
   protected showLoadingIndicator(): void {

@@ -12,7 +12,7 @@ export class InvoiceGeneratorService extends PdfGeneratorService {
     return {
       ...super.defaultOptions,
       filename: 'Накладная.pdf',
-      copyLabels: ['Отправитель', 'Получатель', 'Архив'],
+      orientation: 'portrait',
     };
   }
 
@@ -35,16 +35,20 @@ export class InvoiceGeneratorService extends PdfGeneratorService {
     console.log('invoiceData', invoiceData);
 
     try {
-      // Create containers for invoice pages
-      const page1Container = this.createInvoicePage(sourceElement, config, 1);
-      const page2Container = this.createInvoicePage(sourceElement, config, 2);
+      if (this.isPortraitOrientation) {
+        const page1Container = this.createPage(sourceElement, config, 1);
 
-      containers.push(page1Container, page2Container);
+        const page2Container = this.createPage(sourceElement, config, 2);
 
-      // Insert in DOM
+        containers.push(page1Container, page2Container);
+      } else {
+        const page1Container = this.createPage(sourceElement, config, 1);
+
+        containers.push(page1Container);
+      }
+
       containers.forEach((container) => document.body.appendChild(container));
 
-      // Wait images loading
       await Promise.all(containers.map((container) => this.ensureImagesLoaded(container)));
       await this.waitForRender(300);
 
@@ -55,20 +59,44 @@ export class InvoiceGeneratorService extends PdfGeneratorService {
     }
   }
 
-  private createInvoicePage(
+  private createPage(
     sourceElement: HTMLElement,
     config: Required<PdfOptions>,
     pageNumber: number,
   ): HTMLElement {
     const container = this.createPageContainer(sourceElement, config, pageNumber);
 
-    if (pageNumber === 1) {
-      this.addSourceCopy(container, sourceElement, 1, config.copyLabels[0]);
-      this.addPageSeparator(container);
-      this.addSourceCopy(container, sourceElement, 2, config.copyLabels[1]);
-    } else {
-      this.addSourceCopy(container, sourceElement, 3, config.copyLabels[2]);
+    if (this.isPortraitOrientation) {
+      if (pageNumber === 1) {
+        this.addSourceElementCopy(container, sourceElement);
+        this.addPageSeparator(container);
+        this.addSourceElementCopy(container, sourceElement);
+      } else {
+        this.addSourceElementCopy(container, sourceElement);
+      }
+
+      return container;
     }
+
+    Object.assign(container.style, {
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      gridTemplateRows: '1fr 1fr',
+      alignItems: 'center',
+      width: '100%',
+      height: '100%',
+      gap: '12mm',
+      // padding: '2mm',
+      boxSizing: 'border-box',
+      position: 'relative',
+    });
+
+    this.addSourceElementCopy(container, sourceElement);
+    this.addSourceElementCopy(container, sourceElement);
+    this.addSourceElementCopy(container, sourceElement);
+    this.addSourceElementCopy(container, sourceElement);
+
+    this.addGridSeparators(container);
 
     return container;
   }
