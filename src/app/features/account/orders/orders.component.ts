@@ -1,18 +1,13 @@
 import { AsyncPipe } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  inject,
-  type OnDestroy,
-  type OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, type OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { TuiAlertService, tuiDialog } from '@taiga-ui/core';
-import { finalize, type Observable, Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { type Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { type ModalConfig, ModalService } from '@core/services/modal.service';
 
 import { FilterComponent } from './components/filter';
 import { OrderDetailsDialogComponent } from './components/order-details-dialog';
@@ -34,7 +29,7 @@ import type { OrdersViewModel, Filter, QueryParams } from './types';
   styleUrl: './orders.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OrdersComponent implements OnInit, OnDestroy {
+export class OrdersComponent implements OnInit {
   vm$!: Observable<OrdersViewModel>;
 
   orderDetailsDialog = tuiDialog(OrderDetailsDialogComponent, {
@@ -49,29 +44,31 @@ export class OrdersComponent implements OnInit, OnDestroy {
     size: 'auto',
   });
 
-  private readonly MODAL_PARAMS = ['orderId', 'invoiceId'] as const;
   private readonly ordersFacade = inject(OrdersFacade);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
   private readonly alerts = inject(TuiAlertService);
   private readonly transloco = inject(TranslocoService);
-  private readonly destroyDialog$ = new Subject<void>();
+  private readonly modalService = inject(ModalService);
 
-  private isOrderModalOpen = false;
-  private isInvoiceModalOpen = false;
+  private readonly modalConfigs: Record<string, ModalConfig> = {
+    orderId: {
+      paramName: 'orderId',
+      modalFn: this.orderDetailsDialog.bind(this),
+    },
+    invoiceId: {
+      paramName: 'invoiceId',
+      modalFn: this.orderInvoiceDialog.bind(this),
+    },
+  };
 
   ngOnInit(): void {
     this.vm$ = this.ordersFacade.getViewModel();
     this.initializeUrl();
     this.setupErrorHandling();
 
-    window.addEventListener('popstate', this.handlePopState.bind(this));
-    this.syncModalStateWithUrl();
-  }
-
-  ngOnDestroy(): void {
-    window.removeEventListener('popstate', this.handlePopState.bind(this));
+    this.modalService.syncWithUrl(this.modalConfigs);
   }
 
   setFilter(filter: Filter): void {
@@ -83,11 +80,11 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
 
   showOrderDetails(orderId: string): void {
-    this.showModalWithUrl(this.orderDetailsDialog.bind(this), orderId);
+    this.modalService.showModalWithUrl(this.orderDetailsDialog.bind(this), orderId, 'orderId');
   }
 
   showOrderInvoice(orderId: string): void {
-    this.showModalWithUrl(this.orderInvoiceDialog.bind(this), orderId, 'invoiceId');
+    this.modalService.showModalWithUrl(this.orderInvoiceDialog.bind(this), orderId, 'invoiceId');
   }
 
   onPageSizeChange(pageSize: number): void {
@@ -155,62 +152,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
     });
   }
 
-  private showModalWithUrl(
-    modalFn: (id: string) => Observable<unknown>,
-    orderId: string,
-    paramName = 'orderId',
-  ): void {
-    const url = new URL(window.location.href);
-
-    this.clearAllModalParams(url);
-
-    url.searchParams.set(paramName, orderId);
-    window.history.pushState({}, '', url.toString());
-
-    modalFn(orderId)
-      .pipe(
-        takeUntil(this.destroyDialog$),
-        finalize(() => {
-          const url = new URL(window.location.href);
-          url.searchParams.delete(paramName);
-          window.history.replaceState({}, '', url.toString());
-
-          if (paramName === 'orderId') this.isOrderModalOpen = false;
-          if (paramName === 'invoiceId') this.isInvoiceModalOpen = false;
-        }),
-      )
-      .subscribe();
-  }
-
-  private clearAllModalParams(url: URL): void {
-    this.MODAL_PARAMS.forEach((param) => {
-      url.searchParams.delete(param);
-    });
-  }
-
-  private handlePopState(): void {
-    const urlParams = new URLSearchParams(window.location.search);
-
-    const hasAnyModalParam = this.MODAL_PARAMS.some((param) => urlParams.has(param));
-
-    if (!hasAnyModalParam) {
-      this.destroyDialog$.next();
-    }
-  }
-
-  private syncModalStateWithUrl(): void {
-    const urlParams = new URLSearchParams(window.location.search);
-
-    const orderId = urlParams.get('orderId');
-    const invoiceId = urlParams.get('invoiceId');
-
-    if (orderId && !this.isOrderModalOpen) {
-      this.showOrderDetails(orderId);
-    } else if (invoiceId && !this.isInvoiceModalOpen) {
-      this.showOrderInvoice(invoiceId);
-    }
-  }
-
   private setupErrorHandling(): void {
     this.vm$
       .pipe(
@@ -224,7 +165,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
         if (error.details) {
           this.showErrorNotification('Не удалось загрузить детали заказа');
-          this.destroyDialog$.next();
+          this.modalService.closeAllModals();
         }
 
         if (error.cancel) {
