@@ -1,13 +1,15 @@
 import { inject, Injectable } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, type SafeResourceUrl } from '@angular/platform-browser';
 import { TUI_IS_MOBILE } from '@taiga-ui/cdk';
 import { type TuiPdfViewerOptions, TuiPdfViewerService } from '@taiga-ui/kit';
+import type { PolymorpheusContent } from '@taiga-ui/polymorpheus';
 import { Observable } from 'rxjs';
 
 export interface PdfViewerOptions extends Partial<TuiPdfViewerOptions> {
   autoDownload?: boolean;
   downloadLabel?: string;
   printSupport?: boolean;
+  customActions?: PolymorpheusContent<TuiPdfViewerOptions>;
 }
 
 @Injectable({
@@ -25,7 +27,7 @@ export class PdfViewerService {
       const viewerConfig: TuiPdfViewerOptions = {
         data: undefined,
         label,
-        actions: this.createViewerActions(pdfUrl, options),
+        actions: options.customActions || this.createDefaultActions(pdfUrl, options),
         ...options,
       };
 
@@ -67,9 +69,16 @@ export class PdfViewerService {
     });
   }
 
+  getOriginalUrl(safeUrl: SafeResourceUrl): string {
+    return (
+      (safeUrl as { changingThisBreaksApplicationSecurity: string })
+        .changingThisBreaksApplicationSecurity || ''
+    );
+  }
+
   downloadPdf(url: string, filename: string): void {
     const link = document.createElement('a');
-    link.href = url;
+    link.href = this.getOriginalUrl(url);
     link.download = filename;
     link.style.display = 'none';
     document.body.appendChild(link);
@@ -86,29 +95,14 @@ export class PdfViewerService {
   }
 
   printPdf(url: string): void {
-    if (!this.isPrintSupported()) {
-      console.warn('Печать не поддерживается на данном устройстве');
-      return;
-    }
+    const pdfWindow = window.open(this.getOriginalUrl(url), '_blank');
 
-    try {
-      const printWindow = window.open(url, '_blank', 'width=800,height=600');
-      if (printWindow) {
-        printWindow.onload = () => {
-          setTimeout(() => printWindow.print(), 1000);
-        };
-
-        // Fallback
-        setTimeout(() => {
-          if (printWindow && !printWindow.closed) {
-            printWindow.print();
-          }
-        }, 2000);
-      } else {
-        console.warn('Не удалось открыть окно для печати. Возможно заблокированы popup.');
-      }
-    } catch (error) {
-      console.error('Ошибка при печати PDF:', error);
+    if (pdfWindow) {
+      setTimeout(() => {
+        pdfWindow.print();
+      }, 1500);
+    } else {
+      console.warn('Не удалось открыть окно. Возможно заблокированы popup.');
     }
   }
 
@@ -137,27 +131,18 @@ export class PdfViewerService {
     return this.sanitizer.bypassSecurityTrustResourceUrl(finalUrl);
   }
 
-  protected createViewerActions(
-    pdfUrl: string,
-    options: PdfViewerOptions,
-  ): { text: string; click: () => void }[] {
-    const actions: { text: string; click: () => void }[] = [];
+  protected createDefaultActions(pdfUrl: string, options: PdfViewerOptions): string {
+    const actions: string[] = [];
 
     if (options.autoDownload !== false) {
-      actions.push({
-        text: options.downloadLabel || 'Скачать PDF',
-        click: () => this.downloadPdf(pdfUrl, this.getDefaultFilename()),
-      });
+      actions.push(options.downloadLabel || 'Скачать PDF');
     }
 
     if (options.printSupport !== false && this.isPrintSupported()) {
-      actions.push({
-        text: 'Печать',
-        click: () => this.printPdf(pdfUrl),
-      });
+      actions.push('Печать');
     }
 
-    return actions;
+    return actions.join(', ');
   }
 
   protected isPrintSupported(): boolean {
