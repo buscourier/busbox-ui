@@ -10,6 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { TuiButton, type TuiDialogContext, TuiIcon } from '@taiga-ui/core';
+import { TuiSkeleton } from '@taiga-ui/kit';
 import { injectContext } from '@taiga-ui/polymorpheus';
 import type { Observable } from 'rxjs';
 
@@ -22,7 +23,7 @@ import type { OrderInfo, OrdersViewModel } from '../../types';
 
 @Component({
   selector: 'app-order-invoice-dialog',
-  imports: [AsyncPipe, TuiButton, TuiIcon],
+  imports: [AsyncPipe, TuiButton, TuiIcon, TuiSkeleton],
   templateUrl: './order-invoice-dialog.component.html',
   styleUrl: './order-invoice-dialog.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -98,8 +99,7 @@ export class OrderInvoiceDialogComponent implements OnInit {
   isCashPayment = computed(() => true);
 
   handleClose(): void {
-    // Implement close logic
-    // this.router.navigate(['/orders']);
+    this.context.completeWith('');
   }
 
   private async generateQrCode(): Promise<void> {
