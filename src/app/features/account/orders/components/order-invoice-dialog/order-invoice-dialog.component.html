@@ -9,11 +9,11 @@
             <table class="w-full border border-zinc-600">
               <tr>
                 <td class="w-[25mm] h-[18mm] text-center border border-zinc-600 text-xs p-0.5">
-                  <!--                  <img-->
-                  <!--                    src="/assets/images/print-logo.png"-->
-                  <!--                    class="inline-block w-[20mm] h-auto"-->
-                  <!--                    alt="Logo"-->
-                  <!--                  />-->
+                  <img
+                    src="/assets/images/invoice-logo.png"
+                    class="inline-block w-[20mm] h-auto"
+                    alt="Logo"
+                  />
                 </td>
                 <td class="w-[45mm] border border-zinc-600 text-xs p-0.5">
                   <b>ЗАКАЗ {{ order.order_id }}</b
@@ -275,23 +275,11 @@
             </table>
           </div>
 
-          <!-- Action Buttons -->
           <div class="space-x-2">
-            <button
-              type="button"
-              tuiButton
-              (click)="handlePrint(order)"
-              class="bg-blue-600 hover:bg-blue-700 text-white"
-            >
+            <button type="button" tuiButton appearance="primary" (click)="handlePrint(order)">
               Напечатать
             </button>
-            <button
-              type="button"
-              appearance="accent"
-              tuiButton
-              (click)="handleClose()"
-              class="bg-green-600 hover:bg-green-700 text-white"
-            >
+            <button type="button" appearance="secondary" tuiButton (click)="handleClose()">
               Закрыть
             </button>
           </div>
@@ -300,3 +288,28 @@
     </div>
   </div>
 }
+<ng-template #actions let-content="content">
+  <div class="flex gap-2">
+    <button
+      tuiButton
+      appearance="primary"
+      size="s"
+      (click)="downloadPdf(content)"
+      [style.border-radius.rem]="0.5"
+    >
+      <tui-icon icon="@tui.download" class="mr-1"></tui-icon>
+      Скачать
+    </button>
+
+    <button
+      tuiButton
+      appearance="secondary"
+      size="s"
+      (click)="printPdf(content)"
+      [style.border-radius.rem]="0.5"
+    >
+      <tui-icon icon="@tui.printer" class="mr-1"></tui-icon>
+      Печать
+    </button>
+  </div>
+</ng-template>

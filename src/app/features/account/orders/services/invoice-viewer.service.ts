@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, TemplateRef } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import type { PdfOptions } from '@core/services/pdf-generator.service';
@@ -8,6 +8,7 @@ import { InvoiceGeneratorService } from './invoice-generator.service';
 
 export interface InvoiceViewerOptions extends PdfViewerOptions {
   generationOptions?: Partial<PdfOptions>;
+  customActions?: TemplateRef<unknown>;
 }
 
 @Injectable({
@@ -31,8 +32,20 @@ export class InvoiceViewerService extends PdfViewerService {
             return;
           }
 
-          // Show the generated PDF
-          this.showPdfFromBlob(result.blob, label, options).subscribe({
+          if (options.autoDownload !== false) {
+            const filename = result.filename || this.getDefaultFilename();
+            this.downloadPdfFromBlob(result.blob, filename);
+          }
+
+          // const blobUrl = this.createBlobUrl(result.blob);
+
+          console.log('options.customActions', options.customActions);
+
+          this.showPdfFromBlob(result.blob, label, {
+            ...options,
+            autoDownload: false,
+            customActions: options.customActions ? options.customActions : undefined,
+          }).subscribe({
             next: () => subscriber.next(),
             error: (error) => subscriber.error(error),
             complete: () => subscriber.complete(),

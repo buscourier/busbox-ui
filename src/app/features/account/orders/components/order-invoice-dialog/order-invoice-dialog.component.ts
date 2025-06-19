@@ -6,9 +6,10 @@ import {
   type ElementRef,
   inject,
   type OnInit,
+  type TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { TuiButton, type TuiDialogContext } from '@taiga-ui/core';
+import { TuiButton, type TuiDialogContext, TuiIcon } from '@taiga-ui/core';
 import { injectContext } from '@taiga-ui/polymorpheus';
 import type { Observable } from 'rxjs';
 
@@ -21,13 +22,14 @@ import type { OrderInfo, OrdersViewModel } from '../../types';
 
 @Component({
   selector: 'app-order-invoice-dialog',
-  imports: [AsyncPipe, TuiButton],
+  imports: [AsyncPipe, TuiButton, TuiIcon],
   templateUrl: './order-invoice-dialog.component.html',
   styleUrl: './order-invoice-dialog.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrderInvoiceDialogComponent implements OnInit {
   @ViewChild('invoiceContainer', { static: false }) invoiceContainer!: ElementRef;
+  @ViewChild('actions', { static: true }) actionsTemplate!: TemplateRef<unknown>;
 
   readonly context = injectContext<TuiDialogContext<string, string>>();
 
@@ -51,8 +53,9 @@ export class OrderInvoiceDialogComponent implements OnInit {
         order,
         `Накладная №${order.order_id}`,
         {
-          autoDownload: true,
+          autoDownload: false,
           downloadLabel: 'Скачать накладную',
+          customActions: this.actionsTemplate,
           generationOptions: {
             filename: `Накладная_${order.order_id}.pdf`,
             quality: 0.95,
@@ -62,7 +65,6 @@ export class OrderInvoiceDialogComponent implements OnInit {
       )
       .subscribe({
         next: () => {
-          console.log('PDF viewer открыт');
           this.isGenerating = false;
         },
         error: (error) => {
@@ -70,7 +72,6 @@ export class OrderInvoiceDialogComponent implements OnInit {
           this.isGenerating = false;
         },
         complete: () => {
-          console.log('PDF viewer закрыт');
           this.isGenerating = false;
         },
       });
@@ -118,5 +119,14 @@ export class OrderInvoiceDialogComponent implements OnInit {
     } catch (error) {
       console.error('Ошибка генерации Bar-кода:', error);
     }
+  }
+
+  downloadPdf(pdfUrl: string): void {
+    console.log('pdfUrl', pdfUrl);
+    this.invoiceViewer.downloadPdf(pdfUrl, `Накладная_${this.orderId}.pdf`);
+  }
+
+  printPdf(pdfUrl: string): void {
+    this.invoiceViewer.printPdf(pdfUrl);
   }
 }

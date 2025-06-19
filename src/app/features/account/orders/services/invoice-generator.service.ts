@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 
-import { PdfGeneratorService, type PdfOptions } from '@core/services/pdf-generator.service';
+import {
+  PageOrientation,
+  PdfGeneratorService,
+  type PdfOptions,
+} from '@core/services/pdf-generator.service';
 
 import type { OrderInfo } from '../types';
 
@@ -12,7 +16,7 @@ export class InvoiceGeneratorService extends PdfGeneratorService {
     return {
       ...super.defaultOptions,
       filename: 'Накладная.pdf',
-      orientation: 'portrait',
+      orientation: PageOrientation.LANDSCAPE,
     };
   }
 
