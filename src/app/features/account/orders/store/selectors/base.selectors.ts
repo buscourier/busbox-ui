@@ -29,9 +29,7 @@ export const createBaseSelectors = (
   );
 
   const selectCancelOperationState = createSelector(selectOperationsState, (state) => state.cancel);
-
   const selectExportOperationState = createSelector(selectOperationsState, (state) => state.export);
-
   const selectQueryState = createSelector(selectOrdersFeatureState, (state) => state.query);
 
   return {
@@ -67,5 +65,6 @@ export const createBaseSelectors = (
     // ===== QUERY SELECTORS =====
     selectFilter: createSelector(selectQueryState, (state) => state.filter),
     selectPagination: createSelector(selectQueryState, (state) => state.pagination),
+    selectSort: createSelector(selectQueryState, (state) => state.sort),
   };
 };

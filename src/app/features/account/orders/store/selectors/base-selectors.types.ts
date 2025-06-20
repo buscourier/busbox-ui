@@ -3,7 +3,7 @@ import { type MemoizedSelector } from '@ngrx/store';
 
 import type { ApiError, AsyncStatus, Pagination } from '@shared/types';
 
-import type { Filter, Order, OrderDetails } from '../../types';
+import type { Filter, Order, OrderDetails, SortConfig } from '../../types';
 
 export interface BaseSelectors {
   // Entity selectors
@@ -38,4 +38,5 @@ export interface BaseSelectors {
   // ===== QUERY SELECTORS =====
   selectFilter: MemoizedSelector<object, Filter>;
   selectPagination: MemoizedSelector<object, Pagination>;
+  selectSort: MemoizedSelector<object, SortConfig>;
 }

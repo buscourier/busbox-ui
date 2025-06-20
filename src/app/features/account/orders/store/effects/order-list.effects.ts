@@ -2,10 +2,8 @@ import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { mapResponse } from '@ngrx/operators';
 import { Store } from '@ngrx/store';
-import { distinctUntilChanged, filter, first, switchMap, withLatestFrom } from 'rxjs';
+import { filter, first, switchMap, withLatestFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-import { isObjectsEqual } from '@core/utils';
 
 import type { ApiError } from '@shared/types';
 
@@ -21,7 +19,13 @@ export const orderListEffects = {
   setPayload: createEffect(
     (actions$ = inject(Actions), store = inject(Store), authFacade = inject(AuthFacade)) => {
       return actions$.pipe(
-        ofType(OrdersActions.setFilter, OrdersActions.setPage, OrdersActions.setPageSize),
+        ofType(
+          OrdersActions.setFilter,
+          OrdersActions.setPage,
+          OrdersActions.setPageSize,
+          OrdersActions.setSort,
+          OrdersActions.clearSort,
+        ),
         switchMap(() =>
           authFacade.getCurrentUser().pipe(
             filter((user) => !!user),
@@ -58,7 +62,7 @@ export const orderListEffects = {
     (actions$ = inject(Actions), ordersService = inject(OrdersService)) => {
       return actions$.pipe(
         ofType(OrdersActions.loadList),
-        distinctUntilChanged((prev, curr) => isObjectsEqual(prev, curr)),
+        // distinctUntilChanged((prev, curr) => isObjectsEqual(prev, curr)),
         switchMap(({ payload }) =>
           ordersService.getOrderList(payload).pipe(
             mapResponse({

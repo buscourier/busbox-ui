@@ -3,6 +3,7 @@ import { createReducer, on } from '@ngrx/store';
 import { AsyncStatus, LoadingStatus } from '@shared/types';
 
 import { DEFAULT_PAGE } from '../constants';
+import { SortDirectionEnum } from '../types';
 
 import { OrdersActions } from './actions';
 import { adapter, initialState, type OrdersFeatureState } from './state';
@@ -241,6 +242,37 @@ export const ordersReducer = createReducer(
           ...state.operations.export,
           status: AsyncStatus.ERROR,
           error,
+        },
+      },
+    }),
+  ),
+  on(
+    OrdersActions.setSort,
+    (state, { sort }): OrdersFeatureState => ({
+      ...state,
+      query: {
+        ...state.query,
+        sort,
+        pagination: {
+          ...state.query.pagination,
+          currentPage: DEFAULT_PAGE,
+        },
+      },
+    }),
+  ),
+  on(
+    OrdersActions.clearSort,
+    (state): OrdersFeatureState => ({
+      ...state,
+      query: {
+        ...state.query,
+        sort: {
+          field: null,
+          direction: SortDirectionEnum.NONE,
+        },
+        pagination: {
+          ...state.query.pagination,
+          currentPage: DEFAULT_PAGE,
         },
       },
     }),

@@ -1,6 +1,6 @@
 import type { ApiError } from '@shared/types';
 
-import type { Errors, Filter, Order, OrderDetails } from '../types';
+import type { Errors, Filter, Order, OrderDetails, SortConfig } from '../types';
 
 export interface OrderListViewModel {
   isLoading: boolean;
@@ -12,6 +12,7 @@ export interface OrderListViewModel {
   selectedId: string | null;
   canExport: boolean;
   pagination: PaginationViewModel;
+  sort: SortConfig;
 }
 
 export interface PaginationViewModel {

@@ -45,18 +45,25 @@
       [class.show-right-fade]="showRightFade"
       (scroll)="onTableScroll($event)"
     >
-      <table tuiTable [columns]="columns" class="w-full whitespace-nowrap">
+      <table
+        [tuiSortBy]="sortBy"
+        [direction]="direction || TuiSortDirection.Asc"
+        (tuiSortChange)="onSortChange($event)"
+        tuiTable
+        [columns]="columns"
+        class="w-full whitespace-nowrap"
+      >
         <thead>
           <tr tuiThGroup>
-            <th *tuiHead="'order_id'" tuiTh [sorter]="null">№ Заказа</th>
-            <th *tuiHead="'date'" tuiTh [sorter]="null">Дата заказа</th>
-            <th *tuiHead="'sender_name'" tuiTh [sorter]="null">Отправитель</th>
-            <th *tuiHead="'recipient_name'" tuiTh [sorter]="null">Получатель</th>
-            <th *tuiHead="'start_city'" tuiTh [sorter]="null">Город отправления</th>
-            <th *tuiHead="'end_city'" tuiTh [sorter]="null">Город получения</th>
-            <th *tuiHead="'order_price'" tuiTh [sorter]="null">Цена</th>
-            <th *tuiHead="'status'" tuiTh [sorter]="null">Статус</th>
-            <th *tuiHead="'print'" tuiTh [sorter]="null">Печать</th>
+            <th *tuiHead="'order_id'" tuiTh tuiSortable>№ Заказа</th>
+            <th *tuiHead="'date'" tuiTh tuiSortable>Дата заказа</th>
+            <th *tuiHead="'sender_name'" tuiTh tuiSortable>Отправитель</th>
+            <th *tuiHead="'recipient_name'" tuiTh tuiSortable>Получатель</th>
+            <th *tuiHead="'start_city'" tuiTh tuiSortable>Город отправления</th>
+            <th *tuiHead="'end_city'" tuiTh tuiSortable>Город получения</th>
+            <th *tuiHead="'order_price'" tuiTh tuiSortable>Цена</th>
+            <th *tuiHead="'status'" tuiTh tuiSortable>Статус</th>
+            <th *tuiHead="'print'" tuiTh>Печать</th>
           </tr>
         </thead>
         <tbody tuiTbody [data]="list.orders">

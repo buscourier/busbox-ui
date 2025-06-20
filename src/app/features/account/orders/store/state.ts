@@ -4,7 +4,13 @@ import type { ApiError, Pagination, AsyncState } from '@shared/types';
 import { AsyncStatus } from '@shared/types';
 
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '../constants';
-import type { Filter, Order, OrderDetails } from '../types';
+import {
+  type Filter,
+  type Order,
+  type OrderDetails,
+  type SortConfig,
+  SortDirectionEnum,
+} from '../types';
 
 export interface OrderListState extends EntityState<Order> {
   status: AsyncStatus;
@@ -33,6 +39,7 @@ export interface OrderOperationsState {
 export interface QueryState {
   filter: Filter;
   pagination: Pagination;
+  sort: SortConfig;
 }
 
 export interface OrdersFeatureState {
@@ -44,7 +51,7 @@ export interface OrdersFeatureState {
 
 export const adapter = createEntityAdapter<Order>({
   selectId: (order: Order) => order.order_id,
-  sortComparer: (a: Order, b: Order) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  // sortComparer: (a: Order, b: Order) => new Date(b.date).getTime() - new Date(a.date).getTime(),
 });
 
 export const initialState: OrdersFeatureState = {
@@ -80,6 +87,10 @@ export const initialState: OrdersFeatureState = {
     pagination: {
       currentPage: DEFAULT_PAGE,
       pageSize: DEFAULT_PAGE_SIZE,
+    },
+    sort: {
+      field: null,
+      direction: SortDirectionEnum.NONE,
     },
   },
 };

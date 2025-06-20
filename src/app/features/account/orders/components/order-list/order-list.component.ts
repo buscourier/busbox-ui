@@ -18,7 +18,14 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TuiCurrencyPipe } from '@taiga-ui/addon-commerce';
-import { TuiTable, TuiTableCell, TuiTableDirective, TuiTableHead } from '@taiga-ui/addon-table';
+import {
+  type TuiSortChange,
+  TuiSortDirection,
+  TuiTable,
+  TuiTableCell,
+  TuiTableDirective,
+  TuiTableHead,
+} from '@taiga-ui/addon-table';
 import type { TuiContext, TuiStringHandler } from '@taiga-ui/cdk';
 import { TuiButton, TuiScrollbarDirective, TuiTextfield } from '@taiga-ui/core';
 import {
@@ -32,7 +39,7 @@ import { TuiTextfieldControllerModule } from '@taiga-ui/legacy';
 import { debounceTime, distinctUntilChanged, filter, fromEvent } from 'rxjs';
 
 import { DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS } from '../../constants';
-import type { OrderListViewModel } from '../../types';
+import { type Order, type OrderListViewModel, type SortConfig } from '../../types';
 
 @Component({
   selector: 'app-order-list',
@@ -63,6 +70,7 @@ export class OrderListComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Output() pageChange = new EventEmitter<number>();
   @Output() pageSizeChange = new EventEmitter<number>();
+  @Output() sortChange = new EventEmitter<SortConfig>();
   @Output() orderSelect = new EventEmitter<string>();
   @Output() orderPrint = new EventEmitter<string>();
   @Output() export = new EventEmitter<void>();
@@ -92,6 +100,15 @@ export class OrderListComponent implements OnInit, OnChanges, AfterViewInit {
 
   private readonly destroyRef = inject(DestroyRef);
   private readonly platformId = inject(PLATFORM_ID);
+
+  get sortBy(): keyof Order | null {
+    return this.list.sort?.field || null;
+  }
+
+  get direction(): TuiSortDirection | null {
+    const dir = this.list.sort?.direction || 0;
+    return dir === 0 ? null : (dir as TuiSortDirection);
+  }
 
   ngOnInit(): void {
     this.setupPageSizeChange();
@@ -150,6 +167,14 @@ export class OrderListComponent implements OnInit, OnChanges, AfterViewInit {
     this.export.emit();
   }
 
+  onSortChange(event: TuiSortChange<Order>): void {
+    const sort: SortConfig = {
+      field: event.sortKey || null,
+      direction: event.sortDirection,
+    };
+    this.sortChange.emit(sort);
+  }
+
   getOrdersWord(count: number): string {
     const lastDigit = count % 10;
     const lastTwoDigits = count % 100;
@@ -202,4 +227,6 @@ export class OrderListComponent implements OnInit, OnChanges, AfterViewInit {
     this.showRightFade = canScrollRight;
     this.showLeftFade = false;
   }
+
+  protected readonly TuiSortDirection = TuiSortDirection;
 }

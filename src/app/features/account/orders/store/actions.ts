@@ -9,6 +9,7 @@ import type {
   OrderDetails,
   OrderListPayload,
   OrderListResponse,
+  SortConfig,
 } from '../types';
 
 export const OrdersActions = createActionGroup({
@@ -40,5 +41,8 @@ export const OrdersActions = createActionGroup({
     'Clear Filter': emptyProps(),
 
     'Restore From Url': props<{ params: Partial<QueryParams> }>(),
+
+    'Set Sort': props<{ sort: SortConfig }>(),
+    'Clear Sort': emptyProps(),
   },
 });

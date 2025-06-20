@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
+import type { Action } from '@ngrx/store';
 import { concatMap, EMPTY, filter, of, switchMap, take } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -9,7 +10,7 @@ import { LocationsFacade } from '@shared/store';
 import { LocationsActions } from '@shared/store/locations/actions';
 
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '../../constants';
-import type { Filter } from '../../types';
+import { type Filter, type Order, type SortConfig, stringToSortDirection } from '../../types';
 
 import { OrdersActions } from '../actions';
 
@@ -37,30 +38,45 @@ export const routerEffects = {
       return actions$.pipe(
         ofType(OrdersActions.restoreFromUrl),
         switchMap(({ params }) => {
-          const { from: pickupCityId, to: deliveryCityId, range, page, size: pageSize } = params;
+          const {
+            from: pickupCityId,
+            to: deliveryCityId,
+            range,
+            page,
+            size: pageSize,
+            sortField,
+            sortDirection,
+          } = params;
 
-          // Pagination without filters
-          if (!pickupCityId && !deliveryCityId && !range) {
-            return of(
-              OrdersActions.clearFilter(),
-              OrdersActions.setPage({ page: page || DEFAULT_PAGE }),
-              OrdersActions.setPageSize({ pageSize: pageSize || DEFAULT_PAGE_SIZE }),
-            );
+          const actions: Action[] = [];
+
+          if (sortField && sortDirection) {
+            const sort: SortConfig = {
+              field: sortField as keyof Order,
+              direction: stringToSortDirection(sortDirection),
+            };
+
+            actions.push(OrdersActions.setSort({ sort }));
+          } else {
+            actions.push(OrdersActions.clearSort());
           }
 
-          // Pagination with date range
+          actions.push(OrdersActions.setPage({ page: page || DEFAULT_PAGE }));
+          actions.push(OrdersActions.setPageSize({ pageSize: pageSize || DEFAULT_PAGE_SIZE }));
+
+          if (!pickupCityId && !deliveryCityId && !range) {
+            actions.unshift(OrdersActions.clearFilter());
+            return of(...actions);
+          }
+
           if (!pickupCityId && !deliveryCityId && range) {
             const filter: Filter = {
               pickupCity: null,
               deliveryCity: null,
               range: range || '',
             };
-
-            return of(
-              OrdersActions.setFilter({ filter }),
-              OrdersActions.setPage({ page: page || DEFAULT_PAGE }),
-              OrdersActions.setPageSize({ pageSize: pageSize || DEFAULT_PAGE_SIZE }),
-            );
+            actions.unshift(OrdersActions.setFilter({ filter }));
+            return of(...actions);
           }
 
           if (!pickupCityId) return EMPTY;
@@ -94,11 +110,8 @@ export const routerEffects = {
                     range: range || '',
                   };
 
-                  return of(
-                    OrdersActions.setFilter({ filter }),
-                    OrdersActions.setPage({ page: page || DEFAULT_PAGE }),
-                    OrdersActions.setPageSize({ pageSize: pageSize || DEFAULT_PAGE_SIZE }),
-                  );
+                  actions.unshift(OrdersActions.setFilter({ filter }));
+                  return of(...actions);
                 }),
               );
             }),

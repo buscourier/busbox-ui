@@ -49,11 +49,12 @@ export const createViewModelSelector = (
     derivedSelectors.selectIsListLoaded,
     derivedSelectors.selectIsListExporting,
     derivedSelectors.selectIsListEmpty,
-    baseSelectors.selectAll,
+    derivedSelectors.selectSortedOrders,
     baseSelectors.selectTotalCount,
     baseSelectors.selectSelectedId,
     derivedSelectors.selectCanExport,
     selectPaginationViewModel,
+    baseSelectors.selectSort,
     (
       isLoading,
       isLoaded,
@@ -64,6 +65,7 @@ export const createViewModelSelector = (
       selectedId,
       canExport,
       pagination,
+      sort,
     ): OrderListViewModel => ({
       isLoading,
       isLoaded,
@@ -74,6 +76,7 @@ export const createViewModelSelector = (
       selectedId,
       canExport,
       pagination,
+      sort,
     }),
   );
 

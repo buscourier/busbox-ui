@@ -1,11 +1,59 @@
 import { createSelector } from '@ngrx/store';
+import type { TuiComparator } from '@taiga-ui/addon-table';
+import { tuiDefaultSort } from '@taiga-ui/cdk';
 
 import { AsyncStatus } from '@shared/types';
+
+import type { CustomSortDirection, Order } from '../../types';
 
 import type { BaseSelectors } from './base-selectors.types';
 import type { DerivedSelectors } from './derived-selectors.types';
 
 export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSelectors => {
+  const sortBy = (key: keyof Order, direction: CustomSortDirection): TuiComparator<Order> => {
+    return (a, b) => {
+      // Если direction === 0, возвращаем 0 (без сортировки)
+      if (direction === 0) return 0;
+
+      const aValue = a[key];
+      const bValue = b[key];
+
+      // Специальная обработка для разных типов данных
+      if (key === 'date') {
+        const aDate = new Date(aValue as string).getTime();
+        const bDate = new Date(bValue as string).getTime();
+        return direction * tuiDefaultSort(aDate, bDate);
+      }
+
+      if (key === 'order_price') {
+        const aPrice = parseFloat((aValue as string).replace(/[^\d.-]/g, ''));
+        const bPrice = parseFloat((bValue as string).replace(/[^\d.-]/g, ''));
+        return direction * tuiDefaultSort(aPrice, bPrice);
+      }
+
+      if (key === 'order_id') {
+        const aId = parseInt(aValue as string, 10);
+        const bId = parseInt(bValue as string, 10);
+        return direction * tuiDefaultSort(aId, bId);
+      }
+
+      // Строковая сортировка для остальных полей
+      return direction * tuiDefaultSort(aValue, bValue);
+    };
+  };
+
+  const selectSortedOrders = createSelector(
+    baseSelectors.selectAll,
+    baseSelectors.selectSort,
+    (orders, sort) => {
+      if (!sort.field || sort.direction === 0) {
+        return [...orders].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      }
+
+      return [...orders].sort(sortBy(sort.field, sort.direction));
+    },
+  );
+
   const selectIsListLoading = createSelector(
     baseSelectors.selectListStatus,
     (status) => status === AsyncStatus.LOADING,
@@ -121,6 +169,7 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
   );
 
   return {
+    selectSortedOrders,
     selectIsListLoading,
     selectIsListLoaded,
     selectIsListExporting,

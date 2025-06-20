@@ -11,6 +11,7 @@
     [list]="vm.list"
     (pageChange)="navigateToPage($event)"
     (pageSizeChange)="onPageSizeChange($event)"
+    (sortChange)="onSortChange($event)"
     (export)="onExportToExcel()"
     (orderSelect)="showOrderDetails($event)"
     (orderPrint)="showOrderInvoice($event)"

@@ -1,8 +1,9 @@
 import type { MemoizedSelector } from '@ngrx/store';
 
-import type { Errors } from '../../types';
+import type { Errors, Order } from '../../types';
 
 export interface DerivedSelectors {
+  selectSortedOrders: MemoizedSelector<object, Order[]>;
   selectIsListLoading: MemoizedSelector<object, boolean>;
   selectIsListLoaded: MemoizedSelector<object, boolean>;
   selectIsListExporting: MemoizedSelector<object, boolean>;

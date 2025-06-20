@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject, type OnInit } f
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
+import { Store } from '@ngrx/store';
 import { TuiAlertService, tuiDialog } from '@taiga-ui/core';
 import { type Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -20,7 +21,13 @@ import {
   PAGE_SIZE_OPTIONS,
 } from './constants';
 import { OrdersFacade } from './orders.facade';
-import type { OrdersViewModel, Filter, QueryParams } from './types';
+import {
+  type OrdersViewModel,
+  type Filter,
+  type QueryParams,
+  sortDirectionToString,
+  type SortConfig,
+} from './types';
 
 @Component({
   selector: 'app-orders',
@@ -51,6 +58,7 @@ export class OrdersComponent implements OnInit {
   private readonly alerts = inject(TuiAlertService);
   private readonly transloco = inject(TranslocoService);
   private readonly modalService = inject(ModalService);
+  private readonly store = inject(Store);
 
   private readonly modalConfigs: Record<string, ModalConfig> = {
     orderId: {
@@ -87,6 +95,26 @@ export class OrdersComponent implements OnInit {
     this.modalService.showModalWithUrl(this.orderInvoiceDialog.bind(this), orderId, 'invoiceId');
   }
 
+  onSortChange(sort: SortConfig): void {
+    // Обновляем состояние
+    // this.store.dispatch(OrdersActions.setSort({ sort }));
+
+    // Обновляем URL
+    const sortParams: Partial<QueryParams> = {
+      [FILTER_QUERY_PARAMS.PAGE]: DEFAULT_PAGE,
+    };
+
+    if (sort.field && sort.direction !== 0) {
+      sortParams[FILTER_QUERY_PARAMS.SORT_FIELD] = sort.field;
+      sortParams[FILTER_QUERY_PARAMS.SORT_DIRECTION] = sortDirectionToString(sort.direction);
+    } else {
+      this.clearSortFromUrl();
+      return;
+    }
+
+    this.updateUrl(sortParams);
+  }
+
   onPageSizeChange(pageSize: number): void {
     const validatedPageSize = PAGE_SIZE_OPTIONS.includes(pageSize) ? pageSize : DEFAULT_PAGE_SIZE;
 
@@ -98,6 +126,18 @@ export class OrdersComponent implements OnInit {
 
   navigateToPage(page: number): void {
     this.updateUrl({ [FILTER_QUERY_PARAMS.PAGE]: page });
+  }
+
+  private clearSortFromUrl(): void {
+    const currentParams = { ...this.route.snapshot.queryParams };
+    delete currentParams[FILTER_QUERY_PARAMS.SORT_FIELD];
+    delete currentParams[FILTER_QUERY_PARAMS.SORT_DIRECTION];
+    currentParams[FILTER_QUERY_PARAMS.PAGE] = DEFAULT_PAGE;
+
+    this.router.navigate([], {
+      queryParams: currentParams,
+      replaceUrl: false,
+    });
   }
 
   onExportToExcel(): void {

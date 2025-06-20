@@ -4,4 +4,6 @@ export const FILTER_QUERY_PARAMS = {
   DELIVERY_CITY: 'to',
   DATE_RANGE: 'range',
   PAGE_SIZE: 'size',
+  SORT_FIELD: 'sortField',
+  SORT_DIRECTION: 'sortDirection',
 } as const;
