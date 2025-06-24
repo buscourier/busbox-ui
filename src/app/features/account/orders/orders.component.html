@@ -1,5 +1,9 @@
 @let vm = vm$ | async;
 
+<div class="flex justify-end">
+  <app-balance />
+</div>
+
 @if (vm) {
   <app-filter
     [filter]="vm.filter"

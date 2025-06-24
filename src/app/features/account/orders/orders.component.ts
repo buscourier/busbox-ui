@@ -6,6 +6,8 @@ import { type Observable } from 'rxjs';
 
 import { type ModalConfig, ModalService } from '@core/services/modal.service';
 
+import { BalanceComponent } from '@account/balance';
+
 import { FilterComponent } from './components/filter';
 import { OrderDetailsDialogComponent } from './components/order-details-dialog';
 import { OrderInvoiceDialogComponent } from './components/order-invoice-dialog';
@@ -27,7 +29,7 @@ import {
 
 @Component({
   selector: 'app-orders',
-  imports: [AsyncPipe, FilterComponent, OrderListComponent],
+  imports: [AsyncPipe, FilterComponent, OrderListComponent, BalanceComponent],
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

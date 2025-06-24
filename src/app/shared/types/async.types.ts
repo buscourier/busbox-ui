@@ -11,6 +11,6 @@ export type AsyncStatus = (typeof AsyncStatus)[keyof typeof AsyncStatus];
 
 export interface AsyncState<T = unknown> {
   status: AsyncStatus;
-  data: T;
+  data: T | null;
   error: ApiError | null;
 }

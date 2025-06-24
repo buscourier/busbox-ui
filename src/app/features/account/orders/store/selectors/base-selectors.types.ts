@@ -27,13 +27,13 @@ export interface BaseSelectors {
 
   selectCancelStatus: MemoizedSelector<object, AsyncStatus>;
   selectCancelError: MemoizedSelector<object, ApiError | null>;
-  selectCancelData: MemoizedSelector<object, Record<string, boolean>>;
+  selectCancelData: MemoizedSelector<object, Record<string, boolean> | null>;
 
   // ===== EXPORT SELECTORS =====
 
   selectExportStatus: MemoizedSelector<object, AsyncStatus>;
   selectExportError: MemoizedSelector<object, ApiError | null>;
-  selectExportData: MemoizedSelector<object, boolean>;
+  selectExportData: MemoizedSelector<object, boolean | null>;
 
   // ===== QUERY SELECTORS =====
   selectFilter: MemoizedSelector<object, Filter>;

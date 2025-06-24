@@ -31,6 +31,7 @@ import { CustomDateTransformer, CustomDateRangeTransformer } from '@core/transfo
 
 import { LocationsEffects, locationsFeature } from '@shared/store';
 
+import { BalanceEffects, balanceFeature } from '@account/balance';
 import { OrdersEffects, ordersFeature } from '@account/orders';
 import { ProfileEffects, profileFeature } from '@account/profile';
 import { AuthEffects, authFeature } from '@auth';
@@ -59,6 +60,7 @@ export const appConfig: ApplicationConfig = {
     provideState(authFeature),
     provideState(profileFeature),
     provideState(ordersFeature),
+    provideState(balanceFeature),
     provideEffects(
       LocationsEffects,
       PickupPointEffects,
@@ -69,6 +71,7 @@ export const appConfig: ApplicationConfig = {
       AuthEffects,
       ProfileEffects,
       OrdersEffects,
+      BalanceEffects,
     ),
     provideRouterStore(),
     provideHttpClient(),

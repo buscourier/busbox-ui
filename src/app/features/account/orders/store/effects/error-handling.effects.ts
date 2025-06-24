@@ -12,8 +12,8 @@ export const errorHandlingEffects = {
   errorHandling: createEffect(
     (
       actions$ = inject(Actions),
-      alert = inject(TuiAlertService),
       modalService = inject(ModalService),
+      alert = inject(TuiAlertService),
       transloco = inject(TranslocoService),
     ) => {
       return actions$.pipe(
