@@ -38,9 +38,11 @@ export const createViewModelSelector = (
   const selectFilterViewModel = createSelector(
     baseSelectors.selectFilter,
     derivedSelectors.selectIsFilterActive,
-    (params, isActive): FilterViewModel => ({
+    derivedSelectors.selectIsListLoading,
+    (params, isActive, isListLoading): FilterViewModel => ({
       params,
       isActive,
+      isListLoading,
     }),
   );
 

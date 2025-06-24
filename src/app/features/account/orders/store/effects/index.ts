@@ -1,3 +1,4 @@
+import { errorHandlingEffects } from './error-handling.effects';
 import { exportEffects } from './export.effects';
 import { orderListEffects } from './order-list.effects';
 import { orderEffects } from './order.effects';
@@ -8,4 +9,5 @@ export const OrdersEffects = {
   ...orderEffects,
   ...routerEffects,
   ...exportEffects,
+  ...errorHandlingEffects,
 };

@@ -42,19 +42,18 @@
         tuiButton
         type="submit"
         appearance="primary"
-        [loading]="false"
+        [disabled]="filter.isListLoading"
+        [loading]="filter.isListLoading"
         class="mt-2 sm:mt-0 grow"
       >
         Показать
       </button>
       @if (filter.isActive) {
         <button
+          tuiIconButton
+          type="button"
           appearance="outline-destructive"
           iconStart="@tui.funnel-x"
-          icon
-          tuiButton
-          tuiButtonVertical
-          type="button"
           (click)="onClearFilter()"
         >
           &nbsp;

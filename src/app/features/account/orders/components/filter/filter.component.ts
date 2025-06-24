@@ -81,17 +81,30 @@ export class FilterComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.initializeForm();
-    this.restoreInitialFilter();
+    // this.restoreInitialFilter();
     this.initializeCities();
     this.loadDeliveryCities();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const { params } = this.filter;
+    if (changes['filter'] && this.form) {
+      const currentParams = changes['filter'].currentValue?.params;
 
-    if (changes['filter'] && params && this.form) {
-      this.form.patchValue(params, { emitEvent: false });
+      if (currentParams && !this.isFormAlreadyInSync(currentParams)) {
+        console.log('Updating form with new filter params');
+        this.form.patchValue(currentParams, { emitEvent: false });
+      }
     }
+  }
+
+  private isFormAlreadyInSync(filterParams: Filter): boolean {
+    const formValue = this.form.value as Filter;
+
+    return (
+      formValue.range === filterParams.range &&
+      formValue.pickupCity?.id === filterParams.pickupCity?.id &&
+      formValue.deliveryCity?.id === filterParams.deliveryCity?.id
+    );
   }
 
   onSubmit(): void {

@@ -1,12 +1,8 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, type OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslocoService } from '@jsverse/transloco';
-import { Store } from '@ngrx/store';
-import { TuiAlertService, tuiDialog } from '@taiga-ui/core';
+import { tuiDialog } from '@taiga-ui/core';
 import { type Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { type ModalConfig, ModalService } from '@core/services/modal.service';
 
@@ -54,11 +50,7 @@ export class OrdersComponent implements OnInit {
   private readonly ordersFacade = inject(OrdersFacade);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly alerts = inject(TuiAlertService);
-  private readonly transloco = inject(TranslocoService);
   private readonly modalService = inject(ModalService);
-  private readonly store = inject(Store);
 
   private readonly modalConfigs: Record<string, ModalConfig> = {
     orderId: {
@@ -74,7 +66,6 @@ export class OrdersComponent implements OnInit {
   ngOnInit(): void {
     this.vm$ = this.ordersFacade.getViewModel();
     this.initializeUrl();
-    this.setupErrorHandling();
 
     this.modalService.syncWithUrl(this.modalConfigs);
   }
@@ -96,10 +87,8 @@ export class OrdersComponent implements OnInit {
   }
 
   onSortChange(sort: SortConfig): void {
-    // Обновляем состояние
     // this.store.dispatch(OrdersActions.setSort({ sort }));
 
-    // Обновляем URL
     const sortParams: Partial<QueryParams> = {
       [FILTER_QUERY_PARAMS.PAGE]: DEFAULT_PAGE,
     };
@@ -190,42 +179,5 @@ export class OrdersComponent implements OnInit {
       queryParamsHandling: 'merge',
       replaceUrl: false,
     });
-  }
-
-  private setupErrorHandling(): void {
-    this.vm$
-      .pipe(
-        map((vm) => vm.errors),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((error) => {
-        if (error.list) {
-          this.showErrorNotification('Не удалось загрузить список заказов');
-        }
-
-        if (error.details) {
-          this.showErrorNotification('Не удалось загрузить детали заказа');
-          this.modalService.closeAllModals();
-        }
-
-        if (error.cancel) {
-          this.showErrorNotification('Не удалось отменить заказ');
-        }
-
-        if (error.export) {
-          this.showErrorNotification('Не удалось экспортировать заказы');
-        }
-      });
-  }
-
-  private showErrorNotification(message: string): void {
-    this.alerts
-      .open(message, {
-        label: this.transloco.translate('alert.labels.error'),
-        autoClose: 0,
-        appearance: 'error',
-      })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe();
   }
 }

@@ -27,6 +27,7 @@ export interface PaginationViewModel {
 export interface FilterViewModel {
   params: Filter;
   isActive: boolean;
+  isListLoading: boolean;
 }
 
 export interface OrdersExportViewModel {

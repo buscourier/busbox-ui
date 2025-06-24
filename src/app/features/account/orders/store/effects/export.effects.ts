@@ -2,6 +2,7 @@ import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { mapResponse } from '@ngrx/operators';
 import { Store } from '@ngrx/store';
+import { TuiResponsiveDialogService } from '@taiga-ui/addon-mobile';
 import { filter, first, switchMap, tap, withLatestFrom } from 'rxjs';
 
 import { ExcelService, type ExportOptions } from '@core/services';
@@ -23,6 +24,7 @@ export const exportEffects = {
       actions$ = inject(Actions),
       authFacade = inject(AuthFacade),
       ordersService = inject(OrdersService),
+      excelService = inject(ExcelService),
       store = inject(Store),
     ) => {
       return actions$.pipe(
@@ -46,6 +48,36 @@ export const exportEffects = {
               };
 
               return ordersService.getOrderList(payload).pipe(
+                tap((response) => {
+                  const orders = response.orders;
+
+                  if (!orders || orders.length === 0) {
+                    console.warn('No orders to export');
+                    return;
+                  }
+
+                  const exportOptions: ExportOptions = {
+                    title: 'Отчет по заказам',
+                    subtitle: `Экспорт данных от ${new Date().toLocaleDateString('ru-RU')}`,
+                    metadata: {
+                      'Всего заказов:': orders.length,
+                      'Период:': filter.range || 'Все время',
+                      'Город отправления:': filter.pickupCity?.name || 'Все города',
+                      'Город получения:': filter.deliveryCity?.name || 'Все города',
+                      'Дата экспорта:': new Date().toLocaleString('ru-RU'),
+                    },
+                    showSummary: true,
+                    footerText: 'Сгенерировано автоматически системой управления заказами',
+                  };
+
+                  excelService.exportToExcel(
+                    orders,
+                    'orders_export',
+                    'Заказы',
+                    EXPORT_COLUMNS,
+                    exportOptions,
+                  );
+                }),
                 mapResponse({
                   next: (response) => OrdersActions.exportToExcelSuccess({ response }),
                   error: (error: ApiError) => OrdersActions.exportToExcelFailure({ error }),
@@ -58,45 +90,17 @@ export const exportEffects = {
     },
     { functional: true },
   ),
-
-  exportAfterLoad: createEffect(
-    (actions$ = inject(Actions), excelService = inject(ExcelService), store = inject(Store)) => {
+  afterSuccessExport: createEffect(
+    (actions$ = inject(Actions), dialogs = inject(TuiResponsiveDialogService)) => {
       return actions$.pipe(
         ofType(OrdersActions.exportToExcelSuccess),
-        withLatestFrom(store.select(ordersFeature.selectFilter)),
-        tap(([{ response }, filter]) => {
-          const orders = response.orders;
-
-          if (!orders || orders.length === 0) {
-            console.warn('No orders to export');
-            return;
-          }
-
-          try {
-            const exportOptions: ExportOptions = {
-              title: 'Отчет по заказам',
-              subtitle: `Экспорт данных от ${new Date().toLocaleDateString('ru-RU')}`,
-              metadata: {
-                'Всего заказов:': orders.length,
-                'Период:': filter.range || 'Все время',
-                'Город отправления:': filter.pickupCity?.name || 'Все города',
-                'Город получения:': filter.deliveryCity?.name || 'Все города',
-                'Дата экспорта:': new Date().toLocaleString('ru-RU'),
-              },
-              showSummary: true,
-              footerText: 'Сгенерировано автоматически системой управления заказами',
-            };
-
-            excelService.exportToExcel(
-              orders,
-              'orders_export',
-              'Заказы',
-              EXPORT_COLUMNS,
-              exportOptions, // ✅ Передаем опции
-            );
-          } catch (error) {
-            console.error('Export error:', error);
-          }
+        switchMap(({ response }) => {
+          return dialogs.open(`Экспортировано: ${response.orders.length} заказа`, {
+            label: 'Экспорт завершен!',
+            size: 's',
+            closeable: true,
+            dismissible: true,
+          });
         }),
       );
     },
