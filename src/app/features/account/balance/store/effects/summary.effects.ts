@@ -3,7 +3,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { mapResponse } from '@ngrx/operators';
 import { TuiAlertService } from '@taiga-ui/core';
-import { filter, switchMap } from 'rxjs';
+import { filter, first, switchMap } from 'rxjs';
 
 import type { ApiError } from '@shared/types';
 
@@ -22,14 +22,18 @@ export const summaryEffects = {
     ) => {
       return actions$.pipe(
         ofType(BalanceActions.loadSummary),
-        switchMap(() => authFacade.getCurrentUser()),
-        filter((user) => !!user),
-        switchMap((user) =>
-          balanceService.getBalanceSummary(user.id).pipe(
-            mapResponse({
-              next: (data) => BalanceActions.loadSummarySuccess({ data }),
-              error: (error: ApiError) => BalanceActions.loadSummaryFailure({ error }),
-            }),
+        switchMap(() =>
+          authFacade.getCurrentUser().pipe(
+            filter((user) => !!user),
+            first(),
+            switchMap((user) =>
+              balanceService.getBalanceSummary(user.id).pipe(
+                mapResponse({
+                  next: (data) => BalanceActions.loadSummarySuccess({ data }),
+                  error: (error: ApiError) => BalanceActions.loadSummaryFailure({ error }),
+                }),
+              ),
+            ),
           ),
         ),
       );
