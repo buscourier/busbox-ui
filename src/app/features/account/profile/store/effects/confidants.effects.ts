@@ -1,9 +1,11 @@
 import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { mapResponse } from '@ngrx/operators';
-import { delay, switchMap } from 'rxjs';
+import { filter, first, switchMap } from 'rxjs';
 
 import type { ApiError } from '@shared/types';
+
+import { AuthFacade } from '@auth';
 
 import { ProfileService } from '../../services/profile.service';
 
@@ -11,18 +13,27 @@ import { ProfileActions } from '../actions';
 
 export const confidantsEffects = {
   loadConfidants: createEffect(
-    (actions$ = inject(Actions), profileService = inject(ProfileService)) => {
+    (
+      actions$ = inject(Actions),
+      authFacade = inject(AuthFacade),
+      profileService = inject(ProfileService),
+    ) => {
       return actions$.pipe(
-        ofType(ProfileActions.getConfidants),
-        switchMap(({ userId }) =>
-          profileService.getConfidants(userId).pipe(
-            mapResponse({
-              next: (items) => ProfileActions.getConfidantsSuccess({ items }),
-              error: (error: ApiError) => ProfileActions.getConfidantsFailure({ error }),
-            }),
+        ofType(ProfileActions.loadConfidants),
+        switchMap(() =>
+          authFacade.getCurrentUser().pipe(
+            filter((user) => !!user),
+            first(),
+            switchMap((user) =>
+              profileService.getConfidants(user.id).pipe(
+                mapResponse({
+                  next: (data) => ProfileActions.loadConfidantsSuccess({ data }),
+                  error: (error: ApiError) => ProfileActions.loadConfidantsFailure({ error }),
+                }),
+              ),
+            ),
           ),
         ),
-        delay(1000),
       );
     },
     { functional: true },

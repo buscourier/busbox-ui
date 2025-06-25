@@ -82,8 +82,7 @@ export class ProfileEditComponent implements OnInit, CanDeactivateComponent {
 
     const payload = this.getChangedFields();
 
-    console.log('changedFields', payload);
-    this.profileFacade.updateFields('62', payload);
+    this.profileFacade.updateFields(payload);
   }
 
   onCancel(): void {

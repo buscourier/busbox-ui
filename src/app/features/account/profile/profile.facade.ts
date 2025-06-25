@@ -15,20 +15,20 @@ export class ProfileFacade {
     return this.store.select(profileFeature.selectViewModel);
   }
 
-  loadFields(userId: string): void {
-    this.store.dispatch(ProfileActions.getFields({ userId }));
+  loadFields(): void {
+    this.store.dispatch(ProfileActions.loadFields());
   }
 
-  updateFields(userId: string, payload: unknown) {
-    this.store.dispatch(ProfileActions.updateFields({ userId, payload }));
+  updateFields(payload: unknown) {
+    this.store.dispatch(ProfileActions.updateFields({ payload }));
   }
 
-  loadConfidants(userId: string): void {
-    this.store.dispatch(ProfileActions.getConfidants({ userId }));
+  loadConfidants(): void {
+    this.store.dispatch(ProfileActions.loadConfidants());
   }
 
-  loadAll(userId: string) {
-    this.loadFields(userId);
-    this.loadConfidants(userId);
+  loadAll() {
+    this.loadFields();
+    this.loadConfidants();
   }
 }

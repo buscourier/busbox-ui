@@ -10,9 +10,10 @@ export const createViewModelSelector = (
   derivedSelectors: DerivedSelectors,
 ) => {
   const selectFieldsViewModel = createSelector(
-    baseSelectors.selectIsFieldsLoading,
-    baseSelectors.selectIsFieldsLoaded,
-    baseSelectors.selectIsFieldsUpdating,
+    derivedSelectors.selectIsFieldsLoading,
+    derivedSelectors.selectIsFieldsLoaded,
+    derivedSelectors.selectIsFieldsUpdating,
+    derivedSelectors.selectIsFieldsUpdated,
     derivedSelectors.selectPersonalFields,
     derivedSelectors.selectOrganizationFields,
     derivedSelectors.selectDiscountField,
@@ -21,6 +22,7 @@ export const createViewModelSelector = (
       isLoading,
       isLoaded,
       isUpdating,
+      isUpdated,
       personalFields,
       organizationFields,
       discountField,
@@ -29,6 +31,7 @@ export const createViewModelSelector = (
       isLoading,
       isLoaded,
       isUpdating,
+      isUpdated,
       personalFields,
       organizationFields,
       discountField,
@@ -37,8 +40,8 @@ export const createViewModelSelector = (
   );
 
   const selectConfidantsViewModel = createSelector(
-    baseSelectors.selectIsConfidantsLoading,
-    baseSelectors.selectIsConfidantsLoaded,
+    derivedSelectors.selectIsConfidantsLoading,
+    derivedSelectors.selectIsConfidantsLoaded,
     baseSelectors.selectConfidants,
     baseSelectors.selectConfidantsError,
     (isLoading, isLoaded, confidants, error): ConfidantsViewModel => ({
@@ -53,11 +56,9 @@ export const createViewModelSelector = (
     selectViewModel: createSelector(
       selectFieldsViewModel,
       selectConfidantsViewModel,
-      derivedSelectors.selectErrorStatus,
-      (fields, confidants, errorStatus): ProfileViewModel => ({
+      (fields, confidants): ProfileViewModel => ({
         fields,
         confidants,
-        errorStatus,
       }),
     ),
   };

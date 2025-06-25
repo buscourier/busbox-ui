@@ -1,4 +1,4 @@
-import { createActionGroup, props } from '@ngrx/store';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 import type { ApiError } from '@shared/types';
 
@@ -7,14 +7,14 @@ import type { Confidant, ProfileField } from '../types';
 export const ProfileActions = createActionGroup({
   source: 'Profile',
   events: {
-    'Get Fields': props<{ userId: string }>(),
-    'Get Fields Success': props<{ items: ProfileField[] }>(),
-    'Get Fields Failure': props<{ error: ApiError }>(),
-    'Update Fields': props<{ userId: string; payload: unknown }>(),
-    'Update Fields Success': props<{ items: ProfileField[] }>(),
+    'Load Fields': emptyProps(),
+    'Load Fields Success': props<{ data: ProfileField[] }>(),
+    'Load Fields Failure': props<{ error: ApiError }>(),
+    'Update Fields': props<{ payload: unknown }>(),
+    'Update Fields Success': props<{ data: ProfileField[] }>(),
     'Update Fields Failure': props<{ error: ApiError }>(),
-    'Get Confidants': props<{ userId: string }>(),
-    'Get Confidants Success': props<{ items: Confidant[] }>(),
-    'Get Confidants Failure': props<{ error: ApiError }>(),
+    'Load Confidants': emptyProps(),
+    'Load Confidants Success': props<{ data: Confidant[] }>(),
+    'Load Confidants Failure': props<{ error: ApiError }>(),
   },
 });

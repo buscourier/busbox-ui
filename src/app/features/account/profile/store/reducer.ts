@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 
-import { LoadingStatus } from '@shared/types';
+import { AsyncStatus } from '@shared/types';
 
 import { ProfileActions } from './actions';
 import { initialState, type ProfileFeatureState } from './state';
@@ -8,34 +8,68 @@ import { initialState, type ProfileFeatureState } from './state';
 export const profileReducer = createReducer(
   initialState,
   on(
-    ProfileActions.getFields,
+    ProfileActions.loadFields,
     (state): ProfileFeatureState => ({
       ...state,
       fields: {
         ...state.fields,
-        status: LoadingStatus.LOADING,
+        status: AsyncStatus.LOADING,
         error: null,
       },
     }),
   ),
   on(
-    ProfileActions.getFieldsSuccess,
-    (state, { items }): ProfileFeatureState => ({
+    ProfileActions.loadFieldsSuccess,
+    (state, { data }): ProfileFeatureState => ({
       ...state,
       fields: {
         ...state.fields,
-        status: LoadingStatus.LOADED,
-        items,
+        status: AsyncStatus.LOADED,
+        data,
       },
     }),
   ),
   on(
-    ProfileActions.getFieldsFailure,
+    ProfileActions.loadFieldsFailure,
     (state, { error }): ProfileFeatureState => ({
       ...state,
       fields: {
         ...state.fields,
-        status: LoadingStatus.ERROR,
+        status: AsyncStatus.ERROR,
+        error,
+      },
+    }),
+  ),
+
+  on(
+    ProfileActions.loadConfidants,
+    (state): ProfileFeatureState => ({
+      ...state,
+      confidants: {
+        ...state.confidants,
+        status: AsyncStatus.LOADING,
+        error: null,
+      },
+    }),
+  ),
+  on(
+    ProfileActions.loadConfidantsSuccess,
+    (state, { data }): ProfileFeatureState => ({
+      ...state,
+      confidants: {
+        ...state.confidants,
+        status: AsyncStatus.LOADED,
+        data,
+      },
+    }),
+  ),
+  on(
+    ProfileActions.loadConfidantsFailure,
+    (state, { error }): ProfileFeatureState => ({
+      ...state,
+      confidants: {
+        ...state.confidants,
+        status: AsyncStatus.ERROR,
         error,
       },
     }),
@@ -45,66 +79,47 @@ export const profileReducer = createReducer(
     ProfileActions.updateFields,
     (state): ProfileFeatureState => ({
       ...state,
-      fields: {
-        ...state.fields,
-        isUpdating: true,
-        updateError: null,
-      },
-    }),
-  ),
-  on(
-    ProfileActions.updateFieldsSuccess,
-    (state, { items }): ProfileFeatureState => ({
-      ...state,
-      fields: {
-        ...state.fields,
-        isUpdating: false,
-        items,
-      },
-    }),
-  ),
-  on(
-    ProfileActions.updateFieldsFailure,
-    (state, { error }): ProfileFeatureState => ({
-      ...state,
-      fields: {
-        ...state.fields,
-        isUpdating: false,
-        updateError: error,
+      operations: {
+        ...state.operations,
+        updateFields: {
+          status: AsyncStatus.LOADING,
+          data: [],
+          error: null,
+        },
       },
     }),
   ),
 
   on(
-    ProfileActions.getConfidants,
-    (state): ProfileFeatureState => ({
+    ProfileActions.updateFieldsSuccess,
+    (state, { data }): ProfileFeatureState => ({
       ...state,
-      confidants: {
-        ...state.confidants,
-        status: LoadingStatus.LOADING,
-        error: null,
+      fields: {
+        ...state.fields,
+        data,
+      },
+      operations: {
+        ...state.operations,
+        updateFields: {
+          status: AsyncStatus.LOADED,
+          data,
+          error: null,
+        },
       },
     }),
   ),
+
   on(
-    ProfileActions.getConfidantsSuccess,
-    (state, { items }): ProfileFeatureState => ({
-      ...state,
-      confidants: {
-        ...state.confidants,
-        status: LoadingStatus.LOADED,
-        items,
-      },
-    }),
-  ),
-  on(
-    ProfileActions.getConfidantsFailure,
+    ProfileActions.updateFieldsFailure,
     (state, { error }): ProfileFeatureState => ({
       ...state,
-      confidants: {
-        ...state.confidants,
-        status: LoadingStatus.ERROR,
-        error,
+      operations: {
+        ...state.operations,
+        updateFields: {
+          status: AsyncStatus.ERROR,
+          data: [],
+          error,
+        },
       },
     }),
   ),

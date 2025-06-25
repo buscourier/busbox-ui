@@ -1,7 +1,5 @@
 import { createSelector, type MemoizedSelector } from '@ngrx/store';
 
-import { LoadingStatus } from '@shared/types';
-
 import type { ProfileFeatureState } from '../state';
 
 import type { BaseSelectors } from './base-selectors.types';
@@ -11,35 +9,41 @@ type ProfileFeatureStateSelector = MemoizedSelector<object, ProfileFeatureState>
 export const createBaseSelectors = (
   selectProfileFeatureState: ProfileFeatureStateSelector,
 ): BaseSelectors => {
-  const selectFieldsState = createSelector(selectProfileFeatureState, (state) => state.fields);
+  // ===== STATE SLICES =====
+  const selectFieldsState = createSelector(selectProfileFeatureState, (profile) => profile.fields);
+
   const selectConfidantsState = createSelector(
     selectProfileFeatureState,
-    (state) => state.confidants,
+    (profile) => profile.confidants,
+  );
+
+  const selectOperationsState = createSelector(
+    selectProfileFeatureState,
+    (profile) => profile.operations,
+  );
+
+  const selectUpdateFieldsState = createSelector(
+    selectOperationsState,
+    (operations) => operations.updateFields,
   );
 
   return {
-    selectIsFieldsLoading: createSelector(
-      selectFieldsState,
-      (fields) => fields.status === LoadingStatus.LOADING,
-    ),
-    selectIsFieldsLoaded: createSelector(
-      selectFieldsState,
-      (fields) => fields.status === LoadingStatus.LOADED,
-    ),
-    selectIsFieldsUpdating: createSelector(selectFieldsState, (fields) => fields.isUpdating),
+    // ===== FIELDS SELECTORS =====
+    selectFieldsStatus: createSelector(selectFieldsState, (fields) => fields.status),
+    selectFields: createSelector(selectFieldsState, (fields) => fields.data || []),
     selectFieldsError: createSelector(selectFieldsState, (fields) => fields.error),
-    selectFieldsUpdateError: createSelector(selectFieldsState, (fields) => fields.updateError),
-    selectFields: createSelector(selectFieldsState, (fields) => fields.items),
 
-    selectIsConfidantsLoading: createSelector(
+    // ===== UPDATE ORGANIZATION SELECTORS =====
+    selectUpdateFieldsStatus: createSelector(selectUpdateFieldsState, (update) => update.status),
+    selectUpdateFieldsData: createSelector(selectUpdateFieldsState, (update) => update.data || []),
+    selectUpdateFieldsError: createSelector(selectUpdateFieldsState, (update) => update.error),
+
+    // ===== CONFIDANTS SELECTORS =====
+    selectConfidantsStatus: createSelector(
       selectConfidantsState,
-      (confidants) => confidants.status === LoadingStatus.LOADING,
+      (confidants) => confidants.status,
     ),
-    selectIsConfidantsLoaded: createSelector(
-      selectConfidantsState,
-      (confidants) => confidants.status === LoadingStatus.LOADED,
-    ),
+    selectConfidants: createSelector(selectConfidantsState, (confidants) => confidants.data || []),
     selectConfidantsError: createSelector(selectConfidantsState, (confidants) => confidants.error),
-    selectConfidants: createSelector(selectConfidantsState, (confidants) => confidants.items),
   };
 };
