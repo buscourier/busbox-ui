@@ -102,13 +102,13 @@ export const ordersReducer = createReducer(
   ),
 
   on(
-    OrdersActions.cancel,
+    OrdersActions.cancelOrder,
     (state): OrdersFeatureState => ({
       ...state,
       operations: {
         ...state.operations,
-        cancel: {
-          ...state.operations.cancel,
+        cancelOrder: {
+          ...state.operations.cancelOrder,
           status: LoadingStatus.LOADING,
           error: null,
         },
@@ -116,13 +116,13 @@ export const ordersReducer = createReducer(
     }),
   ),
   on(
-    OrdersActions.cancelSuccess,
+    OrdersActions.cancelOrderSuccess,
     (state): OrdersFeatureState => ({
       ...state,
       operations: {
         ...state.operations,
-        cancel: {
-          ...state.operations.cancel,
+        cancelOrder: {
+          ...state.operations.cancelOrder,
           status: LoadingStatus.LOADED,
           // data: ???
         },
@@ -130,13 +130,13 @@ export const ordersReducer = createReducer(
     }),
   ),
   on(
-    OrdersActions.cancelFailure,
+    OrdersActions.cancelOrderFailure,
     (state, { error }): OrdersFeatureState => ({
       ...state,
       operations: {
         ...state.operations,
-        cancel: {
-          ...state.operations.cancel,
+        cancelOrder: {
+          ...state.operations.cancelOrder,
           status: LoadingStatus.ERROR,
           error,
         },
@@ -205,13 +205,13 @@ export const ordersReducer = createReducer(
   ),
 
   on(
-    OrdersActions.exportToExcel,
+    OrdersActions.exportList,
     (state): OrdersFeatureState => ({
       ...state,
       operations: {
         ...state.operations,
-        export: {
-          ...state.operations.export,
+        exportList: {
+          ...state.operations.exportList,
           status: AsyncStatus.LOADING,
           error: null,
         },
@@ -219,13 +219,13 @@ export const ordersReducer = createReducer(
     }),
   ),
   on(
-    OrdersActions.exportToExcelSuccess,
+    OrdersActions.exportListSuccess,
     (state): OrdersFeatureState => ({
       ...state,
       operations: {
         ...state.operations,
-        export: {
-          ...state.operations.export,
+        exportList: {
+          ...state.operations.exportList,
           status: AsyncStatus.LOADED,
           // data: ???
         },
@@ -233,13 +233,13 @@ export const ordersReducer = createReducer(
     }),
   ),
   on(
-    OrdersActions.exportToExcelFailure,
+    OrdersActions.exportListFailure,
     (state, { error }): OrdersFeatureState => ({
       ...state,
       operations: {
         ...state.operations,
-        export: {
-          ...state.operations.export,
+        exportList: {
+          ...state.operations.exportList,
           status: AsyncStatus.ERROR,
           error,
         },

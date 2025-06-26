@@ -19,21 +19,11 @@ export interface OrderListState extends EntityState<Order> {
   error: ApiError | null;
 }
 
-// export interface OrderDetailsState {
-//   status: AsyncStatus;
 //   data: Record<string, OrderDetails>;
-//   error: ApiError | null;
-// }
 
-export interface OrderDetailsState {
-  status: AsyncStatus;
-  data: OrderDetails | null;
-  error: ApiError | null;
-}
-
-export interface OrderOperationsState {
-  cancel: AsyncState<Record<string, boolean>>;
-  export: AsyncState<boolean>;
+export interface OperationsState {
+  cancelOrder: AsyncState<Record<string, boolean>>;
+  exportList: AsyncState<boolean>;
 }
 
 export interface QueryState {
@@ -44,8 +34,8 @@ export interface QueryState {
 
 export interface OrdersFeatureState {
   list: OrderListState;
-  details: OrderDetailsState;
-  operations: OrderOperationsState;
+  details: AsyncState<OrderDetails>;
+  operations: OperationsState;
   query: QueryState;
 }
 
@@ -67,12 +57,12 @@ export const initialState: OrdersFeatureState = {
     error: null,
   },
   operations: {
-    cancel: {
+    cancelOrder: {
       status: AsyncStatus.IDLE,
       data: {},
       error: null,
     },
-    export: {
+    exportList: {
       status: AsyncStatus.IDLE,
       data: false,
       error: null,

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, type Observable, shareReplay, tap } from 'rxjs';
+import { catchError, type Observable, tap } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ApiService } from '@core/services';
@@ -25,48 +25,14 @@ export class OrdersService extends ApiService {
     super(http);
   }
 
-  getOrderList(payload: OrderListPayload): Observable<OrderListResponse> {
-    const cacheKey = JSON.stringify(payload);
-
-    if (this.cache.has(cacheKey)) {
-      return this.cache.get(cacheKey)!;
-    }
-
-    const request$ = this.http
-      .post<OrderListResponse>(
-        `${this.baseUrl}/order/getorders/`,
-        JSON.stringify({
-          'api-key': environment.apiKey,
-          ...payload,
-        }),
-      )
-      .pipe(
-        map((response) => {
-          if (!response || !Array.isArray(response.orders)) {
-            return {
-              rows: '0',
-              orders: [],
-            };
-          }
-
-          return response;
-        }),
-        catchError((error) => {
-          this.cache.delete(cacheKey);
-          return this.handleError(error);
-        }),
-        shareReplay({
-          bufferSize: 1,
-          refCount: true,
-        }),
-      );
-
-    this.cache.set(cacheKey, request$);
-    return request$;
-  }
-
   // getOrderList(payload: OrderListPayload): Observable<OrderListResponse> {
-  //   return this.http
+  //   const cacheKey = JSON.stringify(payload);
+  //
+  //   if (this.cache.has(cacheKey)) {
+  //     return this.cache.get(cacheKey)!;
+  //   }
+  //
+  //   const request$ = this.http
   //     .post<OrderListResponse>(
   //       `${this.baseUrl}/order/getorders/`,
   //       JSON.stringify({
@@ -86,10 +52,44 @@ export class OrdersService extends ApiService {
   //         return response;
   //       }),
   //       catchError((error) => {
+  //         this.cache.delete(cacheKey);
   //         return this.handleError(error);
   //       }),
+  //       shareReplay({
+  //         bufferSize: 1,
+  //         refCount: true,
+  //       }),
   //     );
+  //
+  //   this.cache.set(cacheKey, request$);
+  //   return request$;
   // }
+
+  getOrderList(payload: OrderListPayload): Observable<OrderListResponse> {
+    return this.http
+      .post<OrderListResponse>(
+        `${this.baseUrl}/order/getorders/`,
+        JSON.stringify({
+          'api-key': environment.apiKey,
+          ...payload,
+        }),
+      )
+      .pipe(
+        map((response) => {
+          if (!response || !Array.isArray(response.orders)) {
+            return {
+              rows: '0',
+              orders: [],
+            };
+          }
+
+          return response;
+        }),
+        catchError((error) => {
+          return this.handleError(error);
+        }),
+      );
+  }
 
   clearCache(): void {
     this.cache.clear();

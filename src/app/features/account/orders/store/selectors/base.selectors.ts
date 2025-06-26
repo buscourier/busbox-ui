@@ -13,7 +13,7 @@ export const createBaseSelectors = (
   selectOrdersFeatureState: OrdersFeatureStateSelector,
   adapter: EntityAdapter<Order>,
 ): BaseSelectors => {
-  const selectListState = createSelector(selectOrdersFeatureState, (state) => state.list);
+  const selectListState = createSelector(selectOrdersFeatureState, (orders) => orders.list);
 
   const entitySelectors = adapter.getSelectors(selectListState);
 
@@ -22,15 +22,21 @@ export const createBaseSelectors = (
   const selectIds = entitySelectors.selectIds;
   // const selectTotal = entitySelectors.selectTotal;
 
-  const selectDetailsState = createSelector(selectOrdersFeatureState, (state) => state.details);
+  const selectDetailsState = createSelector(selectOrdersFeatureState, (orders) => orders.details);
   const selectOperationsState = createSelector(
     selectOrdersFeatureState,
     (state) => state.operations,
   );
 
-  const selectCancelOperationState = createSelector(selectOperationsState, (state) => state.cancel);
-  const selectExportOperationState = createSelector(selectOperationsState, (state) => state.export);
-  const selectQueryState = createSelector(selectOrdersFeatureState, (state) => state.query);
+  const selectCancelOrderState = createSelector(
+    selectOperationsState,
+    (operations) => operations.cancelOrder,
+  );
+  const selectExportListState = createSelector(
+    selectOperationsState,
+    (operations) => operations.exportList,
+  );
+  const selectQueryState = createSelector(selectOrdersFeatureState, (orders) => orders.query);
 
   return {
     // ===== ENTITY SELECTORS =====
@@ -40,31 +46,34 @@ export const createBaseSelectors = (
     // selectTotal,
 
     // ===== LIST SELECTORS =====
-    selectListStatus: createSelector(selectListState, (state) => state.status),
-    selectListError: createSelector(selectListState, (state) => state.error),
-    selectTotalCount: createSelector(selectListState, (state) => state.totalCount),
-    selectSelectedId: createSelector(selectListState, (state) => state.selectedId),
+    selectListStatus: createSelector(selectListState, (list) => list.status),
+    selectListError: createSelector(selectListState, (list) => list.error),
+    selectTotalCount: createSelector(selectListState, (list) => list.totalCount),
+    selectSelectedId: createSelector(selectListState, (list) => list.selectedId),
 
     // ===== DETAILS SELECTORS =====
-    selectDetailsStatus: createSelector(selectDetailsState, (state) => state.status),
-    selectDetailsError: createSelector(selectDetailsState, (state) => state.error),
-    selectOrderDetails: createSelector(selectDetailsState, (state) => state.data),
+    selectDetailsStatus: createSelector(selectDetailsState, (details) => details.status),
+    selectDetailsError: createSelector(selectDetailsState, (details) => details.error),
+    selectOrderDetails: createSelector(selectDetailsState, (details) => details.data),
 
     // ===== CANCEL SELECTORS =====
 
-    selectCancelStatus: createSelector(selectCancelOperationState, (state) => state.status),
-    selectCancelError: createSelector(selectCancelOperationState, (state) => state.error),
-    selectCancelData: createSelector(selectCancelOperationState, (state) => state.data),
+    selectCancelOrderStatus: createSelector(selectCancelOrderState, (cancel) => cancel.status),
+    selectCancelOrderError: createSelector(selectCancelOrderState, (cancel) => cancel.error),
+    selectCancelOrderData: createSelector(selectCancelOrderState, (cancel) => cancel.data),
 
     // ===== EXPORT SELECTORS =====
 
-    selectExportStatus: createSelector(selectExportOperationState, (state) => state.status),
-    selectExportError: createSelector(selectExportOperationState, (state) => state.error),
-    selectExportData: createSelector(selectExportOperationState, (state) => state.data),
+    selectExportListStatus: createSelector(
+      selectExportListState,
+      (exportList) => exportList.status,
+    ),
+    selectExportListError: createSelector(selectExportListState, (exportList) => exportList.error),
+    selectExportListData: createSelector(selectExportListState, (exportList) => exportList.data),
 
     // ===== QUERY SELECTORS =====
-    selectFilter: createSelector(selectQueryState, (state) => state.filter),
-    selectPagination: createSelector(selectQueryState, (state) => state.pagination),
-    selectSort: createSelector(selectQueryState, (state) => state.sort),
+    selectFilter: createSelector(selectQueryState, (query) => query.filter),
+    selectPagination: createSelector(selectQueryState, (query) => query.pagination),
+    selectSort: createSelector(selectQueryState, (query) => query.sort),
   };
 };

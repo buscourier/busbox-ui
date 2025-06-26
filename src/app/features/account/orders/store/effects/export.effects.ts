@@ -19,7 +19,7 @@ import { OrdersActions } from '../actions';
 import { ordersFeature } from '../feature';
 
 export const exportEffects = {
-  exportToExcel: createEffect(
+  exportList: createEffect(
     (
       actions$ = inject(Actions),
       authFacade = inject(AuthFacade),
@@ -28,7 +28,7 @@ export const exportEffects = {
       store = inject(Store),
     ) => {
       return actions$.pipe(
-        ofType(OrdersActions.exportToExcel),
+        ofType(OrdersActions.exportList),
         switchMap(() =>
           authFacade.getCurrentUser().pipe(
             filter((user) => !!user),
@@ -79,8 +79,8 @@ export const exportEffects = {
                   );
                 }),
                 mapResponse({
-                  next: (response) => OrdersActions.exportToExcelSuccess({ response }),
-                  error: (error: ApiError) => OrdersActions.exportToExcelFailure({ error }),
+                  next: (response) => OrdersActions.exportListSuccess({ response }),
+                  error: (error: ApiError) => OrdersActions.exportListFailure({ error }),
                 }),
               );
             }),
@@ -93,7 +93,7 @@ export const exportEffects = {
   afterSuccessExport: createEffect(
     (actions$ = inject(Actions), dialogs = inject(TuiResponsiveDialogService)) => {
       return actions$.pipe(
-        ofType(OrdersActions.exportToExcelSuccess),
+        ofType(OrdersActions.exportListSuccess),
         switchMap(({ response }) => {
           return dialogs.open(`Экспортировано: ${response.orders.length} заказа`, {
             label: 'Экспорт завершен!',

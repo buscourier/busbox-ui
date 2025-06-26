@@ -19,14 +19,14 @@ export class OrdersFacade {
   }
 
   cancelOrder(orderId: string): void {
-    this.store.dispatch(OrdersActions.cancel({ orderId }));
+    this.store.dispatch(OrdersActions.cancelOrder({ orderId }));
   }
 
   loadOrderDetails(orderId: string): void {
     this.store.dispatch(OrdersActions.loadDetails({ orderId }));
   }
 
-  exportOrdersToExcel(): void {
-    this.store.dispatch(OrdersActions.exportToExcel());
+  exportToExcel(): void {
+    this.store.dispatch(OrdersActions.exportList());
   }
 }

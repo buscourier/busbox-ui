@@ -12,13 +12,11 @@ import type { DerivedSelectors } from './derived-selectors.types';
 export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSelectors => {
   const sortBy = (key: keyof Order, direction: CustomSortDirection): TuiComparator<Order> => {
     return (a, b) => {
-      // Если direction === 0, возвращаем 0 (без сортировки)
       if (direction === 0) return 0;
 
       const aValue = a[key];
       const bValue = b[key];
 
-      // Специальная обработка для разных типов данных
       if (key === 'date') {
         const aDate = new Date(aValue as string).getTime();
         const bDate = new Date(bValue as string).getTime();
@@ -37,7 +35,6 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
         return direction * tuiDefaultSort(aId, bId);
       }
 
-      // Строковая сортировка для остальных полей
       return direction * tuiDefaultSort(aValue, bValue);
     };
   };
@@ -65,8 +62,15 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
   );
 
   const selectIsListExporting = createSelector(
-    baseSelectors.selectExportStatus,
+    baseSelectors.selectExportListStatus,
     (status) => status === AsyncStatus.LOADING,
+  );
+
+  const selectCanExportList = createSelector(
+    baseSelectors.selectAll,
+    selectIsListExporting,
+    selectIsListLoading,
+    (orders, isExporting, isListLoading) => orders.length > 0 && !isExporting && !isListLoading,
   );
 
   const selectIsListEmpty = createSelector(
@@ -95,8 +99,8 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
     (status) => status === AsyncStatus.LOADED,
   );
 
-  const selectIsCanceling = createSelector(
-    baseSelectors.selectCancelStatus,
+  const selectIsOrderCanceling = createSelector(
+    baseSelectors.selectCancelOrderStatus,
     (status) => status === AsyncStatus.LOADING,
   );
 
@@ -129,7 +133,7 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
     },
   );
 
-  const selectCanCancel = createSelector(baseSelectors.selectOrderDetails, (details) => {
+  const selectCanCancelOrder = createSelector(baseSelectors.selectOrderDetails, (details) => {
     if (!details) return false;
 
     return details.order.order_status_charcode === 'ORDER_POSTING';
@@ -141,24 +145,17 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
     return !!pickupCity || !!deliveryCity || !!range;
   });
 
-  const selectCanExport = createSelector(
-    baseSelectors.selectAll,
-    selectIsListExporting,
-    selectIsListLoading,
-    (orders, isExporting, isListLoading) => orders.length > 0 && !isExporting && !isListLoading,
-  );
-
   const selectErrors = createSelector(
     baseSelectors.selectListError,
     baseSelectors.selectDetailsError,
-    baseSelectors.selectCancelError,
-    baseSelectors.selectExportError,
+    baseSelectors.selectCancelOrderError,
+    baseSelectors.selectExportListError,
     (listError, detailsError, cancelError, exportError) => {
       const errors = {
         list: listError,
         details: detailsError,
-        cancel: cancelError,
-        export: exportError,
+        cancelOrder: cancelError,
+        exportList: exportError,
       };
 
       return {
@@ -172,18 +169,18 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
     selectSortedOrders,
     selectIsListLoading,
     selectIsListLoaded,
-    selectIsListExporting,
     selectIsListEmpty,
     selectTotalPages,
     selectIsDetailsLoading,
     selectIsDetailsLoaded,
-    selectIsCanceling,
+    selectIsOrderCanceling,
     selectIsPaginationVisible,
     selectStartItem,
     selectEndItem,
     selectIsFilterActive,
-    selectCanCancel,
-    selectCanExport,
+    selectCanCancelOrder,
+    selectIsListExporting,
+    selectCanExportList,
     selectErrors,
   };
 };

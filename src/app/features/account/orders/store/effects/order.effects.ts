@@ -36,7 +36,7 @@ export const orderEffects = {
       ordersService = inject(OrdersService),
     ) => {
       return actions$.pipe(
-        ofType(OrdersActions.cancel),
+        ofType(OrdersActions.cancelOrder),
         switchMap(({ orderId }) =>
           authFacade.getCurrentUser().pipe(
             filter((user) => !!user),
@@ -44,7 +44,7 @@ export const orderEffects = {
             switchMap((user) => {
               if (!orderId) {
                 return of(
-                  OrdersActions.cancelFailure({
+                  OrdersActions.cancelOrderFailure({
                     error: { message: 'Order ID is required' } as ApiError,
                   }),
                 );
@@ -57,8 +57,8 @@ export const orderEffects = {
 
               return ordersService.cancelOrder(payload).pipe(
                 mapResponse({
-                  next: (response) => OrdersActions.cancelSuccess({ response }),
-                  error: (error: ApiError) => OrdersActions.cancelFailure({ error }),
+                  next: (response) => OrdersActions.cancelOrderSuccess({ response }),
+                  error: (error: ApiError) => OrdersActions.cancelOrderFailure({ error }),
                 }),
               );
             }),

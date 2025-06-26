@@ -19,9 +19,9 @@ export const OrdersActions = createActionGroup({
     'Load List Success': props<{ response: OrderListResponse }>(),
     'Load List Failure': props<{ error: ApiError }>(),
 
-    'Export To Excel': emptyProps(),
-    'Export To Excel Success': props<{ response: OrderListResponse }>(),
-    'Export To Excel Failure': props<{ error: ApiError }>(),
+    'Export List': emptyProps(),
+    'Export List Success': props<{ response: OrderListResponse }>(),
+    'Export List Failure': props<{ error: ApiError }>(),
 
     'Select Order': props<{ orderId: string }>(),
     'Clear Selection': emptyProps(),
@@ -30,9 +30,9 @@ export const OrdersActions = createActionGroup({
     'Load Details Success': props<{ data: OrderDetails }>(),
     'Load Details Failure': props<{ error: ApiError }>(),
 
-    Cancel: props<{ orderId: string }>(),
-    'Cancel Success': props<{ response: CancelOrderResponse }>(),
-    'Cancel Failure': props<{ error: ApiError }>(),
+    'Cancel Order': props<{ orderId: string }>(),
+    'Cancel Order Success': props<{ response: CancelOrderResponse }>(),
+    'Cancel Order Failure': props<{ error: ApiError }>(),
 
     'Set page': props<{ page: number }>(),
     'Set Page Size': props<{ pageSize: number }>(),

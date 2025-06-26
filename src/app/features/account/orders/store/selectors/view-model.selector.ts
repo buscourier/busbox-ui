@@ -54,7 +54,7 @@ export const createViewModelSelector = (
     derivedSelectors.selectSortedOrders,
     baseSelectors.selectTotalCount,
     baseSelectors.selectSelectedId,
-    derivedSelectors.selectCanExport,
+    derivedSelectors.selectCanExportList,
     selectPaginationViewModel,
     baseSelectors.selectSort,
     (
@@ -86,8 +86,8 @@ export const createViewModelSelector = (
     derivedSelectors.selectIsDetailsLoading,
     derivedSelectors.selectIsDetailsLoaded,
     baseSelectors.selectOrderDetails,
-    derivedSelectors.selectCanCancel,
-    derivedSelectors.selectIsCanceling,
+    derivedSelectors.selectCanCancelOrder,
+    derivedSelectors.selectIsOrderCanceling,
     (isLoading, isLoaded, details, canCancel, isCanceling): OrderViewModel => ({
       isLoading,
       isLoaded,

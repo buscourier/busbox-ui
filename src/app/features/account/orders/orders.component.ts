@@ -132,7 +132,7 @@ export class OrdersComponent implements OnInit {
   }
 
   onExportToExcel(): void {
-    this.ordersFacade.exportOrdersToExcel();
+    this.ordersFacade.exportToExcel();
   }
 
   private setUrlToDefaults(): void {

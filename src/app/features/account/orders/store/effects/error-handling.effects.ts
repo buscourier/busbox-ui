@@ -20,8 +20,8 @@ export const errorHandlingEffects = {
         ofType(
           OrdersActions.loadListFailure,
           OrdersActions.loadDetailsFailure,
-          OrdersActions.cancelFailure,
-          OrdersActions.exportToExcelFailure,
+          OrdersActions.cancelOrderFailure,
+          OrdersActions.exportListFailure,
         ),
         switchMap((action) => {
           let message = '';
@@ -36,11 +36,11 @@ export const errorHandlingEffects = {
               modalService.closeAllModals();
               break;
 
-            case OrdersActions.cancelFailure.type:
+            case OrdersActions.cancelOrderFailure.type:
               message = 'Не удалось отменить заказ';
               break;
 
-            case OrdersActions.exportToExcelFailure.type:
+            case OrdersActions.exportListFailure.type:
               message = 'Ошибка при подготовке данных для экспорта';
               break;
           }
