@@ -18,4 +18,8 @@ export const routes: Routes = [
     path: 'account',
     loadChildren: () => import('./features/account').then((m) => m.accountRoutes),
   },
+  {
+    path: 'tariffs',
+    loadChildren: () => import('./features/tariffs').then((m) => m.tariffsRoutes),
+  },
 ];

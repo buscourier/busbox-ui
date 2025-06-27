@@ -1,0 +1,17 @@
+@let vm = vm$ | async;
+
+@if (vm) {
+  @if (vm.zones.hasData) {
+    {{ vm.zones.data | json }}
+  } @else {
+    <b>Loading...</b>
+  }
+
+  <div>
+    @if (vm.zoneTariffs.hasData) {
+      {{ vm.zoneTariffs.data | json }}
+    } @else {
+      <b>Loading...</b>
+    }
+  </div>
+}

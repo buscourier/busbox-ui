@@ -35,6 +35,7 @@ import { BalanceEffects, balanceFeature } from '@account/balance';
 import { OrdersEffects, ordersFeature } from '@account/orders';
 import { ProfileEffects, profileFeature } from '@account/profile';
 import { AuthEffects, authFeature } from '@auth';
+import { TariffsEffects, tariffsFeature } from '@tariffs';
 
 import { BookingEffects, bookingFeature } from '@delivery/booking';
 import { DeliveryDetailsEffects, deliveryDetailsFeature } from '@delivery/delivery-details';
@@ -61,6 +62,7 @@ export const appConfig: ApplicationConfig = {
     provideState(profileFeature),
     provideState(ordersFeature),
     provideState(balanceFeature),
+    provideState(tariffsFeature),
     provideEffects(
       LocationsEffects,
       PickupPointEffects,
@@ -72,6 +74,7 @@ export const appConfig: ApplicationConfig = {
       ProfileEffects,
       OrdersEffects,
       BalanceEffects,
+      TariffsEffects,
     ),
     provideRouterStore(),
     provideHttpClient(),

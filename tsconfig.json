@@ -52,6 +52,12 @@
       "@account/*": [
         "./src/app/features/account/*"
       ],
+      "@tariffs": [
+        "./src/app/features/tariffs/index.ts"
+      ],
+      "@tariffs/*": [
+        "./src/app/features/tariffs/*"
+      ],
       "@env/*": [
         "src/environments/*"
       ]
