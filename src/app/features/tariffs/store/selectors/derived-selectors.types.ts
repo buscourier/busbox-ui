@@ -1,5 +1,7 @@
 import type { MemoizedSelector } from '@ngrx/store';
 
+import type { ParcelsTableData, TableData } from '@tariffs/types';
+
 export interface DerivedSelectors {
   selectIsZonesLoading: MemoizedSelector<object, boolean>;
   selectIsZonesLoaded: MemoizedSelector<object, boolean>;
@@ -9,4 +11,7 @@ export interface DerivedSelectors {
   selectIsZoneTariffsLoaded: MemoizedSelector<object, boolean>;
   selectIsZoneTariffsError: MemoizedSelector<object, boolean>;
   selectHasZoneTariffs: MemoizedSelector<object, boolean>;
+  selectParcelsTable: MemoizedSelector<object, ParcelsTableData>;
+  selectAutoPartsTable: MemoizedSelector<object, TableData>;
+  selectOtherTable: MemoizedSelector<object, TableData>;
 }

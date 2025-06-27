@@ -19,8 +19,16 @@ export const createViewModelSelector = (
   const selectZoneTariffsViewModel = createSelector(
     derivedSelectors.selectIsZoneTariffsLoading,
     derivedSelectors.selectHasZoneTariffs,
-    baseSelectors.selectZoneTariffs,
-    (isLoading, hasData, data): ZoneTariffsViewModel => ({ isLoading, hasData, data }),
+    derivedSelectors.selectParcelsTable,
+    derivedSelectors.selectAutoPartsTable,
+    derivedSelectors.selectOtherTable,
+    (isLoading, hasData, parcelsTable, autopartsTable, otherTable): ZoneTariffsViewModel => ({
+      isLoading,
+      hasData,
+      parcelsTable,
+      autopartsTable,
+      otherTable,
+    }),
   );
 
   return {

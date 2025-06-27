@@ -21,7 +21,7 @@ export const createBaseSelectors = (
     selectZonesError: createSelector(selectZonesState, (zones) => zones.error),
 
     selectZoneTariffsStatus: createSelector(selectZoneTariffsState, (tariffs) => tariffs.status),
-    selectZoneTariffs: createSelector(selectZoneTariffsState, (tariffs) => tariffs.data),
+    selectZoneTariffs: createSelector(selectZoneTariffsState, (tariffs) => tariffs.data || []),
     selectZoneTariffsError: createSelector(selectZoneTariffsState, (tariffs) => tariffs.error),
 
     selectSelectedCityId: createSelector(

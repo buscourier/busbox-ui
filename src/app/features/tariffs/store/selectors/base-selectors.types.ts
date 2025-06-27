@@ -10,7 +10,7 @@ export interface BaseSelectors {
   selectZonesError: MemoizedSelector<object, ApiError | null>;
 
   selectZoneTariffsStatus: MemoizedSelector<object, AsyncStatus>;
-  selectZoneTariffs: MemoizedSelector<object, ShippingZoneTariff[] | null>;
+  selectZoneTariffs: MemoizedSelector<object, ShippingZoneTariff[]>;
   selectZoneTariffsError: MemoizedSelector<object, ApiError | null>;
 
   selectSelectedCityId: MemoizedSelector<object, string | null>;

@@ -1,4 +1,6 @@
-import type { ShippingZone, ShippingZoneTariff } from './zone.types';
+import type { ParcelsTableData, TableData } from '../types';
+
+import type { ShippingZone } from './zone.types';
 
 export interface ZonesViewModel {
   isLoading: boolean;
@@ -9,7 +11,9 @@ export interface ZonesViewModel {
 export interface ZoneTariffsViewModel {
   isLoading: boolean;
   hasData: boolean;
-  data: ShippingZoneTariff[] | null;
+  parcelsTable: ParcelsTableData;
+  autopartsTable: TableData;
+  otherTable: TableData;
 }
 
 export interface TariffsViewModel {
