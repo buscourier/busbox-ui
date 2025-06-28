@@ -1,3 +1,5 @@
+import type { PickupCity } from '@shared/types';
+
 import type { ParcelsTableData, TableData } from '../types';
 
 import type { ShippingZone } from './zone.types';
@@ -19,4 +21,5 @@ export interface ZoneTariffsViewModel {
 export interface TariffsViewModel {
   zones: ZonesViewModel;
   zoneTariffs: ZoneTariffsViewModel;
+  selectedCity: PickupCity | null;
 }

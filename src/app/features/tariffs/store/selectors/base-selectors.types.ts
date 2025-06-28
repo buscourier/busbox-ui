@@ -1,6 +1,6 @@
 import type { MemoizedSelector } from '@ngrx/store';
 
-import type { ApiError, AsyncStatus } from '@shared/types';
+import type { ApiError, AsyncStatus, PickupCity } from '@shared/types';
 
 import type { ShippingZone, ShippingZoneTariff } from '../../types';
 
@@ -13,5 +13,5 @@ export interface BaseSelectors {
   selectZoneTariffs: MemoizedSelector<object, ShippingZoneTariff[]>;
   selectZoneTariffsError: MemoizedSelector<object, ApiError | null>;
 
-  selectSelectedCityId: MemoizedSelector<object, string | null>;
+  selectSelectedCity: MemoizedSelector<object, PickupCity | null>;
 }

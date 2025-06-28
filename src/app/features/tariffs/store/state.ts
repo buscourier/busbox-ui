@@ -1,11 +1,11 @@
-import { type AsyncState, AsyncStatus } from '@shared/types';
+import { type AsyncState, AsyncStatus, type PickupCity } from '@shared/types';
 
 import type { ShippingZone, ShippingZoneTariff } from '../types';
 
 export interface TariffsFeatureState {
   zones: AsyncState<ShippingZone[]>;
   zoneTariffs: AsyncState<ShippingZoneTariff[]>;
-  selectedCityId: string | null;
+  selectedCity: PickupCity | null;
 }
 
 export const initialState: TariffsFeatureState = {
@@ -19,5 +19,5 @@ export const initialState: TariffsFeatureState = {
     data: null,
     error: null,
   },
-  selectedCityId: null,
+  selectedCity: null,
 };

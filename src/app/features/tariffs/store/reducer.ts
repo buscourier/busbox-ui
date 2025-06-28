@@ -76,9 +76,9 @@ export const tariffsReducer = createReducer(
   ),
   on(
     TariffsActions.selectCity,
-    (state, { cityId }): TariffsFeatureState => ({
+    (state, { city }): TariffsFeatureState => ({
       ...state,
-      selectedCityId: cityId,
+      selectedCity: city,
     }),
   ),
 );

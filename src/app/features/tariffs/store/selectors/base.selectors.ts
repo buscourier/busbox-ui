@@ -24,9 +24,6 @@ export const createBaseSelectors = (
     selectZoneTariffs: createSelector(selectZoneTariffsState, (tariffs) => tariffs.data || []),
     selectZoneTariffsError: createSelector(selectZoneTariffsState, (tariffs) => tariffs.error),
 
-    selectSelectedCityId: createSelector(
-      selectTariffsFeatureState,
-      (state) => state.selectedCityId,
-    ),
+    selectSelectedCity: createSelector(selectTariffsFeatureState, (state) => state.selectedCity),
   };
 };

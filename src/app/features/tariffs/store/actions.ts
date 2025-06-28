@@ -1,6 +1,6 @@
 import { createActionGroup, props } from '@ngrx/store';
 
-import type { ApiError } from '@shared/types';
+import type { ApiError, PickupCity } from '@shared/types';
 
 import type { ShippingZone, ShippingZoneTariff } from '../types';
 
@@ -15,6 +15,6 @@ export const TariffsActions = createActionGroup({
     'Load Zone Tariffs Success': props<{ data: ShippingZoneTariff[] }>(),
     'Load Zone Tariffs Failure': props<{ error: ApiError }>(),
 
-    'Select City': props<{ cityId: string }>(),
+    'Select City': props<{ city: PickupCity }>(),
   },
 });

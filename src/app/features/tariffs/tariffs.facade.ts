@@ -2,6 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import type { Observable } from 'rxjs';
 
+import type { PickupCity } from '@shared/types';
+
 import { TariffsActions, tariffsFeature } from './store';
 import type { TariffsViewModel } from './types';
 
@@ -26,5 +28,9 @@ export class TariffsFacade {
 
   loadZoneTariffs(cityId: string): void {
     this.store.dispatch(TariffsActions.loadZoneTariffs({ cityId }));
+  }
+
+  selectCity(city: PickupCity) {
+    this.store.dispatch(TariffsActions.selectCity({ city }));
   }
 }

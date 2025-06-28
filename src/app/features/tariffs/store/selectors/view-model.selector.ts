@@ -35,7 +35,12 @@ export const createViewModelSelector = (
     selectViewModel: createSelector(
       selectZonesViewModel,
       selectZoneTariffsViewModel,
-      (zones, zoneTariffs): TariffsViewModel => ({ zones, zoneTariffs }),
+      baseSelectors.selectSelectedCity,
+      (zones, zoneTariffs, selectedCity): TariffsViewModel => ({
+        zones,
+        zoneTariffs,
+        selectedCity,
+      }),
     ),
   };
 };

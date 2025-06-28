@@ -289,6 +289,16 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
     },
   );
 
+  // const selectAutoPartsZones = createSelector(
+  //   selectAutoPartsTableData,
+  //   (data) => data.zones
+  // );
+  //
+  // const selectAutoPartsRows = createSelector(
+  //   selectAutoPartsTableData,
+  //   (data) => data.rows
+  // );
+
   return {
     selectIsZonesLoading,
     selectIsZonesLoaded,
