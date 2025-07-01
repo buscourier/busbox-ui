@@ -21,7 +21,7 @@ import { DOCUMENT_RENDERER } from '@core/tokens';
 import { LocationsFacade } from '@shared/store';
 import type { PickupCity } from '@shared/types';
 
-import { TariffsPdfService } from '@tariffs/services/tariffs-pdf.service';
+import { TariffsViewerService } from '@tariffs/services';
 
 import { TariffsFacade } from './tariffs.facade';
 import type { QueryParams, ParcelsTableData, ParcelTableRow, TariffsViewModel } from './types';
@@ -37,6 +37,7 @@ import type { QueryParams, ParcelsTableData, ParcelTableRow, TariffsViewModel } 
       useClass: MultiElementRenderer,
     },
     DocumentToPdfService,
+    TariffsViewerService,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -55,7 +56,7 @@ export class TariffsComponent implements OnInit {
   private readonly locationsFacade = inject(LocationsFacade);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly tariffsPdf = inject(TariffsPdfService);
+  private readonly tariffsViewer = inject(TariffsViewerService);
 
   get cities(): Observable<PickupCity[]> {
     return this.locationsFacade.getPickupCities();
@@ -67,7 +68,7 @@ export class TariffsComponent implements OnInit {
   }
 
   async handlePrint(city: PickupCity | null): Promise<void> {
-    this.tariffsPdf
+    this.tariffsViewer
       .generateTariffs(
         {
           zones: this.zonesContainer?.nativeElement,
@@ -93,11 +94,11 @@ export class TariffsComponent implements OnInit {
   }
 
   downloadPdf(pdfUrl: string): void {
-    this.tariffsPdf.downloadPdf(pdfUrl, `Тарифы_Владивосток.pdf`);
+    this.tariffsViewer.downloadPdf(pdfUrl, `Тарифы_Владивосток.pdf`);
   }
 
   printPdf(pdfUrl: string): void {
-    this.tariffsPdf.printPdf(pdfUrl);
+    this.tariffsViewer.printPdf(pdfUrl);
   }
 
   private initializeUrl(): void {

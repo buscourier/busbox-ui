@@ -1,13 +1,13 @@
 // import { TestBed } from '@angular/core/testing';
 //
-// import { TariffsPdfService } from './tariffs-pdf.service';
+// import { TariffsViewerService } from './tariffs-viewer.service';
 //
-// describe('TariffsPdfService', () => {
-//   let service: TariffsPdfService;
+// describe('TariffsViewerService', () => {
+//   let service: TariffsViewerService;
 //
 //   beforeEach(() => {
 //     TestBed.configureTestingModule({});
-//     service = TestBed.inject(TariffsPdfService);
+//     service = TestBed.inject(TariffsViewerService);
 //   });
 //
 //   it('should be created', () => {

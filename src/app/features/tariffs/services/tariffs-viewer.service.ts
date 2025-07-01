@@ -27,7 +27,7 @@ export interface TariffsViewerOptions extends PdfViewerOptions {
 @Injectable({
   providedIn: 'root',
 })
-export class TariffsPdfService extends PdfViewerService {
+export class TariffsViewerService extends PdfViewerService {
   private readonly documentToPdfService = inject(DocumentToPdfService);
 
   generateTariffs(
