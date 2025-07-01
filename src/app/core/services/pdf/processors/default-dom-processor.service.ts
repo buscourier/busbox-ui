@@ -16,7 +16,18 @@ export class DefaultDomProcessor implements DomProcessor {
     const copy = element.cloneNode(true) as HTMLElement;
     this.cleanupInteractiveElements(copy);
     this.replaceInputsWithValues(copy);
+    this.handlePrintVisibility(copy);
     return copy;
+  }
+
+  private handlePrintVisibility(element: HTMLElement): void {
+    const hiddenElements = element.querySelectorAll('.no-print');
+    hiddenElements.forEach((el) => el.remove());
+
+    const printOnlyElements = element.querySelectorAll('.print-only');
+    printOnlyElements.forEach((el) => {
+      (el as HTMLElement).style.display = 'block';
+    });
   }
 
   cleanupInteractiveElements(element: HTMLElement): void {
