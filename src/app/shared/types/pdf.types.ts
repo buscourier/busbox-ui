@@ -65,6 +65,7 @@ export interface MultiElementData<T = unknown> {
   data?: T;
   pageLabels?: string[];
   pageConfigs?: PageConfig[];
+  coverPage?: CoverPage;
 }
 
 export interface PdfViewerOptions {
@@ -77,6 +78,11 @@ export interface GenerationOptions {
   processing?: Partial<DocumentProcessingOptions>;
   generation?: Partial<PdfGenerationOptions>;
   copies?: Partial<DocumentCopyOptions>;
+}
+
+export interface CoverPage {
+  title: string;
+  description?: string;
 }
 
 //

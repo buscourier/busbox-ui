@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { DOM_PROCESSOR } from '@core/tokens';
 
 import {
+  type CoverPage,
   type DocumentCopyOptions,
   type MultiElementData,
   type PageConfig,
@@ -23,7 +24,7 @@ export class MultiElementRenderer<T> implements DocumentRenderer<MultiElementDat
     data: MultiElementData<T>,
     options: PdfGenerationOptions & DocumentCopyOptions,
   ): Promise<HTMLElement[]> {
-    const { elements, pageLabels, pageConfigs } = data;
+    const { elements, pageLabels, pageConfigs, coverPage } = data;
 
     if (!elements || elements.length === 0) {
       throw new Error('No elements provided for multi-element rendering');
@@ -31,16 +32,23 @@ export class MultiElementRenderer<T> implements DocumentRenderer<MultiElementDat
 
     const pageElements: HTMLElement[] = [];
 
+    if (coverPage) {
+      const coverPageContainer = this.createCoverPageContainer(coverPage, options.format);
+      document.body.appendChild(coverPageContainer);
+      pageElements.push(coverPageContainer);
+    }
+
     for (let i = 0; i < elements.length; i++) {
       const element = elements[i];
       const pageLabel = pageLabels?.[i] || `Страница ${i + 1}`;
       const pageConfig = pageConfigs?.[i];
 
       const container = this.createPageContainer(pageConfig || { element }, i + 1, options.format);
+
       const processedElement = this.domProcessor.prepareElementForPrint(element);
 
       if (pageLabel && pageLabel.trim() !== '') {
-        this.addPageHeader(container, i + 1, pageLabel);
+        this.addSectionHeader(container, i + 1, pageLabel);
       }
 
       this.applyElementStyling(processedElement, pageConfig || { element });
@@ -129,16 +137,57 @@ export class MultiElementRenderer<T> implements DocumentRenderer<MultiElementDat
     });
   }
 
-  private addPageHeader(container: HTMLElement, pageNumber: number, label: string): void {
+  private createCoverPageContainer(coverPage: CoverPage, format?: PageFormat): HTMLElement {
+    const { title, description } = coverPage;
+
+    const container = this.createPageContainer(
+      { element: document.createElement('div') },
+      0,
+      format,
+    );
+
+    Object.assign(container.style, {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100%',
+      textAlign: 'center',
+    });
+
+    const titleElement = document.createElement('div');
+    Object.assign(titleElement.style, {
+      fontSize: '24px',
+      fontWeight: 'bold',
+      textTransform: 'uppercase',
+    });
+    titleElement.textContent = title;
+
+    container.appendChild(titleElement);
+
+    if (description) {
+      const descriptionElement = document.createElement('div');
+      Object.assign(descriptionElement.style, {
+        marginTop: '4px',
+        fontSize: '16px',
+      });
+      descriptionElement.textContent = description;
+
+      container.appendChild(descriptionElement);
+    }
+
+    return container;
+  }
+
+  private addSectionHeader(container: HTMLElement, pageNumber: number, label: string): void {
     const header = document.createElement('div');
     Object.assign(header.style, {
       textAlign: 'center',
       fontWeight: 'bold',
       marginBottom: '4mm',
-      fontSize: '12px',
+      fontSize: '14px',
       color: '#000',
-      borderBottom: '1px solid #ccc',
-      paddingBottom: '2mm',
+      borderBottom: '1px solid #e6e6e6',
+      paddingBottom: '4mm',
       lineHeight: '1.2',
       flexShrink: '0',
     });
