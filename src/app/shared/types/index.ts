@@ -11,3 +11,4 @@ export * from './tab.types';
 export * from './pagination.types';
 export * from './error-status.types';
 export * from './async.types';
+export * from './pdf.types';

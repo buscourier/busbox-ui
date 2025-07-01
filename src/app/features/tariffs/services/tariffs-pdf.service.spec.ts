@@ -1,13 +1,13 @@
 // import { TestBed } from '@angular/core/testing';
 //
-// import { InvoiceViewerService } from './invoice-viewer.service';
+// import { TariffsPdfService } from './tariffs-pdf.service';
 //
-// describe('InvoiceViewerService', () => {
-//   let service: InvoiceViewerService;
+// describe('TariffsPdfService', () => {
+//   let service: TariffsPdfService;
 //
 //   beforeEach(() => {
 //     TestBed.configureTestingModule({});
-//     service = TestBed.inject(InvoiceViewerService);
+//     service = TestBed.inject(TariffsPdfService);
 //   });
 //
 //   it('should be created', () => {

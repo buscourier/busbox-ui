@@ -1,13 +1,13 @@
 // import { TestBed } from '@angular/core/testing';
 //
-// import { TariffsGeneratorService } from './tariffs-generator.service';
+// import { PdfIndicatorService } from 'src/app/core/services/pdf/pdf-indicator.service';
 //
-// describe('TariffsGeneratorService', () => {
-//   let service: TariffsGeneratorService;
+// describe('PdfIndicatorService', () => {
+//   let service: PdfIndicatorService;
 //
 //   beforeEach(() => {
 //     TestBed.configureTestingModule({});
-//     service = TestBed.inject(TariffsGeneratorService);
+//     service = TestBed.inject(PdfIndicatorService);
 //   });
 //
 //   it('should be created', () => {

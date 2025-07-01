@@ -15,10 +15,14 @@ import { TuiButton, TuiIcon } from '@taiga-ui/core';
 import { TuiChip, TuiSkeleton } from '@taiga-ui/kit';
 import type { Observable } from 'rxjs';
 
+import { DocumentToPdfService, MultiElementRenderer } from '@core/services/pdf';
+import { DOCUMENT_RENDERER } from '@core/tokens';
+
 import { LocationsFacade } from '@shared/store';
 import type { PickupCity } from '@shared/types';
 
-import { TariffsViewerService } from './services';
+import { TariffsPdfService } from '@tariffs/services/tariffs-pdf.service';
+
 import { TariffsFacade } from './tariffs.facade';
 import type { QueryParams, ParcelsTableData, ParcelTableRow, TariffsViewModel } from './types';
 
@@ -27,10 +31,20 @@ import type { QueryParams, ParcelsTableData, ParcelTableRow, TariffsViewModel } 
   imports: [AsyncPipe, TuiSkeleton, FormsModule, TuiChip, TuiRepeatTimes, TuiButton, TuiIcon],
   templateUrl: './tariffs.component.html',
   styleUrl: './tariffs.component.css',
+  providers: [
+    {
+      provide: DOCUMENT_RENDERER,
+      useClass: MultiElementRenderer,
+    },
+    DocumentToPdfService,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TariffsComponent implements OnInit {
-  @ViewChild('container', { static: false }) container!: ElementRef;
+  @ViewChild('zonesContainer', { static: false }) zonesContainer!: ElementRef;
+  @ViewChild('parcelsContainer', { static: false }) parcelsContainer!: ElementRef<HTMLElement>;
+  @ViewChild('autopartsContainer', { static: false }) autopartsContainer!: ElementRef<HTMLElement>;
+  @ViewChild('otherContainer', { static: false }) otherContainer!: ElementRef<HTMLElement>;
   @ViewChild('actions', { static: true }) actionsTemplate!: TemplateRef<unknown>;
 
   vm$!: Observable<TariffsViewModel>;
@@ -41,7 +55,7 @@ export class TariffsComponent implements OnInit {
   private readonly locationsFacade = inject(LocationsFacade);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly tariffsViewer = inject(TariffsViewerService);
+  private readonly tariffsPdf = inject(TariffsPdfService);
 
   get cities(): Observable<PickupCity[]> {
     return this.locationsFacade.getPickupCities();
@@ -52,18 +66,20 @@ export class TariffsComponent implements OnInit {
     this.initializeUrl();
   }
 
-  handlePrint(city: PickupCity | null): void {
-    this.tariffsViewer
-      .generateAndShowPdf(this.container.nativeElement, {}, `Накладная №`, {
-        autoDownload: false,
-        downloadLabel: 'Скачать Тарифы',
-        customActions: this.actionsTemplate,
-        generationOptions: {
-          filename: `Тарифы_${city ? city.name : 'unknown'}.pdf`,
-          quality: 0.95,
-          scale: 2.5,
+  async handlePrint(city: PickupCity | null): Promise<void> {
+    this.tariffsPdf
+      .generateTariffs(
+        {
+          zones: this.zonesContainer?.nativeElement,
+          parcels: this.parcelsContainer?.nativeElement,
+          autoparts: this.autopartsContainer?.nativeElement,
+          other: this.otherContainer?.nativeElement,
         },
-      })
+        city!,
+        {
+          customActions: this.actionsTemplate,
+        },
+      )
       .subscribe();
   }
 
@@ -77,12 +93,11 @@ export class TariffsComponent implements OnInit {
   }
 
   downloadPdf(pdfUrl: string): void {
-    console.log('pdfUrl', pdfUrl);
-    this.tariffsViewer.downloadPdf(pdfUrl, `Тарифы_Владивосток.pdf`);
+    this.tariffsPdf.downloadPdf(pdfUrl, `Тарифы_Владивосток.pdf`);
   }
 
   printPdf(pdfUrl: string): void {
-    this.tariffsViewer.printPdf(pdfUrl);
+    this.tariffsPdf.printPdf(pdfUrl);
   }
 
   private initializeUrl(): void {

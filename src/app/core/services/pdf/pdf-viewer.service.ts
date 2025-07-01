@@ -114,18 +114,12 @@ export class PdfViewerService {
     URL.revokeObjectURL(url);
   }
 
-  /**
-   * Cleans up all active blob URLs to prevent memory leaks
-   */
   cleanup(): void {
     console.log(`Cleaning up ${this.activeBlobUrls.size} blob URLs`);
     this.activeBlobUrls.forEach((url) => this.revokeBlobUrl(url));
     this.activeBlobUrls.clear();
   }
 
-  /**
-   * Creates safe URL for viewing
-   */
   protected createSafeUrl(pdfUrl: string) {
     const finalUrl = this.isMobile ? this.getMobileViewerUrl(pdfUrl) : pdfUrl;
     return this.sanitizer.bypassSecurityTrustResourceUrl(finalUrl);

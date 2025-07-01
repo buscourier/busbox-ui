@@ -188,6 +188,7 @@ module.exports = tseslint.config(
             '*/services/*',
             'components/*',
             'guards/*',
+            'html-to-image/**',
           ],
         },
       ],

@@ -1,13 +1,23 @@
-import { inject, Injectable, TemplateRef } from '@angular/core';
+import { inject, Injectable, type TemplateRef } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import type { PdfOptions } from '@core/services/pdf-generator.service';
-import { type PdfViewerOptions, PdfViewerService } from '@core/services/pdf-viewer.service';
+import { DocumentToPdfService, PdfViewerService } from '@core/services/pdf';
 
-import { InvoiceGeneratorService } from './invoice-generator.service';
+import type {
+  DocumentCopyOptions,
+  DocumentProcessingOptions,
+  PdfGenerationOptions,
+  PdfViewerOptions,
+} from '@shared/types';
+
+export interface InvoiceGenerationOptions {
+  processing?: Partial<DocumentProcessingOptions>;
+  generation?: Partial<PdfGenerationOptions>;
+  copies?: Partial<DocumentCopyOptions>;
+}
 
 export interface InvoiceViewerOptions extends PdfViewerOptions {
-  generationOptions?: Partial<PdfOptions>;
+  generationOptions?: InvoiceGenerationOptions;
   customActions?: TemplateRef<unknown>;
 }
 
@@ -15,20 +25,28 @@ export interface InvoiceViewerOptions extends PdfViewerOptions {
   providedIn: 'root',
 })
 export class InvoiceViewerService extends PdfViewerService {
-  private readonly invoiceGenerator = inject(InvoiceGeneratorService);
+  private readonly documentToPdfService = inject(DocumentToPdfService);
 
   generateAndShowPdf<T>(
-    sourceElement: HTMLElement,
+    sourceElement: HTMLElement | null,
     data: T,
     label: string,
     options: InvoiceViewerOptions = {},
   ): Observable<void> {
     return new Observable<void>((subscriber) => {
-      this.invoiceGenerator
-        .generatePDF(sourceElement, data, options.generationOptions)
+      const generationOptions = options.generationOptions || {};
+
+      this.documentToPdfService
+        .generatePdf(
+          sourceElement,
+          data,
+          generationOptions.processing,
+          generationOptions.generation,
+          generationOptions.copies,
+        )
         .then((result) => {
           if (!result.success || !result.blob) {
-            subscriber.error(new Error(result.error || 'Ошибка генерации PDF'));
+            subscriber.error(new Error(result.error || 'PDF generation failed'));
             return;
           }
 
@@ -37,14 +55,10 @@ export class InvoiceViewerService extends PdfViewerService {
             this.downloadPdfFromBlob(result.blob, filename);
           }
 
-          // const blobUrl = this.createBlobUrl(result.blob);
-
-          console.log('options.customActions', options.customActions);
-
           this.showPdfFromBlob(result.blob, label, {
             ...options,
             autoDownload: false,
-            customActions: options.customActions ? options.customActions : undefined,
+            customActions: options.customActions,
           }).subscribe({
             next: () => subscriber.next(),
             error: (error) => subscriber.error(error),
@@ -53,35 +67,5 @@ export class InvoiceViewerService extends PdfViewerService {
         })
         .catch((error) => subscriber.error(error));
     });
-  }
-
-  generateAndDownloadPdf<T>(
-    sourceElement: HTMLElement,
-    data: T,
-    filename?: string,
-    options: Partial<PdfOptions> = {},
-  ): Observable<void> {
-    return new Observable<void>((subscriber) => {
-      this.invoiceGenerator
-        .generatePDF(sourceElement, data, options)
-        .then((result) => {
-          if (!result.success || !result.blob) {
-            subscriber.error(new Error(result.error || 'Ошибка генерации PDF'));
-            return;
-          }
-
-          const finalFilename = filename || result.filename || this.getDefaultFilename();
-          this.downloadPdfFromBlob(result.blob, finalFilename);
-
-          subscriber.next();
-          subscriber.complete();
-        })
-        .catch((error) => subscriber.error(error));
-    });
-  }
-
-  protected override getDefaultFilename(): string {
-    const timestamp = new Date().toISOString().split('T')[0];
-    return `generated_document_${timestamp}.pdf`;
   }
 }

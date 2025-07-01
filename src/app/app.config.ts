@@ -21,9 +21,21 @@ import { TUI_TEXTFIELD_LABEL_OUTSIDE, TUI_TEXTFIELD_SIZE } from '@taiga-ui/legac
 
 import { DEFAULT_VALIDATION_LIMITS } from '@core/config';
 import {
+  DefaultDomProcessor,
+  DefaultProgressIndicator,
+  DualDocumentRenderer,
+  HtmlToImageConverter,
+  JsPdfBuilder,
+} from '@core/services/pdf';
+import {
   CONTACT_INFO,
+  DOCUMENT_RENDERER,
+  DOM_PROCESSOR,
   EMAIL,
+  IMAGE_CONVERTER,
+  PDF_BUILDER,
   PHONE_NUMBER,
+  PROGRESS_INDICATOR,
   TELEGRAM_ACCOUNT,
   VALIDATION_LIMITS,
 } from '@core/tokens';
@@ -116,7 +128,26 @@ export const appConfig: ApplicationConfig = {
       provide: EMAIL,
       useValue: 'inbox@busbox.guru',
     },
-
+    {
+      provide: DOM_PROCESSOR,
+      useClass: DefaultDomProcessor,
+    },
+    {
+      provide: IMAGE_CONVERTER,
+      useClass: HtmlToImageConverter,
+    },
+    {
+      provide: PDF_BUILDER,
+      useClass: JsPdfBuilder,
+    },
+    {
+      provide: PROGRESS_INDICATOR,
+      useClass: DefaultProgressIndicator,
+    },
+    {
+      provide: DOCUMENT_RENDERER,
+      useClass: DualDocumentRenderer,
+    },
     {
       provide: CONTACT_INFO,
       useFactory: (phone: string, telegram: string, email: string) => ({

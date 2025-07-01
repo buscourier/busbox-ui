@@ -17,6 +17,8 @@ import type { Observable } from 'rxjs';
 import { BarcodeService } from '@core/services/barcode.service';
 import { QrCodeService } from '@core/services/qr-code.service';
 
+import { PageFormat, PageOrientation } from '@shared/types';
+
 import { OrdersFacade } from '../../orders.facade';
 import { InvoiceViewerService } from '../../services/invoice-viewer.service';
 import type { OrderInfo, OrdersViewModel } from '../../types';
@@ -45,37 +47,56 @@ export class OrderInvoiceDialogComponent implements OnInit {
   private readonly qrCodeService = inject(QrCodeService);
   private barcodeService = inject(BarcodeService);
 
-  handlePrint(order: OrderInfo): void {
+  async handlePrint(orderData: OrderInfo): Promise<void> {
+    if (!this.invoiceContainer?.nativeElement) {
+      console.error('Invoice container not found');
+      return;
+    }
+
     this.isGenerating = true;
 
-    this.invoiceViewer
-      .generateAndShowPdf(
-        this.invoiceContainer.nativeElement,
-        order,
-        `Накладная №${order.order_id}`,
-        {
-          autoDownload: false,
-          downloadLabel: 'Скачать накладную',
-          customActions: this.actionsTemplate,
-          generationOptions: {
-            filename: `Накладная_${order.order_id}.pdf`,
-            quality: 0.95,
-            scale: 2.5,
+    try {
+      this.invoiceViewer
+        .generateAndShowPdf(
+          this.invoiceContainer.nativeElement,
+          orderData,
+          `Накладная №${this.orderId}`,
+          {
+            generationOptions: {
+              processing: {
+                scale: 2.0,
+                quality: 0.9,
+              },
+              generation: {
+                filename: `invoice_${this.orderId}.pdf`,
+                showProgress: true,
+                format: PageFormat.A4,
+                orientation: PageOrientation.PORTRAIT,
+              },
+              copies: {
+                copyLabels: ['Оригинал', 'Оригинал', 'Оригинал', 'Оригинал'],
+                addSeparators: true,
+              },
+            },
+            autoDownload: true,
+            customActions: this.actionsTemplate,
           },
-        },
-      )
-      .subscribe({
-        next: () => {
-          this.isGenerating = false;
-        },
-        error: (error) => {
-          console.error('Ошибка при открытии PDF:', error);
-          this.isGenerating = false;
-        },
-        complete: () => {
-          this.isGenerating = false;
-        },
-      });
+        )
+        .subscribe({
+          next: () => {
+            console.log('PDF for print generated successfully');
+          },
+          error: (error) => {
+            console.error('Error generating PDF for print:', error);
+          },
+          complete: () => {
+            this.isGenerating = false;
+          },
+        });
+    } catch (error) {
+      console.error('Error preparing PDF for print:', error);
+      this.isGenerating = false;
+    }
   }
 
   protected get orderId(): string {
@@ -122,7 +143,6 @@ export class OrderInvoiceDialogComponent implements OnInit {
   }
 
   downloadPdf(pdfUrl: string): void {
-    console.log('pdfUrl', pdfUrl);
     this.invoiceViewer.downloadPdf(pdfUrl, `Накладная_${this.orderId}.pdf`);
   }
 

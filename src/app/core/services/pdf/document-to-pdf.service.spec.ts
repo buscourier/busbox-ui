@@ -1,13 +1,13 @@
 // import { TestBed } from '@angular/core/testing';
 //
-// import { PdfGeneratorService } from './pdf-generator.service';
+// import { DocumentToPdfService } from '@core/services/pdf/document-to-pdf.service';
 //
-// describe('PdfGeneratorService', () => {
-//   let service: PdfGeneratorService;
+// describe('DocumentToPdfService', () => {
+//   let service: DocumentToPdfService;
 //
 //   beforeEach(() => {
 //     TestBed.configureTestingModule({});
-//     service = TestBed.inject(PdfGeneratorService);
+//     service = TestBed.inject(DocumentToPdfService);
 //   });
 //
 //   it('should be created', () => {
