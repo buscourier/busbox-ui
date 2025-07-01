@@ -64,6 +64,11 @@ export class TariffsViewerService extends PdfViewerService {
         elements,
         pageLabels: labels,
         data: city,
+        coverPage: {
+          title: `ТАРИФЫ ДОСТАВКИ - ${city?.name?.toUpperCase() || 'ГОРОД'}`,
+          description: `Тарифы указаны только для филиалов «Баскурьер». Чтобы узнать стоимость отправления
+          из других населенных пунктов, свяжитесь с оператором.`,
+        },
       };
 
       this.documentToPdfService
