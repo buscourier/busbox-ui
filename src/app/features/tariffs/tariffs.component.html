@@ -33,12 +33,12 @@
       </section>
 
       <div>
-        <section #zonesContainer class="mb-20">
+        <section #zonesContainer class="mb-12">
           @if (vm.zones.hasData) {
             @for (zone of vm.zones.data; track zone.site_id) {
-              <div class="mb-2.5 rounded-sm bg-yellow-500 p-7">
-                <b class="mb-3 block text-xl font-medium">{{ zone.zone }}</b>
-                <p class="text-sm">{{ zone.cities }}</p>
+              <div class="mb-3 rounded-sm bg-yellow-500 p-4">
+                <b class="mb-2 block text-lg font-semibold leading-tight">{{ zone.zone }}</b>
+                <p class="text-sm leading-relaxed">{{ zone.cities }}</p>
               </div>
             }
           } @else {
@@ -51,12 +51,12 @@
         </section>
 
         @if (vm.zoneTariffs.hasData) {
-          <section class="mb-20">
-            <h2 class="mb-10 font-heading text-xl font-bold lg:text-2xl">Документы и грузы</h2>
+          <section class="mb-12">
+            <h2 class="mb-6 font-heading text-2xl font-bold text-gray-900">Документы и грузы</h2>
 
             <div #parcelsContainer class="">
               <div class="">
-                <table class="w-full border-collapse min-w-[800px]">
+                <table class="w-full border-collapse min-w-[800px] text-sm">
                   <tbody>
                     @for (
                       zone of vm.zoneTariffs.parcelsTable.zones;
@@ -64,8 +64,10 @@
                       let isFirst = $first
                     ) {
                       <tr>
-                        <td colspan="4" class="pr-8">
-                          <b class="block p-4 bg-yellow-500 rounded-sm text-center">
+                        <td colspan="4" class="pr-4">
+                          <b
+                            class="block p-3 bg-yellow-500 rounded-sm text-center text-sm font-semibold"
+                          >
                             {{ zone.zone_name }}
                           </b>
                         </td>
@@ -74,11 +76,11 @@
                             @if (isFirst) {
                               <thead class="border-b-2 border-yellow-500">
                                 <tr>
-                                  <th class="p-4">Габариты</th>
-                                  <th class="p-4">Документы</th>
-                                  <th class="p-4">0 - 5 кг</th>
-                                  <th class="p-4">5 - 10 кг</th>
-                                  <th class="p-4">10 - 20 кг</th>
+                                  <th class="px-2 py-3 text-sm font-semibold">Габариты</th>
+                                  <th class="px-2 py-3 text-sm font-semibold">Документы</th>
+                                  <th class="px-2 py-3 text-sm font-semibold">0 - 5 кг</th>
+                                  <th class="px-2 py-3 text-sm font-semibold">5 - 10 кг</th>
+                                  <th class="px-2 py-3 text-sm font-semibold">10 - 20 кг</th>
                                 </tr>
                               </thead>
                             }
@@ -89,35 +91,33 @@
                                 let isEven = $even
                               ) {
                                 <tr [class.bg-gray-50]="isEven">
-                                  <td class="p-3 text-center w-1/5">
+                                  <td class="px-2 py-2 text-center w-1/5 text-sm">
                                     {{ row.size }}
                                   </td>
-                                  <td class="p-3 text-center w-1/5">
+                                  <td class="px-2 py-2 text-center w-1/5 text-sm font-medium">
                                     @if (row.zones[zone.zone_id]?.documents) {
-                                      <span class="text-center">
-                                        {{ row.zones[zone.zone_id].documents }} ₽
-                                      </span>
+                                      <span>{{ row.zones[zone.zone_id].documents }} ₽</span>
                                     } @else {
                                       <span class="text-gray-400">—</span>
                                     }
                                   </td>
-                                  <td class="p-3 text-center w-1/5">
+                                  <td class="px-2 py-2 text-center w-1/5 text-sm font-medium">
                                     @if (row.zones[zone.zone_id]?.weight_0_5) {
-                                      <span> {{ row.zones[zone.zone_id].weight_0_5 }} ₽ </span>
+                                      <span>{{ row.zones[zone.zone_id].weight_0_5 }} ₽</span>
                                     } @else {
                                       <span class="text-gray-400">—</span>
                                     }
                                   </td>
-                                  <td class="p-3 text-center w-1/5">
+                                  <td class="px-2 py-2 text-center w-1/5 text-sm font-medium">
                                     @if (row.zones[zone.zone_id]?.weight_5_10) {
-                                      <span> {{ row.zones[zone.zone_id].weight_5_10 }} ₽ </span>
+                                      <span>{{ row.zones[zone.zone_id].weight_5_10 }} ₽</span>
                                     } @else {
                                       <span class="text-gray-400">—</span>
                                     }
                                   </td>
-                                  <td class="p-3 text-center w-1/5">
+                                  <td class="px-2 py-2 text-center w-1/5 text-sm font-medium">
                                     @if (row.zones[zone.zone_id]?.weight_10_20) {
-                                      <span> {{ row.zones[zone.zone_id].weight_10_20 }} ₽ </span>
+                                      <span>{{ row.zones[zone.zone_id].weight_10_20 }} ₽</span>
                                     } @else {
                                       <span class="text-gray-400">—</span>
                                     }
@@ -132,12 +132,12 @@
                   </tbody>
                 </table>
               </div>
-              <div class="mt-10">
-                <p class="mb-4 text-xs text-gray-700">
-                  * <b>Документы</b> – формата А4 до1 кг, толщина до 1,5 см, без каких-либо
+              <div class="mt-4">
+                <p class="mb-2 text-sm text-gray-700 leading-relaxed">
+                  * <b>Документы</b> – формата А4 до 1 кг, толщина до 1,5 см, без каких-либо
                   сторонних вложений.
                 </p>
-                <p class="mb-4 text-xs text-gray-700">
+                <p class="mb-2 text-sm text-gray-700 leading-relaxed">
                   * <b>Посылки свыше 160 см и свыше 20 кг</b> - стоимость доставки можно рассчитать
                   на сайте в разделе «Предварительный расчет» или у менеджера.
                 </p>
@@ -146,19 +146,18 @@
           </section>
 
           @if (vm.zoneTariffs.autopartsTable.rows.length) {
-            <section class="mb-20">
-              <h2 class="mb-10 font-heading text-xl font-bold lg:text-2xl">Автозапчасти</h2>
+            <section class="mb-12">
+              <h2 class="mb-6 font-heading text-2xl font-bold text-gray-900">Автозапчасти</h2>
 
               <div #autopartsContainer class="">
                 <div class="">
-                  <table class="w-full">
+                  <table class="w-full text-sm">
                     <thead>
-                      <tr class="">
-                        <th></th>
-
+                      <tr>
+                        <th class="text-left py-3 px-3"></th>
                         @for (zone of vm.zoneTariffs.autopartsTable.zones; track zone.zone_id) {
                           <th
-                            class="p-4 bg-yellow-500"
+                            class="px-3 py-3 bg-yellow-500 text-sm font-semibold text-center"
                             [class.rounded-l-sm]="$first"
                             [class.rounded-r-sm]="$last"
                           >
@@ -174,17 +173,17 @@
                         track row.type;
                         let isOdd = $odd
                       ) {
-                        <tr [class.bg-gray-100]="isOdd">
-                          <td class="p-3 font-bold">
+                        <tr [class.bg-gray-50]="isOdd">
+                          <td class="px-3 py-2 font-semibold text-sm">
                             {{ row.type }}
                           </td>
 
                           @for (zone of vm.zoneTariffs.autopartsTable.zones; track zone.zone_id) {
-                            <td class="p-3 text-center">
+                            <td class="px-3 py-2 text-center text-sm font-medium">
                               @if (row.zones[zone.zone_id]) {
-                                <span> {{ row.zones[zone.zone_id] }} ₽ </span>
+                                <span>{{ row.zones[zone.zone_id] }} ₽</span>
                               } @else {
-                                <span>—</span>
+                                <span class="text-gray-400">—</span>
                               }
                             </td>
                           }
@@ -193,11 +192,11 @@
                     </tbody>
                   </table>
                 </div>
-                <div class="mt-10">
-                  <p class="mb-4 text-xs text-gray-700">
+                <div class="mt-4">
+                  <p class="mb-2 text-sm text-gray-700 leading-relaxed">
                     * <b>Автозапчасти</b> – стоимость указана для стандартных размеров запчастей
-                    легковых автомобилей. <br class="hidden md:block" />Для запчастей с превышением
-                    стандартных размеров расчёт производится индивидуально менеджером.
+                    легковых автомобилей. Для запчастей с превышением стандартных размеров расчёт
+                    производится индивидуально менеджером.
                   </p>
                 </div>
               </div>
@@ -206,18 +205,17 @@
 
           @if (vm.zoneTariffs.otherTable.rows.length) {
             <section class="">
-              <h2 class="mb-10 font-heading text-xl font-bold lg:text-2xl">Другое</h2>
+              <h2 class="mb-6 font-heading text-2xl font-bold text-gray-900">Другое</h2>
 
-              <div class="">
+              <div #otherContainer class="">
                 <div class="">
-                  <table #otherContainer class="w-full">
+                  <table class="w-full text-sm">
                     <thead>
-                      <tr class="">
-                        <th></th>
-
+                      <tr>
+                        <th class="text-left py-3 px-3"></th>
                         @for (zone of vm.zoneTariffs.otherTable.zones; track zone.zone_id) {
                           <th
-                            class="p-4 bg-yellow-500"
+                            class="px-3 py-3 bg-yellow-500 text-sm font-semibold text-center"
                             [class.rounded-l-sm]="$first"
                             [class.rounded-r-sm]="$last"
                           >
@@ -233,17 +231,17 @@
                         track row.type;
                         let isOdd = $odd
                       ) {
-                        <tr [class.bg-gray-100]="isOdd">
-                          <td class="p-3 font-bold">
+                        <tr [class.bg-gray-50]="isOdd">
+                          <td class="px-3 py-2 font-semibold text-sm">
                             {{ row.type }}
                           </td>
 
                           @for (zone of vm.zoneTariffs.otherTable.zones; track zone.zone_id) {
-                            <td class="p-3 text-center">
+                            <td class="px-3 py-2 text-center text-sm font-medium">
                               @if (row.zones[zone.zone_id]) {
-                                <span> {{ row.zones[zone.zone_id] }} ₽ </span>
+                                <span>{{ row.zones[zone.zone_id] }} ₽</span>
                               } @else {
-                                <span>—</span>
+                                <span class="text-gray-400">—</span>
                               }
                             </td>
                           }
@@ -265,8 +263,8 @@
       </div>
     }
   </div>
+
   <aside>
-    <!--    <div class="h-10 bg-gray-200"></div>-->
     @if (vm) {
       <button type="button" tuiButton (click)="handlePrint(vm.selectedCity)">
         Распечатать тарифы
@@ -274,6 +272,7 @@
     }
   </aside>
 </div>
+
 <ng-template #actions let-content="content">
   <div class="flex gap-2">
     <button tuiButton appearance="primary" size="s" (click)="printPdf(content)">

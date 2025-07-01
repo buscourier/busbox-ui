@@ -55,9 +55,9 @@ export class TariffsViewerService extends PdfViewerService {
 
     const labels: string[] = [];
     if (containers.zones) labels.push('Зоны доставки');
-    if (containers.parcels) labels.push('Посылки');
+    if (containers.parcels) labels.push('Документы и грузы');
     if (containers.autoparts) labels.push('Автозапчасти');
-    if (containers.other) labels.push('Прочее');
+    if (containers.other) labels.push('Другое');
 
     return new Observable<void>((subscriber) => {
       const multiData: MultiElementData = {
