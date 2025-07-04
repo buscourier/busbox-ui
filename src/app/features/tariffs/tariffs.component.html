@@ -8,7 +8,7 @@
       </p>
 
       <section class="mb-10 pt-5 pb-5 flex flex-wrap gap-3 border-y border-gray-100">
-        @for (city of cities | async; track city.id) {
+        @for (city of cities$ | async; track city.id) {
           <section>
             <label appearance tuiChip size="m">
               {{ city.name }}
@@ -265,6 +265,10 @@
   </div>
 
   <aside>
+    @if (rulesDocument$ | async; as document) {
+      <button type="button" tuiButton (click)="showRules(document)">Показать правила</button>
+    }
+
     @if (vm) {
       <button type="button" tuiButton (click)="handlePrint(vm.selectedCity)">
         Распечатать тарифы

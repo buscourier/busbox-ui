@@ -18,8 +18,8 @@ import type { Observable } from 'rxjs';
 import { DocumentToPdfService, MultiElementRenderer } from '@core/services/pdf';
 import { DOCUMENT_RENDERER } from '@core/tokens';
 
-import { LocationsFacade } from '@shared/store';
-import type { PickupCity } from '@shared/types';
+import { DocumentsFacade, LocationsFacade } from '@shared/store';
+import type { DocumentFile, PickupCity } from '@shared/types';
 
 import { TariffsViewerService } from '@tariffs/services';
 
@@ -49,21 +49,23 @@ export class TariffsComponent implements OnInit {
   @ViewChild('actions', { static: true }) actionsTemplate!: TemplateRef<unknown>;
 
   vm$!: Observable<TariffsViewModel>;
+  cities$!: Observable<PickupCity[]>;
+  rulesDocument$!: Observable<DocumentFile | null>;
 
   SKELETON_COUNT = 8;
 
   private readonly facade = inject(TariffsFacade);
   private readonly locationsFacade = inject(LocationsFacade);
+  private readonly documentsFacade = inject(DocumentsFacade);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly tariffsViewer = inject(TariffsViewerService);
 
-  get cities(): Observable<PickupCity[]> {
-    return this.locationsFacade.getPickupCities();
-  }
-
   ngOnInit(): void {
     this.vm$ = this.facade.getViewModel();
+    this.cities$ = this.locationsFacade.getPickupCities();
+    this.rulesDocument$ = this.documentsFacade.getRules();
+
     this.initializeUrl();
   }
 
@@ -99,6 +101,12 @@ export class TariffsComponent implements OnInit {
 
   printPdf(pdfUrl: string): void {
     this.tariffsViewer.printPdf(pdfUrl);
+  }
+
+  showRules(document: DocumentFile): void {
+    console.log('document.link', document.link);
+
+    this.tariffsViewer.showPdf(document.link, document.name).subscribe();
   }
 
   private initializeUrl(): void {
