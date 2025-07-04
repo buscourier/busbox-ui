@@ -7,7 +7,7 @@ import { TuiAlertService, TuiRoot } from '@taiga-ui/core';
 import type { Observable } from 'rxjs';
 
 import { BreadcrumbsComponent } from '@shared/components/breadcrumbs';
-import { LocationsFacade } from '@shared/store';
+import { LocationsFacade, DocumentsFacade } from '@shared/store';
 
 import { environment } from '@env/environment';
 
@@ -30,6 +30,7 @@ export class AppComponent implements OnInit {
 
   private readonly authFacade = inject(AuthFacade);
   private readonly locationsFacade = inject(LocationsFacade);
+  private readonly documentsFacade = inject(DocumentsFacade);
   private readonly destroyRef = inject(DestroyRef);
   private readonly alerts = inject(TuiAlertService);
   private transloco = inject(TranslocoService);
@@ -54,6 +55,7 @@ export class AppComponent implements OnInit {
     this.authFacade.loadCurrentUser();
     this.locationsFacade.loadPickupCities();
     this.locationsFacade.loadOffices();
+    this.documentsFacade.loadDocuments();
     this.setupErrorHandling();
   }
 

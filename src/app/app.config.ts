@@ -41,7 +41,12 @@ import {
 } from '@core/tokens';
 import { CustomDateTransformer, CustomDateRangeTransformer } from '@core/transformers';
 
-import { LocationsEffects, locationsFeature } from '@shared/store';
+import {
+  LocationsEffects,
+  locationsFeature,
+  DocumentsEffects,
+  documentsFeature,
+} from '@shared/store';
 
 import { BalanceEffects, balanceFeature } from '@account/balance';
 import { OrdersEffects, ordersFeature } from '@account/orders';
@@ -75,6 +80,7 @@ export const appConfig: ApplicationConfig = {
     provideState(ordersFeature),
     provideState(balanceFeature),
     provideState(tariffsFeature),
+    provideState(documentsFeature),
     provideEffects(
       LocationsEffects,
       PickupPointEffects,
@@ -87,6 +93,7 @@ export const appConfig: ApplicationConfig = {
       OrdersEffects,
       BalanceEffects,
       TariffsEffects,
+      DocumentsEffects,
     ),
     provideRouterStore(),
     provideHttpClient(),
