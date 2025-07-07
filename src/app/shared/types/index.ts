@@ -14,4 +14,5 @@ export * from './async.types';
 export * from './pdf.types';
 export * from './document.types';
 export * from './news.types';
+export * from './seo.types';
 export * from './navigation.types';
