@@ -1,43 +1,54 @@
 @theme {
-  /*--color-yellow-*: initial;*/
+  /* Main Tailwind fonts */
+  --font-kelson: 'Kelson Sans', Arial, sans-serif;
+  --font-roboto: 'Roboto', system-ui, sans-serif;
+  --font-sans: 'Roboto', system-ui, sans-serif;
+  --font-heading: 'Kelson Sans', Arial, sans-serif;
+  --font-body: 'Roboto', system-ui, sans-serif;
+  --font-display: 'Kelson Sans', Arial, sans-serif;
+
+  /* Colors */
   --color-yellow-500: rgb(255, 220, 0);
   --color-yellow-400: rgb(255, 230, 51);
   --color-yellow-600: rgb(230, 198, 0);
 
-  /*shadows*/
+  /* Shadows */
   --shadow-sb: 0px 24px 54px rgba(0, 0, 0, 0.04);
 
-  /*max-container-width*/
+  /* Containers */
   --breakpoint-2xl: initial;
-  /*--breakpoint-2xl: 85rem;*/
 }
 
 :root {
-  --tui-heading-font: 'Kelson Sans', -apple-system, 'BlinkMacSystemFont', system-ui, 'Roboto',
-    'Segoe UI', 'Helvetica Neue', sans-serif;
-  --tui-text-font: 'Roboto', -apple-system, 'BlinkMacSystemFont', system-ui, 'Roboto', 'Segoe UI',
+  /* Taiga UI fonts - using custom fonts */
+  --tui-heading-font: 'Kelson Sans', Arial, -apple-system, 'BlinkMacSystemFont', system-ui,
+    'Roboto', 'Segoe UI', 'Helvetica Neue', sans-serif;
+  --tui-text-font: 'Roboto', -apple-system, 'BlinkMacSystemFont', system-ui, 'Segoe UI',
     'Helvetica Neue', sans-serif;
-  --tui-font-heading: var(--tui-heading-font);
 
-  /*--tui-font-offset: 0rem;*/
+  /* Main Taiga UI fonts */
+  --tui-font-heading: var(--tui-heading-font);
   --tui-font-text: var(--tui-text-font);
 
+  /* Taiga UI text sizes */
   --tui-font-text-s: normal calc(var(--tui-font-offset) + 1rem) / 1.25rem var(--tui-font-text);
 
-  /*--tui-font-text-m: normal 1.125rem/1.25rem var(--tui-font-text);*/
-  /*--tui-font-text-s: normal 1rem/1.25rem var(--tui-font-text);*/
-  /*--tui-font-text-xs: normal 0.6875rem/1rem var(--tui-font-text);*/
+  /*--tui-font-text-s: normal calc(var(--tui-font-offset, 0rem) + 1rem) / 1.25rem var(--tui-font-text);*/
+  /*--tui-font-text-m: normal calc(var(--tui-font-offset, 0rem) + 1.125rem) / 1.5rem var(--tui-font-text);*/
+  /*--tui-font-text-l: normal calc(var(--tui-font-offset, 0rem) + 1.25rem) / 1.75rem var(--tui-font-text);*/
 
-  --tui-background-accent-1: theme(colors.yellow.500);
-  --tui-background-accent-1-hover: theme(colors.yellow.400);
-  --tui-background-accent-1-pressed: theme(colors.yellow.600);
-
+  /* Accent colors */
+  --tui-background-accent-1: var(--color-yellow-500);
+  --tui-background-accent-1-hover: var(--color-yellow-400);
+  --tui-background-accent-1-pressed: var(--color-yellow-600);
   --tui-text-primary-on-accent-1: theme(colors.black);
 
+  /* Sizes */
   --tui-height-m: 50px;
   --tui-radius-m: var(--radius-md);
   --tui-radius-l: var(--radius-lg);
-  /*--tui-text-tertiary: red;*/
+
+  /* Text colors */
   --tui-text-action: var(--color-gray-900);
   --tui-text-action-hover: var(--color-black);
 }
