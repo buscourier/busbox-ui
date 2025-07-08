@@ -147,13 +147,14 @@ export class NavigationService {
         {
           link: 'account/orders',
           name: 'Мои заказы',
-          icon: '@tui.box',
+          icon: 'catalog',
           description: 'Просмотри заказов, формаирование отчетов',
           keywords: 'просмотр, фильтрация, генерация накладных, сортировка, выгрузка в excel',
         },
         {
           link: 'account/profile',
           name: 'Персональные данные',
+          icon: 'profile',
           description: 'Личная информация, данные компании',
           keywords: 'данные пользователя, данные компании, контрагенты',
         },

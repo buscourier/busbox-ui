@@ -3,25 +3,26 @@
     @for (item of accountLinks; track item.link) {
       <div
         [routerLink]="'/' + item.link"
-        class="mb-2 flex border-y border-gray-200 py-5 px-4 hover:cursor-pointer hover:border-yellow sm:space-x-13 sm:py-9 sm:px-6 md:space-x-0 md:rounded-sm md:border-x md:px-8 lg:space-x-13 lg:pl-13 lg:pr-10"
+        class="mb-2 flex border border-gray-200 py-4 px-4 hover:cursor-pointer hover:border-yellow sm:space-x-13 sm:py-9 sm:px-6 md:space-x-0 md:rounded-sm md:border-x md:px-8 lg:space-x-13 lg:pl-13 lg:pr-10"
       >
         <div class="hidden sm:block md:hidden lg:block">
           <tui-icon
-            [icon]="item.icon || ''"
             class="mr-2"
-            [style.color]="'var(--tui-background-accent-1)'"
-            [style.font-size.rem]="1"
+            [icon]="item.icon || ''"
+            [style.color]="'var(--color-gray-300)'"
+            [style.font-size.rem]="5"
           />
         </div>
-        <div class="basis-full">
-          <h2 class="mb-2 text-lg font-bold">{{ item.name }}</h2>
+        <div class="flex flex-col justify-center basis-full">
+          <h2 class="mb-2 text-xl font-bold">{{ item.name }}</h2>
           <p>{{ item.description }}</p>
         </div>
         <div class="hidden items-center sm:flex">
-          <!--          <tui-svg-->
-          <!--            src="icons::caret-right"-->
-          <!--            class="!h-[26px] !w-[13px]"-->
-          <!--          ></tui-svg>-->
+          <tui-icon
+            icon="@tui.chevron-right"
+            [style.color]="'var(--color-gray-300)'"
+            [style.font-size.rem]="4"
+          />
         </div>
       </div>
     }
@@ -39,6 +40,12 @@
     </button>
     <a href="#" class="space-x-1 md:text-xs lg:text-base">
       <span> Выйти из личного кабинета </span>
+      <tui-icon
+        icon="logout"
+        class="rounded-full"
+        [style.background]="'var(--color-yellow-500)'"
+        [style.font-size.rem]="2"
+      />
       <!--        <tui-svg src="icons::logout" class="!h-[27px] !w-[27px]"></tui-svg>-->
     </a>
   </aside>
