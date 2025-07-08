@@ -70,6 +70,12 @@
       "@tracking/*": [
         "./src/app/features/tracking/*"
       ],
+      "@contacts": [
+        "./src/app/features/contacts/index.ts"
+      ],
+      "@contacts/*": [
+        "./src/app/features/contacts/*"
+      ],
       "@env/*": [
         "src/environments/*"
       ]

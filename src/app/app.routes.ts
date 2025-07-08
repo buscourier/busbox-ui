@@ -26,4 +26,8 @@ export const routes: Routes = [
     path: 'tracking',
     loadChildren: () => import('./features/tracking').then((m) => m.trackingRoutes),
   },
+  {
+    path: 'contacts',
+    loadChildren: () => import('./features/contacts').then((m) => m.contactsRoutes),
+  },
 ];
