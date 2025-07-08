@@ -1,0 +1,108 @@
+<footer class="bg-gray-800 text-white py-12">
+  <div class="container mx-auto px-4">
+    <!-- Горизонтальная навигация -->
+    <div class="mb-6 flex gap-x-20 items-end">
+      <div class="w-32 h-20 bg-red-500"></div>
+      <nav class="pb-6 flex flex-wrap flex-grow justify-between md:gap-6 border-b border-gray-700">
+        @for (item of mainNavigation; track item.link) {
+          <a [routerLink]="'/' + item.link" [class]="getLinkClasses('accent')">
+            {{ item.name }}
+          </a>
+        }
+      </nav>
+    </div>
+    <!-- Колонки навигации -->
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[minmax(auto,max-content)_repeat(3,auto)] gap-20 mb-8"
+    >
+      @for (column of footerColumns; track getColumnTitle(column); let isLast = $last) {
+        <div>
+          @if (isNavigationItem(column.title)) {
+            <h3 class="text-lg font-semibold mb-4">
+              <a
+                [routerLink]="'/' + column.title.link"
+                class="text-white hover:text-yellow-400 transition-colors"
+                [title]="column.title.description"
+              >
+                {{ column.title.name }}
+              </a>
+            </h3>
+          } @else if (column.title) {
+            <h3 class="text-lg font-semibold mb-4 text-white">
+              {{ column.title }}
+            </h3>
+          }
+
+          <!-- Ссылки колонки -->
+          @for (section of column.sections; track $index) {
+            <!-- Подзаголовок секции (если есть) -->
+            @if (section.title) {
+              <h4 class="text-md font-medium mt-6 mb-3 text-gray-200">
+                {{ section.title }}
+              </h4>
+            }
+
+            <!-- Ссылки секции -->
+            <ul class="space-y-2" [class.mb-4]="!$last">
+              @for (link of section.links; track link.link) {
+                <li>
+                  <a [routerLink]="'/' + link.link" [class]="getLinkClasses(section.theme)">
+                    {{ link.name }}
+                  </a>
+                </li>
+              }
+            </ul>
+          }
+
+          <!-- Контактная информация для последней колонки -->
+          @if (isLast) {
+            <div class="space-y-2">
+              <div class="flex items-center">
+                <span class="text-lg mr-2">📞</span>
+                <a
+                  [href]="'tel:' + contactInfo.phone"
+                  class="text-white hover:text-gray-300 transition-colors"
+                >
+                  {{ contactInfo.phone }}
+                </a>
+              </div>
+
+              <div class="flex items-center">
+                <span class="text-lg mr-2">✉️</span>
+                <a
+                  [href]="'mailto:' + contactInfo.email"
+                  class="text-gray-300 hover:text-white transition-colors"
+                >
+                  {{ contactInfo.email }}
+                </a>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Копирайт и доп. ссылки -->
+    <div class="border-t border-gray-700 pt-6">
+      <div class="flex flex-col lg:flex-row justify-between items-end gap-4 text-sm text-gray-400">
+        <!-- Копирайт -->
+        <div class="text-center lg:text-left">
+          <p class="mb-1">2013-2025 © ООО «Баскурьер»</p>
+          <p>{{ contactInfo.address }}</p>
+        </div>
+
+        <a href="/privacy-policy" class="hover:text-white transition-colors whitespace-nowrap">
+          Политика конфиденциальности
+        </a>
+        <a
+          href="https://leadwave.ru"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-white transition-colors whitespace-nowrap"
+        >
+          Идея и дизайн сайта: LEAD WAVE
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
