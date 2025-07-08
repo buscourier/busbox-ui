@@ -6,7 +6,12 @@ import { TranslocoService } from '@jsverse/transloco';
 import { TuiAlertService, TuiRoot } from '@taiga-ui/core';
 import type { Observable } from 'rxjs';
 
+import { SeoService } from '@core/services/seo.service';
+
 import { BreadcrumbsComponent } from '@shared/components/breadcrumbs';
+import { FooterComponent } from '@shared/components/footer';
+import { HeaderComponent } from '@shared/components/header';
+import { NavigationComponent } from '@shared/components/navigation';
 import { LocationsFacade, DocumentsFacade } from '@shared/store';
 
 import { environment } from '@env/environment';
@@ -16,14 +21,23 @@ import type { AuthResponse } from '@auth/types';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, TuiRoot, AsyncPipe, BreadcrumbsComponent],
+  imports: [
+    RouterOutlet,
+    TuiRoot,
+    AsyncPipe,
+    BreadcrumbsComponent,
+    NavigationComponent,
+    FooterComponent,
+    HeaderComponent,
+  ],
   templateUrl: './app.component.html',
   standalone: true,
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  title = 'Angular 18 Starter';
-  text = 'Добро пожаловать в ваш новый проект!';
+  title$!: Observable<string>;
+  description$!: Observable<string | string[]>;
+
   configName?: string;
   environment?: string;
   apiUrl?: string;
@@ -34,6 +48,7 @@ export class AppComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly alerts = inject(TuiAlertService);
   private transloco = inject(TranslocoService);
+  private readonly seoService = inject(SeoService);
 
   currentUser$!: Observable<AuthResponse | null>;
 
@@ -43,6 +58,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.title$ = this.seoService.getTitle();
+    this.description$ = this.seoService.getDescription();
+
     this.currentUser$ = this.authFacade.getCurrentUser();
     this.initializeGlobalData();
   }
@@ -88,4 +106,6 @@ export class AppComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe();
   }
+
+  protected readonly Array = Array;
 }
