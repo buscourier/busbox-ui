@@ -58,6 +58,12 @@
       "@tariffs/*": [
         "./src/app/features/tariffs/*"
       ],
+      "@services": [
+        "./src/app/features/services/index.ts"
+      ],
+      "@services/*": [
+        "./src/app/features/services/*"
+      ],
       "@env/*": [
         "src/environments/*"
       ]

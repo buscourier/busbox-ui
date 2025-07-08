@@ -19,7 +19,7 @@ export const routes: Routes = [
     loadChildren: () => import('./features/account').then((m) => m.accountRoutes),
   },
   {
-    path: 'tariffs',
-    loadChildren: () => import('./features/tariffs').then((m) => m.tariffsRoutes),
+    path: 'services',
+    loadChildren: () => import('./features/services').then((m) => m.servicesRoutes),
   },
 ];
