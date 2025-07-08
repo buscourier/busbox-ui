@@ -3,6 +3,8 @@ import { type ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, type Observable, startWith } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { NavigationService } from '@core/services/navigation.service';
+
 export interface BreadcrumbItem {
   caption: string;
   routerLink: string[];
@@ -16,6 +18,7 @@ export interface BreadcrumbItem {
 })
 export class BreadcrumbsService {
   private readonly router = inject(Router);
+  private navigationService = inject(NavigationService);
 
   getBreadcrumbs(): Observable<BreadcrumbItem[]> {
     return this.router.events.pipe(
@@ -62,7 +65,13 @@ export class BreadcrumbsService {
     }
 
     const data = child.snapshot.data;
-    const title = data['title'];
+
+    let title = data['title'];
+
+    if (!title && data['pageKey']) {
+      const content = this.navigationService.getSeoDataByLink(data['pageKey']);
+      title = content?.title;
+    }
 
     if (title && !data['hideBreadcrumb']) {
       breadcrumbs.push({
