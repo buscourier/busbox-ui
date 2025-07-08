@@ -8,7 +8,12 @@ import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore } from '@ngrx/router-store';
 import { provideState, provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
-import { tuiButtonOptionsProvider, tuiTextfieldOptionsProvider } from '@taiga-ui/core';
+import type { TuiStringHandler } from '@taiga-ui/cdk';
+import {
+  TUI_ICON_RESOLVER,
+  tuiButtonOptionsProvider,
+  tuiTextfieldOptionsProvider,
+} from '@taiga-ui/core';
 import { NG_EVENT_PLUGINS } from '@taiga-ui/event-plugins';
 import {
   TUI_DATE_RANGE_VALUE_TRANSFORMER,
@@ -20,6 +25,7 @@ import {
 import { TUI_TEXTFIELD_LABEL_OUTSIDE, TUI_TEXTFIELD_SIZE } from '@taiga-ui/legacy';
 
 import { DEFAULT_VALIDATION_LIMITS } from '@core/config';
+import { PreloadIconsService } from '@core/services';
 import {
   DefaultDomProcessor,
   DefaultProgressIndicator,
@@ -189,5 +195,34 @@ export const appConfig: ApplicationConfig = {
       },
       loader: TranslocoHttpLoader,
     }),
+    // {
+    //   provide: TUI_ICON_RESOLVER,
+    //   useFactory: (): TuiStringHandler<string> => {
+    //     return (name: string) => {
+    //       if (name.startsWith('@tui.')) {
+    //         return `assets/taiga-ui/icons/${name.replace('@tui.', '')}.svg`;
+    //       }
+    //       return `/assets/icons/${name}.svg`;
+    //     };
+    //   },
+    // },
+    {
+      provide: TUI_ICON_RESOLVER,
+      useFactory: (preloadService: PreloadIconsService): TuiStringHandler<string> => {
+        return (name: string) => {
+          if (name.startsWith('@tui.')) {
+            return `assets/taiga-ui/icons/${name.replace('@tui.', '')}.svg`;
+          }
+
+          const cachedIcon = preloadService.getIcon(name);
+          if (cachedIcon) {
+            return `data:image/svg+xml;base64,${btoa(cachedIcon)}`;
+          }
+
+          return `/assets/icons/${name}.svg`;
+        };
+      },
+      deps: [PreloadIconsService],
+    },
   ],
 };
