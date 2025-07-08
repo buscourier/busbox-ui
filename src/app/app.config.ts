@@ -1,3 +1,4 @@
+import { provideImageKitLoader } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import { type ApplicationConfig, signal } from '@angular/core';
 import { isDevMode, provideZoneChangeDetection } from '@angular/core';
@@ -224,5 +225,6 @@ export const appConfig: ApplicationConfig = {
       },
       deps: [PreloadIconsService],
     },
+    provideImageKitLoader('https://ik.imagekit.io/buscourier/'),
   ],
 };
