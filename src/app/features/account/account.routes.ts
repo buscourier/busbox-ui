@@ -7,21 +7,22 @@ export const accountRoutes: Routes = [
   {
     path: '',
     component: AccountComponent,
-    data: { title: 'Личный кабинет' },
+    data: { pageKey: 'account' },
     children: [
       {
         path: '',
         component: LayoutComponent,
-        data: { title: 'Личный кабинет', hideBreadcrumb: true },
+        // data: { pageKey: 'account' },
       },
       {
         path: 'profile',
         loadChildren: () => import('./profile').then((m) => m.profileRoutes),
+        data: { pageKey: 'profile' },
       },
       {
         path: 'orders',
         loadComponent: () => import('./orders').then((c) => c.OrdersComponent),
-        data: { title: 'Мои заказы' },
+        data: { pageKey: 'orders' },
       },
     ],
   },
