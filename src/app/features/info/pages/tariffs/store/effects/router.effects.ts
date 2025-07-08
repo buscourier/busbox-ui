@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { LocationsFacade } from '@shared/store';
 
-import { TariffsActions } from '@tariffs/store';
+import { TariffsActions } from '../actions';
 
 export const routerEffects = {
   initFromRoute: createEffect(

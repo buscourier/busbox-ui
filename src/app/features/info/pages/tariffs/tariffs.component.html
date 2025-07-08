@@ -266,7 +266,7 @@
 
   <aside>
     @if (rulesDocument$ | async; as document) {
-      <button type="button" tuiButton (click)="showRules(document)">Показать правила</button>
+      <app-document-card [doc]="document" (show)="showRules($event)" />
     }
 
     @if (vm) {
@@ -283,6 +283,7 @@
       <tui-icon icon="@tui.printer" class="mr-1"></tui-icon>
       Печать
     </button>
+
     <button tuiButton appearance="primary" size="s" (click)="downloadPdf(content)">
       <tui-icon icon="@tui.download" class="mr-1"></tui-icon>
       Скачать

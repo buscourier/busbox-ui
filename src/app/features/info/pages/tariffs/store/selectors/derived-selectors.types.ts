@@ -1,6 +1,6 @@
 import type { MemoizedSelector } from '@ngrx/store';
 
-import type { ParcelsTableData, TableData } from '@tariffs/types';
+import type { ParcelsTableData, TableData } from '../../types';
 
 export interface DerivedSelectors {
   selectIsZonesLoading: MemoizedSelector<object, boolean>;

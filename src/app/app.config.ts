@@ -52,7 +52,6 @@ import { BalanceEffects, balanceFeature } from '@account/balance';
 import { OrdersEffects, ordersFeature } from '@account/orders';
 import { ProfileEffects, profileFeature } from '@account/profile';
 import { AuthEffects, authFeature } from '@auth';
-import { TariffsEffects, tariffsFeature } from '@tariffs';
 
 import { BookingEffects, bookingFeature } from '@delivery/booking';
 import { DeliveryDetailsEffects, deliveryDetailsFeature } from '@delivery/delivery-details';
@@ -79,7 +78,6 @@ export const appConfig: ApplicationConfig = {
     provideState(profileFeature),
     provideState(ordersFeature),
     provideState(balanceFeature),
-    provideState(tariffsFeature),
     provideState(documentsFeature),
     provideEffects(
       LocationsEffects,
@@ -92,7 +90,6 @@ export const appConfig: ApplicationConfig = {
       ProfileEffects,
       OrdersEffects,
       BalanceEffects,
-      TariffsEffects,
       DocumentsEffects,
     ),
     provideRouterStore(),
@@ -155,6 +152,7 @@ export const appConfig: ApplicationConfig = {
       provide: DOCUMENT_RENDERER,
       useClass: DualDocumentRenderer,
     },
+
     {
       provide: CONTACT_INFO,
       useFactory: (phone: string, telegram: string, email: string) => ({

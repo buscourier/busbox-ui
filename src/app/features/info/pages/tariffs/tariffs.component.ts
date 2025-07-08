@@ -18,17 +18,26 @@ import type { Observable } from 'rxjs';
 import { DocumentToPdfService, MultiElementRenderer } from '@core/services/pdf';
 import { DOCUMENT_RENDERER } from '@core/tokens';
 
+import { DocumentCardComponent } from '@shared/components/document-card';
 import { DocumentsFacade, LocationsFacade } from '@shared/store';
 import type { DocumentFile, PickupCity } from '@shared/types';
 
-import { TariffsViewerService } from '@tariffs/services';
-
+import { TariffsViewerService } from './services';
 import { TariffsFacade } from './tariffs.facade';
 import type { QueryParams, ParcelsTableData, ParcelTableRow, TariffsViewModel } from './types';
 
 @Component({
   selector: 'app-tariffs',
-  imports: [AsyncPipe, TuiSkeleton, FormsModule, TuiChip, TuiRepeatTimes, TuiButton, TuiIcon],
+  imports: [
+    AsyncPipe,
+    TuiSkeleton,
+    FormsModule,
+    TuiChip,
+    TuiRepeatTimes,
+    TuiButton,
+    TuiIcon,
+    DocumentCardComponent,
+  ],
   templateUrl: './tariffs.component.html',
   styleUrl: './tariffs.component.css',
   providers: [
@@ -104,8 +113,6 @@ export class TariffsComponent implements OnInit {
   }
 
   showRules(document: DocumentFile): void {
-    console.log('document.link', document.link);
-
     this.tariffsViewer.showPdf(document.link, document.name).subscribe();
   }
 

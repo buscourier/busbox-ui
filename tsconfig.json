@@ -64,6 +64,12 @@
       "@services/*": [
         "./src/app/features/services/*"
       ],
+      "@info": [
+        "./src/app/features/info/index.ts"
+      ],
+      "@info/*": [
+        "./src/app/features/info/*"
+      ],
       "@tracking": [
         "./src/app/features/tracking/index.ts"
       ],
