@@ -1,7 +1,7 @@
 @let breadcrumbs = breadcrumbs$ | async;
 
 @if (breadcrumbs && breadcrumbs.length > 1) {
-  <tui-breadcrumbs size="l" class="tui-space_top-2">
+  <tui-breadcrumbs size="l" class="tui-space_top-2 pt-4 mb-10">
     @for (item of breadcrumbs$ | async; track item.routerLink; let isLast = $last) {
       <ng-container *tuiItem>
         @if (!isLast) {

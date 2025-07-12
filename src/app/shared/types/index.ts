@@ -16,3 +16,4 @@ export * from './document.types';
 export * from './news.types';
 export * from './seo.types';
 export * from './navigation.types';
+export * from './map-point.types';

@@ -1,6 +1,6 @@
 import { provideImageKitLoader } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
-import { type ApplicationConfig, signal } from '@angular/core';
+import { type ApplicationConfig, importProvidersFrom, signal } from '@angular/core';
 import { isDevMode, provideZoneChangeDetection } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
@@ -24,6 +24,7 @@ import {
   tuiRadioOptionsProvider,
 } from '@taiga-ui/kit';
 import { TUI_TEXTFIELD_LABEL_OUTSIDE, TUI_TEXTFIELD_SIZE } from '@taiga-ui/legacy';
+import { AngularYandexMapsModule, type YaConfig } from 'angular8-yandex-maps';
 
 import { DEFAULT_VALIDATION_LIMITS } from '@core/config';
 import { PreloadIconsService } from '@core/services';
@@ -68,6 +69,11 @@ import { PickupPointEffects, pickupPointFeature } from '@delivery/pickup-point';
 
 import { routes } from './app.routes';
 import { TranslocoHttpLoader } from './transloco-loader';
+
+const mapConfig: YaConfig = {
+  apikey: 'be640658-9c20-46d8-ab54-555efd7fc3ee',
+  lang: 'ru_RU',
+};
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -187,6 +193,7 @@ export const appConfig: ApplicationConfig = {
       max: 20,
     }),
     provideHttpClient(),
+    importProvidersFrom(AngularYandexMapsModule.forRoot(mapConfig)),
     provideTransloco({
       config: {
         availableLangs: ['ru', 'en'],

@@ -20,3 +20,19 @@
     font-family: var(--font-kelson);
   }
 }
+
+ymaps[class*='copyright'] {
+  display: none;
+}
+
+ymaps[class*='map-copyrights-promo'] {
+  display: none;
+}
+
+[class*='ymaps-2'][class*='-ground-pane'] {
+  filter: grayscale(1) brightness(0.9);
+}
+
+ymaps[class*='controls-pane'] {
+  display: none;
+}

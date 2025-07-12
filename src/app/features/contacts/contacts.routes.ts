@@ -6,6 +6,6 @@ export const contactsRoutes: Routes = [
   {
     path: '',
     component: ContactsComponent,
-    data: { pageKey: 'contacts' },
+    // data: { pageKey: 'contacts', hideBreadcrumbs: true },
   },
 ];

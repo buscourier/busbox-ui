@@ -1,1 +1,45 @@
-<p>contacts works!</p>
+@let cities = cities$ | async;
+@let points = filteredPoints$ | async;
+@let activePoint = activePoint$ | async;
+
+<div
+  class="h-[675px] w-full grid grid-cols-[400px_1fr] grid-rows-[auto_auto_450px] gap-x-5 content-start"
+>
+  <app-filter
+    class="col-start-1 row-start-1 row-end-2"
+    [initialCity]="initialCity$ | async"
+    [initialPoint]="initialPoint$ | async"
+    [cities]="cities || []"
+    (filterChange)="setFilter($event)"
+  />
+
+  <app-point-list
+    class="col-start-1 row-start-3 row-end-4"
+    [activePoint]="activePoint"
+    [points]="points || []"
+    (select)="onPointSelect($event)"
+  />
+
+  @if (activePoint; as point) {
+    <app-point-details
+      [point]="point"
+      (close)="onCloseDetails()"
+      class="col-start-2 row-start-3 row-end-4"
+    />
+  }
+</div>
+
+<!--  Background map  -->
+<div class="relative md:absolute md:inset-0 md:-z-10 md:h-full ng-star-inserted">
+  @if (points) {
+    <div
+      class="hidden w-full h-full bg-gray-50 absolute z-10 inset-0"
+      [class.block!]="!points.length"
+    ></div>
+    <app-map
+      [points]="getMapPoints(points)"
+      [zoom]="points.length === 1 ? 12 : 6"
+      [disableScrollZoom]="true"
+    />
+  }
+</div>

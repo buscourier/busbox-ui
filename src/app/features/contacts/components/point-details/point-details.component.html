@@ -1,0 +1,108 @@
+<div class="relative h-full bg-white sm:p-5 lg:p-6 lg:pt-8 xl:pt-8 xl:pr-4 xl:pb-14 xl:pl-8">
+  <button
+    *appBreakpoint="{ hideOn: 'sm' }"
+    tuiButton
+    type="button"
+    class="mb-8 w-full"
+    (click)="closeDetails()"
+  >
+    Назад
+  </button>
+  <button
+    *appBreakpoint="{ showOn: 'sm' }"
+    tuiIconButton
+    type="button"
+    appearance="icon"
+    iconStart="@tui.x"
+    class="absolute top-0 right-0"
+    (click)="closeDetails()"
+  >
+    &nbsp;
+  </button>
+  <b class="text-xl">{{ point && point.name }}</b>
+  <small class="mt-1 mb-2 block text-xs text-yellow">{{ getPointStatus(point) }}</small>
+  @if (point.cargo_restrict === '1') {
+    <small class="mt-1 mb-8 block text-xxs text-red">
+      {{ point.cargo_restrict_info }}
+    </small>
+  }
+  <tui-scrollbar class="scroll-yellow lg:h-80">
+    <div class="grid gap-y-8 sm:grid-cols-2 sm:gap-y-0 sm:gap-x-4 xl:gap-x-11 xl:pr-5">
+      <div>
+        <div class="mb-7 grid grid-cols-[auto_1fr] text-sm">
+          <tui-icon class="col-start-1 row-start-2 row-end-3 mr-3 text-gray-500" icon="point" />
+          <p class="col-start-2 col-end-3 row-start-1 row-end-2">
+            {{ point.address }}
+          </p>
+          <span
+            class="relative col-start-2 col-end-3 row-start-2 row-end-3 justify-self-start text-gray-700 before:absolute before:left-0 before:bottom-0 before:w-full before:border-b before:border-dashed before:border-gray-700 hover:cursor-pointer"
+            >Посмотреть на карте</span
+          >
+        </div>
+        <div class="mb-7 grid grid-cols-[auto_1fr] text-sm">
+          <tui-icon class="col-start-1 row-start-2 row-end-3 mr-3 text-gray-500" icon="alarm" />
+          <p class="col-start-2 col-end-3 row-start-1 row-end-2 text-gray-500">График работы:</p>
+          <span class="relative col-start-2 col-end-3 row-start-2 row-end-3">{{
+            point.worktime
+          }}</span>
+        </div>
+        <div class="mb-7 grid grid-cols-[auto_1fr] text-sm">
+          <tui-icon class="col-start-1 row-start-2 row-end-3 mr-3 text-gray-500" icon="union" />
+          <p class="col-start-2 col-end-3 row-start-1 row-end-2">Контакты для связи:</p>
+          <b class="relative col-start-2 col-end-3 row-start-2 row-end-3 font-medium">{{
+            point.phone
+          }}</b>
+        </div>
+        <div class="grid grid-cols-[auto_1fr] text-sm">
+          <tui-icon class="col-start-1 row-start-2 row-end-3 mr-3 text-blue-500" icon="email" />
+          <p class="col-start-2 col-end-3 row-start-1 row-end-2">Почта отделения:</p>
+          <a
+            href="mailto:inbox@busbox.guru"
+            class="relative col-start-2 col-end-3 row-start-2 row-end-3 justify-self-start font-medium text-blue"
+            >inbox&#64;busbox.guru</a
+          >
+        </div>
+      </div>
+      <div>
+        <div class="mb-6">
+          <!--          <app-video-->
+          <!--            *ngIf="point.video_url; else img"-->
+          <!--            [src]="[-->
+          <!--                          {type: 'video/youtube', src: point.video_url}-->
+          <!--                        ]"-->
+          <!--          >-->
+          <!--          </app-video>-->
+          <!--          <ng-template #img>-->
+          <!--            <div-->
+          <!--              class="relative h-60 w-full rounded-sm object-cover lg:h-48"-->
+          <!--            >-->
+          <!--              <img-->
+          <!--                [ngSrc]="-->
+          <!--                              'contacts-office-' + point.id + '.jpg'-->
+          <!--                            "-->
+          <!--                [alt]="point.name"-->
+          <!--                ngSrcset="360w, 420w, 640w, 720w, 840w, 1080w, 1280w, 1920w"-->
+          <!--                sizes="(min-width: 640px) 360px, 100vw"-->
+          <!--                fill-->
+          <!--                class="rounded-sm bg-gray-50 object-cover text-gray-50"-->
+          <!--              />-->
+          <!--            </div>-->
+          <!--          </ng-template>-->
+        </div>
+        <p class="text-xs">
+          За содержимое грузов и документов (далее — отправление) несет ответственность лицо,
+          являющееся Отправителем.
+        </p>
+      </div>
+    </div>
+  </tui-scrollbar>
+  <button
+    *appBreakpoint="{ hideOn: 'sm' }"
+    tuiButton
+    type="button"
+    class="mt-5 mb-5 w-full"
+    (click)="closeDetails()"
+  >
+    Назад
+  </button>
+</div>
