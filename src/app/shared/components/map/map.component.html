@@ -1,0 +1,26 @@
+<ya-map
+  [center]="[(points.length && points[0].geo_x) || 0, (points.length && points[0].geo_y) || 0]"
+  [zoom]="zoom"
+  [options]="{
+    avoidFractionalZoom: true,
+    copyrightLogoVisible: false,
+    copyrightProvidersVisible: false,
+    copyrightUaVisible: false,
+  }"
+  [state]="{ controls: [] }"
+  (yawheel)="zoomScroll($event)"
+  (ready)="ready()"
+>
+  <ya-control type="ZoomControl" [parameters]="zoomControlParameters"></ya-control>
+  @for (point of points; track point.geo_x) {
+    <ya-placemark
+      [geometry]="[point.geo_x, point.geo_y]"
+      [properties]="{
+        hintContent: '',
+        balloonContent: '',
+      }"
+      [options]="placemarkOptions"
+      (yaclick)="selectPoint(point)"
+    ></ya-placemark>
+  }
+</ya-map>
