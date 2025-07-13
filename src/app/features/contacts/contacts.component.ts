@@ -21,22 +21,22 @@ import { MapComponent } from '@shared/components/map';
 import { LocationsFacade } from '@shared/store';
 import type { MapPoint, Office, PickupCity } from '@shared/types';
 
-import { PointType } from '@contacts/types';
+import { OfficeType } from '@contacts/types';
 
 import { FilterComponent, type Filter } from './components/filter';
-import { PointDetailsComponent } from './components/point-details';
-import { PointListComponent } from './components/point-list';
+import { OfficeDetailsComponent } from './components/office-details';
+import { OfficeListComponent } from './components/office-list';
 
 export interface QueryParams {
   cityId: string | null;
-  pointType: string | null;
-  pointId: string | null;
+  officeType: string | null;
+  officeId: string | null;
 }
 
 export const QUERY_PARAMS = {
   CITY_ID: 'cityId',
-  POINT_TYPE: 'pointType',
-  POINT_ID: 'pointId',
+  OFFICE_TYPE: 'officeType',
+  OFFICE_ID: 'officeId',
 } as const;
 
 @Component({
@@ -47,8 +47,8 @@ export const QUERY_PARAMS = {
     ReactiveFormsModule,
     AsyncPipe,
     FilterComponent,
-    PointDetailsComponent,
-    PointListComponent,
+    OfficeListComponent,
+    OfficeDetailsComponent,
   ],
   templateUrl: './contacts.component.html',
   styleUrl: './contacts.component.css',
@@ -62,12 +62,12 @@ export class ContactsComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   cities$!: Observable<PickupCity[]>;
-  points$!: Observable<Office[]>;
-  filteredPoints$!: Observable<Office[]>;
+  offices$!: Observable<Office[]>;
+  filteredOffices$!: Observable<Office[]>;
 
   initialCity$ = new BehaviorSubject<PickupCity | null>(null);
-  initialPoint$ = new BehaviorSubject<PointType | null>(null);
-  activePoint$ = new BehaviorSubject<Office | null>(null);
+  initialOfficeType$ = new BehaviorSubject<OfficeType | null>(null);
+  activeOffice$ = new BehaviorSubject<Office | null>(null);
 
   // Сигналы для состояния
   readonly activeTabIndex = signal(0);
@@ -79,34 +79,34 @@ export class ContactsComponent implements OnInit {
 
   ngOnInit(): void {
     this.cities$ = this.locationsFacade.getPickupCities();
-    this.points$ = this.locationsFacade.getOffices();
+    this.offices$ = this.locationsFacade.getOffices();
 
     this.initializeUrl();
 
-    this.filteredPoints$ = combineLatest({
-      points: this.points$,
+    this.filteredOffices$ = combineLatest({
+      offices: this.offices$,
       params: this.route.queryParams,
     }).pipe(
-      map(({ points, params }) => {
+      map(({ offices, params }) => {
         const cityId = params['cityId'] as string;
-        const pointType = params['pointType'] as PointType;
+        const officeType = params['officeType'] as OfficeType;
 
-        let filteredPoints = points;
+        let filteredOffices = offices;
 
         if (cityId) {
-          filteredPoints = filteredPoints.filter((point) => point.office_id === cityId);
+          filteredOffices = filteredOffices.filter((office) => office.office_id === cityId);
         }
 
-        switch (pointType) {
-          case PointType.GIVE:
-            return filteredPoints.filter((point) => point.give === '1');
-          case PointType.GET:
-            return filteredPoints.filter((point) => point.get === '1');
-          case PointType.OFFICE:
-            return filteredPoints.filter((point) => point.office_id === '1');
-          case PointType.ANY:
+        switch (officeType) {
+          case OfficeType.GIVE:
+            return filteredOffices.filter((office) => office.give === '1');
+          case OfficeType.GET:
+            return filteredOffices.filter((office) => office.get === '1');
+          case OfficeType.OFFICE:
+            return filteredOffices.filter((office) => office.office_id === '1');
+          case OfficeType.ANY:
           default:
-            return filteredPoints;
+            return filteredOffices;
         }
       }),
       shareReplay(1),
@@ -117,9 +117,9 @@ export class ContactsComponent implements OnInit {
   // private initializeUrl(): void {
   //   const queryParams = this.route.snapshot.queryParams;
   //
-  //   const { cityId, pointType, pointId } = queryParams;
+  //   const { cityId, officeType, officeId } = queryParams;
   //
-  //   this.initialPoint$.next(pointType || PointType.ANY);
+  //   this.initialPoint$.next(officeType || PointType.ANY);
   //
   //   if (cityId) {
   //     this.initCityFromUrl(cityId);
@@ -127,8 +127,8 @@ export class ContactsComponent implements OnInit {
   //     this.initialCity$.next(null);
   //   }
   //
-  //   if (pointId) {
-  //     this.initPointFromUrl(pointId);
+  //   if (officeId) {
+  //     this.initPointFromUrl(officeId);
   //   } else {
   //     this.activePoint$.next(null);
   //   }
@@ -136,10 +136,10 @@ export class ContactsComponent implements OnInit {
 
   private initializeUrl(): void {
     this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((queryParams) => {
-      const { cityId, pointType, pointId } = queryParams;
+      const { cityId, officeType, officeId } = queryParams;
 
       // Обновляем тип фильтра
-      this.initialPoint$.next(pointType || PointType.ANY);
+      this.initialOfficeType$.next(officeType || OfficeType.ANY);
 
       // Обновляем город
       if (cityId) {
@@ -149,10 +149,10 @@ export class ContactsComponent implements OnInit {
       }
 
       // Обновляем выбранную точку
-      if (pointId) {
-        this.initPointFromUrl(pointId);
+      if (officeId) {
+        this.initOfficeFromUrl(officeId);
       } else {
-        this.activePoint$.next(null);
+        this.activeOffice$.next(null);
       }
     });
   }
@@ -162,12 +162,12 @@ export class ContactsComponent implements OnInit {
 
     queryParams[QUERY_PARAMS.CITY_ID] = filter.city ? filter.city.office_id : null;
 
-    if (filter.point && filter.point !== PointType.ANY) {
-      queryParams[QUERY_PARAMS.POINT_TYPE] = filter.point;
+    if (filter.officeType && filter.officeType !== OfficeType.ANY) {
+      queryParams[QUERY_PARAMS.OFFICE_TYPE] = filter.officeType;
     }
 
-    if (filter.point && filter.point === PointType.ANY) {
-      queryParams[QUERY_PARAMS.POINT_TYPE] = null;
+    if (filter.officeType && filter.officeType === OfficeType.ANY) {
+      queryParams[QUERY_PARAMS.OFFICE_TYPE] = null;
     }
 
     this.updateUrl(queryParams);
@@ -196,12 +196,12 @@ export class ContactsComponent implements OnInit {
     });
   }
 
-  private initPointFromUrl(id: string): void {
-    this.points$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((points) => {
-      const point = points.find((point) => point.id === id);
+  private initOfficeFromUrl(id: string): void {
+    this.offices$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((offices) => {
+      const office = offices.find((office) => office.id === id);
 
-      if (point) {
-        this.activePoint$.next(point);
+      if (office) {
+        this.activeOffice$.next(office);
       }
     });
   }
@@ -216,21 +216,22 @@ export class ContactsComponent implements OnInit {
     this.activeTabIndex.set(index);
   }
 
-  getMapPoints(points: Office[] | null): MapPoint[] {
-    if (!(points && points.length)) return [];
+  getMapPoints(offices: Office[] | null): MapPoint[] {
+    if (!(offices && offices.length)) return [];
 
-    return points.map((point) => ({
-      geo_x: point.geo_x,
-      geo_y: point.geo_y,
+    return offices.map((office) => ({
+      id: office.id,
+      lat: office.geo_x,
+      lng: office.geo_y,
     }));
   }
 
-  onPointSelect(pointId: string) {
-    this.updateUrl({ pointId });
+  onOfficeSelect(officeId: string) {
+    this.updateUrl({ officeId });
   }
 
   onCloseDetails(): void {
-    this.updateUrl({ pointId: null });
-    this.activePoint$.next(null);
+    this.updateUrl({ officeId: null });
+    this.activeOffice$.next(null);
   }
 }

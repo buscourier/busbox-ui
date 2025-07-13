@@ -1,18 +1,18 @@
 // import { ComponentFixture, TestBed } from '@angular/core/testing';
 //
-// import { PointListComponent } from './point-list.component';
+// import { OfficeDetailsComponent } from './office-details.component';
 //
-// describe('PointListComponent', () => {
-//   let component: PointListComponent;
-//   let fixture: ComponentFixture<PointListComponent>;
+// describe('OfficeDetailsComponent', () => {
+//   let component: OfficeDetailsComponent;
+//   let fixture: ComponentFixture<OfficeDetailsComponent>;
 //
 //   beforeEach(async () => {
 //     await TestBed.configureTestingModule({
-//       imports: [PointListComponent]
+//       imports: [OfficeDetailsComponent]
 //     })
 //     .compileComponents();
 //
-//     fixture = TestBed.createComponent(PointListComponent);
+//     fixture = TestBed.createComponent(OfficeDetailsComponent);
 //     component = fixture.componentInstance;
 //     fixture.detectChanges();
 //   });

@@ -19,20 +19,20 @@
   >
     &nbsp;
   </button>
-  <b class="text-xl">{{ point && point.name }}</b>
-  <small class="mt-1 mb-2 block text-xs text-yellow">{{ getPointStatus(point) }}</small>
-  @if (point.cargo_restrict === '1') {
+  <b class="text-xl">{{ office && office.name }}</b>
+  <small class="mt-1 mb-2 block text-xs text-yellow">{{ getOfficeStatus(office) }}</small>
+  @if (office.cargo_restrict === '1') {
     <small class="mt-1 mb-8 block text-xxs text-red">
-      {{ point.cargo_restrict_info }}
+      {{ office.cargo_restrict_info }}
     </small>
   }
   <tui-scrollbar class="scroll-yellow lg:h-80">
     <div class="grid gap-y-8 sm:grid-cols-2 sm:gap-y-0 sm:gap-x-4 xl:gap-x-11 xl:pr-5">
       <div>
         <div class="mb-7 grid grid-cols-[auto_1fr] text-sm">
-          <tui-icon class="col-start-1 row-start-2 row-end-3 mr-3 text-gray-500" icon="point" />
+          <tui-icon class="col-start-1 row-start-2 row-end-3 mr-3 text-gray-500" icon="office" />
           <p class="col-start-2 col-end-3 row-start-1 row-end-2">
-            {{ point.address }}
+            {{ office.address }}
           </p>
           <span
             class="relative col-start-2 col-end-3 row-start-2 row-end-3 justify-self-start text-gray-700 before:absolute before:left-0 before:bottom-0 before:w-full before:border-b before:border-dashed before:border-gray-700 hover:cursor-pointer"
@@ -43,14 +43,14 @@
           <tui-icon class="col-start-1 row-start-2 row-end-3 mr-3 text-gray-500" icon="alarm" />
           <p class="col-start-2 col-end-3 row-start-1 row-end-2 text-gray-500">График работы:</p>
           <span class="relative col-start-2 col-end-3 row-start-2 row-end-3">{{
-            point.worktime
+            office.worktime
           }}</span>
         </div>
         <div class="mb-7 grid grid-cols-[auto_1fr] text-sm">
           <tui-icon class="col-start-1 row-start-2 row-end-3 mr-3 text-gray-500" icon="union" />
           <p class="col-start-2 col-end-3 row-start-1 row-end-2">Контакты для связи:</p>
           <b class="relative col-start-2 col-end-3 row-start-2 row-end-3 font-medium">{{
-            point.phone
+            office.phone
           }}</b>
         </div>
         <div class="grid grid-cols-[auto_1fr] text-sm">
@@ -66,9 +66,9 @@
       <div>
         <div class="mb-6">
           <!--          <app-video-->
-          <!--            *ngIf="point.video_url; else img"-->
+          <!--            *ngIf="office.video_url; else img"-->
           <!--            [src]="[-->
-          <!--                          {type: 'video/youtube', src: point.video_url}-->
+          <!--                          {type: 'video/youtube', src: office.video_url}-->
           <!--                        ]"-->
           <!--          >-->
           <!--          </app-video>-->
@@ -78,9 +78,9 @@
           <!--            >-->
           <!--              <img-->
           <!--                [ngSrc]="-->
-          <!--                              'contacts-office-' + point.id + '.jpg'-->
+          <!--                              'contacts-office-' + office.id + '.jpg'-->
           <!--                            "-->
-          <!--                [alt]="point.name"-->
+          <!--                [alt]="office.name"-->
           <!--                ngSrcset="360w, 420w, 640w, 720w, 840w, 1080w, 1280w, 1920w"-->
           <!--                sizes="(min-width: 640px) 360px, 100vw"-->
           <!--                fill-->

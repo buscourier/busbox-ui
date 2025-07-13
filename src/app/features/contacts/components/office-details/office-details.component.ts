@@ -6,18 +6,18 @@ import { BreakpointDirective } from '@core/directives';
 import type { Office } from '@shared/types';
 
 @Component({
-  selector: 'app-point-details',
-  imports: [TuiButton, TuiScrollbar, TuiIcon, BreakpointDirective],
-  templateUrl: './point-details.component.html',
-  styleUrl: './point-details.component.css',
+  selector: 'app-office-details',
+  imports: [BreakpointDirective, TuiButton, TuiIcon, TuiScrollbar],
+  templateUrl: './office-details.component.html',
+  styleUrl: './office-details.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PointDetailsComponent {
-  @Input({ required: true }) point!: Office;
+export class OfficeDetailsComponent {
+  @Input({ required: true }) office!: Office;
   @Output() close = new EventEmitter<void>();
 
-  getPointStatus(point: Office) {
-    console.log('point', point);
+  getOfficeStatus(office: Office) {
+    console.log('office', office);
     return '';
   }
 

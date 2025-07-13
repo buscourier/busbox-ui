@@ -1,20 +1,20 @@
 <div class="h-full mt-2.5 rounded-md bg-white md:shadow-md border-gray-500 md:p-3">
   <tui-scrollbar class="scroll-yellow h-full">
     <div class="pr-3">
-      @for (point of points; track point.id) {
+      @for (office of offices; track office.id) {
         <div
           class="mb-5 grid grid-cols-[1fr_repeat(3,auto)] grid-rows-[repeat(2,auto)] items-center gap-1.5"
         >
           <button
             type="button"
             class="relative col-start-1 col-end-2 row-start-1 row-end-2 justify-self-start text-sm text-blue before:absolute before:bottom-0 before:left-0 before:w-full before:border-b before:border-dashed before:border-blue hover:cursor-pointer"
-            [class.font-bold.font-yellow-500]="activePoint && activePoint.id === point.id"
-            (click)="onSelect(point.id)"
+            [class.font-bold.font-yellow-500]="activeOffice && activeOffice.id === office.id"
+            (click)="onSelect(office.id)"
           >
-            {{ point.name }}
+            {{ office.name }}
           </button>
           <p class="col-start-1 col-end-2 row-start-2 row-end-3 text-2xs">
-            {{ point.address }}
+            {{ office.address }}
           </p>
           <button
             tuiIconButton
@@ -25,7 +25,7 @@
             tuiHintAppearance="onDark"
             size="xs"
             class="col-start-2 col-end-3 row-start-1 row-end-2 opacity-50"
-            [class.opacity-100]="point.get === '1'"
+            [class.opacity-100]="office.get === '1'"
           >
             &nbsp;
           </button>
@@ -38,7 +38,7 @@
             tuiHintAppearance="onDark"
             size="xs"
             class="col-start-3 col-end-4 row-start-1 row-end-2 opacity-50"
-            [class.opacity-100]="point.give === '1'"
+            [class.opacity-100]="office.give === '1'"
           >
             &nbsp;
           </button>
@@ -51,7 +51,7 @@
             tuiHintAppearance="onDark"
             size="xs"
             class="col-start-4 col-end-5 row-start-1 row-end-2 opacity-50"
-            [class.opacity-100]="point.office_id === '1'"
+            [class.opacity-100]="office.office_id === '1'"
           >
             &nbsp;
           </button>

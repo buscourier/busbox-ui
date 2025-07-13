@@ -2,11 +2,11 @@ import type { FormControl, FormGroup } from '@angular/forms';
 
 import type { PickupCity } from '@shared/types';
 
-import type { PointType } from '../../types';
+import type { OfficeType } from '../../types';
 
 export interface Filter {
   city: PickupCity | null;
-  point: PointType | null;
+  officeType: OfficeType | null;
 }
 
 export type FilterForm = FormGroup<{

@@ -4,7 +4,7 @@
     <button
       type="button"
       class="min-w-14 px-3.5 pt-2.5 pb-3 flex flex-grow flex-col items-center rounded-sm bg-white transition-colors border border-gray-400 hover:border-yellow-500 cursor-pointer"
-      [class.bg-yellow-500]="point.value === action.id"
+      [class.bg-yellow-500]="officeType.value === action.id"
       (click)="setFilter(action.id)"
     >
       <tui-icon icon="location" [style.height.rem]="1" class="mb-0.5" />

@@ -1,6 +1,6 @@
 @let cities = cities$ | async;
-@let points = filteredPoints$ | async;
-@let activePoint = activePoint$ | async;
+@let points = filteredOffices$ | async;
+@let activeOffice = activeOffice$ | async;
 
 <div
   class="h-[675px] w-full grid grid-cols-[400px_1fr] grid-rows-[auto_auto_450px] gap-x-5 content-start"
@@ -8,21 +8,21 @@
   <app-filter
     class="col-start-1 row-start-1 row-end-2"
     [initialCity]="initialCity$ | async"
-    [initialPoint]="initialPoint$ | async"
+    [initialOfficeType]="initialOfficeType$ | async"
     [cities]="cities || []"
     (filterChange)="setFilter($event)"
   />
 
-  <app-point-list
+  <app-office-list
     class="col-start-1 row-start-3 row-end-4"
-    [activePoint]="activePoint"
-    [points]="points || []"
-    (select)="onPointSelect($event)"
+    [activeOffice]="activeOffice"
+    [offices]="points || []"
+    (select)="onOfficeSelect($event)"
   />
 
-  @if (activePoint; as point) {
-    <app-point-details
-      [point]="point"
+  @if (activeOffice; as office) {
+    <app-office-details
+      [office]="office"
       (close)="onCloseDetails()"
       class="col-start-2 row-start-3 row-end-4"
     />

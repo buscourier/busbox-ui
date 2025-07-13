@@ -21,12 +21,12 @@ import {
 
 import type { PickupCity } from '@shared/types';
 
-import { PointType } from '../../types';
+import { OfficeType } from '../../types';
 
 import type { Filter, FilterForm } from './filter.types';
 
 interface FilterAction {
-  id: PointType;
+  id: OfficeType;
   name: string;
   icon: string;
 }
@@ -48,7 +48,7 @@ interface FilterAction {
 })
 export class FilterComponent implements OnInit {
   @Input() initialCity: PickupCity | null = null;
-  @Input() initialPoint: PointType | null = null;
+  @Input() initialOfficeType: OfficeType | null = null;
   @Input({ required: true }) cities!: PickupCity[];
   @Output() filterChange = new EventEmitter<Filter>();
 
@@ -58,8 +58,8 @@ export class FilterComponent implements OnInit {
     return this.form.controls.city;
   }
 
-  get point(): FormControl<PointType | null> {
-    return this.form.controls.point;
+  get officeType(): FormControl<OfficeType | null> {
+    return this.form.controls.officeType;
   }
 
   // selectedCity = new FormControl<PickupCity | null>(null);
@@ -69,19 +69,19 @@ export class FilterComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
 
   readonly filterActions: FilterAction[] = [
-    { id: PointType.ANY, name: 'Все адреса', icon: 'location' },
-    { id: PointType.GIVE, name: 'Прием груза', icon: 'give' },
-    { id: PointType.GET, name: 'Выдача груза', icon: 'get' },
-    { id: PointType.OFFICE, name: 'Офис', icon: 'office' },
+    { id: OfficeType.ANY, name: 'Все адреса', icon: 'location' },
+    { id: OfficeType.GIVE, name: 'Прием груза', icon: 'give' },
+    { id: OfficeType.GET, name: 'Выдача груза', icon: 'get' },
+    { id: OfficeType.OFFICE, name: 'Офис', icon: 'office' },
   ];
 
   ngOnInit(): void {
     this.initializeForm();
 
-    if (this.initialCity || this.initialPoint) {
+    if (this.initialCity || this.initialOfficeType) {
       this.form.patchValue({
         city: this.initialCity,
-        point: this.initialPoint || PointType.ANY,
+        officeType: this.initialOfficeType || OfficeType.ANY,
       });
     }
 
@@ -93,7 +93,7 @@ export class FilterComponent implements OnInit {
   initializeForm(): void {
     this.form = this.fb.group({
       city: this.fb.control<PickupCity | null>(null),
-      point: this.fb.control<PointType>(PointType.ANY),
+      officeType: this.fb.control<OfficeType>(OfficeType.ANY),
     });
 
     this.form.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
@@ -101,7 +101,7 @@ export class FilterComponent implements OnInit {
     });
   }
 
-  setFilter(value: PointType): void {
-    this.point.setValue(value);
+  setFilter(value: OfficeType): void {
+    this.officeType.setValue(value);
   }
 }
