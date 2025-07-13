@@ -1,26 +1,60 @@
+<!--<div class="relative w-full h-full rounded-lg overflow-hidden">-->
+<!--  @if (isLoading()) {-->
+<!--    <div-->
+<!--      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2-->
+<!--             flex flex-col items-center gap-3 z-[1000]-->
+<!--             bg-white/90 backdrop-blur-sm p-5 rounded-lg-->
+<!--             shadow-lg border border-gray-100"-->
+<!--    >-->
+<!--      <div-->
+<!--        class="w-6 h-6 border-2 border-gray-200 border-t-blue-500-->
+<!--               rounded-full spinner"-->
+<!--      ></div>-->
+<!--      <span class="text-sm font-medium text-gray-700">-->
+<!--        Загружается карта...-->
+<!--      </span>-->
+<!--    </div>-->
+<!--  }-->
+
+<!--  <ya-map-->
+<!--    [center]="mapCenter()"-->
+<!--    [zoom]="currentZoom()"-->
+<!--    [state]="mapState"-->
+<!--    (ready)="onMapReady($event)"-->
+<!--    (wheel)="onMapWheel($event)"-->
+<!--    [class]="-->
+<!--      isLoading()-->
+<!--        ? 'w-full h-full block opacity-30 transition-opacity duration-300'-->
+<!--        : 'w-full h-full block opacity-100 transition-opacity duration-300'-->
+<!--    "-->
+<!--  >-->
+<!--    @for (point of points; track point.id) {-->
+<!--      <ya-placemark-->
+<!--        [geometry]="[point.lat, point.lng]"-->
+<!--        [options]="getPlacemarkOptions(point)"-->
+<!--        (click)="onPointClick(point)"-->
+<!--      />-->
+<!--    }-->
+<!--  </ya-map>-->
+<!--</div>-->
+
 <ya-map
-  [center]="[(points.length && points[0].geo_x) || 0, (points.length && points[0].geo_y) || 0]"
-  [zoom]="zoom"
-  [options]="{
-    avoidFractionalZoom: true,
-    copyrightLogoVisible: false,
-    copyrightProvidersVisible: false,
-    copyrightUaVisible: false,
-  }"
-  [state]="{ controls: [] }"
-  (yawheel)="zoomScroll($event)"
-  (ready)="ready()"
+  [center]="mapCenter()"
+  [zoom]="currentZoom()"
+  [state]="mapState"
+  (ready)="onMapReady($event)"
+  (wheel)="onMapWheel($event)"
+  [class]="
+    isLoading()
+      ? 'w-full h-full block opacity-30 transition-opacity duration-300'
+      : 'w-full h-full block opacity-100 transition-opacity duration-300'
+  "
 >
-  <ya-control type="ZoomControl" [parameters]="zoomControlParameters"></ya-control>
-  @for (point of points; track point.geo_x) {
+  @for (point of points; track point.id) {
     <ya-placemark
-      [geometry]="[point.geo_x, point.geo_y]"
-      [properties]="{
-        hintContent: '',
-        balloonContent: '',
-      }"
-      [options]="placemarkOptions"
-      (yaclick)="selectPoint(point)"
-    ></ya-placemark>
+      [geometry]="[point.lat, point.lng]"
+      [options]="getPlacemarkOptions(point)"
+      (click)="onPointClick(point)"
+    />
   }
 </ya-map>

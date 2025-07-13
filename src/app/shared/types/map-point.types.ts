@@ -1,4 +1,5 @@
 export interface MapPoint {
-  geo_x: number;
-  geo_y: number;
+  id: string;
+  lat: number;
+  lng: number;
 }
