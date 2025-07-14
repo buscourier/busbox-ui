@@ -55,4 +55,7 @@
   /* Text colors */
   --tui-text-action: var(--color-gray-900);
   --tui-text-action-hover: var(--color-black);
+
+  /* Player */
+  --plyr-color-main: var(--color-yellow-500);
 }

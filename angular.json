@@ -43,6 +43,7 @@
               "src/assets/fonts/fonts.css",
               "node_modules/@taiga-ui/core/styles/taiga-ui-theme.less",
               "node_modules/@taiga-ui/core/styles/taiga-ui-fonts.less",
+              "node_modules/plyr/dist/plyr.css",
               "src/styles.css"
             ],
             "scripts": [],
