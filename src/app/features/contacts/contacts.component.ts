@@ -2,11 +2,10 @@ import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
   DestroyRef,
   inject,
+  type OnDestroy,
   type OnInit,
-  signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -54,7 +53,7 @@ export const QUERY_PARAMS = {
   styleUrl: './contacts.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContactsComponent implements OnInit {
+export class ContactsComponent implements OnInit, OnDestroy {
   private readonly breakpointService = inject(BreakpointService);
   private readonly locationsFacade = inject(LocationsFacade);
   private readonly router = inject(Router);
@@ -69,8 +68,9 @@ export class ContactsComponent implements OnInit {
   initialOfficeType$ = new BehaviorSubject<OfficeType | null>(null);
   activeOffice$ = new BehaviorSubject<Office | null>(null);
 
-  // Сигналы для состояния
-  readonly activeTabIndex = signal(0);
+  // Cached result
+  private _cachedMapPoints: MapPoint[] = [];
+  private _lastOfficesRef: Office[] | null = null;
 
   readonly mobileTabs = [
     { label: 'На карте', value: 'map' },
@@ -138,17 +138,14 @@ export class ContactsComponent implements OnInit {
     this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((queryParams) => {
       const { cityId, officeType, officeId } = queryParams;
 
-      // Обновляем тип фильтра
       this.initialOfficeType$.next(officeType || OfficeType.ANY);
 
-      // Обновляем город
       if (cityId) {
         this.initCityFromUrl(cityId);
       } else {
         this.initialCity$.next(null);
       }
 
-      // Обновляем выбранную точку
       if (officeId) {
         this.initOfficeFromUrl(officeId);
       } else {
@@ -206,24 +203,30 @@ export class ContactsComponent implements OnInit {
     });
   }
 
-  readonly shouldShowList = computed(() => {
-    const isMobile = this.breakpointService.isMobile();
-    return !isMobile || this.activeTabIndex() === 1;
-  });
+  getMapPoints(offices: Office[] | null): MapPoint[] {
+    if (offices === this._lastOfficesRef) {
+      return this._cachedMapPoints;
+    }
 
-  // Методы
-  setActiveTab(index: number): void {
-    this.activeTabIndex.set(index);
+    this._lastOfficesRef = offices;
+    this._cachedMapPoints =
+      offices?.map((office) => ({
+        id: office.id,
+        lat: office.geo_x,
+        lng: office.geo_y,
+      })) || [];
+
+    return this._cachedMapPoints;
   }
 
-  getMapPoints(offices: Office[] | null): MapPoint[] {
-    if (!(offices && offices.length)) return [];
+  getMapPoint(office: Office | null): MapPoint | null {
+    if (!office) return null;
 
-    return offices.map((office) => ({
+    return {
       id: office.id,
       lat: office.geo_x,
       lng: office.geo_y,
-    }));
+    };
   }
 
   onOfficeSelect(officeId: string) {
@@ -233,5 +236,10 @@ export class ContactsComponent implements OnInit {
   onCloseDetails(): void {
     this.updateUrl({ officeId: null });
     this.activeOffice$.next(null);
+  }
+
+  ngOnDestroy() {
+    this._cachedMapPoints = [];
+    this._lastOfficesRef = null;
   }
 }

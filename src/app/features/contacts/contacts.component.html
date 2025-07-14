@@ -38,8 +38,9 @@
     ></div>
     <app-map
       [points]="getMapPoints(points)"
-      [zoom]="points.length === 1 ? 12 : 6"
-      [disableScrollZoom]="true"
+      [activePoint]="getMapPoint(activeOffice)"
+      [autoFitBounds]="true"
+      [animationDuration]="800"
     />
   }
 </div>
