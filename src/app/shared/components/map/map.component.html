@@ -43,7 +43,6 @@
   [zoom]="currentZoom()"
   [state]="mapState"
   (ready)="onMapReady($event)"
-  (wheel)="onMapWheel($event)"
   [class]="
     isLoading()
       ? 'w-full h-full block opacity-30 transition-opacity duration-300'
