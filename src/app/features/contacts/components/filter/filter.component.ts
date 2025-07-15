@@ -77,17 +77,6 @@ export class FilterComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeForm();
-
-    if (this.initialCity || this.initialOfficeType) {
-      this.form.patchValue({
-        city: this.initialCity,
-        officeType: this.initialOfficeType || OfficeType.ANY,
-      });
-    }
-
-    this.form.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
-      this.filterChange.emit(value as Filter);
-    });
   }
 
   initializeForm(): void {
@@ -95,6 +84,20 @@ export class FilterComponent implements OnInit {
       city: this.fb.control<PickupCity | null>(null),
       officeType: this.fb.control<OfficeType>(OfficeType.ANY),
     });
+
+    console.log('this.initialCity', this.initialCity);
+
+    if (this.initialCity) {
+      this.form.patchValue({
+        city: this.initialCity,
+      });
+    }
+
+    if (this.initialOfficeType) {
+      this.form.patchValue({
+        officeType: this.initialOfficeType || OfficeType.ANY,
+      });
+    }
 
     this.form.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       this.filterChange.emit(value as Filter);

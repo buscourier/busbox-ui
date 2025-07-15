@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { type Observable, pairwise, startWith } from 'rxjs';
+import { filter, type Observable, pairwise, startWith } from 'rxjs';
 import { combineLatest } from 'rxjs';
 import { map, shareReplay, distinctUntilChanged } from 'rxjs/operators';
 
@@ -81,6 +81,7 @@ export class ContactsComponent implements OnInit {
     offices: this.locationsFacade.getOffices(),
     queryParams: this.route.queryParams,
   }).pipe(
+    filter(({ cities, offices }) => cities.length > 0 && offices.length > 0),
     map(({ cities, offices, queryParams }) => {
       const urlState: UrlState = {
         cityId: queryParams['cityId'] || null,
@@ -152,19 +153,12 @@ export class ContactsComponent implements OnInit {
           cityId: state.urlState.cityId,
           officeType: state.urlState.officeType,
         })),
-        distinctUntilChanged((a, b) => {
-          console.log('a', a);
-          console.log('b', b);
-          return a.cityId === b.cityId && a.officeType === b.officeType;
-        }),
+        distinctUntilChanged((a, b) => a.cityId === b.cityId && a.officeType === b.officeType),
         startWith(null),
         pairwise(),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(([prev, curr]) => {
-        console.log('prev', prev);
-        console.log('curr', curr);
-        // Закрываем детали только если фильтр действительно изменился (не при первой загрузке)
         if (prev !== null && curr !== null) {
           const currentOfficeId = this.route.snapshot.queryParams['officeId'];
           if (currentOfficeId) {
