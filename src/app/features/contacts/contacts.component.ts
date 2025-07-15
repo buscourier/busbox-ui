@@ -1,18 +1,12 @@
 import { AsyncPipe } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  inject,
-  type OnDestroy,
-  type OnInit,
-} from '@angular/core';
+import type { OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, type Observable, shareReplay } from 'rxjs';
+import { type Observable, pairwise, startWith } from 'rxjs';
 import { combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, shareReplay, distinctUntilChanged } from 'rxjs/operators';
 
 import { BreakpointService } from '@core/services/breakpoint.service';
 
@@ -38,6 +32,28 @@ export const QUERY_PARAMS = {
   OFFICE_ID: 'officeId',
 } as const;
 
+// Внутреннее состояние URL
+interface UrlState {
+  cityId: string | null;
+  officeType: OfficeType;
+  officeId: string | null;
+}
+
+// Состояние страницы
+interface PageState {
+  // Исходные данные
+  cities: PickupCity[];
+  offices: Office[];
+  // URL состояние
+  urlState: UrlState;
+  // Вычисляемые значения
+  selectedCity: PickupCity | null;
+  selectedOffice: Office | null;
+  filteredOffices: Office[];
+  mapPoints: MapPoint[];
+  selectedMapPoint: MapPoint | null;
+}
+
 @Component({
   selector: 'app-contacts',
   imports: [
@@ -53,24 +69,72 @@ export const QUERY_PARAMS = {
   styleUrl: './contacts.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContactsComponent implements OnInit, OnDestroy {
+export class ContactsComponent implements OnInit {
   private readonly breakpointService = inject(BreakpointService);
   private readonly locationsFacade = inject(LocationsFacade);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
 
-  cities$!: Observable<PickupCity[]>;
-  offices$!: Observable<Office[]>;
-  filteredOffices$!: Observable<Office[]>;
+  private readonly pageState$: Observable<PageState> = combineLatest({
+    cities: this.locationsFacade.getPickupCities(),
+    offices: this.locationsFacade.getOffices(),
+    queryParams: this.route.queryParams,
+  }).pipe(
+    map(({ cities, offices, queryParams }) => {
+      const urlState: UrlState = {
+        cityId: queryParams['cityId'] || null,
+        officeType: queryParams['officeType'] || OfficeType.ANY,
+        officeId: queryParams['officeId'] || null,
+      };
 
-  initialCity$ = new BehaviorSubject<PickupCity | null>(null);
-  initialOfficeType$ = new BehaviorSubject<OfficeType | null>(null);
-  activeOffice$ = new BehaviorSubject<Office | null>(null);
+      const selectedCity = urlState.cityId
+        ? cities.find((city) => city.office_id === urlState.cityId) || null
+        : null;
 
-  // Cached result
-  private _cachedMapPoints: MapPoint[] = [];
-  private _lastOfficesRef: Office[] | null = null;
+      const filteredOffices = this.filterOffices(offices, urlState);
+
+      const selectedOffice = urlState.officeId
+        ? offices.find((office) => office.id === urlState.officeId) || null
+        : null;
+
+      const mapPoints = filteredOffices.map((office) => ({
+        id: office.id,
+        lat: office.geo_x,
+        lng: office.geo_y,
+      }));
+
+      // Point of selected office
+      const selectedMapPoint = selectedOffice
+        ? {
+            id: selectedOffice.id,
+            lat: selectedOffice.geo_x,
+            lng: selectedOffice.geo_y,
+          }
+        : null;
+
+      return {
+        cities,
+        offices,
+        urlState,
+        selectedCity,
+        selectedOffice,
+        filteredOffices,
+        mapPoints,
+        selectedMapPoint,
+      };
+    }),
+    shareReplay(1),
+    takeUntilDestroyed(this.destroyRef),
+  );
+
+  readonly cities$ = this.pageState$.pipe(map((state) => state.cities));
+  readonly initialCity$ = this.pageState$.pipe(map((state) => state.selectedCity));
+  readonly initialOfficeType$ = this.pageState$.pipe(map((state) => state.urlState.officeType));
+  readonly activeOffice$ = this.pageState$.pipe(map((state) => state.selectedOffice));
+  readonly filteredOffices$ = this.pageState$.pipe(map((state) => state.filteredOffices));
+  readonly mapPoints$ = this.pageState$.pipe(map((state) => state.mapPoints));
+  readonly selectedMapPoint$ = this.pageState$.pipe(map((state) => state.selectedMapPoint));
 
   readonly mobileTabs = [
     { label: 'На карте', value: 'map' },
@@ -78,96 +142,56 @@ export class ContactsComponent implements OnInit, OnDestroy {
   ];
 
   ngOnInit(): void {
-    this.cities$ = this.locationsFacade.getPickupCities();
-    this.offices$ = this.locationsFacade.getOffices();
-
-    this.initializeUrl();
-
-    this.filteredOffices$ = combineLatest({
-      offices: this.offices$,
-      params: this.route.queryParams,
-    }).pipe(
-      map(({ offices, params }) => {
-        const cityId = params['cityId'] as string;
-        const officeType = params['officeType'] as OfficeType;
-
-        let filteredOffices = offices;
-
-        if (cityId) {
-          filteredOffices = filteredOffices.filter((office) => office.office_id === cityId);
-        }
-
-        switch (officeType) {
-          case OfficeType.GIVE:
-            return filteredOffices.filter((office) => office.give === '1');
-          case OfficeType.GET:
-            return filteredOffices.filter((office) => office.get === '1');
-          case OfficeType.OFFICE:
-            return filteredOffices.filter((office) => office.office_id === '1');
-          case OfficeType.ANY:
-          default:
-            return filteredOffices;
-        }
-      }),
-      shareReplay(1),
-      takeUntilDestroyed(this.destroyRef),
-    );
+    this.setupOfficeDetailsClose();
   }
 
-  // private initializeUrl(): void {
-  //   const queryParams = this.route.snapshot.queryParams;
-  //
-  //   const { cityId, officeType, officeId } = queryParams;
-  //
-  //   this.initialPoint$.next(officeType || PointType.ANY);
-  //
-  //   if (cityId) {
-  //     this.initCityFromUrl(cityId);
-  //   } else {
-  //     this.initialCity$.next(null);
-  //   }
-  //
-  //   if (officeId) {
-  //     this.initPointFromUrl(officeId);
-  //   } else {
-  //     this.activePoint$.next(null);
-  //   }
-  // }
-
-  private initializeUrl(): void {
-    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((queryParams) => {
-      const { cityId, officeType, officeId } = queryParams;
-
-      this.initialOfficeType$.next(officeType || OfficeType.ANY);
-
-      if (cityId) {
-        this.initCityFromUrl(cityId);
-      } else {
-        this.initialCity$.next(null);
-      }
-
-      if (officeId) {
-        this.initOfficeFromUrl(officeId);
-      } else {
-        this.activeOffice$.next(null);
-      }
-    });
+  private setupOfficeDetailsClose(): void {
+    this.pageState$
+      .pipe(
+        map((state) => ({
+          cityId: state.urlState.cityId,
+          officeType: state.urlState.officeType,
+        })),
+        distinctUntilChanged((a, b) => {
+          console.log('a', a);
+          console.log('b', b);
+          return a.cityId === b.cityId && a.officeType === b.officeType;
+        }),
+        startWith(null),
+        pairwise(),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(([prev, curr]) => {
+        console.log('prev', prev);
+        console.log('curr', curr);
+        // Закрываем детали только если фильтр действительно изменился (не при первой загрузке)
+        if (prev !== null && curr !== null) {
+          const currentOfficeId = this.route.snapshot.queryParams['officeId'];
+          if (currentOfficeId) {
+            this.updateUrl({ officeId: null });
+          }
+        }
+      });
   }
 
-  private updateUrlWithFilter(filter: Filter): void {
-    const queryParams: Partial<QueryParams> = {};
+  private filterOffices(offices: Office[], urlState: UrlState): Office[] {
+    let filtered = offices;
 
-    queryParams[QUERY_PARAMS.CITY_ID] = filter.city ? filter.city.office_id : null;
-
-    if (filter.officeType && filter.officeType !== OfficeType.ANY) {
-      queryParams[QUERY_PARAMS.OFFICE_TYPE] = filter.officeType;
+    if (urlState.cityId) {
+      filtered = filtered.filter((office) => office.office_id === urlState.cityId);
     }
 
-    if (filter.officeType && filter.officeType === OfficeType.ANY) {
-      queryParams[QUERY_PARAMS.OFFICE_TYPE] = null;
+    switch (urlState.officeType) {
+      case OfficeType.GIVE:
+        return filtered.filter((office) => office.give === '1');
+      case OfficeType.GET:
+        return filtered.filter((office) => office.get === '1');
+      case OfficeType.OFFICE:
+        return filtered.filter((office) => office.office_id === '1');
+      case OfficeType.ANY:
+      default:
+        return filtered;
     }
-
-    this.updateUrl(queryParams);
   }
 
   private updateUrl(params: Partial<QueryParams>): void {
@@ -179,67 +203,20 @@ export class ContactsComponent implements OnInit, OnDestroy {
   }
 
   setFilter(filter: Filter): void {
-    this.updateUrlWithFilter(filter);
-    // this.onCloseDetails();
-  }
-
-  private initCityFromUrl(id: string): void {
-    this.cities$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((cities) => {
-      const city = cities.find((city) => city.office_id === id);
-
-      if (city) {
-        this.initialCity$.next(city);
-      }
-    });
-  }
-
-  private initOfficeFromUrl(id: string): void {
-    this.offices$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((offices) => {
-      const office = offices.find((office) => office.id === id);
-
-      if (office) {
-        this.activeOffice$.next(office);
-      }
-    });
-  }
-
-  getMapPoints(offices: Office[] | null): MapPoint[] {
-    if (offices === this._lastOfficesRef) {
-      return this._cachedMapPoints;
-    }
-
-    this._lastOfficesRef = offices;
-    this._cachedMapPoints =
-      offices?.map((office) => ({
-        id: office.id,
-        lat: office.geo_x,
-        lng: office.geo_y,
-      })) || [];
-
-    return this._cachedMapPoints;
-  }
-
-  getMapPoint(office: Office | null): MapPoint | null {
-    if (!office) return null;
-
-    return {
-      id: office.id,
-      lat: office.geo_x,
-      lng: office.geo_y,
+    const queryParams: Partial<QueryParams> = {
+      [QUERY_PARAMS.CITY_ID]: filter.city ? filter.city.office_id : null,
+      [QUERY_PARAMS.OFFICE_TYPE]:
+        filter.officeType && filter.officeType !== OfficeType.ANY ? filter.officeType : null,
     };
+
+    this.updateUrl(queryParams);
   }
 
-  onOfficeSelect(officeId: string) {
-    this.updateUrl({ officeId });
+  onOfficeSelect(officeId: string): void {
+    this.updateUrl({ [QUERY_PARAMS.OFFICE_ID]: officeId });
   }
 
   onCloseDetails(): void {
-    this.updateUrl({ officeId: null });
-    this.activeOffice$.next(null);
-  }
-
-  ngOnDestroy() {
-    this._cachedMapPoints = [];
-    this._lastOfficesRef = null;
+    this.updateUrl({ [QUERY_PARAMS.OFFICE_ID]: null });
   }
 }

@@ -65,29 +65,20 @@
       </div>
       <div>
         <div class="mb-6">
-          <!--          <app-video-->
-          <!--            *ngIf="office.video_url; else img"-->
-          <!--            [src]="[-->
-          <!--                          {type: 'video/youtube', src: office.video_url}-->
-          <!--                        ]"-->
-          <!--          >-->
-          <!--          </app-video>-->
-          <!--          <ng-template #img>-->
-          <!--            <div-->
-          <!--              class="relative h-60 w-full rounded-sm object-cover lg:h-48"-->
-          <!--            >-->
-          <!--              <img-->
-          <!--                [ngSrc]="-->
-          <!--                              'contacts-office-' + office.id + '.jpg'-->
-          <!--                            "-->
-          <!--                [alt]="office.name"-->
-          <!--                ngSrcset="360w, 420w, 640w, 720w, 840w, 1080w, 1280w, 1920w"-->
-          <!--                sizes="(min-width: 640px) 360px, 100vw"-->
-          <!--                fill-->
-          <!--                class="rounded-sm bg-gray-50 object-cover text-gray-50"-->
-          <!--              />-->
-          <!--            </div>-->
-          <!--          </ng-template>-->
+          @if (office.video_url; as url) {
+            <app-video [src]="url" />
+          } @else {
+            <div class="relative h-60 w-full rounded-sm object-cover lg:h-48">
+              <img
+                [ngSrc]="'contacts-office-' + office.id + '.jpg'"
+                [alt]="office.name"
+                ngSrcset="360w, 420w, 640w, 720w, 840w, 1080w, 1280w, 1920w"
+                sizes="(min-width: 640px) 360px, 100vw"
+                fill
+                class="rounded-sm bg-gray-50 object-cover text-gray-50"
+              />
+            </div>
+          }
         </div>
         <p class="text-xs">
           За содержимое грузов и документов (далее — отправление) несет ответственность лицо,

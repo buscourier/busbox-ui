@@ -37,8 +37,8 @@
       [class.block!]="!points.length"
     ></div>
     <app-map
-      [points]="getMapPoints(points)"
-      [activePoint]="getMapPoint(activeOffice)"
+      [points]="(mapPoints$ | async) || []"
+      [activePoint]="selectedMapPoint$ | async"
       [autoFitBounds]="true"
       [animationDuration]="800"
     />
