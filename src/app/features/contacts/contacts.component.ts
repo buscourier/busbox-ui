@@ -16,9 +16,13 @@ import type { MapPoint, Office, PickupCity } from '@shared/types';
 
 import { OfficeType } from '@contacts/types';
 
+import {
+  ContactInfoComponent,
+  MobileTabsComponent,
+  OfficeDetailsComponent,
+  OfficeListComponent,
+} from './components';
 import { FilterComponent, type Filter } from './components/filter';
-import { OfficeDetailsComponent } from './components/office-details';
-import { OfficeListComponent } from './components/office-list';
 
 export interface QueryParams {
   cityId: string | null;
@@ -64,17 +68,28 @@ interface PageState {
     FilterComponent,
     OfficeListComponent,
     OfficeDetailsComponent,
+    MobileTabsComponent,
+    ContactInfoComponent,
   ],
   templateUrl: './contacts.component.html',
   styleUrl: './contacts.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContactsComponent implements OnInit {
-  private readonly breakpointService = inject(BreakpointService);
+  protected readonly breakpoint = inject(BreakpointService);
+
   private readonly locationsFacade = inject(LocationsFacade);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
+
+  readonly mobileTabIndex$ = this.route.queryParams.pipe(
+    map((params) => {
+      const tab = params['tab'];
+      return tab === 'list' ? 1 : 0;
+    }),
+    startWith(0),
+  );
 
   private readonly pageState$: Observable<PageState> = combineLatest({
     cities: this.locationsFacade.getPickupCities(),
@@ -137,11 +152,6 @@ export class ContactsComponent implements OnInit {
   readonly mapPoints$ = this.pageState$.pipe(map((state) => state.mapPoints));
   readonly selectedMapPoint$ = this.pageState$.pipe(map((state) => state.selectedMapPoint));
 
-  readonly mobileTabs = [
-    { label: 'На карте', value: 'map' },
-    { label: 'Списком', value: 'list' },
-  ];
-
   ngOnInit(): void {
     this.setupOfficeDetailsClose();
   }
@@ -193,6 +203,14 @@ export class ContactsComponent implements OnInit {
       queryParams: params,
       queryParamsHandling: 'merge',
       replaceUrl: false,
+    });
+  }
+
+  onMobileTabChange(tab: string): void {
+    this.router.navigate([], {
+      queryParams: { tab },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
     });
   }
 
