@@ -1,0 +1,11 @@
+<div class="flex">
+  @for (tab of tabs; track tab.index) {
+    <button
+      class="flex-grow border-b-2 border-gray-300 text-gray-700 p-5 text-center text-sm hover:opacity-80"
+      [class.border-yellow-500.text-black]="activeIndex === tab.index"
+      (click)="setActiveTab(tab.index)"
+    >
+      {{ tab.label }}
+    </button>
+  }
+</div>
