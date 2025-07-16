@@ -46,6 +46,7 @@ import {
   PROGRESS_INDICATOR,
   TELEGRAM_ACCOUNT,
   VALIDATION_LIMITS,
+  WHATSAPP,
 } from '@core/tokens';
 import { CustomDateTransformer, CustomDateRangeTransformer } from '@core/transformers';
 
@@ -139,11 +140,15 @@ export const appConfig: ApplicationConfig = {
     },
     {
       provide: TELEGRAM_ACCOUNT,
-      useValue: 'https://t.me/busbox',
+      useValue: 'busbox',
     },
     {
       provide: EMAIL,
       useValue: 'inbox@busbox.guru',
+    },
+    {
+      provide: WHATSAPP,
+      useValue: '+7 (904) 623 60 90',
     },
     {
       provide: DOM_PROCESSOR,
@@ -168,12 +173,13 @@ export const appConfig: ApplicationConfig = {
 
     {
       provide: CONTACT_INFO,
-      useFactory: (phone: string, telegram: string, email: string) => ({
+      useFactory: (phone: string, telegram: string, email: string, whatsapp: string) => ({
         phone,
         telegram,
         email,
+        whatsapp,
       }),
-      deps: [PHONE_NUMBER, TELEGRAM_ACCOUNT, EMAIL],
+      deps: [PHONE_NUMBER, TELEGRAM_ACCOUNT, EMAIL, WHATSAPP],
     },
     tuiRadioOptionsProvider({
       size: 'm',
