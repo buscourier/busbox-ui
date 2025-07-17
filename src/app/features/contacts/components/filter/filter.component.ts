@@ -19,6 +19,8 @@ import {
   TuiStringifyPipe,
 } from '@taiga-ui/kit';
 
+import { cn } from '@core/utils';
+
 import type { PickupCity } from '@shared/types';
 
 import { OfficeType } from '../../types';
@@ -45,11 +47,15 @@ interface FilterAction {
   templateUrl: './filter.component.html',
   styleUrl: './filter.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: `block`,
+  },
 })
 export class FilterComponent implements OnInit {
+  @Input({ required: true }) cities!: PickupCity[];
   @Input() initialCity: PickupCity | null = null;
   @Input() initialOfficeType: OfficeType | null = null;
-  @Input({ required: true }) cities!: PickupCity[];
+
   @Output() filterChange = new EventEmitter<Filter>();
 
   form!: FilterForm;
@@ -62,9 +68,6 @@ export class FilterComponent implements OnInit {
     return this.form.controls.officeType;
   }
 
-  // selectedCity = new FormControl<PickupCity | null>(null);
-  // currentFilter = new FormControl<FilterAction['id']>(ServiceType.ANY);
-
   private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder);
 
@@ -74,6 +77,20 @@ export class FilterComponent implements OnInit {
     { id: OfficeType.GET, name: 'Выдача груза', icon: 'get' },
     { id: OfficeType.OFFICE, name: 'Офис', icon: 'office' },
   ];
+
+  getButtonClasses(isActive: boolean): string {
+    return cn(
+      'min-w-14 px-3.5 pt-3 pb-3',
+      'flex flex-grow flex-col items-center',
+      'rounded-sm bg-white transition-colors shadow-sm',
+      'border border-gray-200 hover:border-yellow-500',
+      'cursor-pointer',
+
+      {
+        'bg-yellow-500 border-yellow-500': isActive,
+      },
+    );
+  }
 
   ngOnInit(): void {
     this.initializeForm();

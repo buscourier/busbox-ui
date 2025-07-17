@@ -1,26 +1,21 @@
-<!-- Filter Buttons -->
-<div class="mb-5 flex gap-[3px] md:col-start-1 md:col-end-2 md:row-start-1 md:row-end-2 md:mb-2.5">
+<div class="mb-5 flex gap-1 md:col-start-1 md:col-end-2 md:row-start-1 md:row-end-2 md:mb-2.5">
   @for (action of filterActions; track action.id) {
     <button
       type="button"
-      class="min-w-14 px-3.5 pt-2.5 pb-3 flex flex-grow flex-col items-center rounded-sm bg-white transition-colors border border-gray-400 hover:border-yellow-500 cursor-pointer"
-      [class.bg-yellow-500]="officeType.value === action.id"
+      [class]="getButtonClasses(action.id === officeType.value)"
       (click)="setFilter(action.id)"
     >
-      <tui-icon icon="location" [style.height.rem]="1" class="mb-0.5" />
-      <span class="text-2xs font-normal text-black sm:text-xs">{{ action.name }}</span>
+      <tui-icon [icon]="action.icon" [style.height.rem]="1.15" class="mb-0.5" />
+      <span class="font-normal text-black text-xs">
+        {{ action.name }}
+      </span>
     </button>
   }
 </div>
 
-<!-- City selector -->
-<tui-textfield
-  class="col-start-1 row-start-2 row-end-3"
-  tuiChevron
-  [stringify]="'name' | tuiStringify"
-  [tuiTextfieldCleaner]="true"
->
-  <select tuiTextfield [placeholder]="'Все города'" [formControl]="city"></select>
+<tui-textfield tuiChevron [stringify]="'name' | tuiStringify" [tuiTextfieldCleaner]="true">
+  <select tuiTextfield placeholder="Все города" [formControl]="city"></select>
+
   <tui-data-list-wrapper
     *tuiTextfieldDropdown
     [items]="cities"
