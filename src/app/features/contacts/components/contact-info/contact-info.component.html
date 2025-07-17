@@ -1,25 +1,25 @@
-<div
-  class="mt-9 mb-14 flex max-w-[430px] flex-wrap gap-x-4 gap-y-2 self-start rounded-sm bg-yellow-500 pt-4 pr-7 pb-6 pl-5 shadow-xl lg:col-span-4 lg:col-start-4 lg:row-start-1 lg:row-end-4 lg:mt-0 lg:mb-0"
+<p class="basis-full font-medium">Единая справочная</p>
+
+<a [href]="contact.phone | contactLink: 'tel'" class="flex gap-2.5 items-center">
+  <tui-icon icon="headphone" [style.font-size.rem]="1.2" />
+  {{ contact.phone }}
+</a>
+
+<a [href]="contact.email | contactLink: 'telegram'" class="flex gap-2.5 items-center">
+  <tui-icon icon="telegram" [style.font-size.rem]="1.5" />
+  {{ contact.telegram }}
+</a>
+
+<a [href]="contact.email | contactLink: 'email'" class="flex gap-2.5 items-center">
+  <tui-icon icon="email" [style.font-size.rem]="1.2" />
+  {{ contact.email }}
+</a>
+
+<a
+  [href]="contact.whatsapp | contactLink: 'whatsapp'"
+  class="flex gap-2.5 items-center"
+  target="_blank"
 >
-  <p class="mb-1 basis-full font-semibold">Единая справочная:</p>
-  <a tuiLink iconStart="headphone" [href]="contactInfo.phone | contactLink: 'tel'">{{
-    contactInfo.phone
-  }}</a>
-  <a
-    tuiLink
-    iconStart="telegram"
-    target="_blank"
-    [href]="contactInfo.email | contactLink: 'telegram'"
-    >{{ contactInfo.telegram }}</a
-  >
-  <a tuiLink iconStart="email" [href]="contactInfo.email | contactLink: 'email'">{{
-    contactInfo.email
-  }}</a>
-  <a
-    tuiLink
-    iconStart="whatsapp"
-    target="_blank"
-    [href]="contactInfo.whatsapp | contactLink: 'whatsapp'"
-    >{{ contactInfo.whatsapp }}</a
-  >
-</div>
+  <tui-icon icon="whatsapp" [style.font-size.rem]="1.2" />
+  {{ contact.whatsapp }}
+</a>
