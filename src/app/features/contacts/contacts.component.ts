@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import type { OnInit } from '@angular/core';
+import { HostBinding, type OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -9,6 +9,8 @@ import { combineLatest } from 'rxjs';
 import { map, shareReplay, distinctUntilChanged } from 'rxjs/operators';
 
 import { BreakpointService } from '@core/services/breakpoint.service';
+import { CONTACT_INFO } from '@core/tokens';
+import { cn } from '@core/utils';
 
 import { MapComponent } from '@shared/components/map';
 import { LocationsFacade } from '@shared/store';
@@ -36,21 +38,16 @@ export const QUERY_PARAMS = {
   OFFICE_ID: 'officeId',
 } as const;
 
-// Внутреннее состояние URL
 interface UrlState {
   cityId: string | null;
   officeType: OfficeType;
   officeId: string | null;
 }
 
-// Состояние страницы
 interface PageState {
-  // Исходные данные
   cities: PickupCity[];
   offices: Office[];
-  // URL состояние
   urlState: UrlState;
-  // Вычисляемые значения
   selectedCity: PickupCity | null;
   selectedOffice: Office | null;
   filteredOffices: Office[];
@@ -76,7 +73,15 @@ interface PageState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContactsComponent implements OnInit {
+  @HostBinding('class') get hostClasses(): string {
+    return cn(
+      `w-full md:h-[675px] md:pt-8`,
+      `md:grid md:grid-cols-[400px_1fr] md:grid-rows-[auto_500px] md:gap-2.5 md:content-start`,
+    );
+  }
+
   protected readonly breakpoint = inject(BreakpointService);
+  protected readonly contact = inject(CONTACT_INFO);
 
   private readonly locationsFacade = inject(LocationsFacade);
   private readonly router = inject(Router);

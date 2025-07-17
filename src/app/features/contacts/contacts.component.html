@@ -3,61 +3,53 @@
 @let activeOffice = activeOffice$ | async;
 @let activeIndex = mobileTabIndex$ | async;
 
-<div
-  class="w-full md:h-[675px] md:grid md:grid-cols-[400px_1fr] md:grid-rows-[auto_450px] md:gap-2.5 md:content-start"
->
-  @if (breakpoint.isMobile()) {
-    <app-mobile-tabs
-      class="block mb-5"
-      [activeIndex]="activeIndex || 0"
-      (tabChange)="onMobileTabChange($event)"
-    />
-  }
-
-  <app-filter
-    class="block mb-5 md:mb-0 col-start-1 row-start-1 row-end-2"
-    [initialCity]="initialCity$ | async"
-    [initialOfficeType]="initialOfficeType$ | async"
-    [cities]="cities || []"
-    (filterChange)="setFilter($event)"
+@if (breakpoint.isMobile()) {
+  <app-mobile-tabs
+    class="mb-5"
+    [activeIndex]="activeIndex || 0"
+    (tabChange)="onMobileTabChange($event)"
   />
+}
 
-  @if ((breakpoint.isMobile() && activeIndex === 1) || breakpoint.isMd()) {
-    <app-office-list
-      class="col-start-1 row-start-2"
-      [activeOffice]="activeOffice"
-      [offices]="points || []"
-      (select)="onOfficeSelect($event)"
+<app-filter
+  class="mb-5 md:mb-0 col-start-1 row-start-1 row-end-2"
+  [initialCity]="initialCity$ | async"
+  [initialOfficeType]="initialOfficeType$ | async"
+  [cities]="cities || []"
+  (filterChange)="setFilter($event)"
+/>
+
+@if ((breakpoint.isMobile() && activeIndex === 1) || breakpoint.isMd()) {
+  <app-office-list
+    class="col-start-1 row-start-2"
+    [activeOffice]="activeOffice"
+    [offices]="points || []"
+    (select)="onOfficeSelect($event)"
+  />
+}
+
+@if (activeOffice; as office) {
+  <app-office-details
+    class="lg:col-start-2 lg:row-start-2"
+    [email]="contact.email"
+    [office]="office"
+    (close)="onCloseDetails()"
+  />
+}
+
+@if ((breakpoint.isMobile() && activeIndex === 0) || breakpoint.isMd()) {
+  <div class="relative h-[500px] md:absolute md:inset-0 md:-z-10 md:h-full">
+    <app-map
+      [points]="(mapPoints$ | async) || []"
+      [activePoint]="selectedMapPoint$ | async"
+      [autoFitBounds]="true"
+      [animationDuration]="800"
+      [disableScrollZoom]="true"
+      (pointSelect)="onOfficeSelect($event.id)"
     />
-  }
+  </div>
+}
 
-  @if (activeOffice; as office) {
-    <app-office-details
-      [office]="office"
-      (close)="onCloseDetails()"
-      class="col-start-2 row-start-2"
-    />
-  }
-
-  @if ((breakpoint.isMobile() && activeIndex === 0) || breakpoint.isMd()) {
-    <div class="relative h-[500px] md:absolute md:inset-0 md:-z-10 md:h-full">
-      @if (points) {
-        <div
-          class="hidden w-full h-full bg-gray-50 absolute z-10 inset-0"
-          [class.block!]="!points.length"
-        ></div>
-        <app-map
-          [points]="(mapPoints$ | async) || []"
-          [activePoint]="selectedMapPoint$ | async"
-          [autoFitBounds]="true"
-          [animationDuration]="800"
-          [disableScrollZoom]="true"
-        />
-      }
-    </div>
-  }
-
-  @if (breakpoint.isMobile() || breakpoint.isDesktop()) {
-    <app-contact-info class="md:col-start-2 md:row-start-1 md:justify-self-end" />
-  }
-</div>
+@if (breakpoint.isMobile() || breakpoint.isDesktop()) {
+  <app-contact-info class="md:col-start-2 md:row-start-1 md:justify-self-end" [contact]="contact" />
+}
