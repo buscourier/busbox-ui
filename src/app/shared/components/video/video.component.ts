@@ -19,6 +19,9 @@ import Plyr from 'plyr';
   styleUrl: './video.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TuiLoader],
+  host: {
+    class: `block`,
+  },
 })
 export class VideoComponent implements AfterViewInit, OnDestroy {
   @ViewChild('videoPlayer') videoElement!: ElementRef<HTMLDivElement>;
