@@ -66,6 +66,47 @@ module.exports = tseslint.config(
           fixStyle: 'separate-type-imports',
         },
       ],
+      // '@typescript-eslint/member-ordering': [
+      //   'error',
+      //   {
+      //     default: {
+      //       memberTypes: [
+      //         // Static members
+      //         'public-static-field',
+      //         'protected-static-field',
+      //         'private-static-field',
+      //         'public-static-method',
+      //         'protected-static-method',
+      //         'private-static-method',
+      //
+      //         // Angular decorators
+      //         'decorated-field',
+      //         'decorated-method',
+      //
+      //         // Fields by visibility
+      //         'public-abstract-field',
+      //         'public-field',
+      //         'public-readonly-field',
+      //         'protected-abstract-field',
+      //         'protected-field',
+      //         'protected-readonly-field',
+      //         'private-field',
+      //         'private-readonly-field',
+      //
+      //         // Constructor
+      //         'constructor',
+      //
+      //         // Methods (lifecycle hooks будут тут, но в алфавитном порядке)
+      //         'public-abstract-method',
+      //         'public-method',
+      //         'protected-abstract-method',
+      //         'protected-method',
+      //         'private-method',
+      //       ],
+      //       order: 'alphabetically',
+      //     },
+      //   },
+      // ],
       'import/order': [
         'error',
         {
