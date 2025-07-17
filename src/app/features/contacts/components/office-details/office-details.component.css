@@ -1,0 +1,37 @@
+@media (max-width: 639px) {
+  :host {
+    animation: slideInRight 0.3s ease-out;
+  }
+
+  :host.closing {
+    animation: slideOutRight 0.3s ease-in;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  :host {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .card {
+    animation: slideInRight 0.3s ease-out;
+  }
+
+  :host.closing {
+    animation: fadeOut 0.3s ease-in;
+  }
+
+  :host.closing .card {
+    animation: fadeOutScale 0.5s ease-out;
+  }
+}
+
+@media (min-width: 1024px) {
+  :host {
+    animation: slideInUp 0.25s ease-out;
+  }
+
+  :host.closing {
+    animation: none;
+  }
+}
