@@ -7,11 +7,6 @@
   --font-body: 'Roboto', system-ui, sans-serif;
   --font-display: 'Kelson Sans', Arial, sans-serif;
 
-  /* Colors */
-  --color-yellow-500: rgb(255, 220, 0);
-  --color-yellow-400: rgb(255, 230, 51);
-  --color-yellow-600: rgb(230, 198, 0);
-
   /* Shadows */
   --shadow-sb: 0px 24px 54px rgba(0, 0, 0, 0.04);
 
@@ -21,6 +16,42 @@
   /* Text sizes */
   --text-2xs: 0.625rem;
   --text-2xs--line-height: calc(1 / 0.625);
+
+  /* Gray Colors  */
+  --color-gray-50: #fafafa;
+  --color-gray-100: #f2f2f2;
+  --color-gray-200: #eaeaea;
+  --color-gray-300: #d9d9d9;
+  --color-gray-400: #b3b3b3;
+  --color-gray-500: #999999;
+  --color-gray-600: #808080;
+  --color-gray-700: #666666;
+  --color-gray-800: #333333;
+  --color-gray-900: #2e2e2e;
+
+  /* Blue Colors  */
+  --color-blue-50: #f0f2f4;
+  --color-blue-100: #dfe5ec;
+  --color-blue-200: #c1d1e1;
+  --color-blue-300: #97b7d8;
+  --color-blue-400: #699ed3;
+  --color-blue-500: #50a7ff;
+  --color-blue-600: #2477cc;
+  --color-blue-700: #185ea5;
+  --color-blue-800: #0e457c;
+  --color-blue-900: #072e55;
+
+  /* Yellow Colors  */
+  --color-yellow-50: #f9f8f6;
+  --color-yellow-100: #f6f4ea;
+  --color-yellow-200: #f2ecca;
+  --color-yellow-300: #f1e59d;
+  --color-yellow-400: #f3e068;
+  --color-yellow-500: #ffdc00;
+  --color-yellow-600: #e0c206;
+  --color-yellow-700: #aa9409;
+  --color-yellow-800: #76670a;
+  --color-yellow-900: #453c08;
 }
 
 :root {

@@ -1,0 +1,3 @@
+.scroll-yellow .t-bar_vertical .t-thumb {
+  @apply bg-yellow-500;
+}

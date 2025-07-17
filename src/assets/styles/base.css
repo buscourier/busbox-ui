@@ -8,7 +8,7 @@
   }
 
   body {
-    font-family: var(--font-roboto);
+    @apply text-base font-roboto;
   }
 
   h1,
@@ -17,22 +17,6 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-kelson);
+    @apply font-kelson;
   }
-}
-
-ymaps[class*='copyright'] {
-  display: none;
-}
-
-ymaps[class*='map-copyrights-promo'] {
-  display: none;
-}
-
-[class*='ymaps-2'][class*='-ground-pane'] {
-  filter: grayscale(1) brightness(0.9);
-}
-
-ymaps[class*='controls-pane'] {
-  display: none;
 }
