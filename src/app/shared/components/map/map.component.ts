@@ -1,4 +1,4 @@
-import type { OnChanges, SimpleChanges } from '@angular/core';
+import { HostBinding, type OnChanges, type SimpleChanges } from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -12,6 +12,8 @@ import {
 } from '@angular/core';
 import type { YaReadyEvent } from 'angular8-yandex-maps';
 import { AngularYandexMapsModule } from 'angular8-yandex-maps';
+
+import { cn } from '@core/utils';
 
 import type { MapPoint } from '@shared/types';
 
@@ -39,6 +41,10 @@ export class MapComponent implements OnChanges {
   @Output() pointSelect = new EventEmitter<MapPoint>();
   @Output() mapReady = new EventEmitter<ymaps.Map>();
   @Output() boundsChange = new EventEmitter<number[][]>();
+
+  @HostBinding('class') get hostClasses(): string {
+    return cn(`relative block w-full h-full rounded-lg overflow-hidden bg-gray-50`);
+  }
 
   isLoading = signal(true);
   currentZoom = signal(this.zoom);
