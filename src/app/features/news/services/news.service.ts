@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 
 import { ApiService } from '@core/services';
 
-import type { NewsDetails, NewsItem } from '@shared/types';
+import type { NewsDetails, NewsItem } from '../types';
 
 @Injectable({
   providedIn: 'root',

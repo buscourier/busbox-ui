@@ -34,4 +34,8 @@ export const routes: Routes = [
     path: 'contacts',
     loadChildren: () => import('./features/contacts').then((m) => m.contactsRoutes),
   },
+  {
+    path: 'news',
+    loadChildren: () => import('./features/news').then((m) => m.newsRoutes),
+  },
 ];

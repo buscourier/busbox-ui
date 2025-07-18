@@ -85,6 +85,12 @@
       "@contacts/*": [
         "./src/app/features/contacts/*"
       ],
+      "@news": [
+        "./src/app/features/news/index.ts"
+      ],
+      "@news/*": [
+        "./src/app/features/news/*"
+      ],
       "@env/*": [
         "src/environments/*"
       ]

@@ -1,0 +1,7 @@
+@let vm = vm$ | async;
+
+@if (vm) {
+  <div>
+    {{ vm.list | json }}
+  </div>
+}
