@@ -78,6 +78,18 @@
   --tui-background-accent-1-pressed: var(--color-yellow-600);
   --tui-text-primary-on-accent-1: theme(colors.black);
 
+  .theme-yellow {
+    --tui-background-accent-1: var(--color-black);
+    --tui-background-accent-1-hover: var(--color-gray-900);
+    --tui-background-accent-1-pressed: var(--color-gray-800);
+    --tui-text-primary-on-accent-1: var(--color-white);
+  }
+
+  --tui-background-accent-2: var(--color-black);
+  --tui-background-accent-2-hover: var(--color-gray-900);
+  --tui-background-accent-2-pressed: var(--color-gray-800);
+  --tui-text-primary-on-accent-2: var(--color-white);
+
   /* Sizes */
   --tui-height-m: 50px;
   --tui-radius-m: var(--radius-md);
