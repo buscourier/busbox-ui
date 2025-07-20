@@ -1,0 +1,23 @@
+@let vm = vm$ | async;
+
+@if (vm && !vm.isLoading) {
+  <div class="h-48 md:h-80 rounded-md bg-gray-100 overflow-hidden">
+    <img
+      class="block w-full h-full object-cover rounded-md transition-opacity duration-500 ease-in-out"
+      [src]="vm.data?.image"
+      [alt]="vm.data?.title"
+      [class.opacity-0]="!imageLoaded"
+      [class.opacity-100]="imageLoaded"
+      (load)="onImageLoad()"
+      (error)="onImageError()"
+    />
+  </div>
+  <h1 class="mt-7 mb-5 font-heading text-lg font-bold md:text-xl">
+    {{ vm.data?.title }}
+  </h1>
+  <div class="mb-2 text-xs md:mb-4 md:text-base" [innerHTML]="vm.data?.text"></div>
+} @else {
+  <div class="h-48 md:h-80 rounded-md bg-gray-100"></div>
+  <div class="mt-7 mb-5 h-5" [tuiSkeleton]="true"></div>
+  <div *tuiRepeatTimes="let i of 10" class="mb-2 h-3" [tuiSkeleton]="true"></div>
+}

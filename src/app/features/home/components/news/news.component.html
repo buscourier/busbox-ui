@@ -1,7 +1,7 @@
 @let lastNews = lastNews$ | async;
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-  @for (article of lastNews; track article.id) {
+  @for (article of lastNews; track article.news_id) {
     <app-news-card [article]="article" />
   } @empty {
     <div class="w-[395px] h-[393px] rounded-xl bg-black/5"></div>

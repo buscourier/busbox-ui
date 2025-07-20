@@ -23,7 +23,8 @@
   </p>
 
   <a
-    [routerLink]="['/news', article.id]"
+    [routerLink]="['/news']"
+    [queryParams]="{ id: article.news_id }"
     class="inline-flex items-center text-black hover:text-yellow-500 font-medium text-sm transition-colors"
     [tuiSkeleton]="!imageLoaded"
   >
