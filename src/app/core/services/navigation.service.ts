@@ -119,6 +119,13 @@ export class NavigationService {
       onlyMobile: true,
     },
     {
+      link: 'news',
+      name: 'Новости Баскурьер',
+      description: 'Следите за обновлениями компании, новыми услугами и специальными предложениями',
+      keywords: 'Новости, акции, специальные предложения',
+      onlyMobile: true,
+    },
+    {
       link: 'career',
       name: 'Вакансии',
       description: 'Открытые вакансии и карьерные возможности в Баскурьер',

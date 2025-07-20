@@ -6,6 +6,6 @@ export const newsRoutes: Routes = [
   {
     path: '',
     component: NewsComponent,
-    // data: { pageKey: 'news', hideBreadcrumbs: true },
+    data: { pageKey: 'news', hideBreadcrumbs: true },
   },
 ];
