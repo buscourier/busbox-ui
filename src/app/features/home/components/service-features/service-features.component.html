@@ -1,0 +1,17 @@
+@for (feature of getFeatures(); track feature.icon) {
+  <div class="flex max-w-sm md:max-w-full">
+    <tui-icon [icon]="feature.icon" [style.font-size.rem]="3" class="mr-8" />
+    <div>
+      <b
+        [class]="
+          cn('mb-2.5 block text-[22px]/8 cursor-not-allowed', {
+            'cursor-pointer hover:underline underline-offset-8': feature.link,
+          })
+        "
+        [routerLink]="['/' + feature.link?.link || '']"
+        >{{ feature.name }}</b
+      >
+      <p class="text-base text-black/80">{{ feature.description }}</p>
+    </div>
+  </div>
+}
