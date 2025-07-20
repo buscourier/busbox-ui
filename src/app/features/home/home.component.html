@@ -1,0 +1,95 @@
+<section class="relative mt-16 flex flex-col items-start md:flex-row md:gap-x-8">
+  <div
+    class="px-4 sm:mx-auto sm:max-w-md sm:px-0 sm:text-center md:mx-0 md:max-w-full md:flex-grow md:text-left"
+  >
+    <h1 class="mb-6 font-heading text-2xl font-bold lg:text-3xl xl:text-[57px]">
+      Срочная доставка <br />
+      по Приморскому краю <br class="hidden sm:block" />
+      и в Хабаровск
+    </h1>
+    <p class="mb-6 text-sm md:mb-9 lg:text-lg xl:mb-20 xl:text-[26px]">
+      <b class="inline-block rounded-sm bg-yellow-500 px-2 py-1 font-bold xl:text-[27px]">
+        от 2 до 24 часов</b
+      >
+      рейсовыми автобусами
+    </p>
+    <img
+      ngSrc="index-bus.jpg"
+      alt="Срочная доставка"
+      width="1350"
+      height="667"
+      ngSrcset="450w, 900w, 1350w"
+      sizes="450px"
+      class="hidden w-full max-w-[450px] bg-gray-50 text-gray-50 md:mb-8 md:block lg:hidden"
+    />
+
+    <app-cargo-types class="mb-18 md:mb-0 xl:mb-28" />
+  </div>
+  <app-route-selector />
+</section>
+
+<app-page-section
+  [class]="
+    cn(
+      'relative',
+      'xl:mb-40 xl:before:absolute xl:before:top-[-290px] xl:before:left-[-215px] xl:before:z-[-1]',
+      'xl:before:h-[3472px] xl:before:w-[1560px] xl:before:bg-no-repeat',
+      'xl:before:bg-[url(./assets/images/home-curve.svg)]'
+    )
+  "
+>
+  <ng-container class="title">
+    Охватываем всю территорию<br />
+    Приморского края
+  </ng-container>
+  <ng-container class="subtitle">
+    И даже самые труднодоступные населенные пункты региона
+  </ng-container>
+  <app-stats-summary />
+</app-page-section>
+
+<app-page-section>
+  <ng-container class="title">
+    Предлагаем удобный сервис<br class="hidden sm:block" />
+    для вашего комфорта
+  </ng-container>
+  <app-service-features class="mt-10" />
+</app-page-section>
+
+<app-page-section>
+  <ng-container class="title"> Решаем нестандартные<br />логистические задачи </ng-container>
+  <ng-container class="subtitle">
+    Нужно организовать доставку нестандартного груза в очень сжатые сроки?<br
+      class="hidden lg:block"
+    />
+    Трудно найти исполнителя? Мы предложим индивидуальное решение вашей задачи!
+  </ng-container>
+
+  <div
+    class="flex flex-col space-y-14 md:flex-row md:space-y-0 md:space-x-4 lg:space-x-8 xl:space-x-16"
+  >
+    <app-contact-form formType="custom-tasks" />
+    <app-case-examples />
+  </div>
+</app-page-section>
+
+<app-page-section>
+  <ng-container class="title"> Помогаем бизнесу </ng-container>
+  <ng-container class="subtitle">
+    С нами работает более 500 компаний, которые регулярно отправляют грузы<br />
+    по Приморскому краю и в Хабаровск.
+  </ng-container>
+  <app-clients />
+</app-page-section>
+
+<section class="full-width-section mb-0 sm:px-4 md:mb-0 xl:mb-0 bg-yellow-500 py-16 mt-20">
+  <div class="container mx-auto px-4">
+    <div class="mb-12">
+      <h2 class="mb-4 font-bold text-black md:text-4xl lg:text-[42px]">Последние новости</h2>
+      <p class="text-lg text-black/80 max-w-3xl lg:text-lg">
+        Следите за обновлениями компании, новыми услугами и специальными предложениями
+      </p>
+    </div>
+    <app-news />
+  </div>
+</section>

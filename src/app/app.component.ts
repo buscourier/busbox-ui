@@ -1,7 +1,7 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, DestroyRef, inject, type OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { TuiAlertService, TuiRoot } from '@taiga-ui/core';
 import type { Observable } from 'rxjs';
@@ -49,8 +49,13 @@ export class AppComponent implements OnInit {
   private readonly alerts = inject(TuiAlertService);
   private transloco = inject(TranslocoService);
   private readonly seoService = inject(SeoService);
+  private readonly router = inject(Router);
 
   currentUser$!: Observable<AuthResponse | null>;
+
+  get isHomePage(): boolean {
+    return this.router.url === '/' || this.router.url === '/home';
+  }
 
   constructor() {
     this.configName = environment.dopplerConfig;

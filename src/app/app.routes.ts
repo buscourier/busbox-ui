@@ -4,11 +4,15 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'delivery',
+    redirectTo: 'home',
   },
   {
     path: 'auth',
     loadChildren: () => import('./features/auth').then((m) => m.authRoutes),
+  },
+  {
+    path: 'home',
+    loadChildren: () => import('./features/home').then((m) => m.homeRoutes),
   },
   {
     path: 'delivery',

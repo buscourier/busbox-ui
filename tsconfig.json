@@ -37,6 +37,12 @@
       "@utils/*": [
         "src/app/utils/*"
       ],
+      "@home": [
+        "./src/app/features/home/index.ts"
+      ],
+      "@home/*": [
+        "./src/app/features/home/*"
+      ],
       "@delivery": [
         "./src/app/features/delivery/index.ts"
       ],
