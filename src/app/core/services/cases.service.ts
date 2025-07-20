@@ -1,10 +1,22 @@
 import { Injectable } from '@angular/core';
 
+export interface Case {
+  id: string;
+  title: string;
+  description: string[];
+  achievement: string | null;
+  process: {
+    title: string;
+    steps: string[];
+  };
+  image: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
-export class ComplexTasksService {
-  getTasks() {
+export class CasesService {
+  getCases(): Case[] {
     return [
       {
         id: '1',
@@ -13,7 +25,7 @@ export class ComplexTasksService {
           `Крупная оптовая компания поставщик цветов из Москвы запросила организовать
            поставку своей продукции из аэропорта г. Владивосток в 21 населенный пункт
            Приморского края, в том числе и г. Бикин (хабаровский край).`,
-          `В связи со спецификой товара доставку необходимо было реализовать очень быстро.`,
+          `В связь со спецификой товара доставку необходимо было реализовать очень быстро.`,
         ],
         achievement: `Баскурьер справились с задачей за 24 часа.`,
         process: {
@@ -32,12 +44,12 @@ export class ComplexTasksService {
         id: '2',
         title: 'Подарки для близких, которые сейчас далеко',
         description: [
-          `В Баскурьер поступила заявка на доставку спортивного велосипеда из Владивостока в Находку. `,
+          `В Баскурьер поступила заявка на доставку спортивного велосипеда из Владивостока в Находку.`,
           `Но столь большой груз нужно было не только забрать
            у отправителя, а еще и оформить в подарочную упаковку и перевязать
            подходящим бантом.`,
           `Также стояла задача доставить подарок имениннику в
-      определенное время к месту празднования торжества.`,
+           определенное время к месту празднования торжества.`,
         ],
         achievement: null,
         process: {
@@ -70,4 +82,13 @@ export class ComplexTasksService {
       },
     ];
   }
+
+  // getCaseById(id: string): Case | null {
+  //   return this.getCases().find((case) => case.id === id) || null;
+  // }
+  //
+  // getFeaturedCases(): Case[] {
+  //   // Можно добавить логику для рекомендуемых кейсов
+  //   return this.getCases().slice(0, 2);
+  // }
 }

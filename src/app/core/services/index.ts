@@ -5,4 +5,4 @@ export * from './excel.service';
 export * from './seo.service';
 export * from './navigation.service';
 export * from './preload-icons.service';
-export * from './complex-tasks.service';
+export * from './cases.service';

@@ -1,13 +1,13 @@
 // import { TestBed } from '@angular/core/testing';
 //
-// import { ComplexTasksService } from './complex-tasks.service';
+// import { CasesService } from './cases.service';
 //
-// describe('ComplexTasksService', () => {
-//   let service: ComplexTasksService;
+// describe('CasesService', () => {
+//   let service: CasesService;
 //
 //   beforeEach(() => {
 //     TestBed.configureTestingModule({});
-//     service = TestBed.inject(ComplexTasksService);
+//     service = TestBed.inject(CasesService);
 //   });
 //
 //   it('should be created', () => {
