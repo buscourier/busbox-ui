@@ -86,7 +86,7 @@ export class ContactFormComponent implements OnInit {
 
   @HostBinding('class') get hostClasses(): string {
     return cn(
-      'theme-yellow block w-full max-w-[670px] p-12 pb-14 rounded-md  bg-yellow-500',
+      'theme-yellow block w-full max-w-[670px] p-12 pb-14 rounded-md bg-yellow-500 shadow-xl',
       'md:p-10',
     );
   }
