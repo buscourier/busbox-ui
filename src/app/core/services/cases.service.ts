@@ -83,9 +83,10 @@ export class CasesService {
     ];
   }
 
-  // getCaseById(id: string): Case | null {
-  //   return this.getCases().find((case) => case.id === id) || null;
-  // }
+  getCaseById(id: string): Case | null {
+    return this.getCases().find((item) => item.id === id) || null;
+  }
+
   //
   // getFeaturedCases(): Case[] {
   //   // Можно добавить логику для рекомендуемых кейсов
