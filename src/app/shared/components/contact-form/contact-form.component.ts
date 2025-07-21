@@ -85,14 +85,17 @@ export class ContactFormComponent implements OnInit {
   @Input() formType: 'custom-tasks' | 'resume' | 'support' = 'support';
 
   @HostBinding('class') get hostClasses(): string {
-    return cn(
-      'theme-yellow block w-full max-w-[670px] p-12 pb-14 rounded-md bg-yellow-500 shadow-xl',
-      'md:p-10',
-    );
+    return cn({
+      'theme-yellow block w-full max-w-[670px] p-12 pb-14 rounded-md bg-yellow-500 shadow-xl':
+        this.formType === 'custom-tasks',
+      'md:p-10': this.formType === 'custom-tasks',
+    });
   }
 
   get layoutClasses(): string {
-    return cn('mb-3 grid gap-3 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2');
+    return cn('mb-3 grid gap-4 sm:grid-cols-2 md:grid-cols-3', {
+      'grid gap-3 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2': this.formType === 'custom-tasks',
+    });
   }
 
   isSubmitting$ = new BehaviorSubject<boolean>(false);
@@ -201,4 +204,6 @@ export class ContactFormComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe();
   }
+
+  protected readonly cn = cn;
 }

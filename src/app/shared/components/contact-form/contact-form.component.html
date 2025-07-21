@@ -30,7 +30,14 @@
         {{ 'contacts.placeholders.phone' | transloco }}
       </tui-input-phone>
     </div>
-    <label tuiLabel class="col-span-2">
+    <label
+      tuiLabel
+      [class]="
+        cn({
+          'col-span-2': formType === 'custom-tasks',
+        })
+      "
+    >
       <span class="block text-sm text-gray-800 mb-1">
         {{ 'contacts.labels.email' | transloco }}
       </span>
@@ -46,11 +53,26 @@
         </tui-textfield>
       </div>
     </label>
-    <div tuiLabel class="col-span-2">
-      <span class="text-sm text-gray-800">Количество мест</span>
+    <div
+      tuiLabel
+      [class]="
+        cn('col-span-3', {
+          'col-span-2': formType === 'custom-tasks',
+        })
+      "
+    >
+      <span class="text-sm text-gray-800">{{
+        formType === 'custom-tasks' ? 'Комментарий к заявке' : 'Ваш вопрос'
+      }}</span>
       <tui-textarea [formControl]="message"></tui-textarea>
     </div>
-    <label class="mt-2 flex items-start gap-2 col-span-2">
+    <label
+      [class]="
+        cn('mt-2 flex items-start gap-2 col-span-3', {
+          'col-span-2': formType === 'custom-tasks',
+        })
+      "
+    >
       <input tuiCheckbox type="checkbox" [formControl]="processingAccepted" />
       <span class="text-sm text-gray-800"
         >Нажимая кнопку «Оформить заказ», я даю свое согласие на обработку моих персональных
