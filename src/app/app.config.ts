@@ -1,5 +1,6 @@
+import { provideImageKitLoader } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
-import { type ApplicationConfig, signal } from '@angular/core';
+import { type ApplicationConfig, importProvidersFrom, signal } from '@angular/core';
 import { isDevMode, provideZoneChangeDetection } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
@@ -8,25 +9,59 @@ import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore } from '@ngrx/router-store';
 import { provideState, provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
-import { tuiButtonOptionsProvider, tuiTextfieldOptionsProvider } from '@taiga-ui/core';
+import type { TuiStringHandler } from '@taiga-ui/cdk';
+import {
+  TUI_ICON_RESOLVER,
+  tuiButtonOptionsProvider,
+  tuiTextfieldOptionsProvider,
+} from '@taiga-ui/core';
 import { NG_EVENT_PLUGINS } from '@taiga-ui/event-plugins';
 import {
+  TUI_DATE_RANGE_VALUE_TRANSFORMER,
   TUI_DATE_VALUE_TRANSFORMER,
   tuiCheckboxOptionsProvider,
   tuiInputNumberOptionsProvider,
   tuiRadioOptionsProvider,
 } from '@taiga-ui/kit';
 import { TUI_TEXTFIELD_LABEL_OUTSIDE, TUI_TEXTFIELD_SIZE } from '@taiga-ui/legacy';
+import { AngularYandexMapsModule, type YaConfig } from 'angular8-yandex-maps';
 
 import { DEFAULT_VALIDATION_LIMITS } from '@core/config';
+import { PreloadIconsService } from '@core/services';
+import {
+  DefaultDomProcessor,
+  DefaultProgressIndicator,
+  DualDocumentRenderer,
+  HtmlToImageConverter,
+  JsPdfBuilder,
+} from '@core/services/pdf';
 import {
   CONTACT_INFO,
+  DOCUMENT_RENDERER,
+  DOM_PROCESSOR,
   EMAIL,
+  IMAGE_CONVERTER,
+  PDF_BUILDER,
   PHONE_NUMBER,
+  PROGRESS_INDICATOR,
   TELEGRAM_ACCOUNT,
   VALIDATION_LIMITS,
+  WHATSAPP,
 } from '@core/tokens';
-import { CustomDateTransformer } from '@core/transformers';
+import { CustomDateTransformer, CustomDateRangeTransformer } from '@core/transformers';
+
+import {
+  LocationsEffects,
+  locationsFeature,
+  DocumentsEffects,
+  documentsFeature,
+} from '@shared/store';
+
+import { BalanceEffects, balanceFeature } from '@account/balance';
+import { OrdersEffects, ordersFeature } from '@account/orders';
+import { ProfileEffects, profileFeature } from '@account/profile';
+import { AuthEffects, authFeature } from '@auth';
+import { NewsEffects, newsFeature } from '@news/store';
 
 import { BookingEffects, bookingFeature } from '@delivery/booking';
 import { DeliveryDetailsEffects, deliveryDetailsFeature } from '@delivery/delivery-details';
@@ -37,23 +72,42 @@ import { PickupPointEffects, pickupPointFeature } from '@delivery/pickup-point';
 import { routes } from './app.routes';
 import { TranslocoHttpLoader } from './transloco-loader';
 
+const mapConfig: YaConfig = {
+  apikey: 'be640658-9c20-46d8-ab54-555efd7fc3ee',
+  lang: 'ru_RU',
+};
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideStore(),
+    provideState(locationsFeature),
     provideState(pickupPointFeature),
     provideState(deliveryPointFeature),
     provideState(deliveryDetailsFeature),
     provideState(deliverySummaryFeature),
     provideState(bookingFeature),
+    provideState(authFeature),
+    provideState(profileFeature),
+    provideState(ordersFeature),
+    provideState(balanceFeature),
+    provideState(documentsFeature),
+    provideState(newsFeature),
     provideEffects(
+      LocationsEffects,
       PickupPointEffects,
       DeliveryPointEffects,
       DeliveryDetailsEffects,
       DeliverySummaryEffects,
       BookingEffects,
+      AuthEffects,
+      ProfileEffects,
+      OrdersEffects,
+      BalanceEffects,
+      DocumentsEffects,
+      NewsEffects,
     ),
     provideRouterStore(),
     provideHttpClient(),
@@ -62,6 +116,10 @@ export const appConfig: ApplicationConfig = {
     {
       provide: TUI_DATE_VALUE_TRANSFORMER,
       useClass: CustomDateTransformer,
+    },
+    {
+      provide: TUI_DATE_RANGE_VALUE_TRANSFORMER,
+      useClass: CustomDateRangeTransformer,
     },
     {
       provide: VALIDATION_LIMITS,
@@ -85,21 +143,46 @@ export const appConfig: ApplicationConfig = {
     },
     {
       provide: TELEGRAM_ACCOUNT,
-      useValue: 'https://t.me/busbox',
+      useValue: 'busbox',
     },
     {
       provide: EMAIL,
       useValue: 'inbox@busbox.guru',
     },
+    {
+      provide: WHATSAPP,
+      useValue: '+7 (904) 623 60 90',
+    },
+    {
+      provide: DOM_PROCESSOR,
+      useClass: DefaultDomProcessor,
+    },
+    {
+      provide: IMAGE_CONVERTER,
+      useClass: HtmlToImageConverter,
+    },
+    {
+      provide: PDF_BUILDER,
+      useClass: JsPdfBuilder,
+    },
+    {
+      provide: PROGRESS_INDICATOR,
+      useClass: DefaultProgressIndicator,
+    },
+    {
+      provide: DOCUMENT_RENDERER,
+      useClass: DualDocumentRenderer,
+    },
 
     {
       provide: CONTACT_INFO,
-      useFactory: (phone: string, telegram: string, email: string) => ({
+      useFactory: (phone: string, telegram: string, email: string, whatsapp: string) => ({
         phone,
         telegram,
         email,
+        whatsapp,
       }),
-      deps: [PHONE_NUMBER, TELEGRAM_ACCOUNT, EMAIL],
+      deps: [PHONE_NUMBER, TELEGRAM_ACCOUNT, EMAIL, WHATSAPP],
     },
     tuiRadioOptionsProvider({
       size: 'm',
@@ -119,6 +202,7 @@ export const appConfig: ApplicationConfig = {
       max: 20,
     }),
     provideHttpClient(),
+    importProvidersFrom(AngularYandexMapsModule.forRoot(mapConfig)),
     provideTransloco({
       config: {
         availableLangs: ['ru', 'en'],
@@ -128,5 +212,35 @@ export const appConfig: ApplicationConfig = {
       },
       loader: TranslocoHttpLoader,
     }),
+    // {
+    //   provide: TUI_ICON_RESOLVER,
+    //   useFactory: (): TuiStringHandler<string> => {
+    //     return (name: string) => {
+    //       if (name.startsWith('@tui.')) {
+    //         return `assets/taiga-ui/icons/${name.replace('@tui.', '')}.svg`;
+    //       }
+    //       return `/assets/icons/${name}.svg`;
+    //     };
+    //   },
+    // },
+    {
+      provide: TUI_ICON_RESOLVER,
+      useFactory: (preloadService: PreloadIconsService): TuiStringHandler<string> => {
+        return (name: string) => {
+          if (name.startsWith('@tui.')) {
+            return `assets/taiga-ui/icons/${name.replace('@tui.', '')}.svg`;
+          }
+
+          const cachedIcon = preloadService.getIcon(name);
+          if (cachedIcon) {
+            return `data:image/svg+xml;base64,${btoa(cachedIcon)}`;
+          }
+
+          return `/assets/icons/${name}.svg`;
+        };
+      },
+      deps: [PreloadIconsService],
+    },
+    provideImageKitLoader('https://ik.imagekit.io/buscourier/'),
   ],
 };

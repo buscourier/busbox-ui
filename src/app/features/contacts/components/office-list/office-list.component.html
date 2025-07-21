@@ -1,0 +1,48 @@
+<tui-scrollbar class="scroll-yellow h-full">
+  <div class="pr-5">
+    @for (office of offices; track office.id) {
+      <div
+        class="mb-5 grid grid-cols-[1fr_repeat(3,auto)] grid-rows-[repeat(2,auto)] items-center gap-2.5"
+      >
+        <button
+          type="button"
+          [class]="getCityNameClasses(activeOffice && activeOffice.id === office.id)"
+          (click)="onSelect(office.id)"
+        >
+          {{ office.name }}
+        </button>
+        <p class="col-start-1 col-end-2 row-start-2 row-end-3 text-xs">
+          {{ office.address }}
+        </p>
+        <tui-icon
+          icon="get"
+          tuiHint="Выдача грузов"
+          tuiHintAppearance="onDark"
+          class="col-start-2 col-end-3 row-start-1 row-end-2 opacity-30"
+          [class.opacity-60]="office.get === '1'"
+          [style.font-size.rem]="1.1"
+        />
+
+        <tui-icon
+          icon="give"
+          tuiHint="Прием грузов"
+          tuiHintAppearance="onDark"
+          class="col-start-3 col-end-4 row-start-1 row-end-2 opacity-30"
+          [class.opacity-60]="office.give === '1'"
+          [style.font-size.rem]="1.1"
+        />
+
+        <tui-icon
+          icon="office"
+          tuiHint="Офис"
+          tuiHintAppearance="onDark"
+          class="col-start-4 col-end-5 row-start-1 row-end-2 opacity-30"
+          [class.opacity-60]="office.office_id === '1'"
+          [style.font-size.rem]="1.1"
+        />
+      </div>
+    } @empty {
+      <p class="mt-5 text-center text-sm text-gray-500">Офис не найден...</p>
+    }
+  </div>
+</tui-scrollbar>

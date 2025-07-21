@@ -1,0 +1,69 @@
+<div tuiCarouselButtons class="border border-transparent md:w-[370px] lg:w-[442px]">
+  <h3 class="ml-5 mb-5 text-xl font-medium lg:text-4xl">Примеры</h3>
+  <div class="relative flex items-center sm:mb-7 lg:mb-0">
+    <button
+      type="button"
+      tuiIconButton
+      iconStart="@tui.chevron-left"
+      class="!absolute -left-1 top-20 z-10 bg-yellow-500!"
+      [class.cursor-not-allowed]="index === 0"
+      [disabled]="index === 0"
+      (click)="carousel.prev()"
+    >
+      &nbsp;
+    </button>
+    <tui-carousel
+      #carousel
+      [(index)]="index"
+      (indexChange)="onCarouselIndexChange()"
+      [draggable]="true"
+      [itemsCount]="1"
+      class="w-full"
+    >
+      @for (example of examples; track example.id; let i = $index) {
+        <div *tuiItem>
+          <div class="relative h-[200px] rounded-md bg-gray-50 object-cover text-gray-50">
+            <img
+              [ngSrc]="'complex-task-' + (i + 1) + '.jpg'"
+              [alt]="example.title"
+              ngSrcset="400w, 800w, 1200w, 1600w, 2400w"
+              sizes="(min-width: 1024px) 400px, (min-width: 768px) 328px, 100vw"
+              fill
+              class="rounded-md object-cover"
+            />
+          </div>
+        </div>
+      }
+    </tui-carousel>
+    <button
+      type="button"
+      tuiIconButton
+      iconStart="@tui.chevron-right"
+      class="!absolute -right-1 top-20 bg-yellow-500!"
+      [class.cursor-not-allowed]="index === examples.length - 1"
+      [disabled]="index === examples.length - 1"
+      (click)="carousel.next()"
+    >
+      &nbsp;
+    </button>
+  </div>
+  @if (currentExample && showExampleInfo) {
+    <div class="mt-5 px-5 transition-all duration-300 ease-in-out" [@slideIn]>
+      <b class="mb-2 block text-md">{{ currentExample.title }}</b>
+      <a [routerLink]="['/' + pageLink?.link]" [queryParams]="{ id: currentExample.id }">
+        <tui-icon icon="help" [style.font-size.rem]="1" class="mr-2" />
+        <span class="border-b border-dotted text-sm text-gray-600 hover:border-b-0">
+          Как мы решили эту задачу
+        </span>
+      </a>
+    </div>
+  }
+  <div class="mt-7 lg:hidden">
+    <tui-pagination
+      size="s"
+      [length]="examples.length"
+      [(index)]="index"
+      (indexChange)="onIndex($event)"
+    ></tui-pagination>
+  </div>
+</div>

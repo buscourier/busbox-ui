@@ -1,0 +1,47 @@
+@let isLoading = !!(isLoading$ | async);
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-3">
+  <label tuiLabel class="mb-3">
+    <span class="inline-block text-sm text-gray-700 mb-1">
+      {{ 'auth.labels.login' | transloco }}
+    </span>
+    <div class="relative">
+      <tui-textfield>
+        <input
+          tuiTextfield
+          [formControl]="login"
+          [tuiHint]="[] | tuiFieldErrorContent"
+          [placeholder]="'auth.placeholders.login' | transloco"
+          tuiHintAppearance="error"
+        />
+      </tui-textfield>
+    </div>
+  </label>
+  <label tuiLabel>
+    <span class="block text-sm text-gray-700 mb-1">
+      {{ 'auth.labels.password' | transloco }}
+    </span>
+    <div class="relative">
+      <tui-textfield>
+        <input
+          tuiTextfield
+          type="password"
+          [formControl]="password"
+          [tuiHint]="[] | tuiFieldErrorContent"
+          [placeholder]="'auth.placeholders.password' | transloco"
+          tuiHintAppearance="error"
+        />
+        <tui-icon tuiPassword />
+      </tui-textfield>
+    </div>
+  </label>
+  <button
+    type="submit"
+    tuiButton
+    class="mt-4 w-full"
+    [loading]="isLoading"
+    [disabled]="isLoading || form.invalid"
+  >
+    {{ 'auth.buttons.login' | transloco }}
+  </button>
+</form>

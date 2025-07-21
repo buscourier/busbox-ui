@@ -1,0 +1,29 @@
+<form [class]="getFormClasses()" (ngSubmit)="onSubmit()">
+  <b class="mb-6 block text-2xl font-bold leading-7">Рассчитайте стоимость</b>
+  <label tuiLabel class="mb-4">
+    <span class="block text-sm text-gray-700 mb-1">Город отправления</span>
+    <tui-textfield tuiChevron [stringify]="'name' | tuiStringify" [tuiTextfieldCleaner]="false">
+      <select tuiTextfield [formControl]="pickupCity" [placeholder]="'Выберите город'"></select>
+      <tui-data-list-wrapper
+        *tuiTextfieldDropdown
+        [items]="pickupCities$ | async"
+        [itemContent]="'name' | tuiStringify | tuiStringifyContent"
+      />
+    </tui-textfield>
+  </label>
+  <label tuiLabel class="mb-6">
+    <span class="block text-sm text-gray-700 mb-1">Город получения</span>
+    <tui-textfield tuiChevron [stringify]="'name' | tuiStringify" [tuiTextfieldCleaner]="false">
+      <select tuiTextfield [formControl]="deliveryCity" [placeholder]="'Выберите город'"></select>
+      <tui-data-list-wrapper
+        *tuiTextfieldDropdown
+        [items]="deliveryCities$ | async"
+        [itemContent]="'name' | tuiStringify | tuiStringifyContent"
+      />
+    </tui-textfield>
+  </label>
+
+  <button type="submit" tuiButton appearance="accent" class="w-full" [loading]="true">
+    Рассчитать
+  </button>
+</form>

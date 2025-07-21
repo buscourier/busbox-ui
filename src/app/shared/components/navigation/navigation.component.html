@@ -1,0 +1,40 @@
+<nav class="navigation">
+  <ul class="nav-list">
+    @for (item of navigationItems; track item.link) {
+      <li class="nav-item" [class.has-dropdown]="item.dropdown">
+        @if (item.dropdown) {
+          <!-- Drop down menu -->
+          <button
+            class="nav-link dropdown-toggle"
+            (click)="toggleDropdown(item.link)"
+            [class.active]="isDropdownOpen(item.link)"
+          >
+            {{ item.name }}
+            <span class="dropdown-arrow">▼</span>
+          </button>
+
+          @if (isDropdownOpen(item.link)) {
+            <ul class="dropdown-menu">
+              @for (subItem of item.dropdown; track subItem.link) {
+                <li>
+                  <a
+                    [routerLink]="'/' + subItem.link"
+                    class="dropdown-link"
+                    routerLinkActive="active"
+                    (click)="closeDropdowns()"
+                  >
+                    {{ subItem.name }}
+                  </a>
+                </li>
+              }
+            </ul>
+          }
+        } @else {
+          <a [routerLink]="'/' + item.link" class="nav-link" routerLinkActive="active">
+            {{ item.name }}
+          </a>
+        }
+      </li>
+    }
+  </ul>
+</nav>

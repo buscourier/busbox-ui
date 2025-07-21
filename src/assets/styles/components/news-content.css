@@ -1,0 +1,11 @@
+@layer {
+  .news-content {
+    p {
+      @apply my-2;
+    }
+
+    a {
+      @apply text-blue-500 hover:text-blue-400;
+    }
+  }
+}

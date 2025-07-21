@@ -1,0 +1,25 @@
+<p class="basis-full font-medium">Единая справочная</p>
+
+<a [href]="contact.phone | contactLink: 'tel'" class="flex gap-2.5 items-center">
+  <tui-icon icon="headphone" [style.font-size.rem]="1.2" />
+  {{ contact.phone }}
+</a>
+
+<a [href]="contact.email | contactLink: 'telegram'" class="flex gap-2.5 items-center">
+  <tui-icon icon="telegram" [style.font-size.rem]="1.5" />
+  {{ contact.telegram }}
+</a>
+
+<a [href]="contact.email | contactLink: 'email'" class="flex gap-2.5 items-center">
+  <tui-icon icon="email" [style.font-size.rem]="1.2" />
+  {{ contact.email }}
+</a>
+
+<a
+  [href]="contact.whatsapp | contactLink: 'whatsapp'"
+  class="flex gap-2.5 items-center"
+  target="_blank"
+>
+  <tui-icon icon="whatsapp" [style.font-size.rem]="1.2" />
+  {{ contact.whatsapp }}
+</a>

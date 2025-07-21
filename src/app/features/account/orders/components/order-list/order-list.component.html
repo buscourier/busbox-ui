@@ -1,0 +1,146 @@
+@if (list.totalCount && list.totalCount > 0) {
+  <div class="mb-1 flex gap-3 items-center text-sm">
+    <div class="flex items-center gap-1">
+      <span class="text-gray-600">
+        Всего {{ list.totalCount }} {{ getOrdersWord(+list.totalCount) }}
+      </span>
+    </div>
+
+    <span class="text-gray-300">|</span>
+
+    <button
+      appearance="flat"
+      size="s"
+      tuiButton
+      tuiButtonSelect
+      type="button"
+      [formControl]="pageSize"
+      class="flex items-center gap-1"
+    >
+      <span class="text-gray-500">Показано:</span>
+      <span class="font-medium text-gray-700">
+        {{ list.pagination.startItem }}-{{ list.pagination.endItem }}
+      </span>
+
+      <tui-data-list-wrapper
+        *tuiTextfieldDropdown
+        [itemContent]="content"
+        [items]="PAGE_SIZE_OPTIONS"
+      />
+    </button>
+  </div>
+}
+
+@if (!list.isLoaded || list.isLoading) {
+  @for (item of getSkeletonArray(); track $index) {
+    <div class="h-12 mb-0.5" [tuiSkeleton]="true"></div>
+  }
+} @else if (list.totalCount && +list.totalCount > 0) {
+  <div class="mb-7 flex flex-col print:hidden">
+    <div
+      #tableContainer
+      tuiScrollbar="horizontal"
+      class="table-scroll-container"
+      [class.show-left-fade]="showLeftFade"
+      [class.show-right-fade]="showRightFade"
+      (scroll)="onTableScroll($event)"
+    >
+      <table
+        [tuiSortBy]="sortBy"
+        [direction]="direction || TuiSortDirection.Asc"
+        (tuiSortChange)="onSortChange($event)"
+        tuiTable
+        [columns]="columns"
+        class="w-full whitespace-nowrap"
+      >
+        <thead>
+          <tr tuiThGroup>
+            <th *tuiHead="'order_id'" tuiTh tuiSortable>№ Заказа</th>
+            <th *tuiHead="'date'" tuiTh tuiSortable>Дата заказа</th>
+            <th *tuiHead="'sender_name'" tuiTh tuiSortable>Отправитель</th>
+            <th *tuiHead="'recipient_name'" tuiTh tuiSortable>Получатель</th>
+            <th *tuiHead="'start_city'" tuiTh tuiSortable>Город отправления</th>
+            <th *tuiHead="'end_city'" tuiTh tuiSortable>Город получения</th>
+            <th *tuiHead="'order_price'" tuiTh tuiSortable>Цена</th>
+            <th *tuiHead="'status'" tuiTh tuiSortable>Статус</th>
+            <th *tuiHead="'print'" tuiTh>Печать</th>
+          </tr>
+        </thead>
+        <tbody tuiTbody [data]="list.orders">
+          @for (order of list.orders; track order.order_id) {
+            <tr tuiTr>
+              <td *tuiCell="'order_id'" tuiTd [class.!bg-gray-50]="$even">
+                <button
+                  type="button"
+                  class="hover:cursor-pointer"
+                  (click)="onOrderSelect(order.order_id)"
+                >
+                  {{ order.order_id }}
+                </button>
+              </td>
+              <td *tuiCell="'date'" tuiTd [class.!bg-gray-50]="$even">
+                {{ order.date }}
+              </td>
+              <td *tuiCell="'sender_name'" tuiTd [class.!bg-gray-50]="$even">
+                {{ order.sender_name }}
+              </td>
+              <td *tuiCell="'recipient_name'" tuiTd [class.!bg-gray-50]="$even">
+                {{ order.recipient_name }}
+              </td>
+              <td *tuiCell="'start_city'" tuiTd [class.!bg-gray-50]="$even">
+                {{ order.start_city }}
+              </td>
+              <td *tuiCell="'end_city'" tuiTd [class.!bg-gray-50]="$even">
+                {{ order.end_city }}
+              </td>
+              <td *tuiCell="'order_price'" tuiTd [class.!bg-gray-50]="$even">
+                {{ order.order_price }} {{ 'RUB' | tuiCurrency }}
+              </td>
+              <td *tuiCell="'status'" tuiTd [class.!bg-gray-50]="$even">
+                {{ order.status }}
+              </td>
+              <td *tuiCell="'print'" tuiTd [class.!bg-gray-50]="$even">
+                <div class="flex justify-center">
+                  <button
+                    tuiIconButton
+                    type="button"
+                    appearance="icon"
+                    iconStart="@tui.printer"
+                    (click)="onOrderPrint(order.order_id)"
+                  >
+                    &nbsp;
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <div class="mt-4">
+      <button
+        tuiButton
+        appearance="outline"
+        iconStart="@tui.download"
+        [loading]="list.isExporting"
+        (click)="onExport()"
+        [disabled]="!list.canExport || list.isExporting"
+      >
+        Экспорт в Excel
+      </button>
+
+      @if (list.pagination.isVisible) {
+        <tui-pagination
+          [style.float]="'right'"
+          [length]="list.pagination.totalPages"
+          [index]="list.pagination.currentPage - 1"
+          (indexChange)="onPageChange($event)"
+        />
+      }
+    </div>
+  </div>
+} @else {
+  <div class="flex justify-center">
+    <b class="text-gray-300 text-2xl">Заказы с такими параметрами не найдены...</b>
+  </div>
+}

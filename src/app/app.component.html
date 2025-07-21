@@ -1,8 +1,29 @@
+@let currentUser = currentUser$ | async;
+
 <tui-root>
-  <main class="bg-mint-500 flex items-center justify-center bg-gray-300">
-    <div class="text-center">
-      <h1 class="text-6xl font-bold text-gray-800 mb-4 opacity-0">{{ title }}</h1>
+  <app-header />
+
+  <main class="relative">
+    <div class="container mx-auto px-4" [class.pb-10]="!isHomePage">
+      <app-breadcrumbs />
+      <h1 class="inline-block mt-10 md:text-3xl px-4 sm:text-2xl font-bold md:px-0">
+        {{ title$ | async }}
+      </h1>
+
+      @if (description$ | async; as description) {
+        <div class="mt-2 mb-10 max-w-[800px]">
+          @if (Array.isArray(description)) {
+            @for (paragraph of description; track $index) {
+              <p class="text-md text-gray-800">{{ paragraph }}</p>
+            }
+          } @else {
+            <p class="text-md text-gray-800">{{ description }}</p>
+          }
+        </div>
+      }
+
+      <router-outlet />
     </div>
   </main>
-  <router-outlet />
+  <app-footer></app-footer>
 </tui-root>

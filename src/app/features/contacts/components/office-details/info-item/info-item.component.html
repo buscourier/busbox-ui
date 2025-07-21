@@ -1,0 +1,11 @@
+<tui-icon
+  class="col-start-1 row-start-2 row-end-3 mr-3 text-gray-400"
+  [class.text-blue-500!]="icon === 'email'"
+  [icon]="icon"
+/>
+<div class="col-start-2 col-end-3 row-start-1 row-end-2">
+  <ng-content select="p" />
+</div>
+<div class="relative col-start-2 col-end-3 row-start-2 row-end-3 justify-self-start">
+  <ng-content />
+</div>

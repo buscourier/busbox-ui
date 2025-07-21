@@ -1,0 +1,24 @@
+<div class="mb-5 flex gap-1 md:col-start-1 md:col-end-2 md:row-start-1 md:row-end-2 md:mb-2.5">
+  @for (action of filterActions; track action.id) {
+    <button
+      type="button"
+      [class]="getButtonClasses(action.id === officeType.value)"
+      (click)="setFilter(action.id)"
+    >
+      <tui-icon [icon]="action.icon" [style.height.rem]="1.15" class="mb-0.5" />
+      <span class="font-normal text-black text-xs">
+        {{ action.name }}
+      </span>
+    </button>
+  }
+</div>
+
+<tui-textfield tuiChevron [stringify]="'name' | tuiStringify" [tuiTextfieldCleaner]="true">
+  <select tuiTextfield placeholder="Все города" [formControl]="city"></select>
+
+  <tui-data-list-wrapper
+    *tuiTextfieldDropdown
+    [items]="cities"
+    [itemContent]="'name' | tuiStringify | tuiStringifyContent"
+  />
+</tui-textfield>

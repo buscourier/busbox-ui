@@ -1,0 +1,175 @@
+<!-- Mobile Menu Template -->
+<div
+  class="fixed inset-0 z-[9999]"
+  [class.pointer-events-auto]="isOpen"
+  [class.pointer-events-none]="!isOpen"
+>
+  <!-- Backdrop -->
+  <div
+    class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ease-in-out"
+    [class.opacity-100]="isOpen"
+    [class.opacity-0]="!isOpen"
+    [class.invisible]="!isOpen"
+    (click)="close.emit()"
+    (keydown.escape)="close.emit()"
+    (keydown.enter)="close.emit()"
+    (keydown.space)="close.emit()"
+    aria-label="Закрыть модальное окно"
+    tabindex="0"
+    role="button"
+  >
+    &nbsp;
+  </div>
+
+  <!-- Mobile Menu Panel -->
+  <div
+    class="absolute top-0 right-0 bottom-0 w-80 max-w-[85vw] sm:max-w-full bg-white flex flex-col shadow-[-2px_0_12px_rgba(0,0,0,0.15)] transition-transform duration-300 ease-in-out"
+    [class.translate-x-0]="isOpen"
+    [class.translate-x-full]="!isOpen"
+  >
+    <!-- Header -->
+    <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200 bg-gray-50">
+      <div class="flex items-center">
+        <img src="/assets/logo.svg" alt="Баскурьер" class="h-8" />
+        <span class="ml-2 text-lg font-semibold">Баскурьер</span>
+      </div>
+      <button
+        (click)="close.emit()"
+        class="text-xl text-gray-500 hover:text-gray-700 hover:bg-gray-200 p-1 rounded transition-colors duration-200"
+        aria-label="Закрыть меню"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- Navigation Content -->
+    <div class="flex-1 overflow-y-auto py-4">
+      <!-- Main Navigation Items -->
+      <nav class="border-b border-gray-200 pb-4 mb-4">
+        @for (item of navigationItems; track item.link) {
+          <div class="border-b border-gray-100 last:border-b-0">
+            @if (item.dropdown) {
+              <!-- Item with dropdown -->
+              <button
+                class="flex w-full px-6 py-4 text-gray-700 font-medium justify-between items-center hover:bg-gray-50 hover:text-amber-600 transition-colors duration-200"
+                (click)="toggleSection(item.link)"
+                [class.text-amber-600]="isExpanded(item.link)"
+              >
+                <span>{{ item.name }}</span>
+                <span
+                  class="text-xs text-gray-400 transition-transform duration-300 ease-in-out"
+                  [class.rotate-180]="isExpanded(item.link)"
+                >
+                  ▼
+                </span>
+              </button>
+
+              <!-- Dropdown Content with Smooth Animation -->
+              <div
+                class="overflow-hidden transition-all duration-300 ease-in-out"
+                [class.max-h-0]="!isExpanded(item.link)"
+                [class.max-h-96]="isExpanded(item.link)"
+              >
+                <div class="bg-gray-50 border-t border-gray-200">
+                  @for (subItem of item.dropdown; track subItem.link) {
+                    <a
+                      [routerLink]="'/' + subItem.link"
+                      class="block py-3 pl-12 pr-6 text-gray-600 text-sm hover:bg-gray-200 hover:text-amber-600 transition-colors duration-200"
+                      (click)="close.emit()"
+                      routerLinkActive="text-amber-600"
+                    >
+                      {{ subItem.name }}
+                    </a>
+                  }
+                </div>
+              </div>
+            } @else {
+              <!-- Simple link -->
+              <a
+                [routerLink]="'/' + item.link"
+                class="flex w-full px-6 py-4 text-gray-700 font-medium hover:bg-gray-50 hover:text-amber-600 transition-colors duration-200"
+                (click)="close.emit()"
+                routerLinkActive="bg-gray-50 text-amber-600"
+              >
+                {{ item.name }}
+              </a>
+            }
+          </div>
+        }
+      </nav>
+
+      <!-- Account Section -->
+      <div class="px-6 pb-4 border-b border-gray-200 mb-4">
+        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+          Личный кабинет
+        </h3>
+        @for (item of accountItems; track item.link) {
+          <a
+            [routerLink]="'/' + item.link"
+            class="block py-3 text-gray-700 font-medium border-b border-gray-100 hover:text-amber-600 transition-colors duration-200"
+            (click)="close.emit()"
+            routerLinkActive="text-amber-600"
+          >
+            {{ item.name }}
+          </a>
+        }
+        <button
+          class="block w-full py-3 text-red-500 font-medium text-left hover:text-red-600 transition-colors duration-200"
+          (click)="logout()"
+        >
+          Выйти
+        </button>
+      </div>
+
+      <!-- Contact Section -->
+      <div class="px-6 pb-4">
+        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+          Связаться с нами
+        </h3>
+
+        <a
+          [href]="'tel:' + contactInfo.phone"
+          class="flex items-center py-3 text-gray-700 hover:text-amber-600 transition-colors duration-200"
+        >
+          <span class="text-xl mr-3">📞</span>
+          <div>
+            <div class="text-xs text-gray-500 uppercase tracking-wider">Позвонить</div>
+            <div class="font-medium mt-0.5">{{ contactInfo.phone }}</div>
+          </div>
+        </a>
+
+        <a
+          [href]="'mailto:' + contactInfo.email"
+          class="flex items-center py-3 text-gray-700 hover:text-amber-600 transition-colors duration-200"
+        >
+          <span class="text-xl mr-3">✉️</span>
+          <div>
+            <div class="text-xs text-gray-500 uppercase tracking-wider">Написать</div>
+            <div class="font-medium mt-0.5">{{ contactInfo.email }}</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+      <div class="flex flex-col gap-2 mb-3">
+        <a
+          href="/privacy-policy"
+          class="text-xs text-gray-500 hover:text-gray-700 transition-colors duration-200"
+          (click)="close.emit()"
+        >
+          Политика конфиденциальности
+        </a>
+        <a
+          href="/terms"
+          class="text-xs text-gray-500 hover:text-gray-700 transition-colors duration-200"
+          (click)="close.emit()"
+        >
+          Пользовательское соглашение
+        </a>
+      </div>
+      <div class="text-xs text-gray-400">© 2013-2025 ООО «Баскурьер»</div>
+    </div>
+  </div>
+</div>

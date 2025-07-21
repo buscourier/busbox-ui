@@ -6,4 +6,20 @@
   ::file-selector-button {
     border-color: var(--color-gray-200, currentcolor);
   }
+
+  body {
+    @apply text-base font-roboto;
+  }
+
+  h1 {
+    @apply font-kelson;
+  }
+
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-roboto;
+  }
 }

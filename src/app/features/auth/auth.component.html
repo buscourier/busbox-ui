@@ -1,0 +1,13 @@
+@let error = error$ | async;
+
+<div class="mx-auto mt-20 max-w-md">
+  <h1 class="mt-10 mb-10 font-heading text-2xl font-bold lg:mt-20 lg:text-3xl">
+    {{ pageTitle$ | async | transloco }}
+  </h1>
+
+  @if (error) {
+    <tui-notification appearance="negative">{{ error.message }}</tui-notification>
+  }
+
+  <router-outlet></router-outlet>
+</div>

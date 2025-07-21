@@ -1,0 +1,29 @@
+import type { Routes } from '@angular/router';
+
+import { AccountComponent } from './account.component';
+import { LayoutComponent } from './layout';
+
+export const accountRoutes: Routes = [
+  {
+    path: '',
+    component: AccountComponent,
+    data: { pageKey: 'account' },
+    children: [
+      {
+        path: '',
+        component: LayoutComponent,
+        // data: { pageKey: 'account' },
+      },
+      {
+        path: 'profile',
+        loadChildren: () => import('./profile').then((m) => m.profileRoutes),
+        data: { pageKey: 'profile' },
+      },
+      {
+        path: 'orders',
+        loadComponent: () => import('./orders').then((c) => c.OrdersComponent),
+        data: { pageKey: 'orders' },
+      },
+    ],
+  },
+];

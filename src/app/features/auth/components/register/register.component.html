@@ -1,0 +1,86 @@
+@let isLoading = !!(isLoading$ | async);
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-3">
+  <label tuiLabel class="mb-3">
+    <span class="inline-block text-sm text-gray-700 mb-1">
+      {{ 'auth.labels.username' | transloco }}
+    </span>
+    <div class="relative">
+      <tui-textfield>
+        <input
+          tuiTextfield
+          [formControl]="username"
+          [tuiHint]="[] | tuiFieldErrorContent"
+          [placeholder]="'auth.placeholders.username' | transloco"
+          tuiHintAppearance="error"
+        />
+      </tui-textfield>
+    </div>
+  </label>
+  <label tuiLabel class="mb-3">
+    <span class="inline-block text-sm text-gray-700 mb-1">
+      {{ 'auth.labels.email' | transloco }}
+    </span>
+    <div class="relative">
+      <tui-textfield>
+        <input
+          tuiTextfield
+          type="email"
+          [formControl]="email"
+          [tuiHint]="[] | tuiFieldErrorContent"
+          [placeholder]="'auth.placeholders.email' | transloco"
+          tuiHintAppearance="error"
+        />
+      </tui-textfield>
+    </div>
+  </label>
+  <label tuiLabel class="mb-3">
+    <span class="block text-sm text-gray-700 mb-1">
+      {{ 'auth.labels.password' | transloco }}
+    </span>
+    <div class="relative">
+      <tui-textfield>
+        <input
+          tuiTextfield
+          type="password"
+          [formControl]="password"
+          [tuiHint]="[] | tuiFieldErrorContent"
+          [placeholder]="'auth.placeholders.password' | transloco"
+          tuiHintAppearance="error"
+        />
+        <tui-icon tuiPassword />
+      </tui-textfield>
+    </div>
+  </label>
+  <label tuiLabel class="mb-3">
+    <span class="block text-sm text-gray-700 mb-1">
+      {{ 'auth.labels.confirmPassword' | transloco }}
+    </span>
+    <div class="relative">
+      <tui-textfield>
+        <input
+          tuiTextfield
+          type="password"
+          [formControl]="confirmPassword"
+          [tuiHint]="[] | tuiFieldErrorContent"
+          [placeholder]="'auth.placeholders.confirmPassword' | transloco"
+          tuiHintAppearance="error"
+        />
+        <tui-icon tuiPassword />
+      </tui-textfield>
+    </div>
+  </label>
+  <!--    <label class="mt-4 flex items-center gap-2">-->
+  <!--      <input tuiCheckbox type="checkbox" [formControl]="agreeTerms" />-->
+  <!--      <span>Согласен на обработку персональных данных</span>-->
+  <!--    </label>-->
+  <button
+    type="submit"
+    tuiButton
+    class="mt-4 w-full"
+    [loading]="isLoading"
+    [disabled]="isLoading || form.invalid"
+  >
+    {{ 'auth.buttons.register' | transloco }}
+  </button>
+</form>

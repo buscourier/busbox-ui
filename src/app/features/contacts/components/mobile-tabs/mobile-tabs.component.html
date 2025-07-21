@@ -1,0 +1,5 @@
+@for (tab of tabs; track tab.index) {
+  <button [class]="getButtonClasses(activeIndex === tab.index)" (click)="setActiveTab(tab.index)">
+    {{ tab.label }}
+  </button>
+}

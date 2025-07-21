@@ -1,39 +1,104 @@
 @theme {
-  /*--color-yellow-*: initial;*/
-  --color-yellow-500: rgb(255, 220, 0);
-  --color-yellow-400: rgb(255, 230, 51);
-  --color-yellow-600: rgb(230, 198, 0);
+  /* Main Tailwind fonts */
+  --font-kelson: 'Kelson Sans', Arial, sans-serif;
+  --font-roboto: 'Roboto', system-ui, sans-serif;
+  --font-sans: 'Roboto', system-ui, sans-serif;
+  --font-heading: 'Kelson Sans', Arial, sans-serif;
+  --font-body: 'Roboto', system-ui, sans-serif;
+  --font-display: 'Kelson Sans', Arial, sans-serif;
 
-  /*shadows*/
+  /* Shadows */
   --shadow-sb: 0px 24px 54px rgba(0, 0, 0, 0.04);
+
+  /* Containers */
+  --breakpoint-2xl: initial;
+
+  /* Text sizes */
+  --text-2xs: 0.625rem;
+  --text-2xs--line-height: calc(1 / 0.625);
+
+  /* Gray Colors  */
+  --color-gray-50: #fafafa;
+  --color-gray-100: #f2f2f2;
+  --color-gray-200: #eaeaea;
+  --color-gray-300: #d9d9d9;
+  --color-gray-400: #b3b3b3;
+  --color-gray-500: #999999;
+  --color-gray-600: #808080;
+  --color-gray-700: #666666;
+  --color-gray-800: #333333;
+  --color-gray-900: #2e2e2e;
+
+  /* Blue Colors  */
+  --color-blue-50: #f0f2f4;
+  --color-blue-100: #dfe5ec;
+  --color-blue-200: #c1d1e1;
+  --color-blue-300: #97b7d8;
+  --color-blue-400: #699ed3;
+  --color-blue-500: #50a7ff;
+  --color-blue-600: #2477cc;
+  --color-blue-700: #185ea5;
+  --color-blue-800: #0e457c;
+  --color-blue-900: #072e55;
+
+  /* Yellow Colors  */
+  --color-yellow-50: #f9f8f6;
+  --color-yellow-100: #f6f4ea;
+  --color-yellow-200: #f2ecca;
+  --color-yellow-300: #f1e59d;
+  --color-yellow-400: #f3e068;
+  --color-yellow-500: #ffdc00;
+  --color-yellow-600: #e0c206;
+  --color-yellow-700: #aa9409;
+  --color-yellow-800: #76670a;
+  --color-yellow-900: #453c08;
 }
 
 :root {
-  --tui-heading-font: 'Kelson Sans', -apple-system, 'BlinkMacSystemFont', system-ui, 'Roboto',
-    'Segoe UI', 'Helvetica Neue', sans-serif;
-  --tui-text-font: 'Roboto', -apple-system, 'BlinkMacSystemFont', system-ui, 'Roboto', 'Segoe UI',
+  /* Taiga UI fonts - using custom fonts */
+  --tui-heading-font: 'Kelson Sans', Arial, -apple-system, 'BlinkMacSystemFont', system-ui,
+    'Roboto', 'Segoe UI', 'Helvetica Neue', sans-serif;
+  --tui-text-font: 'Roboto', -apple-system, 'BlinkMacSystemFont', system-ui, 'Segoe UI',
     'Helvetica Neue', sans-serif;
-  --tui-font-heading: var(--tui-heading-font);
 
-  /*--tui-font-offset: 0rem;*/
+  /* Main Taiga UI fonts */
+  --tui-font-heading: var(--tui-heading-font);
   --tui-font-text: var(--tui-text-font);
 
+  /* Taiga UI text sizes */
   --tui-font-text-s: normal calc(var(--tui-font-offset) + 1rem) / 1.25rem var(--tui-font-text);
 
-  /*--tui-font-text-m: normal 1.125rem/1.25rem var(--tui-font-text);*/
-  /*--tui-font-text-s: normal 1rem/1.25rem var(--tui-font-text);*/
-  /*--tui-font-text-xs: normal 0.6875rem/1rem var(--tui-font-text);*/
+  /*--tui-font-text-s: normal calc(var(--tui-font-offset, 0rem) + 1rem) / 1.25rem var(--tui-font-text);*/
+  /*--tui-font-text-m: normal calc(var(--tui-font-offset, 0rem) + 1.125rem) / 1.5rem var(--tui-font-text);*/
+  /*--tui-font-text-l: normal calc(var(--tui-font-offset, 0rem) + 1.25rem) / 1.75rem var(--tui-font-text);*/
 
-  --tui-background-accent-1: theme(colors.yellow.500);
-  --tui-background-accent-1-hover: theme(colors.yellow.400);
-  --tui-background-accent-1-pressed: theme(colors.yellow.600);
-
+  /* Accent colors */
+  --tui-background-accent-1: var(--color-yellow-500);
+  --tui-background-accent-1-hover: var(--color-yellow-400);
+  --tui-background-accent-1-pressed: var(--color-yellow-600);
   --tui-text-primary-on-accent-1: theme(colors.black);
 
+  .theme-yellow {
+    --tui-background-accent-1: var(--color-black);
+    --tui-background-accent-1-hover: var(--color-gray-900);
+    --tui-background-accent-1-pressed: var(--color-gray-800);
+    --tui-text-primary-on-accent-1: var(--color-white);
+  }
+
+  --tui-background-accent-2: var(--color-black);
+  --tui-background-accent-2-hover: var(--color-gray-900);
+  --tui-background-accent-2-pressed: var(--color-gray-800);
+  --tui-text-primary-on-accent-2: var(--color-white);
+
+  /* Sizes */
   --tui-height-m: 50px;
   --tui-radius-m: var(--radius-md);
   --tui-radius-l: var(--radius-lg);
-  /*--tui-text-tertiary: red;*/
+
+  /* Text colors */
   --tui-text-action: var(--color-gray-900);
   --tui-text-action-hover: var(--color-black);
+
+  /* Player */
+  --plyr-color-main: var(--color-yellow-500);
 }

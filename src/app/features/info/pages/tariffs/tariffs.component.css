@@ -1,0 +1,40 @@
+/*.tariff-tables-container {*/
+/*  max-width: 100%;*/
+/*  margin: 0 auto;*/
+/*}*/
+
+/*.zone-button button.active {*/
+/*  @apply bg-yellow-500 shadow-lg;*/
+/*}*/
+
+/*.tariff-table table {*/
+/*  min-width: 600px;*/
+/*  font-size: 14px;*/
+/*}*/
+
+/*.tariff-table th,*/
+/*.tariff-table td {*/
+/*  min-width: 80px;*/
+/*}*/
+
+/*.tariff-table th:first-child,*/
+/*.tariff-table td:first-child {*/
+/*  min-width: 120px;*/
+/*}*/
+
+/*@media (max-width: 768px) {*/
+/*  .tariff-table {*/
+/*    font-size: 12px;*/
+/*  }*/
+
+/*  .tariff-table th,*/
+/*  .tariff-table td {*/
+/*    padding: 8px 4px;*/
+/*    min-width: 60px;*/
+/*  }*/
+
+/*  .tariff-table th:first-child,*/
+/*  .tariff-table td:first-child {*/
+/*    min-width: 80px;*/
+/*  }*/
+/*}*/

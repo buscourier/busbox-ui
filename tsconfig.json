@@ -19,6 +19,9 @@
     "target": "ES2022",
     "module": "ES2022",
     "verbatimModuleSyntax": true,
+    "types": [
+      "angular8-yandex-maps"
+    ],
     "lib": [
       "ES2022",
       "dom"
@@ -34,11 +37,65 @@
       "@utils/*": [
         "src/app/utils/*"
       ],
+      "@home": [
+        "./src/app/features/home/index.ts"
+      ],
+      "@home/*": [
+        "./src/app/features/home/*"
+      ],
       "@delivery": [
         "./src/app/features/delivery/index.ts"
       ],
       "@delivery/*": [
         "./src/app/features/delivery/*"
+      ],
+      "@auth": [
+        "./src/app/features/auth/index.ts"
+      ],
+      "@auth/*": [
+        "./src/app/features/auth/*"
+      ],
+      "@account": [
+        "./src/app/features/account/index.ts"
+      ],
+      "@account/*": [
+        "./src/app/features/account/*"
+      ],
+      "@tariffs": [
+        "./src/app/features/tariffs/index.ts"
+      ],
+      "@tariffs/*": [
+        "./src/app/features/tariffs/*"
+      ],
+      "@services": [
+        "./src/app/features/services/index.ts"
+      ],
+      "@services/*": [
+        "./src/app/features/services/*"
+      ],
+      "@info": [
+        "./src/app/features/info/index.ts"
+      ],
+      "@info/*": [
+        "./src/app/features/info/*"
+      ],
+      "@tracking": [
+        "./src/app/features/tracking/index.ts"
+      ],
+      "@tracking/*": [
+        "./src/app/features/tracking/*"
+      ],
+      "@contacts": [
+        "./src/app/features/contacts/index.ts"
+      ],
+      "@contacts/*": [
+        "./src/app/features/contacts/*"
+      ],
+      "@news": [
+        "./src/app/features/news/index.ts"
+      ],
+      "@news/*": [
+        "./src/app/features/news/*"
       ],
       "@env/*": [
         "src/environments/*"

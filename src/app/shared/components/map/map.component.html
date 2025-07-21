@@ -1,0 +1,24 @@
+@if (isLoading()) {
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+    <span class="text-sm font-medium text-gray-700"> Загружается карта... </span>
+  </div>
+}
+<ya-map
+  [center]="mapCenter()"
+  [zoom]="currentZoom()"
+  [state]="mapState"
+  (ready)="onMapReady($event)"
+  [class]="
+    isLoading()
+      ? 'w-full h-full block opacity-30 transition-opacity duration-300'
+      : 'w-full h-full block opacity-100 transition-opacity duration-300'
+  "
+>
+  @for (point of points; track point.id) {
+    <ya-placemark
+      [geometry]="[point.lat, point.lng]"
+      [options]="getPlacemarkOptions(point)"
+      (yaclick)="onPointClick(point)"
+    />
+  }
+</ya-map>
