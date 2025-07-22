@@ -67,6 +67,8 @@ jobs:
             DOPPLER_CONFIG=${{ secrets.DOPPLER_CONFIG }}
             APP_API_BASE_URL=${{ secrets.APP_API_BASE_URL }}
             APP_API_KEY=${{ secrets.APP_API_KEY }}
+            APP_MAP_KEY: ${{secrets.APP_MAP_KEY}}
+            APP_IMAGE_PROVIDER_URL: ${{secrets.APP_IMAGE_PROVIDER_URL}}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
@@ -102,6 +104,8 @@ jobs:
               -e DOPPLER_CONFIG=${{ secrets.DOPPLER_CONFIG }} \
               -e APP_API_BASE_URL=${{ secrets.APP_API_BASE_URL }} \
               -e APP_API_KEY=${{ secrets.APP_API_KEY }} \
+              -e APP_MAP_KEY=${{secrets.APP_MAP_KEY}} \
+              -e APP_IMAGE_PROVIDER_URL=${{secrets.APP_IMAGE_PROVIDER_URL}} \
               ${{ env.DOCKER_IMAGE }}:${{ needs.build-and-push.outputs.version }}
 
             # Remove old Docker images

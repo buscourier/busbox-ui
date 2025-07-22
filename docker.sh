@@ -78,6 +78,8 @@ main() {
       --build-arg DOPPLER_CONFIG="$DOPPLER_CONFIG" \
       --build-arg APP_API_BASE_URL="$APP_API_BASE_URL" \
       --build-arg APP_API_KEY="$APP_API_KEY" \
+      --build-arg APP_MAP_KEY="$APP_MAP_KEY" \
+      --build-arg APP_IMAGE_PROVIDER_URL="$APP_IMAGE_PROVIDER_URL" \
       --build-arg NODE_ENV="$NODE_ENV" \
       -f "$DOCKERFILE" .; then
       log "ERROR" "Docker build failed"
@@ -90,6 +92,9 @@ main() {
   if ! docker run -d -p "$PORT" \
     -e DOPPLER_CONFIG="$DOPPLER_CONFIG" \
     -e APP_API_BASE_URL="$APP_API_BASE_URL" \
+    -e APP_API_KEY="$APP_API_KEY" \
+    -e APP_MAP_KEY="$APP_MAP_KEY" \
+    -e APP_IMAGE_PROVIDER_URL="$APP_IMAGE_PROVIDER_URL" \
     -e NODE_ENV="$NODE_ENV" \
     --rm --name "$CONTAINER_NAME" \
     "$IMAGE_NAME"; then
