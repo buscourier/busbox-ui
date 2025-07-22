@@ -2,14 +2,13 @@ import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TuiIcon } from '@taiga-ui/core';
-import { TuiSkeleton } from '@taiga-ui/kit';
 
 import type { Case } from '@core/services';
 import { cn } from '@core/utils';
 
 @Component({
   selector: 'app-case-card',
-  imports: [TuiIcon, TuiSkeleton, RouterLink, NgOptimizedImage],
+  imports: [TuiIcon, RouterLink, NgOptimizedImage],
   templateUrl: './case-card.component.html',
   styleUrl: './case-card.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -11,7 +11,6 @@ import { SeoService } from '@core/services/seo.service';
 import { BreadcrumbsComponent } from '@shared/components/breadcrumbs';
 import { FooterComponent } from '@shared/components/footer';
 import { HeaderComponent } from '@shared/components/header';
-import { NavigationComponent } from '@shared/components/navigation';
 import { LocationsFacade, DocumentsFacade } from '@shared/store';
 
 import { environment } from '@env/environment';
@@ -26,7 +25,6 @@ import type { AuthResponse } from '@auth/types';
     TuiRoot,
     AsyncPipe,
     BreadcrumbsComponent,
-    NavigationComponent,
     FooterComponent,
     HeaderComponent,
   ],
@@ -40,7 +38,7 @@ export class AppComponent implements OnInit {
 
   configName?: string;
   environment?: string;
-  apiUrl?: string;
+  apiBaseUrl?: string;
 
   private readonly authFacade = inject(AuthFacade);
   private readonly locationsFacade = inject(LocationsFacade);
@@ -58,8 +56,8 @@ export class AppComponent implements OnInit {
   }
 
   constructor() {
-    this.configName = environment.dopplerConfig;
-    this.apiUrl = environment.apiUrl;
+    // this.configName = environment.dopplerConfig;
+    this.apiBaseUrl = environment.apiBaseUrl;
   }
 
   ngOnInit(): void {

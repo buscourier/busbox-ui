@@ -15,8 +15,12 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular/build:application",
+          "builder": "@ngx-env/builder:application",
           "options": {
+            "ngxEnv": {
+              "prefix": "APP_",
+              "runtime": false
+            },
             "outputPath": {
               "base": "dist/busbox-ui"
             },
@@ -47,12 +51,24 @@
             "scripts": [],
             "allowedCommonJsDependencies": [
               "jspdf",
-              "html2canvas"
+              "html2canvas",
+              "canvg",
+              "xlsx-js-style",
+              "jsbarcode",
+              "qrcode",
+              "plyr",
+              "raf",
+              "rgbcolor",
+              "core-js"
             ],
             "browser": "src/main.ts"
           },
           "configurations": {
             "production": {
+              "ngxEnv": {
+                "prefix": "APP_",
+                "runtime": false
+              },
               "budgets": [
                 {
                   "type": "initial",
@@ -79,6 +95,10 @@
               "extractLicenses": true
             },
             "staging": {
+              "ngxEnv": {
+                "prefix": "APP_",
+                "runtime": false
+              },
               "budgets": [
                 {
                   "type": "initial",
@@ -105,6 +125,10 @@
               "extractLicenses": true
             },
             "development": {
+              "ngxEnv": {
+                "prefix": "APP_",
+                "runtime": false
+              },
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
@@ -113,7 +137,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular/build:dev-server",
+          "builder": "@ngx-env/builder:dev-server",
           "options": {
             "buildTarget": "busbox-ui:build"
           },
@@ -131,10 +155,10 @@
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
-          "builder": "@angular/build:extract-i18n"
+          "builder": "@angular-devkit/build-angular:extract-i18n"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "polyfills": [
               "zone.js",

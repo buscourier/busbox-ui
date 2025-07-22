@@ -2,7 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { tuiDialog } from '@taiga-ui/core';
-import { type Observable } from 'rxjs';
+import type { Observable } from 'rxjs';
 
 import { type ModalConfig, ModalService } from '@core/services/modal.service';
 

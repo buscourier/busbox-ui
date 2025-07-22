@@ -1,6 +1,6 @@
 import type { HttpErrorResponse } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { catchError, concatAll, filter, shareReplay, throwError, toArray } from 'rxjs';
 import type { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -17,11 +17,11 @@ const EXCLUDED_CITY_ID = '249';
   providedIn: 'root',
 })
 export class ApiService {
-  private readonly url = `${environment.apiUrl}`;
+  private readonly url = `${environment.apiBaseUrl}`;
   private cachedStartCities$: Observable<PickupCity[]> | null = null;
   private cachedOffices$: Observable<Office[]> | null = null;
 
-  constructor(protected http: HttpClient) {}
+  protected readonly http = inject(HttpClient);
 
   protected get baseUrl(): string {
     return this.url;

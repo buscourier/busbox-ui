@@ -76,8 +76,8 @@ main() {
     log "INFO" "Building Docker image"
     if ! docker build -t "$IMAGE_NAME" \
       --build-arg DOPPLER_CONFIG="$DOPPLER_CONFIG" \
-      --build-arg API_URL="$API_URL" \
-      --build-arg API_KEY="$API_KEY" \
+      --build-arg APP_API_BASE_URL="$APP_API_BASE_URL" \
+      --build-arg APP_API_KEY="$APP_API_KEY" \
       --build-arg NODE_ENV="$NODE_ENV" \
       -f "$DOCKERFILE" .; then
       log "ERROR" "Docker build failed"
@@ -89,7 +89,7 @@ main() {
   log "INFO" "Running Docker container in background"
   if ! docker run -d -p "$PORT" \
     -e DOPPLER_CONFIG="$DOPPLER_CONFIG" \
-    -e API_URL="$API_URL" \
+    -e APP_API_BASE_URL="$APP_API_BASE_URL" \
     -e NODE_ENV="$NODE_ENV" \
     --rm --name "$CONTAINER_NAME" \
     "$IMAGE_NAME"; then

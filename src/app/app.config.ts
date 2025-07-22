@@ -57,6 +57,8 @@ import {
   documentsFeature,
 } from '@shared/store';
 
+import { environment } from '@env/environment';
+
 import { BalanceEffects, balanceFeature } from '@account/balance';
 import { OrdersEffects, ordersFeature } from '@account/orders';
 import { ProfileEffects, profileFeature } from '@account/profile';
@@ -73,7 +75,7 @@ import { routes } from './app.routes';
 import { TranslocoHttpLoader } from './transloco-loader';
 
 const mapConfig: YaConfig = {
-  apikey: 'be640658-9c20-46d8-ab54-555efd7fc3ee',
+  apikey: environment.mapApiKey,
   lang: 'ru_RU',
 };
 
@@ -241,6 +243,6 @@ export const appConfig: ApplicationConfig = {
       },
       deps: [PreloadIconsService],
     },
-    provideImageKitLoader('https://ik.imagekit.io/buscourier/'),
+    provideImageKitLoader(environment.imageProviderUrl),
   ],
 };

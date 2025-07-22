@@ -24,7 +24,7 @@ export class MobileMenuComponent {
   private readonly contacts = inject(CONTACT_INFO);
 
   @Input() isOpen = false;
-  @Output() close = new EventEmitter<void>();
+  @Output() closeMenu = new EventEmitter<void>();
 
   private expandedSections = new Set<string>();
 
@@ -56,7 +56,7 @@ export class MobileMenuComponent {
   }
 
   logout(): void {
-    this.close.emit();
+    this.closeMenu.emit();
     console.log('Logout clicked');
   }
 }

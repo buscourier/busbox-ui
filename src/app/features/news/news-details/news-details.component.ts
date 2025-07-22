@@ -1,4 +1,4 @@
-import { AsyncPipe, JsonPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -20,7 +20,7 @@ import type { NewsDetailsViewModel } from '@news/types';
 
 @Component({
   selector: 'app-news-details',
-  imports: [AsyncPipe, JsonPipe, TuiSkeleton, TuiRepeatTimes],
+  imports: [AsyncPipe, TuiSkeleton, TuiRepeatTimes],
   templateUrl: './news-details.component.html',
   styleUrl: './news-details.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -85,7 +85,7 @@
 //       for (let i = 0; i < 4; i++) {
 //         jasmine.clock().tick(1000); // Продвигаем время на 1 секунду
 //         const req = httpMock.expectOne(
-//           `${environment.apiUrl}/calc/gettypes/${pickupCityId}/${deliveryCityId}`,
+//           `${environment.apiBaseUrl}/calc/gettypes/${pickupCityId}/${deliveryCityId}`,
 //         );
 //         req.flush('Not Found', errorResponse);
 //       }
@@ -105,7 +105,8 @@
 //         expect(services).toEqual(dummyServices);
 //       });
 //
-//       const req = httpMock.expectOne(`${environment.apiUrl}/calc/getservices/${pickupCityId}`);
+//       const req = httpMock.expectOne(`${environment.apiBaseUrl}
+//       /calc/getservices/${pickupCityId}`);
 //       expect(req.request.method).toBe('GET');
 //       req.flush(dummyServices);
 //     });
@@ -119,10 +120,10 @@
 //       });
 //
 //       const cargoReq = httpMock.expectOne(
-//         `${environment.apiUrl}/calc/gettypes/${pickupCityId}/${deliveryCityId}`,
+//         `${environment.apiBaseUrl}/calc/gettypes/${pickupCityId}/${deliveryCityId}`,
 //       );
 //       const serviceReq = httpMock.expectOne(
-//         `${environment.apiUrl}/calc/getservices/${pickupCityId}`,
+//         `${environment.apiBaseUrl}/calc/getservices/${pickupCityId}`,
 //       );
 //
 //       cargoReq.flush(dummyCargos);

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
-import { TuiIcon, TuiLink } from '@taiga-ui/core';
+import { TuiIcon } from '@taiga-ui/core';
 
 import { type ContactInfo } from '@core/tokens';
 import { cn } from '@core/utils';
@@ -8,7 +8,7 @@ import { ContactLinkPipe } from '@shared/pipes';
 
 @Component({
   selector: 'app-contact-info',
-  imports: [ContactLinkPipe, TuiLink, TuiIcon],
+  imports: [ContactLinkPipe, TuiIcon],
   templateUrl: './contact-info.component.html',
   styleUrl: './contact-info.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

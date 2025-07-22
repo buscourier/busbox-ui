@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { type Observable } from 'rxjs';
+import type { Observable } from 'rxjs';
 
 import type { FormControlStatus, FormValidationState, Office, PickupCity } from '@shared/types';
 

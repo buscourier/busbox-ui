@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import type { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -42,10 +41,6 @@ interface OrderResponse {
   providedIn: 'root',
 })
 export class BookingService extends DeliveryBaseService {
-  constructor(http: HttpClient) {
-    super(http);
-  }
-
   submitOrder(booking: Booking): Observable<BookingResult> {
     const requestData = this.mapToRequestData(booking);
 

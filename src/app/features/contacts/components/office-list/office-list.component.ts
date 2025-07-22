@@ -6,7 +6,7 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { TuiButton, TuiHint, TuiIcon, TuiScrollbar } from '@taiga-ui/core';
+import { TuiHint, TuiIcon, TuiScrollbar } from '@taiga-ui/core';
 
 import { cn } from '@core/utils';
 
@@ -14,7 +14,7 @@ import type { Office } from '@shared/types';
 
 @Component({
   selector: 'app-office-list',
-  imports: [TuiButton, TuiScrollbar, TuiHint, TuiIcon],
+  imports: [TuiScrollbar, TuiHint, TuiIcon],
   templateUrl: './office-list.component.html',
   styleUrl: './office-list.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,7 +23,7 @@ export class OfficeListComponent {
   @Input({ required: true }) activeOffice!: Office | null;
   @Input({ required: true }) offices!: Office[];
 
-  @Output() select = new EventEmitter<string>();
+  @Output() selectOffice = new EventEmitter<string>();
 
   @HostBinding('class') get hostClasses(): string {
     return cn(
@@ -44,7 +44,7 @@ export class OfficeListComponent {
     );
   }
 
-  onSelect(id: string) {
-    this.select.emit(id);
+  onSelectOffice(id: string) {
+    this.selectOffice.emit(id);
   }
 }

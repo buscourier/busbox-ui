@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, type Observable, shareReplay } from 'rxjs';
 
@@ -12,10 +11,6 @@ import type { Confidant, ProfileField } from '../types';
   providedIn: 'root',
 })
 export class ProfileService extends ApiService {
-  constructor(http: HttpClient) {
-    super(http);
-  }
-
   getFields(userId: string): Observable<ProfileField[]> {
     return this.http
       .get<ProfileField[]>(`${this.baseUrl}/account/details/${environment.apiKey}/${userId}`)
