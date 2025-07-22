@@ -23,10 +23,10 @@ ARG APP_API_KEY
 ENV APP_API_KEY=${APP_API_KEY}
 
 ARG APP_MAP_KEY
-ENV APP_MAP_KEY = ${APP_MAP_KEY}
+ENV APP_MAP_KEY=${APP_MAP_KEY}
 
 ARG APP_IMAGE_PROVIDER_URL
-ENV APP_IMAGE_PROVIDER_URL = ${APP_IMAGE_PROVIDER_URL}
+ENV APP_IMAGE_PROVIDER_URL=${APP_IMAGE_PROVIDER_URL}
 
 ARG DOPPLER_CONFIG
 ENV DOPPLER_CONFIG=${DOPPLER_CONFIG}
@@ -37,50 +37,29 @@ COPY . .
 # Build the application
 RUN npm run build -- --configuration=${NODE_ENV}
 
-# Stage 2: Nginx Configuration
-FROM nginx:alpine AS nginx-config
-
-RUN rm /etc/nginx/conf.d/default.conf
-COPY nginx/nginx.conf /etc/nginx/nginx.conf
-RUN mkdir /etc/nginx/logs && \
-    touch /etc/nginx/logs/error.log /etc/nginx/logs/access.log
-
-# Stage 3: Final Image
+# Stage 2: Final Image
 FROM nginx:alpine
+
+# Remove default nginx configuration
+RUN rm /etc/nginx/conf.d/default.conf
 
 # Copy built files from the build stage
 COPY --from=builder /app/dist/busbox-ui /usr/share/nginx/html
 
-# Copy Nginx configuration
-COPY --from=nginx-config /etc/nginx/nginx.conf /etc/nginx/nginx.conf
-COPY --from=nginx-config /etc/nginx/logs /etc/nginx/logs
+# Copy custom nginx configuration
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
-# Optional: install additional tools for debugging
+# Create logs directory
+RUN mkdir -p /etc/nginx/logs && \
+   touch /etc/nginx/logs/error.log /etc/nginx/logs/access.log
+
+# Install curl for healthcheck
 RUN apk add --no-cache curl
 
 # Configure healthcheck
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:80 || exit 1
+ CMD curl -f http://localhost:80 || exit 1
 
 EXPOSE 80
-
-# Set environment variables at runtime
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
-
-ARG APP_API_BASE_URL
-ENV APP_API_BASE_URL=${APP_API_BASE_URL}
-
-ARG APP_API_KEY
-ENV APP_API_KEY=${APP_API_KEY}
-
-ARG APP_MAP_KEY
-ENV APP_MAP_KEY = ${APP_MAP_KEY}
-
-ARG APP_IMAGE_PROVIDER_URL
-ENV APP_IMAGE_PROVIDER_URL = ${APP_IMAGE_PROVIDER_URL}
-
-ARG DOPPLER_CONFIG
-ENV DOPPLER_CONFIG=${DOPPLER_CONFIG}
 
 CMD ["nginx", "-g", "daemon off;"]
