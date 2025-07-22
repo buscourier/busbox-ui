@@ -44,7 +44,7 @@ FROM nginx:alpine
 RUN rm /etc/nginx/conf.d/default.conf
 
 # Copy built files from the build stage
-COPY --from=builder /app/dist/busbox-ui /usr/share/nginx/html
+COPY --from=builder /app/dist/busbox-ui/browser /usr/share/nginx/html
 
 # Copy custom nginx configuration
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
