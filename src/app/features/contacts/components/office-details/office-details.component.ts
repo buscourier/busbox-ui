@@ -8,7 +8,7 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { TuiButton, TuiIcon, TuiLink, TuiScrollbar } from '@taiga-ui/core';
+import { TuiButton, TuiLink, TuiScrollbar } from '@taiga-ui/core';
 
 import { BreakpointDirective } from '@core/directives';
 import { cn } from '@core/utils';
@@ -24,7 +24,6 @@ import { InfoItemComponent } from './info-item';
   imports: [
     BreakpointDirective,
     TuiButton,
-    TuiIcon,
     TuiScrollbar,
     VideoComponent,
     NgOptimizedImage,
@@ -39,7 +38,7 @@ import { InfoItemComponent } from './info-item';
 export class OfficeDetailsComponent {
   @Input({ required: true }) office!: Office;
   @Input({ required: true }) email!: string;
-  @Output() close = new EventEmitter<void>();
+  @Output() closeDetails = new EventEmitter<void>();
 
   @HostBinding('class') get hostClasses(): string {
     return cn(
@@ -54,13 +53,13 @@ export class OfficeDetailsComponent {
 
   @HostListener('document:keydown.escape')
   onEscapeKey(): void {
-    this.closeDetails();
+    this.onCloseDetails();
   }
 
   @HostListener('click', ['$event'])
   onClick(event: Event): void {
     if (event.target === event.currentTarget) {
-      this.closeDetails();
+      this.onCloseDetails();
     }
   }
 
@@ -76,11 +75,11 @@ export class OfficeDetailsComponent {
 
   isClosing = false;
 
-  closeDetails(): void {
+  onCloseDetails(): void {
     this.isClosing = true;
 
     setTimeout(() => {
-      this.close.emit();
+      this.closeDetails.emit();
     }, 300);
   }
 

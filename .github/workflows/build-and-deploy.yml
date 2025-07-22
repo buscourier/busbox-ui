@@ -65,8 +65,8 @@ jobs:
           build-args: |
             NODE_ENV=${{ env.NODE_ENV }}
             DOPPLER_CONFIG=${{ secrets.DOPPLER_CONFIG }}
-            API_URL=${{ secrets.API_URL }}
-            API_KEY=${{ secrets.API_KEY }}
+            APP_API_BASE_URL=${{ secrets.APP_API_BASE_URL }}
+            APP_API_KEY=${{ secrets.APP_API_KEY }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
@@ -100,8 +100,8 @@ jobs:
               --restart unless-stopped \
               -e NODE_ENV=${{ env.NODE_ENV }} \
               -e DOPPLER_CONFIG=${{ secrets.DOPPLER_CONFIG }} \
-              -e API_URL=${{ secrets.API_URL }} \
-              -e API_KEY=${{ secrets.API_KEY }} \
+              -e APP_API_BASE_URL=${{ secrets.APP_API_BASE_URL }} \
+              -e APP_API_KEY=${{ secrets.APP_API_KEY }} \
               ${{ env.DOCKER_IMAGE }}:${{ needs.build-and-push.outputs.version }}
 
             # Remove old Docker images

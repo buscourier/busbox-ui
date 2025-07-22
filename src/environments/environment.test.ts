@@ -1,7 +1,8 @@
 export const environment = {
   production: false,
-  apiUrl: '$API_URL',
-  dopplerConfig: '$DOPPLER_CONFIG',
-  name: 'test',
-  apiKey: '',
+  apiBaseUrl: '$API_URL',
+  apiKey: '$API_KEY',
+  mapApiKey: '$MAP_API_KEY',
+  imageProviderUrl: '$APP_IMAGE_PROVIDER_URL',
+  // dopplerConfig: '',
 };

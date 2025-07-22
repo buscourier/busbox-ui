@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { forkJoin, of } from 'rxjs';
 import type { Observable } from 'rxjs';
@@ -18,10 +17,6 @@ import type { Courier } from '@delivery/types';
   providedIn: 'root',
 })
 export class DeliverySummaryService extends DeliveryBaseService {
-  constructor(http: HttpClient) {
-    super(http);
-  }
-
   calculateTotalAmount(params: TotalAmountParams): Observable<TotalAmount> {
     return forkJoin(
       params.orders.map((order) =>

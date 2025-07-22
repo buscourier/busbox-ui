@@ -10,10 +10,10 @@
     [class.opacity-100]="isOpen"
     [class.opacity-0]="!isOpen"
     [class.invisible]="!isOpen"
-    (click)="close.emit()"
-    (keydown.escape)="close.emit()"
-    (keydown.enter)="close.emit()"
-    (keydown.space)="close.emit()"
+    (click)="closeMenu.emit()"
+    (keydown.escape)="closeMenu.emit()"
+    (keydown.enter)="closeMenu.emit()"
+    (keydown.space)="closeMenu.emit()"
     aria-label="Закрыть модальное окно"
     tabindex="0"
     role="button"
@@ -34,7 +34,7 @@
         <span class="ml-2 text-lg font-semibold">Баскурьер</span>
       </div>
       <button
-        (click)="close.emit()"
+        (click)="closeMenu.emit()"
         class="text-xl text-gray-500 hover:text-gray-700 hover:bg-gray-200 p-1 rounded transition-colors duration-200"
         aria-label="Закрыть меню"
       >
@@ -75,7 +75,7 @@
                     <a
                       [routerLink]="'/' + subItem.link"
                       class="block py-3 pl-12 pr-6 text-gray-600 text-sm hover:bg-gray-200 hover:text-amber-600 transition-colors duration-200"
-                      (click)="close.emit()"
+                      (click)="closeMenu.emit()"
                       routerLinkActive="text-amber-600"
                     >
                       {{ subItem.name }}
@@ -88,7 +88,7 @@
               <a
                 [routerLink]="'/' + item.link"
                 class="flex w-full px-6 py-4 text-gray-700 font-medium hover:bg-gray-50 hover:text-amber-600 transition-colors duration-200"
-                (click)="close.emit()"
+                (click)="closeMenu.emit()"
                 routerLinkActive="bg-gray-50 text-amber-600"
               >
                 {{ item.name }}
@@ -107,7 +107,7 @@
           <a
             [routerLink]="'/' + item.link"
             class="block py-3 text-gray-700 font-medium border-b border-gray-100 hover:text-amber-600 transition-colors duration-200"
-            (click)="close.emit()"
+            (click)="closeMenu.emit()"
             routerLinkActive="text-amber-600"
           >
             {{ item.name }}
@@ -157,14 +157,14 @@
         <a
           href="/privacy-policy"
           class="text-xs text-gray-500 hover:text-gray-700 transition-colors duration-200"
-          (click)="close.emit()"
+          (click)="closeMenu.emit()"
         >
           Политика конфиденциальности
         </a>
         <a
           href="/terms"
           class="text-xs text-gray-500 hover:text-gray-700 transition-colors duration-200"
-          (click)="close.emit()"
+          (click)="closeMenu.emit()"
         >
           Пользовательское соглашение
         </a>

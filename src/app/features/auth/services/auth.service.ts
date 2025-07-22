@@ -20,12 +20,12 @@ import { TokenService } from './token.service';
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly tokenService = inject(TokenService);
-  private readonly apiUrl = environment.apiUrl;
+  private readonly apiBaseUrl = environment.apiBaseUrl;
 
   login(credentials: LoginCredentials): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(
-        `${this.apiUrl}/account/login`,
+        `${this.apiBaseUrl}/account/login`,
         JSON.stringify({
           'api-key': environment.apiKey,
           ...credentials,
@@ -48,14 +48,14 @@ export class AuthService {
 
   register(userData: RegisterPayload): Observable<AuthResponse> {
     console.log('register', userData);
-    return this.http.post<AuthResponse>(`${this.apiUrl}/users`, userData).pipe(
+    return this.http.post<AuthResponse>(`${this.apiBaseUrl}/users`, userData).pipe(
       tap((response) => this.handleAuthentication(response)),
       catchError((error) => this.handleError('Registration Failed', error)),
     );
   }
 
   logout(): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/account/logout`, {}).pipe(
+    return this.http.post<void>(`${this.apiBaseUrl}/account/logout`, {}).pipe(
       tap(() => this.handleLogout()),
       catchError(() => {
         // Even if the API call fails, we still want to log out locally
@@ -67,13 +67,13 @@ export class AuthService {
 
   forgotPassword(email: string): Observable<{ message: string }> {
     return this.http
-      .post<{ message: string }>(`${this.apiUrl}/account/forgot-password`, { email })
+      .post<{ message: string }>(`${this.apiBaseUrl}/account/forgot-password`, { email })
       .pipe(catchError((error) => this.handleError('Forgot password request failed', error)));
   }
 
   resetPassword(payload: ResetPasswordPayload): Observable<{ message: string }> {
     return this.http
-      .post<{ message: string }>(`${this.apiUrl}/reset-password`, payload)
+      .post<{ message: string }>(`${this.apiBaseUrl}/reset-password`, payload)
       .pipe(catchError((error) => this.handleError('Password reset failed', error)));
   }
 
@@ -86,12 +86,14 @@ export class AuthService {
       return of(null);
     }
 
-    return this.http.get<AuthResponse>(`${environment.apiUrl}/account/auth/${accessToken}`).pipe(
-      catchError(() => {
-        this.handleLogout();
-        return of(null);
-      }),
-    );
+    return this.http
+      .get<AuthResponse>(`${environment.apiBaseUrl}/account/auth/${accessToken}`)
+      .pipe(
+        catchError(() => {
+          this.handleLogout();
+          return of(null);
+        }),
+      );
   }
 
   refreshToken(): Observable<AuthResponse> {
@@ -102,7 +104,7 @@ export class AuthService {
     }
 
     return this.http
-      .post<AuthResponse>(`${this.apiUrl}/refresh-token`, { refresh_token: refreshToken })
+      .post<AuthResponse>(`${this.apiBaseUrl}/refresh-token`, { refresh_token: refreshToken })
       .pipe(
         map((response) => {
           if ('error' in response) {

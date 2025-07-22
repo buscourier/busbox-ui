@@ -18,7 +18,7 @@ export class OrderTabsComponent {
 
   add = output<void>();
   remove = output<string>();
-  select = output<string>();
+  selectOrder = output<string>();
 
   addTab(): void {
     this.add.emit();
@@ -29,7 +29,7 @@ export class OrderTabsComponent {
     this.remove.emit(tabId);
   }
 
-  selectTab(tabId: string): void {
-    this.select.emit(tabId);
+  onSelectOrder(tabId: string): void {
+    this.selectOrder.emit(tabId);
   }
 }

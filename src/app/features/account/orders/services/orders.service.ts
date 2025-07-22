@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, type Observable, tap } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -20,10 +19,6 @@ import type {
 })
 export class OrdersService extends ApiService {
   private cache = new Map<string, Observable<OrderListResponse>>();
-
-  constructor(http: HttpClient) {
-    super(http);
-  }
 
   // getOrderList(payload: OrderListPayload): Observable<OrderListResponse> {
   //   const cacheKey = JSON.stringify(payload);

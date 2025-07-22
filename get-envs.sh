@@ -12,9 +12,9 @@ fi
 # Set config
 CONFIG="$1"
 
-# Get the API_URL value from Doppler
-API_URL="$(doppler secrets get API_URL --plain --config "$CONFIG")"
-echo "API_URL: $API_URL"
+# Get the APP_API_BASE_URL value from Doppler
+APP_API_BASE_URL="$(doppler secrets get APP_API_BASE_URL --plain --config "$CONFIG")"
+echo "APP_API_BASE_URL: $APP_API_BASE_URL"
 
 # Get the DOPPLER_CONFIG value from Doppler
 DOPPLER_CONFIG="$(doppler secrets get DOPPLER_CONFIG --plain --config "$CONFIG")"

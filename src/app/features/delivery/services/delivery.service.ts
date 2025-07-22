@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, forkJoin, retry } from 'rxjs';
 import type { Observable } from 'rxjs';
@@ -14,10 +13,6 @@ const MAX_RETRIES = 3;
   providedIn: 'root',
 })
 export class DeliveryService extends ApiService {
-  constructor(http: HttpClient) {
-    super(http);
-  }
-
   loadCargos(pickupCityId: string, deliveryCityId: string): Observable<Cargo[]> {
     return this.http
       .get<Cargo[]>(`${this.baseUrl}/calc/gettypes/${pickupCityId}/${deliveryCityId}`)

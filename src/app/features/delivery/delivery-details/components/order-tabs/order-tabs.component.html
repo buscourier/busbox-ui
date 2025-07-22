@@ -5,7 +5,7 @@
       tuiChip
       [class.!bg-yellow-500]="tab.isActive"
       [class.isInvalid]="tab.isActiveInvalid"
-      (click)="selectTab(tab.id)"
+      (click)="onSelectOrder(tab.id)"
       [disabled]="tab.isDisabled"
     >
       Заказ №{{ tab.number }}

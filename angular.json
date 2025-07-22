@@ -15,14 +15,16 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-builders/custom-webpack:browser",
+          "builder": "@ngx-env/builder:application",
           "options": {
-            "customWebpackConfig": {
-              "path": "./custom-webpack.config.js"
+            "ngxEnv": {
+              "prefix": "APP_",
+              "runtime": false
             },
-            "outputPath": "dist/busbox-ui",
+            "outputPath": {
+              "base": "dist/busbox-ui"
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -49,11 +51,24 @@
             "scripts": [],
             "allowedCommonJsDependencies": [
               "jspdf",
-              "html2canvas"
-            ]
+              "html2canvas",
+              "canvg",
+              "xlsx-js-style",
+              "jsbarcode",
+              "qrcode",
+              "plyr",
+              "raf",
+              "rgbcolor",
+              "core-js"
+            ],
+            "browser": "src/main.ts"
           },
           "configurations": {
             "production": {
+              "ngxEnv": {
+                "prefix": "APP_",
+                "runtime": false
+              },
               "budgets": [
                 {
                   "type": "initial",
@@ -77,11 +92,13 @@
               },
               "sourceMap": false,
               "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
+              "extractLicenses": true
             },
             "staging": {
+              "ngxEnv": {
+                "prefix": "APP_",
+                "runtime": false
+              },
               "budgets": [
                 {
                   "type": "initial",
@@ -105,11 +122,13 @@
               },
               "sourceMap": false,
               "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
+              "extractLicenses": true
             },
             "development": {
+              "ngxEnv": {
+                "prefix": "APP_",
+                "runtime": false
+              },
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
@@ -118,7 +137,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-builders/custom-webpack:dev-server",
+          "builder": "@ngx-env/builder:dev-server",
           "options": {
             "buildTarget": "busbox-ui:build"
           },
@@ -182,5 +201,31 @@
       "@angular-eslint/schematics",
       "@ngrx/schematics"
     ]
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "type": "component"
+    },
+    "@schematics/angular:directive": {
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
+    }
   }
 }

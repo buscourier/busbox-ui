@@ -1,4 +1,4 @@
-@import 'theme.css';
-@import 'base.css';
-@import 'animations.css';
-@import 'components/index.css';
+@import './theme.css';
+@import './base.css';
+@import './animations.css';
+@import './components/index.css';

@@ -10,17 +10,17 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install all dependencies, including devDependencies
-RUN npm ci && npm cache clean --force
+RUN npm ci --legacy-peer-deps && npm cache clean --force
 
 # Set environment variables at build time
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
-ARG API_URL
-ENV API_URL=${API_URL}
+ARG APP_API_BASE_URL
+ENV APP_API_BASE_URL=${APP_API_BASE_URL}
 
-ARG API_KEY
-ENV API_KEY=${API_KEY}
+ARG APP_API_KEY
+ENV APP_API_KEY=${APP_API_KEY}
 
 ARG DOPPLER_CONFIG
 ENV DOPPLER_CONFIG=${DOPPLER_CONFIG}
@@ -62,11 +62,11 @@ EXPOSE 80
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
-ARG API_URL
-ENV API_URL=${API_URL}
+ARG APP_API_BASE_URL
+ENV APP_API_BASE_URL=${APP_API_BASE_URL}
 
-ARG API_KEY
-ENV API_KEY=${API_KEY}
+ARG APP_API_KEY
+ENV APP_API_KEY=${APP_API_KEY}
 
 ARG DOPPLER_CONFIG
 ENV DOPPLER_CONFIG=${DOPPLER_CONFIG}

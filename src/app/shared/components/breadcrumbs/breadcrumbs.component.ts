@@ -1,4 +1,4 @@
-import { AsyncPipe, JsonPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TuiItem } from '@taiga-ui/cdk';
@@ -10,7 +10,7 @@ import { type BreadcrumbItem, BreadcrumbsService } from '@core/services';
 
 @Component({
   selector: 'app-breadcrumbs',
-  imports: [TuiBreadcrumbs, AsyncPipe, TuiItem, TuiLink, RouterLink, JsonPipe],
+  imports: [TuiBreadcrumbs, AsyncPipe, TuiItem, TuiLink, RouterLink],
   templateUrl: './breadcrumbs.component.html',
   styleUrl: './breadcrumbs.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

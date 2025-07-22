@@ -8,14 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import {
-  TuiButton,
-  TuiHint,
-  TuiIcon,
-  TuiLabel,
-  TuiNotification,
-  TuiTextfield,
-} from '@taiga-ui/core';
+import { TuiButton, TuiHint, TuiIcon, TuiLabel, TuiTextfield } from '@taiga-ui/core';
 import {
   TUI_VALIDATION_ERRORS,
   TuiButtonLoading,
@@ -38,7 +31,6 @@ import type { RegisterForm } from './register.types';
   selector: 'app-register',
   imports: [
     AsyncPipe,
-    TuiNotification,
     ReactiveFormsModule,
     TuiLabel,
     TuiTextfield,

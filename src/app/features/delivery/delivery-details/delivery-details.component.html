@@ -7,7 +7,7 @@
     [maxTabs]="MAX_ORDERS"
     (add)="addOrder()"
     (remove)="removeOrder($event)"
-    (select)="setActiveOrder($event)"
+    (selectOrder)="setActiveOrder($event)"
   />
   @if (vm?.orders?.active; as order) {
     <app-cargo-picker

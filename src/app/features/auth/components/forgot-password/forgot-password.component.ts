@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { TuiButton, TuiHint, TuiLabel, TuiNotification, TuiTextfield } from '@taiga-ui/core';
+import { TuiButton, TuiHint, TuiLabel, TuiTextfield } from '@taiga-ui/core';
 import { TUI_VALIDATION_ERRORS, TuiButtonLoading, TuiFieldErrorContentPipe } from '@taiga-ui/kit';
 import { type Observable, withLatestFrom } from 'rxjs';
 
@@ -23,7 +23,6 @@ import type { ForgotPasswordForm } from './forgot-password.types';
   selector: 'app-forgot-password',
   imports: [
     AsyncPipe,
-    TuiNotification,
     ReactiveFormsModule,
     TuiLabel,
     TuiTextfield,

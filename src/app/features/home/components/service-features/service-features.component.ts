@@ -1,4 +1,3 @@
-import { JsonPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, HostBinding, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TuiIcon } from '@taiga-ui/core';
@@ -8,7 +7,7 @@ import { cn } from '@core/utils';
 
 @Component({
   selector: 'app-service-features',
-  imports: [RouterLink, TuiIcon, JsonPipe],
+  imports: [RouterLink, TuiIcon],
   templateUrl: './service-features.component.html',
   styleUrl: './service-features.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

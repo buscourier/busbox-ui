@@ -8,14 +8,12 @@ import { type Case, CasesService } from '@core/services';
 
 import { ContactFormComponent } from '@shared/components/contact-form';
 
-import { NewsComponent } from '@home/components';
-
 import { CaseCardComponent } from './case-card';
 import { CaseDetailsComponent } from './case-details';
 
 @Component({
   selector: 'app-complex-tasks',
-  imports: [ContactFormComponent, NewsComponent, CaseCardComponent],
+  imports: [ContactFormComponent, CaseCardComponent],
   templateUrl: './complex-tasks.component.html',
   styleUrl: './complex-tasks.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

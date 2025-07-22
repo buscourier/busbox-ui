@@ -24,7 +24,7 @@
     class="col-start-1 row-start-2"
     [activeOffice]="activeOffice"
     [offices]="points || []"
-    (select)="onOfficeSelect($event)"
+    (selectOffice)="onOfficeSelect($event)"
   />
 }
 
@@ -33,7 +33,7 @@
     class="lg:col-start-2 lg:row-start-2"
     [email]="contact.email"
     [office]="office"
-    (close)="onCloseDetails()"
+    (closeDetails)="onCloseDetails()"
   />
 }
 

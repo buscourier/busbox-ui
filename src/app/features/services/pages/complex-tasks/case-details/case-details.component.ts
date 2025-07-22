@@ -1,4 +1,4 @@
-import { AsyncPipe, NgOptimizedImage } from '@angular/common';
+import { NgOptimizedImage } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,8 +6,6 @@ import {
   inject,
   type OnInit,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { TuiRepeatTimes } from '@taiga-ui/cdk';
 import { type TuiDialogContext, TuiIcon } from '@taiga-ui/core';
 import { injectContext } from '@taiga-ui/polymorpheus';
 
@@ -16,7 +14,7 @@ import { cn } from '@core/utils';
 
 @Component({
   selector: 'app-case-details',
-  imports: [AsyncPipe, TuiRepeatTimes, NgOptimizedImage, TuiIcon, RouterLink],
+  imports: [NgOptimizedImage, TuiIcon],
   templateUrl: './case-details.component.html',
   styleUrl: './case-details.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
