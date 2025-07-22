@@ -15,11 +15,8 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-builders/custom-webpack:browser",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "customWebpackConfig": {
-              "path": "./custom-webpack.config.js"
-            },
             "outputPath": "dist/busbox-ui",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -118,7 +115,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-builders/custom-webpack:dev-server",
+          "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "buildTarget": "busbox-ui:build"
           },
