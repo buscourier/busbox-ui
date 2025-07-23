@@ -67,7 +67,7 @@
             "production": {
               "ngxEnv": {
                 "prefix": "APP_",
-                "runtime": false
+                "runtime": true
               },
               "budgets": [
                 {
@@ -81,6 +81,7 @@
                   "maximumError": "6kB"
                 }
               ],
+              "outputPath": "dist/busbox-ui",
               "outputHashing": "all",
               "optimization": {
                 "scripts": true,
@@ -97,7 +98,7 @@
             "staging": {
               "ngxEnv": {
                 "prefix": "APP_",
-                "runtime": false
+                "runtime": true
               },
               "budgets": [
                 {
@@ -111,6 +112,7 @@
                   "maximumError": "4kB"
                 }
               ],
+              "outputPath": "dist/busbox-ui",
               "outputHashing": "all",
               "optimization": {
                 "scripts": true,
