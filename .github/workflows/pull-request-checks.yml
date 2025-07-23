@@ -124,7 +124,7 @@ jobs:
             DOPPLER_CONFIG=${{ secrets.DOPPLER_CONFIG }}
             APP_API_BASE_URL=${{ secrets.APP_API_BASE_URL }}
             APP_API_KEY=${{ secrets.APP_API_KEY }}
-            APP_MAP_KEY: ${{secrets.APP_MAP_KEY}}
-            APP_IMAGE_PROVIDER_URL: ${{secrets.APP_IMAGE_PROVIDER_URL}}
+            APP_MAP_KEY=${{secrets.APP_MAP_KEY}}
+            APP_IMAGE_PROVIDER_URL=${{secrets.APP_IMAGE_PROVIDER_URL}}
           cache-from: type=gha
           cache-to: type=gha,mode=max
