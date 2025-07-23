@@ -67,7 +67,7 @@
             "production": {
               "ngxEnv": {
                 "prefix": "APP_",
-                "runtime": false
+                "runtime": true
               },
               "budgets": [
                 {
@@ -97,7 +97,7 @@
             "staging": {
               "ngxEnv": {
                 "prefix": "APP_",
-                "runtime": false
+                "runtime": true
               },
               "budgets": [
                 {
