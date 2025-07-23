@@ -81,6 +81,7 @@
                   "maximumError": "6kB"
                 }
               ],
+              "outputPath": "dist/busbox-ui",
               "outputHashing": "all",
               "optimization": {
                 "scripts": true,
@@ -111,6 +112,7 @@
                   "maximumError": "4kB"
                 }
               ],
+              "outputPath": "dist/busbox-ui",
               "outputHashing": "all",
               "optimization": {
                 "scripts": true,
