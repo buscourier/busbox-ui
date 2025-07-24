@@ -1,0 +1,45 @@
+<div class="grid grid-cols-[1fr_370px] gap-x-10">
+  <div class="main-content">
+    <ng-content></ng-content>
+  </div>
+
+  <aside class="sidebar">
+    @if (isDocumentsLoading) {
+      <div class="h-20 mb-3 rounded" [tuiSkeleton]="true"></div>
+    } @else if (documents.length > 0) {
+      @for (document of documents; track document.charcode) {
+        <app-document-card [doc]="document" (show)="onDocumentShow(document)" class="mb-4" />
+      }
+    } @else {
+      <div class="text-gray-500 text-sm text-center py-4">Документы отсутствуют</div>
+    }
+
+    @if (customSidebarContent) {
+      <ng-container [ngTemplateOutlet]="customSidebarContent"></ng-container>
+    }
+
+    @for (action of actions; track action.label) {
+      <button
+        type="button"
+        tuiButton
+        [disabled]="action.disabled"
+        (click)="action.handler()"
+        size="l"
+        class="mb-2 w-full"
+      >
+        @if (action.icon) {
+          <tui-icon [icon]="action.icon" class="mr-2"></tui-icon>
+        }
+        {{ action.label }}
+      </button>
+    }
+  </aside>
+</div>
+
+<ng-template #actionsTemplate let-content="content">
+  <app-pdf-actions
+    [content]="content"
+    (print)="printPdf($event)"
+    (download)="downloadPdf($event)"
+  />
+</ng-template>
