@@ -1,6 +1,8 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
-import type { ApiError, DocumentFile } from '@shared/types';
+import type { ApiError } from '@shared/types';
+
+import type { DocumentFile } from '../types';
 
 export const DocumentsActions = createActionGroup({
   source: 'Documents',

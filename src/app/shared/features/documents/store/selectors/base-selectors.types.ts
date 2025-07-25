@@ -1,6 +1,8 @@
 import type { MemoizedSelector } from '@ngrx/store';
 
-import type { ApiError, AsyncStatus, DocumentFile } from '@shared/types';
+import type { ApiError, AsyncStatus } from '@shared/types';
+
+import type { DocumentFile } from '../../types';
 
 export interface BaseSelectors {
   selectDocumentsStatus: MemoizedSelector<object, AsyncStatus>;

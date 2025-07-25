@@ -5,9 +5,9 @@ import { mapResponse } from '@ngrx/operators';
 import { TuiAlertService } from '@taiga-ui/core';
 import { switchMap } from 'rxjs';
 
-import { DocumentsService } from '@core/services/api';
-
 import type { ApiError } from '@shared/types';
+
+import { DocumentsService } from '../services';
 
 import { DocumentsActions } from './actions';
 

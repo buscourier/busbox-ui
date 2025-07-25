@@ -225,6 +225,8 @@ module.exports = tseslint.config(
             '@delivery/*/types',
             '@delivery/*/constants',
             '@shared/components/*',
+            '@shared/features/*',
+            '@shared/features/*/types',
             'features/*',
             '*/services/*',
             'components/*',

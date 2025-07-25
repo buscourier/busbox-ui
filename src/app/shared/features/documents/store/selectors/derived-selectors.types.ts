@@ -1,12 +1,13 @@
 import type { MemoizedSelector } from '@ngrx/store';
 
-import type { DocumentFile } from '@shared/types';
+import type { DocumentFile } from '../../types';
 
 export interface DerivedSelectors {
   selectIsDocumentsLoading: MemoizedSelector<object, boolean>;
   selectIsDocumentsLoaded: MemoizedSelector<object, boolean>;
   selectIsDocumentsError: MemoizedSelector<object, boolean>;
   selectHasDocuments: MemoizedSelector<object, boolean>;
+  selectDocumentByType: (charcode: string) => MemoizedSelector<object, DocumentFile | null>;
   selectRules: MemoizedSelector<object, DocumentFile | null>;
   selectContract: MemoizedSelector<object, DocumentFile | null>;
   selectWarrantIndividual: MemoizedSelector<object, DocumentFile | null>;

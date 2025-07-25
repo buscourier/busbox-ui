@@ -6,12 +6,6 @@ import type { BaseSelectors } from './base-selectors.types';
 import type { DerivedSelectors } from './derived-selectors.types';
 
 export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSelectors => {
-  const createDocumentSelector = (charcode: string) =>
-    createSelector(
-      baseSelectors.selectDocuments,
-      (documents) => documents?.find((document) => document.charcode === charcode) || null,
-    );
-
   const selectIsDocumentsLoading = createSelector(
     baseSelectors.selectDocumentsStatus,
     (status) => status === AsyncStatus.LOADING,
@@ -33,18 +27,25 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
     (data, isLoaded) => isLoaded && !!data,
   );
 
+  const selectDocumentByType = (charcode: string) =>
+    createSelector(
+      baseSelectors.selectDocuments,
+      (documents) => documents?.find((document) => document.charcode === charcode) || null,
+    );
+
   return {
     selectIsDocumentsLoading,
     selectIsDocumentsLoaded,
     selectIsDocumentsError,
     selectHasDocuments,
-    selectRules: createDocumentSelector('rules'),
-    selectContract: createDocumentSelector('dogovor'),
-    selectWarrantIndividual: createDocumentSelector('warrant_fiz'),
-    selectWarrantLegal: createDocumentSelector('warrant_ur'),
-    selectPackaging: createDocumentSelector('upakovka'),
-    selectTariffs: createDocumentSelector('tarif'),
-    selectCourierTariff: createDocumentSelector('tarif_kurier'),
-    selectWorkConditionsAssessment: createDocumentSelector('spec_otcenka'),
+    selectDocumentByType,
+    selectRules: selectDocumentByType('rules'),
+    selectContract: selectDocumentByType('dogovor'),
+    selectWarrantIndividual: selectDocumentByType('warrant_fiz'),
+    selectWarrantLegal: selectDocumentByType('warrant_ur'),
+    selectPackaging: selectDocumentByType('upakovka'),
+    selectTariffs: selectDocumentByType('tarif'),
+    selectCourierTariff: selectDocumentByType('tarif_kurier'),
+    selectWorkConditionsAssessment: selectDocumentByType('spec_otcenka'),
   };
 };

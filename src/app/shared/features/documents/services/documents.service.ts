@@ -3,7 +3,7 @@ import { catchError, type Observable } from 'rxjs';
 
 import { ApiService } from '@core/services/api.service';
 
-import type { DocumentFile } from '@shared/types';
+import type { DocumentFile } from '../types';
 
 @Injectable({
   providedIn: 'root',

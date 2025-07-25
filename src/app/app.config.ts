@@ -50,12 +50,8 @@ import {
 } from '@core/tokens';
 import { CustomDateTransformer, CustomDateRangeTransformer } from '@core/transformers';
 
-import {
-  LocationsEffects,
-  locationsFeature,
-  DocumentsEffects,
-  documentsFeature,
-} from '@shared/store';
+import { DocumentsEffects, documentsFeature } from '@shared/features/documents';
+import { LocationsEffects, locationsFeature } from '@shared/store';
 
 import { environment } from '@env/environment';
 
