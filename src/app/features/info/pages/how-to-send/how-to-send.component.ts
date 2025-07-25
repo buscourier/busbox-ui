@@ -3,11 +3,12 @@ import { RouterLink } from '@angular/router';
 
 import { NavigationService } from '@core/services';
 
+import { StepsComponent, StepDirective } from '@shared/components/steps';
 import { SidebarLayoutComponent } from '@shared/layouts';
 
 @Component({
   selector: 'app-how-to-send',
-  imports: [SidebarLayoutComponent, RouterLink],
+  imports: [SidebarLayoutComponent, RouterLink, StepsComponent, StepDirective],
   templateUrl: './how-to-send.component.html',
   styleUrl: './how-to-send.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
