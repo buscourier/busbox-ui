@@ -1,1 +1,63 @@
-<app-sidebar-layout [documentTypes]="['rules']"> </app-sidebar-layout>
+<app-sidebar-layout [documentTypes]="['rules']">
+  <ol class="max-w-[720px]">
+    <li>
+      <div>
+        <p class="mb-5">Передать посылку в Баскурьер:</p>
+        <ul>
+          <li class="mb-3 flex space-x-3">
+            <span class="text-gray-500">a)</span>
+            <p>
+              Если вы хотите, чтобы курьер забрал посылку от вашей двери, вы можете
+              <a [routerLink]="deliveryLink" class="link-blue-500">оставить заявку</a>
+              на вызов курьера.
+            </p>
+          </li>
+          <li class="mb-3 flex space-x-3">
+            <span class="text-gray-500">б)</span>
+            <p>
+              Прийти в филиал.<br class="sm:hidden" />
+              <a [routerLink]="contactsLink" class="link-blue-500 ml-1 inline-block">
+                Смотреть адреса филиалов
+              </a>
+            </p>
+          </li>
+        </ul>
+      </div>
+    </li>
+    <li>
+      <p>
+        Для оформления вам понадобятся документы, удостоверяющие личность (паспорт, военный билет
+        или водительское удостоверение).
+      </p>
+    </li>
+    <li>
+      <p>Оплата производится только отправителем наличным или безналичным расчетом.</p>
+    </li>
+    <li>
+      <div>
+        <p class="mb-2.5">
+          Транспортная упаковка должна быть обязательно, она обеспечивает сохранность груза. Вы
+          можете использовать как свою упаковку, так и приобрести необходимую транспортную упаковку
+          у нас.
+        </p>
+        <a [routerLink]="packagingLink" class="link-blue-500">Смотреть виды упаковки и стоимость</a>
+      </div>
+    </li>
+    <li>
+      <div>
+        <p class="mb-2.5">Груз обязательно предоставляется для осмотра в открытом виде.</p>
+        <a [routerLink]="rulesLink" class="link-blue-500"
+          >Смотреть правила приемки и отправки груза</a
+        >
+      </div>
+    </li>
+    <li>
+      <div>
+        <p class="mb-2.5">
+          Согласно транспортной безопасности есть грузы, которые мы не перевозим.
+        </p>
+        <a [routerLink]="rulesLink" class="link-blue-500">Смотреть запрещенные к перевозке грузы</a>
+      </div>
+    </li>
+  </ol>
+</app-sidebar-layout>
