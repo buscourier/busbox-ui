@@ -1,12 +1,6 @@
 @let vm = vm$ | async;
-@let rulesDocument = rulesDocument$ | async;
-@let isDocumentsLoading = (isDocumentsLoading$ | async) || false;
 
-<app-sidebar-layout
-  [isDocumentsLoading]="isDocumentsLoading"
-  [documents]="rulesDocument ? [rulesDocument] : []"
-  [actions]="pageActions"
->
+<app-sidebar-layout [actions]="pageActions" [documentTypes]="['rules']">
   @if (vm) {
     <p class="mb-3 text-md">
       Для получения тарифов, выберите город, из которого планируется отправление.

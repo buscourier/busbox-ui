@@ -19,8 +19,8 @@ import { DOCUMENT_RENDERER } from '@core/tokens';
 
 import { PdfActionsComponent } from '@shared/components/pdf-actions';
 import { type SidebarLayoutAction, SidebarLayoutComponent } from '@shared/layouts';
-import { DocumentsFacade, LocationsFacade } from '@shared/store';
-import type { DocumentFile, PickupCity } from '@shared/types';
+import { LocationsFacade } from '@shared/store';
+import type { PickupCity } from '@shared/types';
 
 import { TariffsViewerService } from './services';
 import { TariffsFacade } from './tariffs.facade';
@@ -58,8 +58,6 @@ export class TariffsComponent implements OnInit {
 
   vm$!: Observable<TariffsViewModel>;
   cities$!: Observable<PickupCity[]>;
-  rulesDocument$!: Observable<DocumentFile | null>;
-  isDocumentsLoading$!: Observable<boolean>;
 
   SKELETON_COUNT = 8;
 
@@ -79,7 +77,6 @@ export class TariffsComponent implements OnInit {
 
   private readonly facade = inject(TariffsFacade);
   private readonly locationsFacade = inject(LocationsFacade);
-  private readonly documentsFacade = inject(DocumentsFacade);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly tariffsViewer = inject(TariffsViewerService);
@@ -87,8 +84,6 @@ export class TariffsComponent implements OnInit {
   ngOnInit(): void {
     this.vm$ = this.facade.getViewModel();
     this.cities$ = this.locationsFacade.getPickupCities();
-    this.rulesDocument$ = this.documentsFacade.getRules();
-    this.isDocumentsLoading$ = this.documentsFacade.isDocumentsLoading();
 
     this.initializeUrl();
   }
@@ -121,11 +116,6 @@ export class TariffsComponent implements OnInit {
 
   downloadPdf(pdfUrl: string): void {
     this.tariffsViewer.downloadPdf(pdfUrl, `Тарифы_Владивосток.pdf`);
-  }
-
-  private printPage(): void {
-    // Логика печати
-    window.print();
   }
 
   printPdf(pdfUrl: string): void {
