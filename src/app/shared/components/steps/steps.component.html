@@ -1,0 +1,9 @@
+<ol class="max-w-[720px]" role="list">
+  @for (step of steps; track $index) {
+    <li
+      class="mb-10 grid grid-cols-[38px_1fr] items-center text-base/6 before:step-point gap-x-5 md:gap-x-8"
+    >
+      <ng-container *ngTemplateOutlet="step.template"></ng-container>
+    </li>
+  }
+</ol>

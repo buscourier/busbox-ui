@@ -1,3 +1,15 @@
+/* link */
+@utility link-* {
+  position: relative;
+  color: --value(--color- *, [color]);
+  border-bottom: 1px dashed --value(--color- *, [color]);
+  cursor: pointer;
+
+  &:hover {
+    border-bottom: none;
+  }
+}
+
 @utility step-point {
   position: relative;
   display: flex;
@@ -15,16 +27,4 @@
   content: counter(number);
   counter-increment: number;
   align-self: start;
-}
-
-/* link */
-@utility link-* {
-  position: relative;
-  color: --value(--color- *, [color]);
-  border-bottom: 1px dashed --value(--color- *, [color]);
-  cursor: pointer;
-
-  &:hover {
-    border-bottom: none;
-  }
 }
