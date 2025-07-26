@@ -2,17 +2,18 @@
 @let isDocumentsLoading = (isDocumentsLoading$ | async) || false;
 
 @if (isDocumentsLoading) {
-  <div class="h-20 mb-3 rounded" [tuiSkeleton]="true"></div>
+  <div class="mb-3 h-20 rounded" [tuiSkeleton]="true"></div>
 } @else if (documents.length > 0) {
   @for (document of documents; track document.charcode) {
     <app-document-card
+      [appearance]="appearance"
       [doc]="document"
       (show)="onDocumentShow(document)"
       class="w-full max-w-[370px]"
     />
   }
 } @else {
-  <div class="text-gray-500 text-sm text-center py-4">Документы отсутствуют</div>
+  <div class="py-4 text-center text-sm text-gray-500">Документы отсутствуют</div>
 }
 
 <ng-template #actionsTemplate let-content="content">

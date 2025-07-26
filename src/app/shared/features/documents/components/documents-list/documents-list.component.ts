@@ -33,10 +33,11 @@ import { DocumentCardComponent } from '../document-card';
 export class DocumentsListComponent implements OnInit {
   @Input() documentTypes?: DocumentCategory[];
   @Input() allDocuments = false;
+  @Input() appearance: 'accent' | 'default' = 'default';
   @ViewChild('actionsTemplate', { static: true }) actionsTemplate!: TemplateRef<unknown>;
 
   @HostBinding('class') get hostClasses(): string {
-    return cn('flex gap-4 flex-wrap');
+    return cn('flex flex-wrap gap-8');
   }
 
   documents$!: Observable<DocumentFile[]>;
