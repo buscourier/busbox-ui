@@ -9,22 +9,3 @@
     border-bottom: none;
   }
 }
-
-@utility step-point {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 38px;
-  height: 38px;
-  font-family: Roboto, Helvetica, sans-serif;
-  font-size: 20px;
-  line-height: 24px;
-  font-weight: 700;
-  background-color: var(--color-yellow-500);
-  color: var(--color-black);
-  border-radius: 50%;
-  content: counter(number);
-  counter-increment: number;
-  align-self: start;
-}
