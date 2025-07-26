@@ -1,5 +1,5 @@
 @if (appearance === 'accent') {
-  <p class="mb-5 font-heading text-lg md:text-xl">
+  <p class="font-heading mb-5 text-xl md:text-[28px]">
     Вы можете скачать файл «{{ doc.name }}» в формате PDF
   </p>
   <button type="button" class="flex items-center" (click)="onShow()">
@@ -8,8 +8,10 @@
       [class]="
         cn('relative text-black hover:cursor-pointer', 'border-b border-dashed border-black')
       "
-      ><b>Скачать в PDF</b> (80 кб)</span
     >
+      <b>Скачать в PDF</b>
+      (80 кб)
+    </span>
   </button>
 } @else {
   <img [src]="getIcon(doc.type)" alt="PDF" height="42" width="42" class="mr-4" />
@@ -26,9 +28,9 @@
       "
       (click)="onShow()"
     >
-      <span
-        ><b class="font-medium">{{ getLabel(doc.type) }}</b></span
-      >
+      <span>
+        <b class="font-medium">{{ getLabel(doc.type) }}</b>
+      </span>
     </button>
   </div>
 }

@@ -24,8 +24,8 @@ export class DocumentCardComponent {
   @Output() show = new EventEmitter<DocumentFile>();
 
   @HostBinding('class') get hostClasses(): string {
-    return cn('flex max-w-[370px] min-h-32 items-start rounded-sm pt-6 pr-9 pb-8 pl-7 shadow-xl', {
-      'rounded-md bg-yellow-500 px-5 pt-9 pb-7.5 md:mt-11 md:px-18 md:py-10':
+    return cn('flex min-h-32 max-w-[370px] items-start rounded-sm pt-6 pr-9 pb-8 pl-7 shadow-xl', {
+      'max-w-full flex-col rounded-md bg-yellow-500 px-5 pt-9 pb-7.5 md:px-18 md:py-10':
         this.appearance === 'accent',
     });
   }
