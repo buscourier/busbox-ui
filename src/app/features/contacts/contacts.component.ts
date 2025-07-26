@@ -76,7 +76,7 @@ export class ContactsComponent implements OnInit {
   @HostBinding('class') get hostClasses(): string {
     return cn(
       `w-full md:h-[675px] md:pt-8`,
-      `md:grid md:grid-cols-[400px_1fr] md:grid-rows-[auto_500px] md:gap-2.5 md:content-start`,
+      `md:grid md:grid-cols-[400px_1fr] md:grid-rows-[auto_500px] md:content-start md:gap-2.5`,
     );
   }
 

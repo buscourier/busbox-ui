@@ -12,6 +12,6 @@ export class PageSectionComponent {
   @Input() type: 'full-width' | 'default' = 'default';
 
   @HostBinding('class') get hostClasses(): string {
-    return cn('block mb-16 md:mb-20 xl:mb-32');
+    return cn('mb-16 block md:mb-20 xl:mb-32');
   }
 }

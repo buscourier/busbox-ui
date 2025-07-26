@@ -16,7 +16,7 @@ export class ServiceFeaturesComponent {
   @HostBinding('class') get hostClasses(): string {
     return cn(
       'flex flex-col space-y-7',
-      'md:grid md:grid-cols-2 md:gap-y-9 md:gap-x-14 md:space-y-0',
+      'md:grid md:grid-cols-2 md:space-y-0 md:gap-x-14 md:gap-y-9',
       'lg:grid-cols-3',
     );
   }

@@ -28,7 +28,7 @@ export class OfficeListComponent {
   @HostBinding('class') get hostClasses(): string {
     return cn(
       'h-full rounded-sm bg-white',
-      'md:border md:border-gray-200 md:shadow-md md:p-5 md:pr-2.5',
+      'md:border md:border-gray-200 md:p-5 md:pr-2.5 md:shadow-md',
     );
   }
 
@@ -39,7 +39,7 @@ export class OfficeListComponent {
       'border-b border-dashed border-blue-500',
 
       {
-        'font-bold text-yellow-500 border-yellow-500': isActive,
+        'border-yellow-500 font-bold text-yellow-500': isActive,
       },
     );
   }

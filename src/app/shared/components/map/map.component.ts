@@ -43,7 +43,7 @@ export class MapComponent implements OnChanges {
   @Output() boundsChange = new EventEmitter<number[][]>();
 
   @HostBinding('class') get hostClasses(): string {
-    return cn(`relative block w-full h-full rounded-lg overflow-hidden bg-gray-50`);
+    return cn(`relative block h-full w-full overflow-hidden rounded-lg bg-gray-50`);
   }
 
   isLoading = signal(true);

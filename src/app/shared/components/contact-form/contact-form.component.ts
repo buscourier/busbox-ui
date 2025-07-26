@@ -86,7 +86,7 @@ export class ContactFormComponent implements OnInit {
 
   @HostBinding('class') get hostClasses(): string {
     return cn({
-      'theme-yellow block w-full max-w-[670px] p-12 pb-14 rounded-md bg-yellow-500 shadow-xl':
+      'theme-yellow block w-full max-w-[670px] rounded-md bg-yellow-500 p-12 pb-14 shadow-xl':
         this.formType === 'custom-tasks',
       'md:p-10': this.formType === 'custom-tasks',
     });
