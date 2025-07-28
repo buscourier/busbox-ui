@@ -1,1 +1,56 @@
-<p>courier works!</p>
+@let cities = cities$ | async;
+
+<app-sidebar-layout [documentTypes]="['tarif_kurier']">
+  <app-steps>
+    <div *appStep>
+      <p class="mb-3">Убедитесь, что в нужном вам городе действует услуга «Вызов курьера».</p>
+      <b class="mb-3 block">Список городов, где есть услуга «Вызов курьера»:</b>
+      @if (cities && cities.length) {
+        <app-list>
+          @for (city of cities; track city.name) {
+            <span *appListItem>{{ city.name }} ({{ city.descr }})</span>
+          }
+        </app-list>
+      } @else {
+        <div
+          *tuiRepeatTimes="let i of SKELETON_COUNT"
+          class="mb-3 h-6 max-w-md last:mb-0"
+          [tuiSkeleton]="true"
+        ></div>
+      }
+    </div>
+    <div *appStep>
+      Вы можете оформить вызов курьера по номеру телефона
+      <br class="hidden sm:block" />
+      <a [href]="contact.phone | contactLink: 'tel'" class="link-blue-500">
+        {{ contact.phone }}
+      </a>
+      или
+      <a [routerLink]="deliveryLink" class="link-blue-500">заполните заявку на сайте</a>
+      . Наш менеджер свяжется с вами и проинформирует о стоимости и сроках доставки.
+    </div>
+    <p *appStep>
+      По прибытию в пункт забора груза с вами свяжется наш курьер, заберет ваш груз и выдаст
+      накладную заказа.
+    </p>
+    <p *appStep>Оплата производится только отправителем наличным или безналичным платежом.</p>
+    <div *appStep>
+      <p class="mb-4">Отследить доставку вашего груза вы можете:</p>
+      <app-list>
+        <span *appListItem>
+          на сайте, в разделе
+          <a [routerLink]="trackingLink" class="link-blue-500">«Статус доставки»</a>
+        </span>
+        <span *appListItem>
+          при отправлении посылки оформить дополнительную услугу «смс-уведомление отправителю»
+        </span>
+        <span *appListItem>
+          позвонить по номеру телефона:
+          <a [href]="contact.phone | contactLink: 'tel'" class="link-blue-500">
+            {{ contact.phone }}
+          </a>
+        </span>
+      </app-list>
+    </div>
+  </app-steps>
+</app-sidebar-layout>
