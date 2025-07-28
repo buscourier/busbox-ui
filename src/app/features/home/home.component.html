@@ -2,15 +2,17 @@
   <div
     class="px-4 sm:mx-auto sm:max-w-md sm:px-0 sm:text-center md:mx-0 md:max-w-full md:flex-grow md:text-left"
   >
-    <h1 class="mb-6 font-heading text-2xl font-bold lg:text-3xl xl:text-[57px]">
-      Срочная доставка <br />
-      по Приморскому краю <br class="hidden sm:block" />
+    <h1 class="font-heading mb-6 text-2xl font-bold lg:text-3xl xl:text-[57px]">
+      Срочная доставка
+      <br />
+      по Приморскому краю
+      <br class="hidden sm:block" />
       и в Хабаровск
     </h1>
     <p class="mb-6 text-sm md:mb-9 lg:text-lg xl:mb-20 xl:text-[26px]">
       <b class="inline-block rounded-sm bg-yellow-500 px-2 py-1 font-bold xl:text-[27px]">
-        от 2 до 24 часов</b
-      >
+        от 2 до 24 часов
+      </b>
       рейсовыми автобусами
     </p>
     <img
@@ -40,7 +42,8 @@
   "
 >
   <ng-container class="title">
-    Охватываем всю территорию<br />
+    Охватываем всю территорию
+    <br />
     Приморского края
   </ng-container>
   <ng-container class="subtitle">
@@ -51,18 +54,22 @@
 
 <app-page-section>
   <ng-container class="title">
-    Предлагаем удобный сервис<br class="hidden sm:block" />
+    Предлагаем удобный сервис
+    <br class="hidden sm:block" />
     для вашего комфорта
   </ng-container>
   <app-service-features class="mt-10" />
 </app-page-section>
 
 <app-page-section>
-  <ng-container class="title"> Решаем нестандартные<br />логистические задачи</ng-container>
+  <ng-container class="title">
+    Решаем нестандартные
+    <br />
+    логистические задачи
+  </ng-container>
   <ng-container class="subtitle">
-    Нужно организовать доставку нестандартного груза в очень сжатые сроки?<br
-      class="hidden lg:block"
-    />
+    Нужно организовать доставку нестандартного груза в очень сжатые сроки?
+    <br class="hidden lg:block" />
     Трудно найти исполнителя? Мы предложим индивидуальное решение вашей задачи!
   </ng-container>
 
@@ -75,19 +82,23 @@
 </app-page-section>
 
 <app-page-section>
-  <ng-container class="title"> Помогаем бизнесу</ng-container>
+  <ng-container class="title">Помогаем бизнесу</ng-container>
   <ng-container class="subtitle">
-    С нами работает более 500 компаний, которые регулярно отправляют грузы<br />
+    С нами работает более 500 компаний, которые регулярно отправляют грузы
+    <br />
     по Приморскому краю и в Хабаровск.
   </ng-container>
-  <app-clients />
+  <app-carousel [items]="brands" [itemTemplate]="slideTemplate" />
+  <ng-template #slideTemplate let-brand>
+    <app-brand-card [brand]="brand" />
+  </ng-template>
 </app-page-section>
 
-<section class="full-width-section mb-0 sm:px-4 md:mb-0 xl:mb-0 bg-yellow-500 py-16 mt-20">
+<section class="full-width-section mt-20 mb-0 bg-yellow-500 py-16 sm:px-4 md:mb-0 xl:mb-0">
   <div class="container mx-auto px-4">
     <div class="mb-12">
       <h2 class="mb-4 font-bold text-black md:text-4xl lg:text-[42px]">Последние новости</h2>
-      <p class="text-lg text-black/80 max-w-3xl lg:text-lg">
+      <p class="max-w-3xl text-lg text-black/80 lg:text-lg">
         Следите за обновлениями компании, новыми услугами и специальными предложениями
       </p>
     </div>
