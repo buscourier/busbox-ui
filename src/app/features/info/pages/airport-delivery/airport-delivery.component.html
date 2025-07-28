@@ -2,7 +2,9 @@
   <p *appStep>Услуга предоставляется как юридическим, так и физическим лицам.</p>
   <div *appStep>
     <p>Вы можете оформить доставку груза из аэропорта по номеру телефона</p>
-    <a href="tel:+7(423)2937879" class="link-blue-500 mgo-number-30374">+7 (423) 293 78 79</a>
+    <a [href]="contact.phone | contactLink: 'tel'" class="link-blue-500 mgo-number-30374">
+      {{ contact.phone }}
+    </a>
     или
     <a [routerLink]="deliveryLink" class="link-blue-500">на сайте</a>
     с пометкой "аэропорт".

@@ -2,12 +2,13 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { NavigationService } from '@core/services';
+import { CONTACT_INFO } from '@core/tokens';
 
 import { type BrandCard, BrandCardComponent } from '@shared/components/brand-card';
 import { CarouselComponent } from '@shared/components/carousel';
-import { PageSectionComponent } from '@shared/components/page-section';
 import { StepDirective, StepsComponent } from '@shared/components/steps';
 import { DocumentsListComponent } from '@shared/features/documents';
+import { ContactLinkPipe } from '@shared/pipes';
 
 @Component({
   selector: 'app-airport-delivery',
@@ -16,10 +17,10 @@ import { DocumentsListComponent } from '@shared/features/documents';
     StepDirective,
     RouterLink,
     DocumentsListComponent,
-    PageSectionComponent,
     BrandCardComponent,
     BrandCardComponent,
     CarouselComponent,
+    ContactLinkPipe,
   ],
   templateUrl: './airport-delivery.component.html',
   styleUrl: './airport-delivery.component.css',
@@ -27,6 +28,7 @@ import { DocumentsListComponent } from '@shared/features/documents';
 })
 export class AirportDeliveryComponent {
   private readonly navigationService = inject(NavigationService);
+  protected readonly contact = inject(CONTACT_INFO);
 
   public readonly items: BrandCard[] = [
     {
