@@ -4,14 +4,28 @@ import { RouterLink } from '@angular/router';
 import { TuiButton } from '@taiga-ui/core';
 import type { Observable } from 'rxjs';
 
+import { CAROUSEL_BREAKPOINTS } from '@core/tokens';
+
+import { CarouselComponent } from '@shared/components/carousel';
+
 import { NewsCardComponent, NewsFacade } from '@news';
 import type { NewsItem } from '@news/types';
 
 @Component({
   selector: 'app-news',
-  imports: [AsyncPipe, TuiButton, RouterLink, NewsCardComponent],
+  imports: [AsyncPipe, TuiButton, RouterLink, NewsCardComponent, CarouselComponent],
   templateUrl: './news.component.html',
   styleUrl: './news.component.css',
+  providers: [
+    {
+      provide: CAROUSEL_BREAKPOINTS,
+      useValue: {
+        default: 1,
+        md: 2,
+        lg: 3,
+      },
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewsComponent implements OnInit {
