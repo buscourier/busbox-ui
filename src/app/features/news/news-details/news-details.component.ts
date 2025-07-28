@@ -29,8 +29,8 @@ export class NewsDetailsComponent implements OnInit {
   @HostBinding('class') get hostClasses(): string {
     return cn(
       'news-content',
-      'before:absolute z-[2px] before:top-2 before:right-2 before:size-12',
-      'before:bg-white before:rounded-full',
+      'z-[2px] before:absolute before:top-2 before:right-2 before:size-12',
+      'before:rounded-full before:bg-white',
     );
   }
 

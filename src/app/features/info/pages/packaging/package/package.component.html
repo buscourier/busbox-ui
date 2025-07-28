@@ -1,0 +1,21 @@
+<b class="col-start-1 mt-2 mb-2.5 block text-[22px] font-medium">{{ title }}</b>
+<p class="col-start-1 mb-6 text-gray-500">
+  <ng-content></ng-content>
+</p>
+<img [ngSrc]="image + '.jpg'" [alt]="title" width="270" height="175" [class]="imageClasses" />
+@if (table) {
+  <app-simple-table
+    class="relative col-start-1 -ml-[60px] sm:ml-0"
+    [columns]="table.columns"
+    [data]="table.rows"
+  />
+}
+
+@if (pricing.length) {
+  <dl [class]="priceClasses">
+    @for (priceItem of pricing; track $index) {
+      <dt>{{ priceItem[0] }}</dt>
+      <dd class="not-last:after:content-[',']">{{ priceItem[1] }}</dd>
+    }
+  </dl>
+}

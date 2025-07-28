@@ -11,16 +11,16 @@ import {
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TuiRepeatTimes } from '@taiga-ui/cdk';
-import { TuiButton, TuiIcon } from '@taiga-ui/core';
 import { TuiChip, TuiSkeleton } from '@taiga-ui/kit';
-import type { Observable } from 'rxjs';
+import { type Observable, take } from 'rxjs';
 
 import { DocumentToPdfService, MultiElementRenderer } from '@core/services/pdf';
 import { DOCUMENT_RENDERER } from '@core/tokens';
 
-import { DocumentCardComponent } from '@shared/components/document-card';
-import { DocumentsFacade, LocationsFacade } from '@shared/store';
-import type { DocumentFile, PickupCity } from '@shared/types';
+import { PdfActionsComponent } from '@shared/components/pdf-actions';
+import { type SidebarLayoutAction, SidebarLayoutComponent } from '@shared/layouts';
+import { LocationsFacade } from '@shared/store';
+import type { PickupCity } from '@shared/types';
 
 import { TariffsViewerService } from './services';
 import { TariffsFacade } from './tariffs.facade';
@@ -34,9 +34,8 @@ import type { QueryParams, ParcelsTableData, ParcelTableRow, TariffsViewModel } 
     FormsModule,
     TuiChip,
     TuiRepeatTimes,
-    TuiButton,
-    TuiIcon,
-    DocumentCardComponent,
+    SidebarLayoutComponent,
+    PdfActionsComponent,
   ],
   templateUrl: './tariffs.component.html',
   styleUrl: './tariffs.component.css',
@@ -59,13 +58,25 @@ export class TariffsComponent implements OnInit {
 
   vm$!: Observable<TariffsViewModel>;
   cities$!: Observable<PickupCity[]>;
-  rulesDocument$!: Observable<DocumentFile | null>;
 
   SKELETON_COUNT = 8;
 
+  get pageActions(): SidebarLayoutAction[] {
+    return [
+      {
+        label: 'Распечатать тарифы',
+        icon: '@tui.printer',
+        handler: () => {
+          this.vm$.pipe(take(1)).subscribe((vm) => {
+            this.handlePrint(vm.selectedCity);
+          });
+        },
+      },
+    ];
+  }
+
   private readonly facade = inject(TariffsFacade);
   private readonly locationsFacade = inject(LocationsFacade);
-  private readonly documentsFacade = inject(DocumentsFacade);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly tariffsViewer = inject(TariffsViewerService);
@@ -73,7 +84,6 @@ export class TariffsComponent implements OnInit {
   ngOnInit(): void {
     this.vm$ = this.facade.getViewModel();
     this.cities$ = this.locationsFacade.getPickupCities();
-    this.rulesDocument$ = this.documentsFacade.getRules();
 
     this.initializeUrl();
   }
@@ -110,10 +120,6 @@ export class TariffsComponent implements OnInit {
 
   printPdf(pdfUrl: string): void {
     this.tariffsViewer.printPdf(pdfUrl);
-  }
-
-  showRules(document: DocumentFile): void {
-    this.tariffsViewer.showPdf(document.link, document.name).subscribe();
   }
 
   private initializeUrl(): void {

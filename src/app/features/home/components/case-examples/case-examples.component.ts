@@ -2,14 +2,16 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TuiButton, TuiIcon } from '@taiga-ui/core';
-import { TuiCarousel, TuiPagination } from '@taiga-ui/kit';
+import { TuiIcon } from '@taiga-ui/core';
 
 import { type Case, CasesService, NavigationService } from '@core/services';
+import { CAROUSEL_BREAKPOINTS } from '@core/tokens';
+
+import { CarouselComponent } from '@shared/components/carousel';
 
 @Component({
   selector: 'app-case-examples',
-  imports: [TuiCarousel, TuiButton, NgOptimizedImage, RouterLink, TuiPagination, TuiIcon],
+  imports: [NgOptimizedImage, RouterLink, TuiIcon, CarouselComponent],
   templateUrl: './case-examples.component.html',
   styleUrl: './case-examples.component.css',
   animations: [
@@ -19,6 +21,14 @@ import { type Case, CasesService, NavigationService } from '@core/services';
         animate('300ms ease-in-out', style({ opacity: 1, transform: 'translateY(0)' })),
       ]),
     ]),
+  ],
+  providers: [
+    {
+      provide: CAROUSEL_BREAKPOINTS,
+      useValue: {
+        default: 1,
+      },
+    },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -38,17 +48,10 @@ export class CaseExamplesComponent implements OnInit {
     this.examples = this.casesService.getCases();
   }
 
-  onIndex(index: number): void {
+  onCarouselSlideChange(index: number): void {
     this.showExampleInfo = false;
     this.index = index;
 
-    setTimeout(() => {
-      this.showExampleInfo = true;
-    }, 50);
-  }
-
-  onCarouselIndexChange(): void {
-    this.showExampleInfo = false;
     setTimeout(() => {
       this.showExampleInfo = true;
     }, 50);

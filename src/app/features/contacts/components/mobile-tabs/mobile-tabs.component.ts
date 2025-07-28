@@ -34,7 +34,7 @@ export class MobileTabsComponent implements OnInit {
 
   getButtonClasses(isActive: boolean): string {
     return cn(
-      'p-5 flex-grow hover:opacity-80',
+      'flex-grow p-5 hover:opacity-80',
       'text-center text-sm text-gray-700',
       'border-b-2 border-gray-300',
 

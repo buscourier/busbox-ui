@@ -1,0 +1,28 @@
+<div class="lg:grid lg:grid-cols-[1fr_370px] lg:gap-x-16">
+  <div class="main-content">
+    <ng-content></ng-content>
+  </div>
+
+  <aside class="sidebar">
+    <app-documents-list [documentTypes]="documentTypes"></app-documents-list>
+    @if (customSidebarContent) {
+      <ng-container [ngTemplateOutlet]="customSidebarContent"></ng-container>
+    }
+
+    @for (action of actions; track action.label) {
+      <button
+        type="button"
+        tuiButton
+        [disabled]="action.disabled"
+        (click)="action.handler()"
+        size="l"
+        class="mb-2 w-full"
+      >
+        @if (action.icon) {
+          <tui-icon [icon]="action.icon" class="mr-2"></tui-icon>
+        }
+        {{ action.label }}
+      </button>
+    }
+  </aside>
+</div>

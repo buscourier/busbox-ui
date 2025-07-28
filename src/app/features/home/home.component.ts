@@ -3,13 +3,14 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { cn } from '@core/utils';
 
+import { BrandCardComponent } from '@shared/components/brand-card';
+import { CarouselComponent } from '@shared/components/carousel';
 import { ContactFormComponent } from '@shared/components/contact-form';
 import { PageSectionComponent } from '@shared/components/page-section';
 
 import {
   CargoTypesComponent,
   CaseExamplesComponent,
-  ClientsComponent,
   NewsComponent,
   RouteSelectorComponent,
   ServiceFeaturesComponent,
@@ -25,10 +26,11 @@ import {
     ServiceFeaturesComponent,
     ContactFormComponent,
     CaseExamplesComponent,
-    ClientsComponent,
     NewsComponent,
     CargoTypesComponent,
     PageSectionComponent,
+    BrandCardComponent,
+    CarouselComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
@@ -36,4 +38,23 @@ import {
 })
 export class HomeComponent {
   protected readonly cn = cn;
+
+  readonly brands = [
+    {
+      name: 'sber',
+      link: 'https://sber.ru/',
+    },
+    {
+      name: 'aeroflot',
+      link: 'https://www.aeroflot.ru/ru-ru',
+    },
+    {
+      name: 'hyperauto',
+      link: 'https://hyperauto.ru/',
+    },
+    {
+      name: 'unilab',
+      link: 'https://unilab.su/',
+    },
+  ];
 }

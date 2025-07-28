@@ -1,0 +1,18 @@
+<table class="w-full">
+  <thead class="bg-yellow-500">
+    <tr>
+      @for (column of columns; track column.key) {
+        <th [class]="cellStyles">{{ column.title }}</th>
+      }
+    </tr>
+  </thead>
+  <tbody>
+    @for (row of data; track $index) {
+      <tr [class.bg-gray-100]="$odd">
+        @for (column of columns; track column.key) {
+          <td [class]="cellStyles">{{ row[column.key] }}</td>
+        }
+      </tr>
+    }
+  </tbody>
+</table>

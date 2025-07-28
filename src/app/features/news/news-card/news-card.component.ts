@@ -19,8 +19,8 @@ export class NewsCardComponent {
 
   @HostBinding('class') get hostClasses(): string {
     return cn(
-      'block bg-white rounded-xl overflow-hidden transition-all duration-300',
-      'shadow-lg  hover:-translate-y-1 hover:shadow-xl',
+      'block overflow-hidden rounded-xl bg-white transition-all duration-300',
+      'shadow-lg hover:-translate-y-1 hover:shadow-xl',
       'border-8 border-white',
     );
   }

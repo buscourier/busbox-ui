@@ -1,0 +1,11 @@
+/* link */
+@utility link-* {
+  position: relative;
+  color: --value(--color- *, [color]);
+  border-bottom: 1px dashed --value(--color- *, [color]);
+  cursor: pointer;
+
+  &:hover {
+    border-bottom: none;
+  }
+}

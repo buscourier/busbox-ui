@@ -1,1 +1,33 @@
-<p>airport-delivery works!</p>
+<app-steps>
+  <p *appStep>Услуга предоставляется как юридическим, так и физическим лицам.</p>
+  <div *appStep>
+    <p>Вы можете оформить доставку груза из аэропорта по номеру телефона</p>
+    <a [href]="contact.phone | contactLink: 'tel'" class="link-blue-500 mgo-number-30374">
+      {{ contact.phone }}
+    </a>
+    или
+    <a [routerLink]="deliveryLink" class="link-blue-500">на сайте</a>
+    с пометкой "аэропорт".
+  </div>
+  <p *appStep class="max-w-[540px]">
+    Наш менеджер свяжется с вами и проинформирует о стоимости и сроках доставки.
+  </p>
+  <div *appStep>
+    <p class="mb-5">Вам потребуется заполнить рекомендуемую форму доверенности.</p>
+    <app-documents-list [documentTypes]="['warrant_fiz', 'warrant_ur']" />
+  </div>
+  <p *appStep>
+    Получить груз можно по адресу получателя, в одном из наших филиалов или в населенном пункте, где
+    нет нашего филиала, встретить автобус на автостанции и забрать груз у водителя.
+  </p>
+</app-steps>
+
+<section class="full-width-section mt-16 mb-10! border-t border-gray-300 pt-16">
+  <div class="container mx-auto px-4">
+    <app-carousel [items]="items" [itemTemplate]="slideTemplate"></app-carousel>
+  </div>
+</section>
+
+<ng-template #slideTemplate let-brand>
+  <app-brand-card [brand]="brand" />
+</ng-template>

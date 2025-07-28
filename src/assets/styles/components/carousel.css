@@ -1,0 +1,13 @@
+[data-custom-pagination] .t-button_small {
+  block-size: 1rem !important;
+  inline-size: 1rem !important;
+  border-radius: 100%;
+}
+
+tui-carousel {
+  margin: -45px 0;
+}
+
+tui-carousel .t-items {
+  padding: 45px 0;
+}

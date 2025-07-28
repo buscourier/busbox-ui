@@ -1,0 +1,7 @@
+<ol class="block" role="list">
+  @for (step of steps; track $index) {
+    <li [class]="stepClasses">
+      <ng-container *ngTemplateOutlet="step.template"></ng-container>
+    </li>
+  }
+</ol>

@@ -1,0 +1,11 @@
+:host.slides-shadow {
+  width: calc(100% + 40px);
+  margin-left: -20px;
+}
+
+:host.carousel-secondary {
+  --tui-background-accent-1: var(--color-black);
+  --tui-background-accent-1-hover: rgba(0, 0, 0, 0.8);
+  --tui-background-neutral-1: rgba(0, 0, 0, 0.3);
+  --tui-background-neutral-1-hover: rgba(0, 0, 0, 0.5);
+}

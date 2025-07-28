@@ -82,12 +82,12 @@ export class FilterComponent implements OnInit {
     return cn(
       'min-w-14 px-3.5 pt-3 pb-3',
       'flex flex-grow flex-col items-center',
-      'rounded-sm bg-white transition-colors shadow-sm',
+      'rounded-sm bg-white shadow-sm transition-colors',
       'border border-gray-200 hover:border-yellow-500',
       'cursor-pointer',
 
       {
-        'bg-yellow-500 border-yellow-500': isActive,
+        'border-yellow-500 bg-yellow-500': isActive,
       },
     );
   }

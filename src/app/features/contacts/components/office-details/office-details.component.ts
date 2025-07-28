@@ -42,7 +42,7 @@ export class OfficeDetailsComponent {
 
   @HostBinding('class') get hostClasses(): string {
     return cn(
-      'absolute top-0 bottom-0 right-0 w-full z-20',
+      'absolute top-0 right-0 bottom-0 z-20 w-full',
       'sm:fixed sm:left-0 sm:flex sm:items-center sm:justify-center sm:bg-black/80',
       'lg:relative lg:inset-auto lg:block lg:bg-transparent',
       {
@@ -65,10 +65,10 @@ export class OfficeDetailsComponent {
 
   get cardClasses(): string {
     return cn(
-      'card p-5 relative h-full bg-white',
-      'sm:z-20 sm:max-w-[620px] sm:h-auto sm:rounded-sm',
-      'md:shadow-md md:border md:border-gray-200',
-      'lg:p-6 lg:pt-8 lg:max-w-full lg:h-full',
+      'card relative h-full bg-white p-5',
+      'sm:z-20 sm:h-auto sm:max-w-[620px] sm:rounded-sm',
+      'md:border md:border-gray-200 md:shadow-md',
+      'lg:h-full lg:max-w-full lg:p-6 lg:pt-8',
       'xl:pt-8 xl:pr-4 xl:pl-8',
     );
   }

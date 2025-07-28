@@ -1,132 +1,187 @@
 @let vm = vm$ | async;
 
-<div class="grid grid-cols-[1fr_370px] gap-x-10">
-  <div>
-    @if (vm) {
-      <p class="mb-3 text-md">
-        Для получения тарифов, выберите город, из которого планируется отправление.
-      </p>
+<app-sidebar-layout [actions]="pageActions" [documentTypes]="['rules']">
+  @if (vm) {
+    <p class="mb-3 text-md">
+      Для получения тарифов, выберите город, из которого планируется отправление.
+    </p>
 
-      <section class="mb-10 pt-5 pb-5 flex flex-wrap gap-3 border-y border-gray-100">
-        @for (city of cities$ | async; track city.id) {
-          <section>
-            <label appearance tuiChip size="m">
-              {{ city.name }}
-              <input
-                appearance="outline-grayscale"
-                name="radio"
-                tuiChip
-                type="radio"
-                [value]="city"
-                [ngModel]="vm.selectedCity"
-                (ngModelChange)="onCityChange($event)"
-              />
-            </label>
-          </section>
-        } @empty {
+    <section class="mb-10 pt-5 pb-5 flex flex-wrap gap-3 border-y border-gray-100">
+      @for (city of cities$ | async; track city.id) {
+        <section>
+          <label appearance tuiChip size="m">
+            {{ city.name }}
+            <input
+              appearance="outline-grayscale"
+              name="radio"
+              tuiChip
+              type="radio"
+              [value]="city"
+              [ngModel]="vm.selectedCity"
+              (ngModelChange)="onCityChange($event)"
+            />
+          </label>
+        </section>
+      } @empty {
+        <div *tuiRepeatTimes="let i of SKELETON_COUNT" class="h-12 w-32" [tuiSkeleton]="true"></div>
+      }
+    </section>
+
+    <div>
+      <section #zonesContainer class="mb-12">
+        @if (vm.zones.hasData) {
+          @for (zone of vm.zones.data; track zone.site_id) {
+            <div class="mb-3 rounded-sm bg-yellow-500 p-4">
+              <b class="mb-2 block text-lg font-semibold leading-tight">{{ zone.zone }}</b>
+              <p class="text-sm leading-relaxed">{{ zone.cities }}</p>
+            </div>
+          }
+        } @else {
           <div
             *tuiRepeatTimes="let i of SKELETON_COUNT"
-            class="h-12 w-32"
+            class="h-32 mb-2.5"
             [tuiSkeleton]="true"
           ></div>
         }
       </section>
 
-      <div>
-        <section #zonesContainer class="mb-12">
-          @if (vm.zones.hasData) {
-            @for (zone of vm.zones.data; track zone.site_id) {
-              <div class="mb-3 rounded-sm bg-yellow-500 p-4">
-                <b class="mb-2 block text-lg font-semibold leading-tight">{{ zone.zone }}</b>
-                <p class="text-sm leading-relaxed">{{ zone.cities }}</p>
-              </div>
-            }
-          } @else {
-            <div
-              *tuiRepeatTimes="let i of SKELETON_COUNT"
-              class="h-32 mb-2.5"
-              [tuiSkeleton]="true"
-            ></div>
-          }
+      @if (vm.zoneTariffs.hasData) {
+        <section class="mb-12">
+          <h2 class="mb-6 font-heading text-2xl font-bold text-gray-900">Документы и грузы</h2>
+
+          <div #parcelsContainer class="">
+            <div class="">
+              <table class="w-full border-collapse min-w-[800px] text-sm">
+                <tbody>
+                  @for (
+                    zone of vm.zoneTariffs.parcelsTable.zones;
+                    track zone.zone_id;
+                    let isFirst = $first
+                  ) {
+                    <tr>
+                      <td colspan="4" class="pr-4">
+                        <b
+                          class="block p-3 bg-yellow-500 rounded-sm text-center text-sm font-semibold"
+                        >
+                          {{ zone.zone_name }}
+                        </b>
+                      </td>
+                      <td class="border-b-2 border-yellow-500">
+                        <table class="w-full">
+                          @if (isFirst) {
+                            <thead class="border-b-2 border-yellow-500">
+                              <tr>
+                                <th class="px-2 py-3 text-sm font-semibold">Габариты</th>
+                                <th class="px-2 py-3 text-sm font-semibold">Документы</th>
+                                <th class="px-2 py-3 text-sm font-semibold">0 - 5 кг</th>
+                                <th class="px-2 py-3 text-sm font-semibold">5 - 10 кг</th>
+                                <th class="px-2 py-3 text-sm font-semibold">10 - 20 кг</th>
+                              </tr>
+                            </thead>
+                          }
+                          <tbody>
+                            @for (
+                              row of getZoneRows(vm.zoneTariffs.parcelsTable, zone.zone_id);
+                              track row.size;
+                              let isEven = $even
+                            ) {
+                              <tr [class.bg-gray-50]="isEven">
+                                <td class="px-2 py-2 text-center w-1/5 text-sm">
+                                  {{ row.size }}
+                                </td>
+                                <td class="px-2 py-2 text-center w-1/5 text-sm font-medium">
+                                  @if (row.zones[zone.zone_id]?.documents) {
+                                    <span>{{ row.zones[zone.zone_id].documents }} ₽</span>
+                                  } @else {
+                                    <span class="text-gray-400">—</span>
+                                  }
+                                </td>
+                                <td class="px-2 py-2 text-center w-1/5 text-sm font-medium">
+                                  @if (row.zones[zone.zone_id]?.weight_0_5) {
+                                    <span>{{ row.zones[zone.zone_id].weight_0_5 }} ₽</span>
+                                  } @else {
+                                    <span class="text-gray-400">—</span>
+                                  }
+                                </td>
+                                <td class="px-2 py-2 text-center w-1/5 text-sm font-medium">
+                                  @if (row.zones[zone.zone_id]?.weight_5_10) {
+                                    <span>{{ row.zones[zone.zone_id].weight_5_10 }} ₽</span>
+                                  } @else {
+                                    <span class="text-gray-400">—</span>
+                                  }
+                                </td>
+                                <td class="px-2 py-2 text-center w-1/5 text-sm font-medium">
+                                  @if (row.zones[zone.zone_id]?.weight_10_20) {
+                                    <span>{{ row.zones[zone.zone_id].weight_10_20 }} ₽</span>
+                                  } @else {
+                                    <span class="text-gray-400">—</span>
+                                  }
+                                </td>
+                              </tr>
+                            }
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+            <div class="mt-4">
+              <p class="mb-2 text-sm text-gray-700 leading-relaxed">
+                * <b>Документы</b> – формата А4 до 1 кг, толщина до 1,5 см, без каких-либо сторонних
+                вложений.
+              </p>
+              <p class="mb-2 text-sm text-gray-700 leading-relaxed">
+                * <b>Посылки свыше 160 см и свыше 20 кг</b> - стоимость доставки можно рассчитать на
+                сайте в разделе «Предварительный расчет» или у менеджера.
+              </p>
+            </div>
+          </div>
         </section>
 
-        @if (vm.zoneTariffs.hasData) {
+        @if (vm.zoneTariffs.autopartsTable.rows.length) {
           <section class="mb-12">
-            <h2 class="mb-6 font-heading text-2xl font-bold text-gray-900">Документы и грузы</h2>
+            <h2 class="mb-6 font-heading text-2xl font-bold text-gray-900">Автозапчасти</h2>
 
-            <div #parcelsContainer class="">
+            <div #autopartsContainer class="">
               <div class="">
-                <table class="w-full border-collapse min-w-[800px] text-sm">
+                <table class="w-full text-sm">
+                  <thead>
+                    <tr>
+                      <th class="text-left py-3 px-3"></th>
+                      @for (zone of vm.zoneTariffs.autopartsTable.zones; track zone.zone_id) {
+                        <th
+                          class="px-3 py-3 bg-yellow-500 text-sm font-semibold text-center"
+                          [class.rounded-l-sm]="$first"
+                          [class.rounded-r-sm]="$last"
+                        >
+                          {{ zone.zone_name }}
+                        </th>
+                      }
+                    </tr>
+                  </thead>
+
                   <tbody>
                     @for (
-                      zone of vm.zoneTariffs.parcelsTable.zones;
-                      track zone.zone_id;
-                      let isFirst = $first
+                      row of vm.zoneTariffs.autopartsTable.rows;
+                      track row.type;
+                      let isOdd = $odd
                     ) {
-                      <tr>
-                        <td colspan="4" class="pr-4">
-                          <b
-                            class="block p-3 bg-yellow-500 rounded-sm text-center text-sm font-semibold"
-                          >
-                            {{ zone.zone_name }}
-                          </b>
+                      <tr [class.bg-gray-50]="isOdd">
+                        <td class="px-3 py-2 font-semibold text-sm">
+                          {{ row.type }}
                         </td>
-                        <td class="border-b-2 border-yellow-500">
-                          <table class="w-full">
-                            @if (isFirst) {
-                              <thead class="border-b-2 border-yellow-500">
-                                <tr>
-                                  <th class="px-2 py-3 text-sm font-semibold">Габариты</th>
-                                  <th class="px-2 py-3 text-sm font-semibold">Документы</th>
-                                  <th class="px-2 py-3 text-sm font-semibold">0 - 5 кг</th>
-                                  <th class="px-2 py-3 text-sm font-semibold">5 - 10 кг</th>
-                                  <th class="px-2 py-3 text-sm font-semibold">10 - 20 кг</th>
-                                </tr>
-                              </thead>
+
+                        @for (zone of vm.zoneTariffs.autopartsTable.zones; track zone.zone_id) {
+                          <td class="px-3 py-2 text-center text-sm font-medium">
+                            @if (row.zones[zone.zone_id]) {
+                              <span>{{ row.zones[zone.zone_id] }} ₽</span>
+                            } @else {
+                              <span class="text-gray-400">—</span>
                             }
-                            <tbody>
-                              @for (
-                                row of getZoneRows(vm.zoneTariffs.parcelsTable, zone.zone_id);
-                                track row.size;
-                                let isEven = $even
-                              ) {
-                                <tr [class.bg-gray-50]="isEven">
-                                  <td class="px-2 py-2 text-center w-1/5 text-sm">
-                                    {{ row.size }}
-                                  </td>
-                                  <td class="px-2 py-2 text-center w-1/5 text-sm font-medium">
-                                    @if (row.zones[zone.zone_id]?.documents) {
-                                      <span>{{ row.zones[zone.zone_id].documents }} ₽</span>
-                                    } @else {
-                                      <span class="text-gray-400">—</span>
-                                    }
-                                  </td>
-                                  <td class="px-2 py-2 text-center w-1/5 text-sm font-medium">
-                                    @if (row.zones[zone.zone_id]?.weight_0_5) {
-                                      <span>{{ row.zones[zone.zone_id].weight_0_5 }} ₽</span>
-                                    } @else {
-                                      <span class="text-gray-400">—</span>
-                                    }
-                                  </td>
-                                  <td class="px-2 py-2 text-center w-1/5 text-sm font-medium">
-                                    @if (row.zones[zone.zone_id]?.weight_5_10) {
-                                      <span>{{ row.zones[zone.zone_id].weight_5_10 }} ₽</span>
-                                    } @else {
-                                      <span class="text-gray-400">—</span>
-                                    }
-                                  </td>
-                                  <td class="px-2 py-2 text-center w-1/5 text-sm font-medium">
-                                    @if (row.zones[zone.zone_id]?.weight_10_20) {
-                                      <span>{{ row.zones[zone.zone_id].weight_10_20 }} ₽</span>
-                                    } @else {
-                                      <span class="text-gray-400">—</span>
-                                    }
-                                  </td>
-                                </tr>
-                              }
-                            </tbody>
-                          </table>
-                        </td>
+                          </td>
+                        }
                       </tr>
                     }
                   </tbody>
@@ -134,159 +189,76 @@
               </div>
               <div class="mt-4">
                 <p class="mb-2 text-sm text-gray-700 leading-relaxed">
-                  * <b>Документы</b> – формата А4 до 1 кг, толщина до 1,5 см, без каких-либо
-                  сторонних вложений.
-                </p>
-                <p class="mb-2 text-sm text-gray-700 leading-relaxed">
-                  * <b>Посылки свыше 160 см и свыше 20 кг</b> - стоимость доставки можно рассчитать
-                  на сайте в разделе «Предварительный расчет» или у менеджера.
+                  * <b>Автозапчасти</b> – стоимость указана для стандартных размеров запчастей
+                  легковых автомобилей. Для запчастей с превышением стандартных размеров расчёт
+                  производится индивидуально менеджером.
                 </p>
               </div>
             </div>
           </section>
-
-          @if (vm.zoneTariffs.autopartsTable.rows.length) {
-            <section class="mb-12">
-              <h2 class="mb-6 font-heading text-2xl font-bold text-gray-900">Автозапчасти</h2>
-
-              <div #autopartsContainer class="">
-                <div class="">
-                  <table class="w-full text-sm">
-                    <thead>
-                      <tr>
-                        <th class="text-left py-3 px-3"></th>
-                        @for (zone of vm.zoneTariffs.autopartsTable.zones; track zone.zone_id) {
-                          <th
-                            class="px-3 py-3 bg-yellow-500 text-sm font-semibold text-center"
-                            [class.rounded-l-sm]="$first"
-                            [class.rounded-r-sm]="$last"
-                          >
-                            {{ zone.zone_name }}
-                          </th>
-                        }
-                      </tr>
-                    </thead>
-
-                    <tbody>
-                      @for (
-                        row of vm.zoneTariffs.autopartsTable.rows;
-                        track row.type;
-                        let isOdd = $odd
-                      ) {
-                        <tr [class.bg-gray-50]="isOdd">
-                          <td class="px-3 py-2 font-semibold text-sm">
-                            {{ row.type }}
-                          </td>
-
-                          @for (zone of vm.zoneTariffs.autopartsTable.zones; track zone.zone_id) {
-                            <td class="px-3 py-2 text-center text-sm font-medium">
-                              @if (row.zones[zone.zone_id]) {
-                                <span>{{ row.zones[zone.zone_id] }} ₽</span>
-                              } @else {
-                                <span class="text-gray-400">—</span>
-                              }
-                            </td>
-                          }
-                        </tr>
-                      }
-                    </tbody>
-                  </table>
-                </div>
-                <div class="mt-4">
-                  <p class="mb-2 text-sm text-gray-700 leading-relaxed">
-                    * <b>Автозапчасти</b> – стоимость указана для стандартных размеров запчастей
-                    легковых автомобилей. Для запчастей с превышением стандартных размеров расчёт
-                    производится индивидуально менеджером.
-                  </p>
-                </div>
-              </div>
-            </section>
-          }
-
-          @if (vm.zoneTariffs.otherTable.rows.length) {
-            <section class="">
-              <h2 class="mb-6 font-heading text-2xl font-bold text-gray-900">Другое</h2>
-
-              <div #otherContainer class="">
-                <div class="">
-                  <table class="w-full text-sm">
-                    <thead>
-                      <tr>
-                        <th class="text-left py-3 px-3"></th>
-                        @for (zone of vm.zoneTariffs.otherTable.zones; track zone.zone_id) {
-                          <th
-                            class="px-3 py-3 bg-yellow-500 text-sm font-semibold text-center"
-                            [class.rounded-l-sm]="$first"
-                            [class.rounded-r-sm]="$last"
-                          >
-                            {{ zone.zone_name }}
-                          </th>
-                        }
-                      </tr>
-                    </thead>
-
-                    <tbody>
-                      @for (
-                        row of vm.zoneTariffs.otherTable.rows;
-                        track row.type;
-                        let isOdd = $odd
-                      ) {
-                        <tr [class.bg-gray-50]="isOdd">
-                          <td class="px-3 py-2 font-semibold text-sm">
-                            {{ row.type }}
-                          </td>
-
-                          @for (zone of vm.zoneTariffs.otherTable.zones; track zone.zone_id) {
-                            <td class="px-3 py-2 text-center text-sm font-medium">
-                              @if (row.zones[zone.zone_id]) {
-                                <span>{{ row.zones[zone.zone_id] }} ₽</span>
-                              } @else {
-                                <span class="text-gray-400">—</span>
-                              }
-                            </td>
-                          }
-                        </tr>
-                      }
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </section>
-          }
-        } @else {
-          <div
-            *tuiRepeatTimes="let i of SKELETON_COUNT"
-            class="h-12 mb-0.5"
-            [tuiSkeleton]="true"
-          ></div>
         }
-      </div>
-    }
-  </div>
 
-  <aside>
-    @if (rulesDocument$ | async; as document) {
-      <app-document-card [doc]="document" (show)="showRules($event)" />
-    }
+        @if (vm.zoneTariffs.otherTable.rows.length) {
+          <section class="">
+            <h2 class="mb-6 font-heading text-2xl font-bold text-gray-900">Другое</h2>
 
-    @if (vm) {
-      <button type="button" tuiButton (click)="handlePrint(vm.selectedCity)">
-        Распечатать тарифы
-      </button>
-    }
-  </aside>
-</div>
+            <div #otherContainer class="">
+              <div class="">
+                <table class="w-full text-sm">
+                  <thead>
+                    <tr>
+                      <th class="text-left py-3 px-3"></th>
+                      @for (zone of vm.zoneTariffs.otherTable.zones; track zone.zone_id) {
+                        <th
+                          class="px-3 py-3 bg-yellow-500 text-sm font-semibold text-center"
+                          [class.rounded-l-sm]="$first"
+                          [class.rounded-r-sm]="$last"
+                        >
+                          {{ zone.zone_name }}
+                        </th>
+                      }
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    @for (row of vm.zoneTariffs.otherTable.rows; track row.type; let isOdd = $odd) {
+                      <tr [class.bg-gray-50]="isOdd">
+                        <td class="px-3 py-2 font-semibold text-sm">
+                          {{ row.type }}
+                        </td>
+
+                        @for (zone of vm.zoneTariffs.otherTable.zones; track zone.zone_id) {
+                          <td class="px-3 py-2 text-center text-sm font-medium">
+                            @if (row.zones[zone.zone_id]) {
+                              <span>{{ row.zones[zone.zone_id] }} ₽</span>
+                            } @else {
+                              <span class="text-gray-400">—</span>
+                            }
+                          </td>
+                        }
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        }
+      } @else {
+        <div
+          *tuiRepeatTimes="let i of SKELETON_COUNT"
+          class="h-12 mb-0.5"
+          [tuiSkeleton]="true"
+        ></div>
+      }
+    </div>
+  }
+</app-sidebar-layout>
 
 <ng-template #actions let-content="content">
-  <div class="flex gap-2">
-    <button tuiButton appearance="primary" size="s" (click)="printPdf(content)">
-      <tui-icon icon="@tui.printer" class="mr-1"></tui-icon>
-      Печать
-    </button>
-
-    <button tuiButton appearance="primary" size="s" (click)="downloadPdf(content)">
-      <tui-icon icon="@tui.download" class="mr-1"></tui-icon>
-      Скачать
-    </button>
-  </div>
+  <app-pdf-actions
+    [content]="content"
+    (print)="printPdf($event)"
+    (download)="downloadPdf($event)"
+  />
 </ng-template>

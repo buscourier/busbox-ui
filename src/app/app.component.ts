@@ -11,7 +11,7 @@ import { SeoService } from '@core/services/seo.service';
 import { BreadcrumbsComponent } from '@shared/components/breadcrumbs';
 import { FooterComponent } from '@shared/components/footer';
 import { HeaderComponent } from '@shared/components/header';
-import { LocationsFacade, DocumentsFacade } from '@shared/store';
+import { LocationsFacade } from '@shared/store';
 
 import { environment } from '@env/environment';
 
@@ -42,7 +42,6 @@ export class AppComponent implements OnInit {
 
   private readonly authFacade = inject(AuthFacade);
   private readonly locationsFacade = inject(LocationsFacade);
-  private readonly documentsFacade = inject(DocumentsFacade);
   private readonly destroyRef = inject(DestroyRef);
   private readonly alerts = inject(TuiAlertService);
   private transloco = inject(TranslocoService);
@@ -76,7 +75,6 @@ export class AppComponent implements OnInit {
     this.authFacade.loadCurrentUser();
     this.locationsFacade.loadPickupCities();
     this.locationsFacade.loadOffices();
-    this.documentsFacade.loadDocuments();
     this.setupErrorHandling();
   }
 
