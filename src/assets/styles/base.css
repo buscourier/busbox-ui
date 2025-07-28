@@ -8,7 +8,7 @@
   }
 
   body {
-    @apply text-base font-roboto;
+    @apply font-roboto text-base;
   }
 
   h1 {
@@ -24,6 +24,6 @@
   }
 
   p {
-    @apply text-gray-800;
+    @apply leading-6 text-gray-800;
   }
 }
