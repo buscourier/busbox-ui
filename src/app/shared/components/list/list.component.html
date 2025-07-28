@@ -1,0 +1,11 @@
+<ul role="list" [class]="listClasses">
+  @for (item of items; track $index) {
+    <li class="flex items-center gap-x-3">
+      @if (icon !== 'none') {
+        <tui-icon [icon]="icon" [style.font-size.rem]="iconSizeValue" [class]="iconColorClass" />
+      }
+
+      <ng-container *ngTemplateOutlet="item.template"></ng-container>
+    </li>
+  }
+</ul>
