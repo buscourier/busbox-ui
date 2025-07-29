@@ -1,6 +1,6 @@
 <ul role="list" [class]="listClasses">
   @for (item of items; track $index) {
-    <li class="flex items-center gap-x-3">
+    <li class="flex items-start gap-x-3 leading-6">
       @if (icon !== 'none') {
         <tui-icon [icon]="icon" [style.font-size.rem]="iconSizeValue" [class]="iconColorClass" />
       }

@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   ContentChildren,
+  HostBinding,
   Input,
   type QueryList,
 } from '@angular/core';
@@ -28,6 +29,10 @@ export class ListComponent {
   @Input() iconSize: 'xs' | 'sm' | 'md' | 'lg' = 'md';
   @Input() iconColor?: IconColor;
   @ContentChildren(ListItemDirective) items!: QueryList<ListItemDirective>;
+
+  @HostBinding('class') get hostClasses(): string {
+    return cn('block');
+  }
 
   get listClasses() {
     return cn('flex flex-col', {
