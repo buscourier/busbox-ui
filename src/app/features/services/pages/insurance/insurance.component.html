@@ -1,1 +1,60 @@
-<p>insurance works!</p>
+<div class="max-w-[570px]">
+  <img
+    ngSrc="energogarant.jpg"
+    alt="Страховая акционерная компания Энергогарант"
+    width="1182"
+    height="297"
+    class="w-full max-w-96 rounded-sm"
+    (load)="onImageLoad()"
+    (error)="onImageError()"
+    [tuiSkeleton]="!imageLoaded"
+  />
+
+  <h2 class="mt-12 mb-5 text-2xl font-medium">Тарифы на страхование:</h2>
+  <div class="mb-12 max-w-96">
+    <app-simple-table
+      class="relative col-start-1 -ml-[60px] sm:ml-0"
+      [columns]="table.columns"
+      [data]="table.rows"
+    />
+    <small class="text-3xs mt-4 block text-gray-700">
+      <sup>*</sup>
+      Максимальная стоимость страхования груза 30 000 руб.
+    </small>
+  </div>
+
+  <h2 class="mt-12 mb-5 text-2xl font-medium">Условия страхования:</h2>
+  <app-list>
+    <span *appListItem>
+      Мы гарантируем, 100% возмещение убытков в течение 30 календарных дней с момента подачи
+      заявления о наступлении страхового случая.
+    </span>
+    <span *appListItem>
+      Страхование грузов осуществляется только при наличии обеспечения сохранности груза упаковкой.
+    </span>
+    <span *appListItem>Страховым случаем не является потеря груза.</span>
+    <span *appListItem>
+      Выплаты осуществляются по объявленной ценности груза, не превышающей его реальную стоимость.
+    </span>
+  </app-list>
+
+  <h2 class="mt-12 mb-5 text-2xl font-medium">Действия при наступлении страхового случая:</h2>
+  <p class="mb-3">
+    Если вы обнаружили нарушение целостности упаковки или повреждение груза в офисе нашей компании,
+    необходимо совместно с менеджером зафиксировать этот факт и составить претензию.
+  </p>
+  <p class="mb-3">
+    Если вы обнаружили нарушение целостности упаковки или повреждение груза при встрече груза с
+    автобуса, вам необходимо самостоятельно зафиксировать этот факт, сделав фотографии повреждений,
+    и оставить посылку в багажном отделении автобуса.
+  </p>
+  <p class="mb-3">
+    После чего связаться с нами по телефону:
+    <a [href]="contact.phone | contactLink: 'tel'" class="link-blue-500">
+      {{ contact.phone }}
+    </a>
+    или электронному адресу:
+    <a [href]="contact.email | contactLink: 'email'" class="link-blue-500">{{ contact.email }}.</a>
+  </p>
+  <p>Вы также можете обратиться в онлайн-чат справа и задать вопрос нашему онлайн-консультанту.</p>
+</div>
