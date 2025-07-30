@@ -3,9 +3,11 @@ import { RouterLink } from '@angular/router';
 
 import { NavigationService } from '@core/services/navigation.service';
 
+import { NavCardComponent } from '@shared/components/nav-card';
+
 @Component({
   selector: 'app-info-index',
-  imports: [RouterLink],
+  imports: [RouterLink, NavCardComponent],
   templateUrl: './info-index.component.html',
   styleUrl: './info-index.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

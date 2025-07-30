@@ -1,0 +1,26 @@
+<div class="mb-4 flex items-start justify-between">
+  <div [class]="iconWrapperClass">
+    @if (item.icon) {
+      <tui-icon [icon]="item.icon"></tui-icon>
+    }
+  </div>
+  <tui-icon
+    icon="@tui.chevron-right"
+    [style.font-size.rem]="1.5"
+    class="text-gray-400 transition-all group-hover:translate-x-1 group-hover:text-yellow-500"
+  />
+</div>
+<h3 class="mb-2 text-lg font-medium text-gray-900 transition-colors">
+  {{ item.name }}
+</h3>
+<p class="mb-4 line-clamp-2 leading-relaxed font-light text-gray-600">
+  {{ item.description }}
+</p>
+<div class="mt-auto flex items-center justify-end">
+  @if (item.badge; as badge) {
+    <div class="flex items-center text-xs text-gray-500">
+      <span [class]="markerClass"></span>
+      {{ badge.text }}
+    </div>
+  }
+</div>
