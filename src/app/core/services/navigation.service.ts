@@ -23,7 +23,7 @@ export class NavigationService {
     {
       link: 'services',
       name: 'Услуги',
-      description: 'Полный спектр логистических услуг компании Баскурьер',
+      description: '',
       keywords: 'услуги доставки, логистика, грузоперевозки',
       dropdown: [
         // {

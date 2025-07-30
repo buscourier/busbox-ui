@@ -4,9 +4,12 @@
   <main class="relative">
     <div class="container mx-auto px-4" [class.pb-10]="!isHomePage">
       <app-breadcrumbs />
-      <h1 class="inline-block mt-10 md:text-3xl px-4 sm:text-2xl font-bold md:px-0">
-        {{ title$ | async }}
-      </h1>
+
+      @if (!isServicesPage) {
+        <h1 class="mt-10 inline-block px-4 font-bold sm:text-2xl md:px-0 md:text-4xl">
+          {{ title$ | async }}
+        </h1>
+      }
 
       @if (description$ | async; as description) {
         <div class="mt-2 mb-10 max-w-[800px]">
