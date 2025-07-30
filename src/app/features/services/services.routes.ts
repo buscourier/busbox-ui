@@ -52,7 +52,7 @@ export function generateServicesRoutes(): Routes {
         {
           path: '',
           component: ServicesIndexComponent,
-          data: { title: 'Наши услуги', hideBreadcrumb: true },
+          data: { pageKey: 'services', hideBreadcrumb: true },
         },
         ...dynamicRoutes,
       ],

@@ -54,6 +54,10 @@ export class AppComponent implements OnInit {
     return this.router.url === '/' || this.router.url === '/home';
   }
 
+  get isServicesPage(): boolean {
+    return this.router.url === '/services';
+  }
+
   constructor() {
     // this.configName = environment.dopplerConfig;
     this.apiBaseUrl = environment.apiBaseUrl;
