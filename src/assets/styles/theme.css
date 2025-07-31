@@ -101,4 +101,90 @@
 
   /* Player */
   --plyr-color-main: var(--color-yellow-500);
+
+  /*temporary*/
+  --primary: 52 100% 50%;
+  --primary-foreground: 0 0% 0%;
+  --primary-glow: 52 100% 70%;
+  --background: 240 20% 99%;
+  --foreground: 240 15% 9%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 15% 9%;
+  --muted: 240 5% 96%;
+  --muted-foreground: 240 4% 46%;
+  --border: 240 6% 90%;
+  --accent: 52 100% 95%;
+  --accent-foreground: 52 100% 30%;
+  --gradient-primary: linear-gradient(135deg, hsl(52 100% 50%), hsl(52 100% 70%));
+  --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(240 5% 98%));
+  --shadow-card: 0 4px 6px -1px hsl(240 5% 65% / 0.1), 0 2px 4px -1px hsl(240 5% 65% / 0.06);
+  --shadow-elevated: 0 10px 15px -3px hsl(240 5% 65% / 0.1), 0 4px 6px -2px hsl(240 5% 65% / 0.05);
+}
+
+.bg-gradient-primary {
+  background: var(--gradient-primary);
+}
+
+.bg-gradient-card {
+  background: var(--gradient-card);
+}
+
+.shadow-card {
+  box-shadow: var(--shadow-card);
+}
+
+.shadow-elevated {
+  box-shadow: var(--shadow-elevated);
+}
+
+.text-primary {
+  color: hsl(var(--primary));
+}
+
+.text-primary-foreground {
+  color: hsl(var(--primary-foreground));
+}
+
+.text-foreground {
+  color: hsl(var(--foreground));
+}
+
+.text-muted-foreground {
+  color: hsl(var(--muted-foreground));
+}
+
+.bg-background {
+  background-color: hsl(var(--background));
+}
+
+.bg-muted {
+  background-color: hsl(var(--muted));
+}
+
+.border-primary {
+  border-color: hsl(var(--primary));
+}
+
+.group:hover .group-hover\:text-primary {
+  color: hsl(var(--primary));
+}
+
+.group:hover .group-hover\:shadow-elevated {
+  box-shadow: var(--shadow-elevated);
+}
+
+.group:hover .group-hover\:opacity-100 {
+  opacity: 1;
+}
+
+.transition-all {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-colors {
+  transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-opacity {
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }

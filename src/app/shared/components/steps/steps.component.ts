@@ -1,6 +1,16 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { HostBinding, Input, type QueryList } from '@angular/core';
-import { ChangeDetectionStrategy, Component, ContentChildren } from '@angular/core';
+import {
+  type AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ContentChildren,
+  type ElementRef,
+  HostBinding,
+  Input,
+  type OnDestroy,
+  type QueryList,
+  ViewChildren,
+} from '@angular/core';
 
 import { cn } from '@core/utils';
 
@@ -13,21 +23,67 @@ import { StepDirective } from './step.directive';
   styleUrl: './steps.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StepsComponent {
+export class StepsComponent implements AfterViewInit, OnDestroy {
   @Input() separated = false;
+  @Input() animationDelay = 150;
   @ContentChildren(StepDirective) steps!: QueryList<StepDirective>;
+  @ViewChildren('stepElement') stepElements!: QueryList<ElementRef<HTMLElement>>;
+
+  private observer?: IntersectionObserver;
 
   @HostBinding('class') get hostClasses(): string {
-    return cn('block max-w-[720px]');
+    return cn('block');
   }
 
-  get stepClasses(): string {
+  get shadowClass(): string {
     return cn(
-      'before:step-point mb-10 text-base/6',
-      'grid grid-cols-[40px_1fr] items-center gap-x-5 md:gap-x-8',
-      {
-        'border-t border-gray-300 pt-10 not-first:mt-10': this.separated,
-      },
+      'pointer-events-none absolute inset-0',
+      'rounded-2xl bg-gradient-to-br from-yellow-500/5 to-transparent',
+      'opacity-0 transition-opacity duration-300 group-hover:opacity-100',
     );
+  }
+
+  get stepPointClass(): string {
+    return cn(
+      // Layout & positioning
+      'relative z-10 flex h-12 w-12 items-center justify-center',
+      // Shape & spacing
+      'rounded-full',
+      // Background & effects
+      'bg-gradient-primary shadow-elevated',
+      // Typography
+      'text-lg font-bold text-gray-900',
+    );
+  }
+
+  get stepContentClass(): string {
+    return cn(
+      'rounded-2xl p-6',
+      'bg-gradient-card shadow-card hover:shadow-elevated',
+      'transition-all duration-300',
+    );
+  }
+
+  ngAfterViewInit(): void {
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.remove('opacity-0', 'translate-y-8');
+            entry.target.classList.add('opacity-100', 'translate-y-0');
+            this.observer!.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2, rootMargin: '-50px' },
+    );
+
+    this.stepElements.forEach((el) => {
+      this.observer!.observe(el.nativeElement);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.observer?.disconnect();
   }
 }
