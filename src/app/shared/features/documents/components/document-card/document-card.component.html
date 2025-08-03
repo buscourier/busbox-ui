@@ -1,36 +1,37 @@
-@if (appearance === 'accent') {
-  <p class="font-heading mb-5 text-xl md:text-[28px]">
-    Вы можете скачать файл «{{ doc.name }}» в формате PDF
-  </p>
-  <button type="button" class="flex items-center" (click)="onShow()">
-    <img [src]="getIcon(doc.type)" alt="PDF" height="42" width="42" class="mr-4" />
-    <span
-      [class]="
-        cn('relative text-black hover:cursor-pointer', 'border-b border-dashed border-black')
-      "
-    >
-      <b>Скачать в PDF</b>
-      (80 кб)
-    </span>
-  </button>
-} @else {
-  <img [src]="getIcon(doc.type)" alt="PDF" height="42" width="42" class="mr-4" />
-  <div>
-    <p class="mb-2.5">{{ doc.name }}</p>
-    <button
-      type="button"
-      [class]="
-        cn(
-          'relative text-blue-500',
-          'border-b border-dashed border-blue-500',
-          'hover:cursor-pointer hover:opacity-75'
-        )
-      "
-      (click)="onShow()"
-    >
-      <span>
-        <b class="font-medium">{{ getLabel(doc.type) }}</b>
+<div [class]="cardContentClass">
+  <div [class]="iconWrapperClass">
+    @if (doc.name) {
+      <tui-icon
+        icon="@tui.file-text"
+        class="absolute transition-all group-hover/card:-translate-y-100"
+        [style.font-size.rem]="isCardLarge ? 2 : 1.5"
+      ></tui-icon>
+      <span [class]="iconLabelClass">
+        {{ doc.type }}
       </span>
-    </button>
+    }
   </div>
-}
+  <div>
+    <h3 [class]="titleClass">
+      {{ doc.name }}
+    </h3>
+    @if (isCardLarge) {
+      <p>
+        Ознакомьтесь с полными правилами приемки и отправки грузов, чтобы обеспечить безопасную и
+        быструю доставку вашей посылки.
+      </p>
+
+      <button
+        type="button"
+        tuiButton
+        class="mt-6 shadow-xs transition-all active:translate-y-[2px] active:shadow-none"
+        (click)="onShow()"
+      >
+        Открыть файл
+      </button>
+    }
+  </div>
+  @if (!isCardLarge) {
+    <tui-icon [icon]="icon" [style.font-size.rem]="1.5" [class]="iconClass" />
+  }
+</div>
