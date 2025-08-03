@@ -2,55 +2,79 @@
 
 <app-sidebar-layout [documentTypes]="['tarif_kurier']">
   <app-steps>
-    <div *appStep>
-      <p class="mb-3">Убедитесь, что в нужном вам городе действует услуга «Вызов курьера».</p>
-      <b class="mb-3 block">Список городов, где есть услуга «Вызов курьера»:</b>
-      @if (cities && cities.length) {
-        <app-list>
-          @for (city of cities; track city.name) {
-            <span *appListItem>{{ city.name }} ({{ city.descr }})</span>
+    @for (step of steps; track step.id) {
+      <app-step-card [step]="step" *appStep>
+        @switch (step.id) {
+          @case (1) {
+            <p>
+              Курьер заберёт посылку прямо у вас дома или в офисе — это быстро и удобно.
+              <br />
+              Проверьте, доступна ли услуга
+              <b>«Вызов курьера»</b>
+              в вашем городе.
+            </p>
+            @if (cities) {
+              <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-2">
+                @if (cities.pickupAndDelivery.length) {
+                  <div
+                    class="rounded-sm border-1 border-gray-200 bg-white p-4 transition-shadow hover:shadow-md"
+                  >
+                    <h4 class="mb-3 text-sm font-medium">Курьер только доставляет</h4>
+                    <app-list spacing="sm" iconSize="sm">
+                      @for (city of cities.deliveryOnly; track city.name) {
+                        <span *appListItem>{{ city.name }}</span>
+                      }
+                    </app-list>
+                  </div>
+                }
+
+                @if (cities.deliveryOnly.length) {
+                  <div
+                    class="rounded-sm border-1 border-gray-200 bg-white p-4 transition-shadow hover:shadow-md"
+                  >
+                    <h4 class="mb-3 text-sm font-medium">Курьер забирает и доставляет</h4>
+                    <app-list spacing="sm" iconSize="sm">
+                      @for (city of cities.pickupAndDelivery; track city.name) {
+                        <span *appListItem>{{ city.name }}</span>
+                      }
+                    </app-list>
+                  </div>
+                }
+              </div>
+            } @else {
+              <div
+                *tuiRepeatTimes="let i of SKELETON_COUNT"
+                class="mb-3 h-6 max-w-md last:mb-0"
+                [tuiSkeleton]="true"
+              ></div>
+            }
           }
-        </app-list>
-      } @else {
-        <div
-          *tuiRepeatTimes="let i of SKELETON_COUNT"
-          class="mb-3 h-6 max-w-md last:mb-0"
-          [tuiSkeleton]="true"
-        ></div>
-      }
-    </div>
-    <div *appStep>
-      Вы можете оформить вызов курьера по номеру телефона
-      <br class="hidden sm:block" />
-      <a [href]="contact.phone | contactLink: 'tel'" class="link-blue-500">
-        {{ contact.phone }}
-      </a>
-      или
-      <a [routerLink]="deliveryLink" class="link-blue-500">заполните заявку на сайте</a>
-      . Наш менеджер свяжется с вами и проинформирует о стоимости и сроках доставки.
-    </div>
-    <p *appStep>
-      По прибытию в пункт забора груза с вами свяжется наш курьер, заберет ваш груз и выдаст
-      накладную заказа.
-    </p>
-    <p *appStep>Оплата производится только отправителем наличным или безналичным платежом.</p>
-    <div *appStep>
-      <p class="mb-4">Отследить доставку вашего груза вы можете:</p>
-      <app-list>
-        <span *appListItem>
-          на сайте, в разделе
-          <a [routerLink]="trackingLink" class="link-blue-500">«Статус доставки»</a>
-        </span>
-        <span *appListItem>
-          при отправлении посылки оформить дополнительную услугу «смс-уведомление отправителю»
-        </span>
-        <span *appListItem>
-          позвонить по номеру телефона:
-          <a [href]="contact.phone | contactLink: 'tel'" class="link-blue-500">
-            {{ contact.phone }}
-          </a>
-        </span>
-      </app-list>
-    </div>
+          @case (2) {
+            <p>
+              Позвоните нам или оставьте заявку на сайте. Менеджер свяжется с вами, уточнит детали и
+              назовёт точное время приезда курьера.
+            </p>
+          }
+          @case (3) {
+            <p class="mb-4">
+              Курьер приедет к вам в назначенное время: если вы отправляете груз — передайте его
+              курьеру, если ждёте доставку — просто получите посылку. Всё займёт всего пару минут.
+            </p>
+          }
+          @case (4) {
+            <p class="mb-4">
+              Можно расплатиться наличными курьеру или сделать безналичный перевод — выбирайте
+              удобный способ.
+            </p>
+          }
+          @case (5) {
+            <p class="mb-4">
+              После отправки проверяйте статус посылки на сайте или по телефону. При желании
+              подключите SMS‑уведомления, чтобы всегда знать, где ваш груз.
+            </p>
+          }
+        }
+      </app-step-card>
+    }
   </app-steps>
 </app-sidebar-layout>
