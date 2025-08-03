@@ -17,7 +17,7 @@ export class StepCardComponent {
   @Input({ required: true }) step!: Step;
 
   @HostBinding('class') get hostClasses(): string {
-    return cn('group block');
+    return cn('group block select-none');
   }
 
   get actionClass(): string {
@@ -27,9 +27,10 @@ export class StepCardComponent {
       // Visual styling
       'rounded-md border border-yellow-500/20 px-3',
       // Typography
-      'text-sm font-medium whitespace-nowrap text-yellow-500',
+      'bg-yellow-500/10 text-sm font-medium whitespace-nowrap text-gray-700',
       // Interactions
-      'cursor-pointer transition-colors group-hover:bg-yellow-500/10 hover:bg-yellow-500 hover:text-gray-900',
+      'cursor-pointer transition-colors group-hover:border-yellow-500 hover:bg-yellow-500 hover:text-gray-900',
+      'shadow-xs transition-all active:translate-y-[2px] active:shadow-none',
     );
   }
 }
