@@ -1,14 +1,16 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TuiNotification } from '@taiga-ui/core';
 
 import { NavigationService } from '@core/services';
 import { CONTACT_INFO } from '@core/tokens';
 
+import { ListComponent, ListItemDirective } from '@shared/components/list';
 import { ContactLinkPipe } from '@shared/pipes';
 
 @Component({
   selector: 'app-storage',
-  imports: [RouterLink, ContactLinkPipe],
+  imports: [RouterLink, ContactLinkPipe, ListComponent, ListItemDirective, TuiNotification],
   templateUrl: './storage.component.html',
   styleUrl: './storage.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
