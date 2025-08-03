@@ -1,9 +1,11 @@
 import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { TuiNotification } from '@taiga-ui/core';
 import { TuiSkeleton } from '@taiga-ui/kit';
 
 import { CONTACT_INFO } from '@core/tokens';
 
+import { ContentScrollerComponent } from '@shared/components/content-scroller';
 import { ListComponent, ListItemDirective } from '@shared/components/list';
 import { SimpleTableComponent } from '@shared/components/simple-table';
 import { ContactLinkPipe } from '@shared/pipes';
@@ -17,6 +19,8 @@ import { ContactLinkPipe } from '@shared/pipes';
     ListItemDirective,
     ContactLinkPipe,
     TuiSkeleton,
+    ContentScrollerComponent,
+    TuiNotification,
   ],
   templateUrl: './insurance.component.html',
   styleUrl: './insurance.component.css',
