@@ -1,0 +1,18 @@
+<div class="mb-4 flex items-start justify-between">
+  <h3 class="flex-1 pr-4 text-xl font-semibold text-gray-900">
+    {{ step.title }}
+  </h3>
+  <div class="text-primary/60 h-8 w-8 flex-shrink-0">
+    <tui-icon [icon]="step.icon" class="text-yellow-500" [style.font-size.rem]="2" />
+  </div>
+</div>
+
+<ng-content />
+
+@if (step.actions; as actions) {
+  <div class="mt-4 flex gap-3">
+    @for (action of actions; track $index) {
+      <button [class]="actionClass" [routerLink]="action.href">{{ action.text }}</button>
+    }
+  </div>
+}

@@ -71,31 +71,8 @@
   </div>
 </section>
 
-<section class="bg-gray-50 py-32">
-  <div class="mx-auto max-w-6xl px-6 text-center">
-    <div class="grid gap-12 md:grid-cols-4">
-      <div>
-        <div class="mb-2 text-4xl font-light text-gray-900 lg:text-5xl">1000+</div>
-        <div class="font-light text-gray-600">довольных клиентов</div>
-      </div>
-      <div>
-        <div class="mb-2 text-4xl font-light text-gray-900 lg:text-5xl">50+</div>
-        <div class="font-light text-gray-600">городов доставки</div>
-      </div>
-      <div>
-        <div class="mb-2 text-4xl font-light text-gray-900 lg:text-5xl">99.8%</div>
-        <div class="font-light text-gray-600">сохранность грузов</div>
-      </div>
-      <div>
-        <div class="mb-2 text-4xl font-light text-gray-900 lg:text-5xl">24/7</div>
-        <div class="font-light text-gray-600">поддержка клиентов</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="bg-white py-16">
-  <div class="mx-auto max-w-4xl px-6 text-center">
+<section class="full-width-section relative top-10 -mt-10 bg-gray-50 py-24 text-center">
+  <div class="container mx-auto px-4">
     <h2 class="mb-8 text-4xl leading-tight font-light text-gray-900 lg:text-5xl">
       Начните с нами прямо сейчас
     </h2>
@@ -104,11 +81,12 @@
     </p>
 
     <div class="flex flex-col items-center justify-center gap-6 sm:flex-row">
-      <button
+      <a
         class="rounded-full bg-gray-900 px-10 py-4 font-medium text-white shadow-lg transition-all duration-300 hover:bg-gray-800 hover:shadow-xl"
+        [routerLink]="deliveryLink"
       >
         Рассчитать стоимость
-      </button>
+      </a>
       <button
         class="rounded-full border border-gray-300 px-10 py-4 font-medium text-gray-700 transition-all duration-300 hover:border-gray-900 hover:text-gray-900"
       >

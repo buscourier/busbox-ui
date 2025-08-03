@@ -1,6 +1,8 @@
+import type { DocumentCategory } from './document-category.types';
+
 export interface DocumentFile {
   name: string;
-  type: string;
+  type: 'pdf' | 'docx';
   link: string;
-  charcode: string;
+  charcode: DocumentCategory;
 }

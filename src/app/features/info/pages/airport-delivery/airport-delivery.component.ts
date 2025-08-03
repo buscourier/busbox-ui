@@ -1,12 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TuiNotification } from '@taiga-ui/core';
+import { TuiBadge } from '@taiga-ui/kit';
 
 import { NavigationService } from '@core/services';
 import { CONTACT_INFO } from '@core/tokens';
 
 import { type BrandCard, BrandCardComponent } from '@shared/components/brand-card';
 import { CarouselComponent } from '@shared/components/carousel';
-import { StepDirective, StepsComponent } from '@shared/components/steps';
+import { ListComponent, ListItemDirective } from '@shared/components/list';
+import { StepCardComponent, StepDirective, StepsComponent } from '@shared/components/steps';
 import { DocumentsListComponent } from '@shared/features/documents';
 import { ContactLinkPipe } from '@shared/pipes';
 
@@ -21,6 +24,11 @@ import { ContactLinkPipe } from '@shared/pipes';
     BrandCardComponent,
     CarouselComponent,
     ContactLinkPipe,
+    StepCardComponent,
+    TuiBadge,
+    ListComponent,
+    ListItemDirective,
+    TuiNotification,
   ],
   templateUrl: './airport-delivery.component.html',
   styleUrl: './airport-delivery.component.css',
@@ -52,4 +60,42 @@ export class AirportDeliveryComponent {
   get deliveryLink(): string {
     return '/' + this.navigationService.findByLink('delivery')!.link;
   }
+
+  steps = [
+    {
+      id: 1,
+      icon: '@tui.info',
+      title: 'Для кого эта услуга?',
+    },
+    {
+      id: 2,
+      icon: '@tui.clock-8',
+      title: 'Как оформить доставку за пару минут',
+      actions: [
+        {
+          text: 'Оформить на сайте',
+          href: this.deliveryLink,
+        },
+        {
+          text: this.contact.phone,
+          href: this.contact.phone,
+        },
+      ],
+    },
+    {
+      id: 3,
+      icon: '@tui.messages-square',
+      title: 'Мы сами свяжемся с вами',
+    },
+    {
+      id: 4,
+      icon: '@tui.signature',
+      title: 'Если получает не вы — нужна доверенность',
+    },
+    {
+      id: 5,
+      icon: '@tui.combine',
+      title: 'Три способа получить груз',
+    },
+  ];
 }

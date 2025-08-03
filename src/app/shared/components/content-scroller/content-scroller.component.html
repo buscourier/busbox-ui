@@ -1,0 +1,23 @@
+<div
+  #contentContainer
+  class="content-scroll-container relative mb-3 overflow-x-auto"
+  (scroll)="onContainerScroll()"
+>
+  <ng-content></ng-content>
+</div>
+
+<div
+  [class]="scrollIndicatorClass"
+  (click)="onIndicatorClick($event)"
+  (keydown)="onIndicatorKeydown($event)"
+  title="Кликните для прокрутки контента"
+  tabindex="0"
+  [attr.aria-label]="'Прокрутка контента'"
+  [attr.aria-orientation]="'horizontal'"
+>
+  <div #scrollProgress [class]="scrollProgressClass"></div>
+</div>
+
+<div class="mt-4">
+  <ng-content select=".footer"></ng-content>
+</div>

@@ -1,25 +1,58 @@
-<app-steps>
-  <p *appStep>Услуга предоставляется как юридическим, так и физическим лицам.</p>
-  <div *appStep>
-    <p>Вы можете оформить доставку груза из аэропорта по номеру телефона</p>
-    <a [href]="contact.phone | contactLink: 'tel'" class="link-blue-500 mgo-number-30374">
-      {{ contact.phone }}
-    </a>
-    или
-    <a [routerLink]="deliveryLink" class="link-blue-500">на сайте</a>
-    с пометкой "аэропорт".
-  </div>
-  <p *appStep class="max-w-[540px]">
-    Наш менеджер свяжется с вами и проинформирует о стоимости и сроках доставки.
-  </p>
-  <div *appStep>
-    <p class="mb-5">Вам потребуется заполнить рекомендуемую форму доверенности.</p>
-    <app-documents-list [documentTypes]="['warrant_fiz', 'warrant_ur']" />
-  </div>
-  <p *appStep>
-    Получить груз можно по адресу получателя, в одном из наших филиалов или в населенном пункте, где
-    нет нашего филиала, встретить автобус на автостанции и забрать груз у водителя.
-  </p>
+<app-steps class="max-w-[680px]">
+  @for (step of steps; track step.id) {
+    <app-step-card [step]="step" *appStep>
+      @switch (step.id) {
+        @case (1) {
+          <p class="mb-4">
+            Мы поможем доставить багаж и грузы и
+            <b>компаниям</b>
+            , и
+            <b>частным клиентам</b>
+            — сервис доступен всем.
+          </p>
+        }
+        @case (2) {
+          <p class="mb-4">
+            Оформите доставку
+            <b>онлайн</b>
+            или позвоните нам.
+          </p>
+          <p>
+            Если заполняете форму на сайте — просто укажите в комментарии, что доставка нужна
+            <b>из аэропорта.</b>
+          </p>
+        }
+        @case (3) {
+          <p class="mb-4">
+            Менеджер перезвонит, уточнит все детали и расскажет, сколько стоит доставка и когда её
+            ждать.
+          </p>
+        }
+        @case (4) {
+          <p class="mb-4">Для передачи груза представителю нужна доверенность.</p>
+          <p class="mb-4 font-medium">Скачайте нужный бланк:</p>
+          <app-documents-list [documentTypes]="['warrant_fiz', 'warrant_ur']" />
+        }
+        @case (5) {
+          <p class="mb-4 font-medium">Выберите, как удобнее:</p>
+          <app-list spacing="sm" iconSize="sm">
+            <span *appListItem>
+              <b>Прямо по адресу</b>
+              — мы привезём домой или в офис
+            </span>
+            <span *appListItem>
+              <b>В филиале Баскурьер</b>
+              — заберёте сами
+            </span>
+            <span *appListItem>
+              <b>На автостанции</b>
+              — если филиала нет, можно встретить автобус и получить груз у водителя.
+            </span>
+          </app-list>
+        }
+      }
+    </app-step-card>
+  }
 </app-steps>
 
 <section class="full-width-section mt-16 mb-10! border-t border-gray-300 pt-16">

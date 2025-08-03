@@ -9,6 +9,7 @@ import {
   type TemplateRef,
   ViewChild,
 } from '@angular/core';
+import { TuiRepeatTimes } from '@taiga-ui/cdk';
 import { TuiSkeleton } from '@taiga-ui/kit';
 import { combineLatest, type Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -19,13 +20,13 @@ import { cn } from '@core/utils';
 import { PdfActionsComponent } from '@shared/components/pdf-actions';
 
 import { DocumentsFacade } from '../../facade';
-import type { DocumentCategory, DocumentFile } from '../../types';
+import type { DocumentCategory, DocumentFile, DocumentSize } from '../../types';
 
 import { DocumentCardComponent } from '../document-card';
 
 @Component({
   selector: 'app-documents-list',
-  imports: [AsyncPipe, DocumentCardComponent, PdfActionsComponent, TuiSkeleton],
+  imports: [AsyncPipe, DocumentCardComponent, PdfActionsComponent, TuiSkeleton, TuiRepeatTimes],
   templateUrl: './documents-list.component.html',
   styleUrl: './documents-list.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,11 +34,15 @@ import { DocumentCardComponent } from '../document-card';
 export class DocumentsListComponent implements OnInit {
   @Input() documentTypes?: DocumentCategory[];
   @Input() allDocuments = false;
-  @Input() appearance: 'accent' | 'default' = 'default';
+  @Input() documentSize: DocumentSize = 'sm';
   @ViewChild('actionsTemplate', { static: true }) actionsTemplate!: TemplateRef<unknown>;
 
   @HostBinding('class') get hostClasses(): string {
     return cn('flex flex-wrap gap-8');
+  }
+
+  get documentsCount(): number {
+    return this.documentTypes ? this.documentTypes.length : this.allDocuments ? 8 : 1;
   }
 
   documents$!: Observable<DocumentFile[]>;

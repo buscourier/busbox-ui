@@ -20,10 +20,21 @@
   h4,
   h5,
   h6 {
-    @apply font-roboto;
+    @apply font-roboto font-bold;
   }
 
   p {
-    @apply leading-6 text-gray-800;
+    @apply mb-3 leading-6 text-gray-800;
+  }
+
+  ul li,
+  ol li,
+  dl dt,
+  dl dd {
+    @apply text-gray-800;
+  }
+
+  b {
+    @apply font-medium;
   }
 }

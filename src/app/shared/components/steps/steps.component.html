@@ -1,7 +1,23 @@
-<ol class="block" role="list">
-  @for (step of steps; track $index) {
-    <li [class]="stepClasses">
-      <ng-container *ngTemplateOutlet="step.template"></ng-container>
-    </li>
-  }
-</ol>
+@for (step of steps; track $index; let stepIndex = $index) {
+  <div
+    #stepElement
+    class="step-item relative flex translate-y-8 gap-6 opacity-0 transition-all duration-700 ease-out"
+    [style.transition-delay.ms]="stepIndex * animationDelay"
+  >
+    <div class="flex flex-col items-center">
+      <div [class]="stepPointClass">
+        {{ $index + 1 }}
+      </div>
+      @if (!$last) {
+        <div class="mt-4 h-16 w-0.5 bg-gradient-to-b from-yellow-500/80 to-yellow-500/40"></div>
+      }
+    </div>
+    <div class="group flex-1 pb-16">
+      <div [class]="stepContentClass">
+        <ng-container *ngTemplateOutlet="step.template"></ng-container>
+      </div>
+      <!--light yellow bg shadow-->
+      <div [class]="shadowClass"></div>
+    </div>
+  </div>
+}
