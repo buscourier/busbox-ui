@@ -1,0 +1,8 @@
+.content-scroll-container {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.content-scroll-container::-webkit-scrollbar {
+  display: none;
+}
