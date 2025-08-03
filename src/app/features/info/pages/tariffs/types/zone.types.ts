@@ -1,7 +1,7 @@
 export interface ShippingZone {
   site_id: string;
   zone: string;
-  cities: string[];
+  cities: string;
 }
 
 export interface ShippingZoneTariff {

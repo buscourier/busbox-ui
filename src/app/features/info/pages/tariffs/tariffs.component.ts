@@ -1,6 +1,7 @@
 import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   type ElementRef,
   inject,
@@ -11,12 +12,15 @@ import {
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TuiRepeatTimes } from '@taiga-ui/cdk';
+import { TuiNotification } from '@taiga-ui/core';
 import { TuiChip, TuiSkeleton } from '@taiga-ui/kit';
 import { type Observable, take } from 'rxjs';
 
 import { DocumentToPdfService, MultiElementRenderer } from '@core/services/pdf';
 import { DOCUMENT_RENDERER } from '@core/tokens';
+import { cn } from '@core/utils';
 
+import { ContentScrollerComponent } from '@shared/components/content-scroller';
 import { PdfActionsComponent } from '@shared/components/pdf-actions';
 import { type SidebarLayoutAction, SidebarLayoutComponent } from '@shared/layouts';
 import { LocationsFacade } from '@shared/store';
@@ -36,6 +40,8 @@ import type { QueryParams, ParcelsTableData, ParcelTableRow, TariffsViewModel } 
     TuiRepeatTimes,
     SidebarLayoutComponent,
     PdfActionsComponent,
+    TuiNotification,
+    ContentScrollerComponent,
   ],
   templateUrl: './tariffs.component.html',
   styleUrl: './tariffs.component.css',
@@ -75,11 +81,21 @@ export class TariffsComponent implements OnInit {
     ];
   }
 
+  get cityBadgeClass(): string {
+    return cn(
+      'animate-fade-in inline-block cursor-pointer rounded-full border',
+      'border-yellow-500/70 bg-yellow-500/20 px-3 py-1.5 text-xs font-medium text-yellow-900 transition-all duration-300',
+      'hover:scale-105',
+    );
+  }
+
+  private observer?: IntersectionObserver;
   private readonly facade = inject(TariffsFacade);
   private readonly locationsFacade = inject(LocationsFacade);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly tariffsViewer = inject(TariffsViewerService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.vm$ = this.facade.getViewModel();
