@@ -1,4 +1,4 @@
-import { NgOptimizedImage } from '@angular/common';
+import { JsonPipe, NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TuiIcon } from '@taiga-ui/core';
@@ -27,7 +27,7 @@ const linkMap: Record<ServiceType, string> = {
 
 @Component({
   selector: 'app-service-card',
-  imports: [NgOptimizedImage, TuiIcon, RouterLink],
+  imports: [NgOptimizedImage, TuiIcon, RouterLink, JsonPipe],
   templateUrl: './service-card.component.html',
   styleUrl: './service-card.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -55,7 +55,7 @@ export class ServiceCardComponent {
     return cn('text-xs font-medium tracking-wide uppercase', {
       'text-red-500': this.service.type === 'guard',
       'text-white': this.service.type === 'task',
-      'text-green-500': this.service.type === 'courier',
+      'text-green-600': this.service.type === 'courier',
     });
   }
 
@@ -63,7 +63,7 @@ export class ServiceCardComponent {
     return cn({
       'text-red-500': this.service.type === 'guard',
       'text-yellow-500': this.service.type === 'task',
-      'text-green-500': this.service.type === 'courier',
+      'text-green-600': this.service.type === 'courier',
     });
   }
 
@@ -71,7 +71,7 @@ export class ServiceCardComponent {
     return cn('flex items-center font-medium transition-colors', {
       'text-red-500 group-hover:text-red-400': this.service.type === 'guard',
       'text-yellow-500 group-hover:text-yellow-400': this.service.type === 'task',
-      'text-green-500 group-hover:text-green-400': this.service.type === 'courier',
+      'text-green-600 group-hover:text-green-500': this.service.type === 'courier',
     });
   }
 

@@ -29,7 +29,9 @@ import { type ServiceCard, ServiceCardComponent } from './service-card';
 export class ServicesIndexComponent {
   private readonly navigationService = inject(NavigationService);
 
-  // readonly links = this.navigationService.getDropdownItems('services');
+  get deliveryLink(): string {
+    return '/' + this.navigationService.findByLink('delivery')?.link;
+  }
 
   readonly services: ServiceCard[] = [
     {
@@ -37,21 +39,21 @@ export class ServicesIndexComponent {
       title: 'Страхование груза',
       description: 'Полная защита от любых непредвиденных ситуаций во время транспортировки.',
       type: 'guard',
-      link: '/' + this.navigationService.getDropdownItems('insurance'),
+      link: '/' + this.navigationService.findByLink('insurance')?.link,
     },
     {
       id: 'tasks',
       title: 'Сложные задачи',
       description: 'Индивидуальные решения для нестандартных логистических задач любой сложности.',
       type: 'task',
-      link: '/' + this.navigationService.getDropdownItems('complex-tasks'),
+      link: '/' + this.navigationService.findByLink('complex-tasks')?.link,
     },
     {
       id: 'courier',
       title: 'Курьерская доставка',
       description: 'Забор груза от двери и доставка до получателя. Экономьте время и силы.',
       type: 'courier',
-      link: '/' + this.navigationService.getDropdownItems('courier'),
+      link: '/' + this.navigationService.findByLink('courier')?.link,
     },
   ];
 }
