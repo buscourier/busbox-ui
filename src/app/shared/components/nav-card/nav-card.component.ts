@@ -27,9 +27,9 @@ export class NavCardComponent {
     return cn(
       'group cursor-pointer p-6',
       'rounded-2xl border border-gray-100 bg-white',
-      'card-hover shadow-lg hover:shadow-xl',
-      'focus:ring-2 focus:ring-yellow-400 focus:outline-none',
-      'focus:border-yellow-400',
+      'shadow-lg transition-all hover:shadow-xl active:translate-y-[4px] active:shadow-none',
+      'focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400 focus:outline-none',
+      'select-none',
     );
   }
 
