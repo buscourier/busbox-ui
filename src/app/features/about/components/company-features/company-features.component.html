@@ -1,0 +1,22 @@
+@for (feature of features; track $index) {
+  <div
+    class="group relative overflow-hidden rounded-lg bg-white p-6 shadow-md transition-all duration-500 hover:-translate-y-2 hover:shadow-lg"
+  >
+    <div
+      class="absolute top-4 right-4 rounded-full bg-yellow-500/10 px-2 py-1 text-xs font-semibold text-yellow-500 transition-colors duration-300 group-hover:bg-yellow-500 group-hover:text-white"
+    >
+      {{ feature.badge }}
+    </div>
+    <div class="space-y-4">
+      <div
+        class="w-fit rounded-xl bg-yellow-500/10 p-3 text-yellow-500 transition-all duration-300 group-hover:scale-110 group-hover:bg-yellow-500 group-hover:text-white"
+      >
+        <tui-icon [icon]="feature.icon" [style.font-size.rem]="1.5"></tui-icon>
+      </div>
+      <div>
+        <h3 class="mb-2 text-lg font-semibold text-gray-900">{{ feature.title }}</h3>
+        <p class="leading-relaxed text-gray-600">{{ feature.text }}</p>
+      </div>
+    </div>
+  </div>
+}

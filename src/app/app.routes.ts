@@ -42,4 +42,8 @@ export const routes: Routes = [
     path: 'news',
     loadChildren: () => import('./features/news').then((m) => m.newsRoutes),
   },
+  {
+    path: 'about',
+    loadChildren: () => import('./features/about').then((m) => m.aboutRoutes),
+  },
 ];

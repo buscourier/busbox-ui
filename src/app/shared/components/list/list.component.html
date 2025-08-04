@@ -2,7 +2,11 @@
   @for (item of items; track $index) {
     <li [class]="listItemClass">
       @if (icon !== 'none') {
-        <tui-icon [icon]="icon" [style.font-size.rem]="iconSizeValue" [class]="iconColorClass" />
+        <tui-icon
+          [icon]="'@tui.' + icon"
+          [style.font-size.rem]="iconSizeValue"
+          [class]="iconColorClass"
+        />
       }
 
       <ng-container *ngTemplateOutlet="item.template"></ng-container>

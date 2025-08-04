@@ -13,7 +13,7 @@ import { cn } from '@core/utils';
 
 import { ListItemDirective } from './list-item.directive';
 
-type IconType = 'check-circle' | 'arrow-right' | 'none';
+type IconType = 'check-circle' | 'circle-check-big' | 'arrow-right' | 'none';
 type IconColor = 'gray' | 'green' | 'blue' | 'yellow';
 
 @Component({
@@ -24,7 +24,7 @@ type IconColor = 'gray' | 'green' | 'blue' | 'yellow';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListComponent {
-  @Input() icon: IconType = 'check-circle';
+  @Input() icon: IconType = 'circle-check-big';
   @Input() spacing: 'sm' | 'md' | 'lg' = 'md';
   @Input() iconSize: 'xs' | 'sm' | 'md' | 'lg' = 'md';
   @Input() iconColor?: IconColor;
@@ -75,6 +75,7 @@ export class ListComponent {
     const defaultColorMap: Record<IconType, string> = {
       'check-circle': 'text-gray-500',
       'arrow-right': 'text-blue-500',
+      'circle-check-big': 'text-yellow-500',
       none: '',
     };
 

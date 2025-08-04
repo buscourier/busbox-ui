@@ -1,0 +1,13 @@
+@for (value of values; track value.icon) {
+  <div class="group text-center transition-transform duration-300 hover:scale-105">
+    <div
+      class="mb-4 inline-flex rounded-2xl bg-yellow-500/10 p-4 text-yellow-500 transition-colors duration-300 group-hover:bg-yellow-500 group-hover:text-white"
+    >
+      <tui-icon [icon]="value.icon" [style.font-size.rem]="2"></tui-icon>
+    </div>
+    <h3 class="mb-3 text-xl font-semibold text-black">{{ value.title }}</h3>
+    <p class="leading-relaxed text-gray-600">
+      {{ value.text }}
+    </p>
+  </div>
+}
