@@ -22,7 +22,7 @@ import { cn } from '@core/utils';
 export class StatsComponent implements OnInit {
   @HostBinding('class') get hostClasses(): string {
     return cn(
-      'flex flex-col items-center pt-12 md:flex-row md:items-start md:justify-center md:gap-x-18 lg:gap-x-32 xl:justify-start xl:gap-x-28 xl:pt-0',
+      'flex flex-col items-center pt-12 md:flex-row md:items-start md:justify-center md:gap-x-18 lg:gap-x-32 xl:gap-x-28 xl:pt-0',
     );
   }
 
