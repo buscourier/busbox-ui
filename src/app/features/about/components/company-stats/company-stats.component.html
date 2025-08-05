@@ -1,0 +1,21 @@
+@for (stat of stats; track $index) {
+  <div
+    class="group rounded-lg border-0 bg-white p-6 shadow-sm transition-all duration-300 hover:scale-105 hover:shadow-lg"
+  >
+    <div class="space-y-3 text-center">
+      <div
+        class="inline-block w-fit rounded-xl bg-yellow-500/10 p-3 text-yellow-500 transition-all duration-300 group-hover:bg-yellow-500 group-hover:text-white"
+      >
+        <tui-icon [icon]="stat.icon" [style.font-size.rem]="1.5"></tui-icon>
+      </div>
+      <div
+        class="text-3xl font-bold text-yellow-500 transition-colors duration-300 group-hover:text-gray-800 lg:text-4xl"
+      >
+        {{ stat.number }}
+      </div>
+      <div class="text-muted-foreground text-sm leading-tight">
+        {{ stat.label }}
+      </div>
+    </div>
+  </div>
+}
