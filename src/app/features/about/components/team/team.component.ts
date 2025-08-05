@@ -25,7 +25,7 @@ export class TeamComponent {
   private readonly navigationService = inject(NavigationService);
 
   get careerLink(): string {
-    return this.navigationService.findByLink('career')!.link;
+    return '/' + this.navigationService.findByLink('career')!.link;
   }
 
   activities = [
