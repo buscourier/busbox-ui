@@ -43,7 +43,7 @@ export class ListComponent {
   }
 
   get listItemClass() {
-    return cn('flex items-center gap-x-2 leading-6', {
+    return cn('flex gap-x-3 leading-6', {
       'text-sm leading-4': this.spacing === 'sm',
     });
   }
@@ -57,7 +57,7 @@ export class ListComponent {
       case 'lg':
         return 1.5;
       default:
-        return 1.15;
+        return 1.25;
     }
   }
 

@@ -1,0 +1,30 @@
+@let stats = stats$ | async;
+
+<div
+  class="mb-12 flex flex-col bg-[url('src/assets/images/achievement-1.svg')] bg-[length:86px_94px] bg-[left_190px_bottom_58px] bg-no-repeat sm:mr-auto md:mr-0 lg:mb-0 lg:h-36 lg:flex-row lg:items-center lg:gap-x-12 lg:bg-[length:120px_134px] lg:bg-center xl:h-52 xl:bg-[length:150px_164px]"
+>
+  <span class="font-heading mb-1.5 block h-[82px] text-[82px] leading-tight">
+    {{ workPeriod }}
+  </span>
+  <p class="text-[24px] leading-8">
+    лет работы
+    <br />
+    на рынке грузоперевозок
+  </p>
+</div>
+<div
+  class="flex flex-col bg-[url('src/assets/images/achievement-2.svg')] bg-[length:86px_94px] bg-[left_220px_top_80px] bg-no-repeat pb-12 sm:ml-auto md:ml-0 xl:h-52 xl:flex-row xl:items-center xl:gap-x-8 xl:bg-[length:145px_145px] xl:bg-center xl:pb-0"
+>
+  <div class="font-heading mb-1.5 block h-[82px] align-middle text-[82px] leading-tight">
+    @if (stats) {
+      {{ stats.orders_sent }}
+    } @else {
+      0000000
+    }
+  </div>
+  <p class="text-[24px] leading-8">
+    отправлено посылок
+    <br />
+    с 2013 года
+  </p>
+</div>
