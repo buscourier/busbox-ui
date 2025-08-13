@@ -1,0 +1,31 @@
+@for (status of statusList; track status.charcode) {
+  <div
+    [class]="cn(
+    `group grid grid-cols-[repeat(2,auto)_1fr] items-center justify-items-start gap-4 sm:grid-cols-[repeat(3,auto)_1fr]`,
+    `text-md  sm:text-lg`
+    )"
+  >
+    <i
+      [class]="cn(
+      `relative block size-1.5 shrink-0 rounded-full bg-gray-300`,
+      `sm:after:h-16 after:absolute after:top-full after:left-[2px] after:h-24 after:w-[1px] after:bg-gray-300`,
+      `group-last:after:hidden `
+      )"
+    ></i>
+    <time class="text-gray-400">
+      {{ status.serverdate | date: 'dd.MM.yyyy' }}
+    </time>
+    <div>Заказ № {{ orderNumber }}</div>
+    <div
+      [class]="cn(
+    `col-span-3 col-start-2 row-start-2 px-2.5 py-1.5 sm:col-span-1 sm:col-start-4 sm:row-start-1`,
+    `border border-gray-300 bg-gray-50 text-xs rounded-sm`,
+    getStatusColor(status.charcode)
+  )"
+    >
+      {{ status.lk_name }}
+    </div>
+  </div>
+} @empty {
+  <p class="text-center text-gray-600">Заказ с таким номером не найден!</p>
+}
