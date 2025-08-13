@@ -1,0 +1,17 @@
+@for (contact of contacts; track contact.icon) {
+  <div class="grid grid-cols-[auto_1fr]">
+    <tui-icon
+      [icon]="contact.icon"
+      class="col-start-1 row-start-2 row-end-3 mr-3 text-yellow-500"
+    ></tui-icon>
+    <p class="col-start-2 col-end-3 row-start-1 row-end-2 mb-2 text-gray-900">
+      {{ contact.label }}
+    </p>
+    <a
+      [href]="contact.value | contactLink: ($index === 0 ? 'tel' : 'whatsapp')"
+      class="relative col-start-2 col-end-3 row-start-2 row-end-3 justify-self-start text-[26px] transition-colors before:absolute before:-bottom-1.5 before:left-0 before:w-full before:border-b before:border-dashed before:border-gray-700 hover:cursor-pointer hover:text-yellow-500"
+    >
+      {{ $index === 0 ? contact.value : 'Whatsapp' }}
+    </a>
+  </div>
+}
