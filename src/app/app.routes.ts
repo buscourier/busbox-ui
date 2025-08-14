@@ -54,4 +54,8 @@ export const routes: Routes = [
     path: 'privacy-policy',
     loadChildren: () => import('./features/privacy-policy').then((m) => m.privacyPolicyRoutes),
   },
+  {
+    path: 'feedback',
+    loadChildren: () => import('./features/feedback').then((m) => m.feedbackRoutes),
+  },
 ];
