@@ -50,4 +50,8 @@ export const routes: Routes = [
     path: 'career',
     loadChildren: () => import('./features/career').then((m) => m.careerRoutes),
   },
+  {
+    path: 'privacy-policy',
+    loadChildren: () => import('./features/privacy-policy').then((m) => m.privacyPolicyRoutes),
+  },
 ];
