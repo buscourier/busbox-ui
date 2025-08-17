@@ -1,13 +1,17 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { TuiIcon } from '@taiga-ui/core';
 
+import { cn } from '@core/utils';
+
+import { ContactLinkPipe } from '@shared/pipes';
 import type { NavigationItem } from '@shared/types';
 
 import { type FooterColumn, FooterService } from './footer.service';
 
 @Component({
   selector: 'app-footer',
-  imports: [RouterLink],
+  imports: [RouterLink, TuiIcon, ContactLinkPipe, RouterLinkActive],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,4 +42,6 @@ export class FooterComponent {
   getColumnTitle(column: FooterColumn): string {
     return typeof column.title === 'string' ? column.title : column.title.name;
   }
+
+  protected readonly cn = cn;
 }
