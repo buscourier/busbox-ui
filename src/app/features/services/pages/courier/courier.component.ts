@@ -42,7 +42,7 @@ export class CourierComponent implements OnInit {
   private readonly courierService = inject(CourierService);
 
   get deliveryLink(): string {
-    return '/' + this.navigationService.findByLink('delivery')!.link;
+    return '/' + this.navigationService.findByLink('delivery/booking')!.link;
   }
 
   get trackingLink(): string {
