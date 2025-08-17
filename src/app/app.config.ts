@@ -3,7 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { type ApplicationConfig, importProvidersFrom, signal } from '@angular/core';
 import { isDevMode, provideZoneChangeDetection } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling, withViewTransitions } from '@angular/router';
 import { provideTransloco } from '@jsverse/transloco';
 import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore } from '@ngrx/router-store';
@@ -79,7 +79,6 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
     provideStore(),
     provideState(locationsFeature),
     provideState(pickupPointFeature),
@@ -93,6 +92,18 @@ export const appConfig: ApplicationConfig = {
     provideState(balanceFeature),
     provideState(documentsFeature),
     provideState(newsFeature),
+    provideRouter(
+      routes,
+      withViewTransitions({
+        skipInitialTransition: true,
+        onViewTransitionCreated: (transitionInfo) => {
+          console.log('transitionInfo', transitionInfo);
+        },
+      }),
+      withInMemoryScrolling({
+        scrollPositionRestoration: 'top',
+      }),
+    ),
     provideEffects(
       LocationsEffects,
       PickupPointEffects,

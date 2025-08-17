@@ -77,3 +77,67 @@
     opacity: 0;
   }
 }
+
+/* PAGE ANIMATIONS  */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+app-header {
+  view-transition-name: header;
+}
+
+app-footer {
+  view-transition-name: footer;
+}
+
+::view-transition-old(header),
+::view-transition-new(header),
+::view-transition-old(footer),
+::view-transition-new(footer) {
+  animation: none;
+}
+
+/* 4. Main content */
+/*.main-content {*/
+/*  view-transition-name: main-content;*/
+/*  !*overflow-x: hidden;*!*/
+/*}*/
+
+/* Animations for content */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(root) {
+  animation-name: slide-out-to-left;
+}
+
+::view-transition-new(root) {
+  animation-name: slide-in-from-right;
+}
+
+@keyframes slide-out-to-left {
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-in-from-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.01s;
+  }
+}
