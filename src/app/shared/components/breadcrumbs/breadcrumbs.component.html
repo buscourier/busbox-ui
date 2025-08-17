@@ -1,7 +1,7 @@
 @let breadcrumbs = breadcrumbs$ | async;
 
 @if (breadcrumbs && breadcrumbs.length > 1) {
-  <tui-breadcrumbs size="l" class="tui-space_top-2 pt-4">
+  <tui-breadcrumbs size="l">
     @for (item of breadcrumbs$ | async; track item.routerLink; let isLast = $last) {
       <ng-container *tuiItem>
         @if (!isLast) {
@@ -9,7 +9,7 @@
             tuiLink
             [routerLink]="item.routerLink"
             [class.disabled]="item.disabled"
-            class="flex items-center gap-1"
+            class="flex items-center gap-1 text-sm! text-gray-500"
           >
             @if (item.icon) {
               <!--            <tui-icon [icon]="item.icon" class="text-sm"></tui-icon>-->
@@ -18,7 +18,7 @@
             {{ item.caption }}
           </a>
         } @else {
-          <span class="flex items-center gap-1 text-gray-600">
+          <span class="flex items-center gap-1 text-sm text-gray-500">
             @if (item.icon) {
               <!--                <tui-icon [icon]="item.icon" class="text-sm"></tui-icon>-->
               icon
