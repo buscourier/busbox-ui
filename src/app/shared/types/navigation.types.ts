@@ -11,8 +11,9 @@ export interface NavigationItem {
   description?: string | string[];
   keywords?: string;
   dropdown?: NavigationItem[];
-  onlyMobile?: boolean;
   icon?: string;
   badge?: NavigationBadge;
   hidden?: boolean;
+  isMainMenu?: boolean;
+  isCTA?: boolean;
 }

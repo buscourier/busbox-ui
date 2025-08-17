@@ -1,36 +1,59 @@
-<nav class="navigation">
-  <ul class="nav-list">
+<nav>
+  <ul class="flex items-center justify-center gap-x-2">
     @for (item of navigationItems; track item.link) {
-      <li class="nav-item" [class.has-dropdown]="item.dropdown">
+      <li class="relative">
         @if (item.dropdown) {
-          <!-- Drop down menu -->
-          <button
-            class="nav-link dropdown-toggle"
-            (click)="toggleDropdown(item.link)"
-            [class.active]="isDropdownOpen(item.link)"
+          <div
+            class="relative"
+            (mouseenter)="onMouseEnter(item.link)"
+            (mouseleave)="onMouseLeave(item.link)"
           >
-            {{ item.name }}
-            <span class="dropdown-arrow">▼</span>
-          </button>
+            <button
+              type="button"
+              routerLinkActive="bg-yellow-500/20"
+              [routerLink]="'/' + item.link"
+              [class]="cn(navLinkClass, dropdownToggleClass)"
+              [tuiDropdownManual]="isDropdownOpen(item.link)"
+              [tuiDropdown]="dropdownTemplate"
+              (tuiActiveZoneChange)="onActiveZoneChange($event, item.link)"
+            >
+              {{ item.name }}
+              <tui-icon
+                icon="@tui.chevron-down"
+                [style.font-size.rem]="1"
+                [class.rotate-180]="isDropdownOpen(item.link)"
+              />
+            </button>
 
-          @if (isDropdownOpen(item.link)) {
-            <ul class="dropdown-menu">
-              @for (subItem of item.dropdown; track subItem.link) {
-                <li>
-                  <a
-                    [routerLink]="'/' + subItem.link"
-                    class="dropdown-link"
-                    routerLinkActive="active"
-                    (click)="closeDropdowns()"
-                  >
-                    {{ subItem.name }}
-                  </a>
-                </li>
-              }
-            </ul>
-          }
+            <ng-template #dropdownTemplate>
+              <div
+                class="py-3"
+                (mouseenter)="openDropdown(item.link)"
+                (mouseleave)="onMouseLeave(item.link)"
+              >
+                <ul>
+                  @for (subItem of item.dropdown; track subItem.link) {
+                    <li>
+                      <a
+                        [routerLink]="'/' + subItem.link"
+                        [class]="dropdownLinkClass"
+                        routerLinkActive="bg-yellow-500/20 font-medium"
+                        (click)="closeAllDropdowns()"
+                      >
+                        {{ subItem.name }}
+                      </a>
+                    </li>
+                  }
+                </ul>
+              </div>
+            </ng-template>
+          </div>
         } @else {
-          <a [routerLink]="'/' + item.link" class="nav-link" routerLinkActive="active">
+          <a
+            [routerLink]="'/' + item.link"
+            [class]="navLinkClass"
+            routerLinkActive="bg-yellow-500/20"
+          >
             {{ item.name }}
           </a>
         }

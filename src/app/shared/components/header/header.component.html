@@ -1,89 +1,145 @@
-<header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+<header class="">
   <div class="container mx-auto px-4">
-    <div class="flex items-center justify-between h-16 gap-4">
-      <!-- Mobile Menu Button -->
-      <button
-        class="flex flex-col justify-center items-center w-8 h-8 bg-transparent border-0 cursor-pointer p-0 gap-0.5 transition-all duration-300 md:hidden"
-        (click)="toggleMobileMenu()"
-        aria-label="Открыть меню"
-      >
-        <span
-          class="block w-5 h-0.5 bg-gray-700 transition-all duration-300 origin-center"
-          [class]="isMobileMenuOpen ? 'translate-x-1.5 translate-y-1.5 rotate-45' : ''"
-        ></span>
-        <span
-          class="block w-5 h-0.5 bg-gray-700 transition-all duration-300 origin-center"
-          [class]="isMobileMenuOpen ? 'opacity-0' : ''"
-        ></span>
-        <span
-          class="block w-5 h-0.5 bg-gray-700 transition-all duration-300 origin-center"
-          [class]="isMobileMenuOpen ? 'translate-x-1.5 -translate-y-1.5 -rotate-45' : ''"
-        ></span>
-      </button>
-
+    <div class="flex h-20 items-center justify-between gap-4">
       <!-- Logo -->
-      <div class="flex-1 flex justify-center md:flex-none md:justify-start">
+      <div class="flex flex-1 md:flex-none md:justify-start">
         <a routerLink="/" class="flex items-center no-underline">
-          <img src="/assets/logo.svg" alt="Баскурьер" class="h-8 w-auto" />
+          <img src="/assets/icons/header-logo.svg" alt="Баскурьер" class="h-12 w-auto" />
         </a>
       </div>
 
       <!-- Desktop Navigation -->
-      <div class="flex-1 flex justify-center hidden md:block">
+      <div class="hidden flex-1 justify-center xl:flex">
         <app-navigation />
       </div>
 
       <!-- Right Section -->
-      <div class="flex items-center gap-4">
-        <!-- Contact Phone -->
-        <a
-          [href]="'tel:' + getContactPhone()"
-          class="flex items-center gap-2 no-underline text-gray-700 font-medium transition-colors duration-200 hover:text-amber-500 hidden sm:flex"
-        >
-          <span class="text-lg">📞</span>
-          <span class="text-sm whitespace-nowrap">{{ getContactPhone() }}</span>
-        </a>
+      <div class="flex items-center gap-2">
+        @if (isPhoneNumberAvailable) {
+          <a
+            [href]="contactPhone | contactLink: 'tel'"
+            class="shadow-contact relative ml-auto flex size-11 items-center justify-center rounded-full border border-gray-200 bg-white transition-shadow hover:shadow-sm active:top-0.5 md:size-auto md:space-x-3 md:border-none md:px-5 md:py-3"
+          >
+            <tui-icon icon="phone" [style.font-size.rem]="1" />
+            <span class="hidden md:block">{{ contactPhone }}</span>
+          </a>
+        } @else {
+          <div class="hidden lg:block">
+            <button
+              type="button"
+              tuiButton
+              appearance="primary"
+              size="s"
+              class="bg-yellow-300 ring-2 ring-yellow-500 ring-offset-2"
+              (click)="goToCalculatorPage()"
+            >
+              Расчитать стоимость
+            </button>
+          </div>
+        }
 
         <!-- User Menu -->
         <div class="relative">
-          <button
-            class="flex items-center justify-center w-10 h-10 bg-amber-400 border-0 rounded-full cursor-pointer transition-all duration-200 shadow-md hover:bg-amber-500 hover:-translate-y-0.5 hover:shadow-lg"
-            [class.bg-amber-500]="isUserMenuOpen"
-            (click)="toggleUserMenu()"
-            aria-label="Меню пользователя"
-          >
-            <span class="text-lg text-white">👤</span>
-          </button>
-
-          <!-- User Dropdown -->
-          @if (isUserMenuOpen) {
-            <div
-              class="absolute top-[calc(100%+0.5rem)] right-0 bg-white border border-gray-200 rounded-lg shadow-xl min-w-[200px] z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200"
+          @if (currentUser | async; as currentUser) {
+            <button
+              type="button"
+              tuiDropdownLimitWidth="min"
+              class="cursor-pointer rounded-lg p-3 transition-colors hover:bg-gray-100"
+              (click)="toggleUserMenu()"
+              [tuiDropdownManual]="isUserMenuOpen"
+              [tuiDropdown]="dropdownTemplate"
+              (tuiActiveZoneChange)="onActiveZoneChange($event)"
             >
-              @for (item of getUserMenuItems(); track item.link) {
-                <a
-                  [routerLink]="'/' + item.link"
-                  class="block w-full px-4 py-3 no-underline text-gray-700 font-medium transition-colors duration-200 border-b border-gray-100 hover:bg-gray-50 hover:text-amber-500"
-                  (click)="closeUserMenu()"
+              <img src="/assets/icons/user-logged.svg" class="block size-10!" alt="" />
+            </button>
+
+            <ng-template #dropdownTemplate>
+              <div class="w-full max-w-3xl">
+                <div class="flex gap-4 border-b border-gray-100 p-4">
+                  <img
+                    src="/assets/icons/user-logged.svg"
+                    alt=""
+                    class="block size-10 rounded-full bg-gray-50"
+                  />
+                  <div class="flex flex-col">
+                    <b class="font-medium">{{ currentUser.user_name }}</b>
+                    <small>tafibuchgalter&#64;mail.ru</small>
+                  </div>
+                </div>
+
+                @for (item of userMenuItems; track item.link) {
+                  <a
+                    [routerLink]="'/' + item.link"
+                    routerLinkActive="bg-gray-50 font-medium"
+                    class="flex w-full gap-2 border-b border-gray-100 px-4 py-3 text-gray-700 no-underline transition-colors duration-200 hover:bg-gray-50"
+                    (click)="closeUserMenu()"
+                  >
+                    {{ item.name }}
+                  </a>
+                }
+                <button
+                  class="flex w-full cursor-pointer gap-2 border-0 bg-transparent px-4 py-3 text-left text-red-500 transition-colors duration-200 hover:bg-red-50 hover:text-red-600"
+                  (click)="logout()"
                 >
-                  {{ item.name }}
-                </a>
-              }
-              <button
-                class="block w-full px-4 py-3 text-red-500 font-medium transition-colors duration-200 border-0 bg-transparent text-left cursor-pointer hover:bg-red-50 hover:text-red-600"
-                (click)="logout()"
-              >
-                Выйти
-              </button>
-            </div>
+                  <tui-icon icon="@tui.log-out" [style.font-size.rem]="1.15" />
+                  Выйти
+                </button>
+              </div>
+            </ng-template>
+          } @else {
+            <button type="button" tuiButton appearance="neutral" [routerLink]="['/auth/login']">
+              <span class="font-normal">Войти</span>
+            </button>
           }
         </div>
+        <!-- Mobile Menu Button -->
+        <button
+          tuiButton
+          appearance="flat"
+          class="xl:hidden!"
+          (click)="mobileMenuOpen.set(true)"
+          aria-label="Открыть меню"
+        >
+          <tui-icon icon="@tui.menu" />
+        </button>
       </div>
     </div>
   </div>
 </header>
 
-<!-- Mobile Menu -->
-@if (isMobileMenuOpen) {
-  <app-mobile-menu [isOpen]="isMobileMenuOpen" (close)="closeMobileMenu()" />
-}
+<tui-drawer
+  direction="right"
+  class="drawer"
+  [overlay]="true"
+  (click.self)="closeMobileMenu()"
+  *tuiPopup="mobileMenuOpen()"
+>
+  <header class="sticky py-2!">
+    <div class="flex items-center justify-between py-2">
+      <a routerLink="/" class="flex items-center no-underline" (click)="closeMobileMenu()">
+        <img src="/assets/icons/header-logo.svg" alt="Баскурьер" class="h-10 w-auto" />
+      </a>
+      <div tuiAccessories class="relative -right-3">
+        <button tuiButton appearance="flat" type="button" (click)="closeMobileMenu()">
+          <tui-icon icon="@tui.x" [style.font-size.rem]="1.5"></tui-icon>
+        </button>
+      </div>
+    </div>
+  </header>
+  <app-mobile-menu (navigate)="closeMobileMenu()" />
+  <footer class="bg-gray-50!">
+    <div class="flex w-full flex-col items-center py-4">
+      <button
+        type="button"
+        tuiButton
+        appearance="primary"
+        iconStart="@tui.calculator"
+        size="m"
+        class="bg-yellow-300 ring-2 ring-yellow-500 ring-offset-2"
+        (click)="goToCalculatorPage(true)"
+      >
+        Расчитать стоимость
+      </button>
+    </div>
+  </footer>
+</tui-drawer>
