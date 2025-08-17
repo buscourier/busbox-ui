@@ -1,10 +1,16 @@
 <tui-root>
   <app-header />
 
-  <main class="relative">
-    <div class="container mx-auto px-4" [class.pb-10]="!isHomePage">
-      <app-breadcrumbs />
+  @if (isAccountPage) {
+    <div class="bg-gray-50">
+      <div class="container mx-auto px-4">
+        <app-breadcrumbs />
+      </div>
+    </div>
+  }
 
+  <main class="main-content relative overflow-x-hidden">
+    <div class="container mx-auto px-4" [class.pb-10]="!isHomePage">
       @if (!isServicesPage) {
         <h1 class="mt-10 inline-block text-4xl font-bold">
           {{ title$ | async }}
