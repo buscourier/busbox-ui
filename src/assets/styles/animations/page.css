@@ -1,6 +1,8 @@
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation: none;
+  animation-duration: 0.3s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: both;
 }
 
 app-header {
@@ -11,38 +13,77 @@ app-footer {
   view-transition-name: footer;
 }
 
-::view-transition-old(header),
-::view-transition-new(header),
-::view-transition-old(footer),
-::view-transition-new(footer) {
-  animation: none;
+app-delivery-summary {
+  view-transition-name: delivery-sumary;
 }
 
-/* 4. Main content */
-/*.main-content {*/
-/*  view-transition-name: main-content;*/
-/*  !*overflow-x: hidden;*!*/
+app-stepper {
+  view-transition-name: booking-stepper;
+}
+
+.booking-header {
+  view-transition-name: booking-header;
+}
+
+/* Remove animations for header and footer */
+/*::view-transition-old(header),*/
+/*::view-transition-new(header),*/
+/*::view-transition-old(footer),*/
+/*::view-transition-new(footer) {*/
+/*  animation: none !important;*/
 /*}*/
 
-/* Animations for content */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 0.4s;
-  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  animation-fill-mode: both;
+.no-view-transition {
+  view-transition-name: no-view-transition;
 }
 
+/*::view-transition-old(.no-view-transition),*/
+/*::view-transition-new(.no-view-transition) {*/
+/*  animation: none !important;*/
+/*  animation-duration: 0s !important;*/
+/*}*/
+
+/* DEFAULT ANIMATIONS  */
 ::view-transition-old(root) {
-  animation-name: slide-out-to-left;
+  animation-name: slide-out-to-left; /* ← Меняем с fade-out */
+  z-index: 1;
 }
 
 ::view-transition-new(root) {
-  animation-name: slide-in-from-right;
+  animation-name: slide-in-from-right; /* ← Меняем с fade-in */
+  z-index: 2;
 }
 
+/* Go back animation */
+.router-back ::view-transition-old(root) {
+  animation-name: slide-out-to-right;
+  z-index: 2;
+}
+
+.router-back ::view-transition-new(root) {
+  animation-name: slide-in-from-left;
+  z-index: 1;
+}
+
+/* Animations for same-level */
+.vertical-nav ::view-transition-old(root) {
+  animation-name: slide-out-up;
+}
+
+.vertical-nav ::view-transition-new(root) {
+  animation-name: slide-in-down;
+}
+
+/* KEYFRAMES */
+
+/* Horizontal slides */
 @keyframes slide-out-to-left {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
   to {
-    transform: translateX(-100%);
+    transform: translateX(-30%);
     opacity: 0;
   }
 }
@@ -52,11 +93,86 @@ app-footer {
     transform: translateX(100%);
     opacity: 0;
   }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
+@keyframes slide-out-to-right {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(30%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-in-from-left {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/*  Accessibility */
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(root),
   ::view-transition-new(root) {
-    animation-duration: 0.01s;
+    animation-duration: 0.01s !important;
+    animation-name: none !important;
+  }
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.2s;
+  }
+
+  @keyframes slide-out-to-left {
+    to {
+      transform: translateX(-20%);
+      opacity: 0;
+    }
+  }
+
+  @keyframes slide-in-from-right {
+    from {
+      transform: translateX(50%);
+      opacity: 0;
+    }
+  }
+
+  @keyframes slide-out-to-right {
+    to {
+      transform: translateX(20%);
+      opacity: 0;
+    }
+  }
+
+  @keyframes slide-in-from-left {
+    from {
+      transform: translateX(-50%);
+      opacity: 0;
+    }
+  }
+}
+
+/* Fallback */
+@supports not (view-transition-name: none) {
+  body {
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .page-transitioning {
+    opacity: 0;
   }
 }

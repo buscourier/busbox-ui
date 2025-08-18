@@ -7,6 +7,10 @@
     border-color: var(--color-gray-200, currentcolor);
   }
 
+  html.no-view-transition {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply font-roboto text-base;
   }
