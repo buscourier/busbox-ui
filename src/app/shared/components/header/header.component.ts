@@ -1,64 +1,102 @@
-import { ChangeDetectionStrategy, Component, HostListener, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, HostListener, inject, signal } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { TuiActiveZone } from '@taiga-ui/cdk';
+import { TuiButton, TuiDropdown, TuiDropdownManual, TuiIcon, TuiPopup } from '@taiga-ui/core';
+import { TuiDrawer } from '@taiga-ui/kit';
+import type { Observable } from 'rxjs';
 
+import { NavigationService } from '@core/services';
+import { BreakpointService } from '@core/services/breakpoint.service';
 import { CONTACT_INFO } from '@core/tokens';
 
 import { MobileMenuComponent } from '@shared/components/mobile-menu';
+import { ContactLinkPipe } from '@shared/pipes';
+
+// eslint-disable-next-line import/no-restricted-paths
+import { AuthFacade } from '@auth';
+// eslint-disable-next-line import/no-restricted-paths
+import type { AuthResponse } from '@auth/types';
 
 import { NavigationComponent } from '../navigation';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, NavigationComponent, NavigationComponent, MobileMenuComponent],
+  imports: [
+    RouterLink,
+    NavigationComponent,
+    NavigationComponent,
+    MobileMenuComponent,
+    TuiButton,
+    TuiDropdownManual,
+    TuiDropdown,
+    TuiActiveZone,
+    TuiIcon,
+    AsyncPipe,
+    TuiDrawer,
+    TuiPopup,
+    RouterLinkActive,
+    ContactLinkPipe,
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: `block sticky top-0 z-50 shadow-header bg-white/80 backdrop-blur-lg`,
+  },
 })
 export class HeaderComponent {
   private readonly contacts = inject(CONTACT_INFO);
+  private readonly navigationService = inject(NavigationService);
+  private readonly authFacade = inject(AuthFacade);
+  private readonly router = inject(Router);
+  private breakpointsService = inject(BreakpointService);
 
-  isMobileMenuOpen = false;
   isUserMenuOpen = false;
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: Event): void {
-    const target = event.target as HTMLElement;
-    if (!target.closest('.user-menu-container')) {
-      this.isUserMenuOpen = false;
-    }
-  }
+  protected readonly mobileMenuOpen = signal(false);
 
   @HostListener('window:resize', ['$event'])
   onWindowResize(): void {
-    if (window.innerWidth >= 768 && this.isMobileMenuOpen) {
-      this.isMobileMenuOpen = false;
+    if (this.breakpointsService.isXl()) {
+      this.closeMobileMenu();
     }
   }
 
-  getContactPhone(): string {
+  get isHomePage(): boolean {
+    return this.router.url === '/' || this.router.url === '/home';
+  }
+
+  get isDeliveryPage(): boolean {
+    return this.router.url.includes('delivery');
+  }
+
+  get isTrackingPage(): boolean {
+    return this.router.url.includes('tracking');
+  }
+
+  get isPhoneNumberAvailable(): boolean {
+    return this.isHomePage || this.isDeliveryPage || this.isTrackingPage;
+  }
+
+  get currentUser(): Observable<AuthResponse | null> {
+    return this.authFacade.getCurrentUser();
+  }
+
+  goToCalculatorPage(isMobileNav = false) {
+    this.router.navigateByUrl('/' + this.navigationService.findByLink('calculator')!.link);
+
+    if (isMobileNav) {
+      this.closeMobileMenu();
+    }
+  }
+
+  get contactPhone(): string {
     return this.contacts.phone;
   }
 
-  getUserMenuItems() {
-    return [
-      { link: 'account/orders', name: 'Мои заказы' },
-      { link: 'account/profile', name: 'Персональные данные' },
-    ];
-  }
-
-  toggleMobileMenu(): void {
-    this.isMobileMenuOpen = !this.isMobileMenuOpen;
-
-    if (this.isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-  }
-
-  closeMobileMenu(): void {
-    this.isMobileMenuOpen = false;
-    document.body.style.overflow = '';
+  get userMenuItems() {
+    return this.navigationService.getDropdownItems('account');
   }
 
   toggleUserMenu(): void {
@@ -70,7 +108,15 @@ export class HeaderComponent {
   }
 
   logout(): void {
+    this.authFacade.logout();
     this.closeUserMenu();
-    console.log('Logout clicked');
+  }
+
+  onActiveZoneChange(active: boolean) {
+    this.isUserMenuOpen = active && this.isUserMenuOpen;
+  }
+
+  public closeMobileMenu(): void {
+    this.mobileMenuOpen.set(false);
   }
 }

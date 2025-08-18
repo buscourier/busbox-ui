@@ -16,7 +16,7 @@ export class HowToSendComponent {
   private readonly navigationService = inject(NavigationService);
 
   get deliveryLink(): string {
-    return '/' + this.navigationService.findByLink('delivery')!.link;
+    return '/' + this.navigationService.findByLink('delivery/booking')!.link;
   }
 
   get contactsLink(): string {

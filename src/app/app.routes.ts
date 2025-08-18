@@ -1,5 +1,7 @@
 import type { Routes } from '@angular/router';
 
+import { NotFoundComponent } from '@shared/components/not-found';
+
 export const routes: Routes = [
   {
     path: '',
@@ -58,4 +60,5 @@ export const routes: Routes = [
     path: 'feedback',
     loadChildren: () => import('./features/feedback').then((m) => m.feedbackRoutes),
   },
+  { path: '**', component: NotFoundComponent },
 ];

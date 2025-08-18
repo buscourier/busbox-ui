@@ -9,22 +9,32 @@ import type { NavigationItem } from '@shared/types';
 export class NavigationService {
   private readonly navigationConfig: NavigationItem[] = [
     {
+      link: 'delivery/calculator',
+      name: 'Расчитать доставку',
+      description: 'Рассчитайте стоимость доставки вашего груза',
+      keywords: 'расчет стоимости, калькулятор доставки',
+      isCTA: true,
+    },
+    {
+      link: 'delivery/booking',
+      name: 'Оформить доставку',
+      description: 'Рассчитайте стоимость доставки вашего груза',
+      keywords: 'расчет стоимости, калькулятор доставки',
+      isMainMenu: true,
+    },
+    {
       link: 'tracking',
       name: 'Статус доставки',
       description: 'Отследите местоположение вашего груза в режиме реального времени',
       keywords: 'статус доставки, отслеживание, трекинг',
-    },
-    {
-      link: 'delivery',
-      name: 'Предварительный расчет',
-      description: 'Рассчитайте стоимость доставки вашего груза',
-      keywords: 'расчет стоимости, калькулятор доставки',
+      isMainMenu: true,
     },
     {
       link: 'services',
       name: 'Услуги',
       description: '',
       keywords: 'услуги доставки, логистика, грузоперевозки',
+      isMainMenu: true,
       dropdown: [
         // {
         //   link: 'services/cargo-primorye',
@@ -40,7 +50,7 @@ export class NavigationService {
         },
         {
           link: 'services/complex-tasks',
-          name: 'Реализация нестандартных логистических задач',
+          name: 'Индивидуальные решения',
           description: 'Решение сложных логистических вопросов под ваши потребности',
           keywords: 'нестандартная логистика, сложные задачи',
         },
@@ -60,6 +70,7 @@ export class NavigationService {
       name: 'Информация',
       description: 'Полезная информация о работе с компанией Баскурьер',
       keywords: 'информация, справка, инструкции',
+      isMainMenu: true,
       dropdown: [
         {
           link: 'info/how-to-send',
@@ -159,14 +170,12 @@ export class NavigationService {
       name: 'О компании',
       description: 'История, миссия и ценности компании Баскурьер',
       keywords: 'о компании, история, миссия',
-      onlyMobile: true,
     },
     {
       link: 'news',
       name: 'Новости Баскурьер',
       description: 'Следите за обновлениями компании, новыми услугами и специальными предложениями',
       keywords: 'Новости, акции, специальные предложения',
-      onlyMobile: true,
     },
     {
       link: 'career',
@@ -174,7 +183,6 @@ export class NavigationService {
       description:
         'Баскурьер - это единственная в России официальная служба сверхсрочной доставки грузов междугородними рейсовыми автобусами!',
       keywords: 'вакансии, работа, карьера',
-      onlyMobile: true,
     },
     {
       link: 'feedback',
@@ -182,13 +190,13 @@ export class NavigationService {
       description: `Вы можете задать нам вопрос, оставить отзыв, а также написать свое предложение
        или замечание.`,
       keywords: 'обратная связь, контакты, консультация',
-      onlyMobile: true,
     },
     {
       link: 'contacts',
       name: 'Контакты',
       description: 'Контактная информация и адреса офисов компании Баскурьер',
       keywords: 'контакты, адреса, телефоны',
+      isMainMenu: true,
     },
     {
       link: 'account',
@@ -219,11 +227,11 @@ export class NavigationService {
   }
 
   getDesktopNavigation(): NavigationItem[] {
-    return this.navigationConfig.filter((item) => !item.onlyMobile && item.link !== 'account');
+    return this.navigationConfig.filter((item) => item.isMainMenu && item.link !== 'account');
   }
 
   getMobileNavigation(): NavigationItem[] {
-    return this.navigationConfig;
+    return this.navigationConfig.filter((item) => !item.isCTA);
   }
 
   // findByLink(link: string): NavigationItem | null {

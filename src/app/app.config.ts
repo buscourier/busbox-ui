@@ -1,9 +1,9 @@
 import { provideImageKitLoader } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
-import { type ApplicationConfig, importProvidersFrom, signal } from '@angular/core';
+import { type ApplicationConfig, importProvidersFrom, inject, signal } from '@angular/core';
 import { isDevMode, provideZoneChangeDetection } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling, withViewTransitions } from '@angular/router';
 import { provideTransloco } from '@jsverse/transloco';
 import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore } from '@ngrx/router-store';
@@ -28,6 +28,7 @@ import { AngularYandexMapsModule, type YaConfig } from 'angular8-yandex-maps';
 
 import { DEFAULT_VALIDATION_LIMITS } from '@core/config';
 import { PreloadIconsService } from '@core/services';
+import { NavigationDirectionService } from '@core/services/navigation-direction.service';
 import {
   DefaultDomProcessor,
   DefaultProgressIndicator,
@@ -52,6 +53,7 @@ import { CustomDateTransformer, CustomDateRangeTransformer } from '@core/transfo
 
 import { DocumentsEffects, documentsFeature } from '@shared/features/documents';
 import { LocationsEffects, locationsFeature } from '@shared/store';
+import { routeSnapshotToUrl } from '@shared/utils';
 
 import { environment } from '@env/environment';
 
@@ -79,7 +81,6 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
     provideStore(),
     provideState(locationsFeature),
     provideState(pickupPointFeature),
@@ -93,6 +94,59 @@ export const appConfig: ApplicationConfig = {
     provideState(balanceFeature),
     provideState(documentsFeature),
     provideState(newsFeature),
+    provideRouter(
+      routes,
+      withViewTransitions({
+        skipInitialTransition: true,
+        onViewTransitionCreated: (transitionInfo) => {
+          try {
+            const navigationService = inject(NavigationDirectionService);
+
+            const fromUrl = transitionInfo.from ? routeSnapshotToUrl(transitionInfo.from) : '';
+            const toUrl = routeSnapshotToUrl(transitionInfo.to);
+
+            document.documentElement.classList.remove(
+              'router-back',
+              'vertical-nav',
+              'page-modal',
+              'no-view-transition',
+              'forward',
+            );
+
+            if (navigationService.shouldSkipAnimation(fromUrl, toUrl)) {
+              document.documentElement.classList.add('no-view-transition');
+              console.log('Animation skipped:', { from: fromUrl, to: toUrl });
+              return;
+            }
+
+            const navigationType = navigationService.getNavigationType(toUrl, fromUrl);
+
+            switch (navigationType) {
+              case 'back':
+                document.documentElement.classList.add('router-back');
+                break;
+              case 'same-level':
+                document.documentElement.classList.add('vertical-nav');
+                break;
+              case 'modal':
+                document.documentElement.classList.add('page-modal');
+                break;
+              default:
+                document.documentElement.classList.add('forward');
+            }
+
+            console.log('Navigation:', { type: navigationType, from: fromUrl, to: toUrl });
+          } catch (error) {
+            console.warn('View transition error:', error);
+            document.documentElement.classList.add('no-view-transition');
+          }
+        },
+      }),
+      withInMemoryScrolling({
+        scrollPositionRestoration: 'top',
+        anchorScrolling: 'enabled',
+      }),
+    ),
     provideEffects(
       LocationsEffects,
       PickupPointEffects,

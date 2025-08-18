@@ -64,14 +64,18 @@ export class FooterService {
           {
             links: [
               this.navigationService.findByLink('account'),
+              this.navigationService.findByLink('delivery/booking'),
               this.navigationService.findByLink('tracking'),
-              this.navigationService.findByLink('delivery'),
             ].filter(Boolean) as NavigationItem[],
           },
           {
-            links: this.navigationService
-              .getNavigation()
-              .filter((item) => item.onlyMobile || item.link === 'contacts'),
+            links: [
+              this.navigationService.findByLink('about'),
+              this.navigationService.findByLink('news'),
+              this.navigationService.findByLink('career'),
+              this.navigationService.findByLink('feedback'),
+              this.navigationService.findByLink('contacts'),
+            ].filter(Boolean) as NavigationItem[],
             theme: 'accent',
           },
         ],
@@ -85,7 +89,14 @@ export class FooterService {
   }
 
   getMainNavigation(): NavigationItem[] {
-    const mainLinks = ['tracking', 'delivery', 'services', 'info', 'documents', 'contacts'];
+    const mainLinks = [
+      'delivery/calculator',
+      'tracking',
+      'services',
+      'info',
+      'documents',
+      'contacts',
+    ];
     return mainLinks
       .map((link) => this.navigationService.findByLink(link))
       .filter(Boolean) as NavigationItem[];

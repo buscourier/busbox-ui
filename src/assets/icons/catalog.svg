@@ -1,14 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="4.25em" height="3.3125em"><g id="catalog" xmlns="http://www.w3.org/2000/svg">
-            <svg x="50%" y="50%" width="4.25em" height="3.3125em" overflow="visible" viewBox="0 0 68 53">
-                <svg x="-34" y="-26.5"><svg width="68" height="53" viewBox="0 0 68 53" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M1.41602 25.4994V22.666L8.49935 9.91602H11.3327" stroke="#B3B3B3" stroke-miterlimit="10"/>
-<path d="M66.5827 25.4994V22.666L59.4994 9.91602H56.666" stroke="#B3B3B3" stroke-miterlimit="10"/>
-<path d="M48.166 25.5L43.916 29.75H24.0827L19.8327 25.5H1.41602V52.4167H66.5827V25.5H48.166Z" stroke="#B3B3B3" stroke-miterlimit="10"/>
-<path d="M11.333 22.6654V15.582H56.6663V22.6654" stroke="#B3B3B3" stroke-miterlimit="10"/>
-<path d="M15.583 12.75V8.5H52.4163V12.75" stroke="#B3B3B3" stroke-miterlimit="10"/>
-<path d="M18.416 5.66602V1.41602H49.5827V5.66602" stroke="#B3B3B3" stroke-miterlimit="10"/>
-<path d="M39.666 43.9154H28.3327C27.5535 43.9154 26.916 43.2779 26.916 42.4987V36.832H41.0827V42.4987C41.0827 43.2779 40.4452 43.9154 39.666 43.9154Z" stroke="#B3B3B3" stroke-miterlimit="10"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="4.25em" height="3.3125em" viewBox="0 0 68 53" fill="none">
+  <path d="M1.41602 25.4994V22.666L8.49935 9.91602H11.3327" stroke="#B3B3B3" stroke-width="2" stroke-miterlimit="10" />
+  <path d="M66.5827 25.4994V22.666L59.4994 9.91602H56.666" stroke="#B3B3B3" stroke-width="2" stroke-miterlimit="10" />
+  <path d="M48.166 25.5L43.916 29.75H24.0827L19.8327 25.5H1.41602V52.4167H66.5827V25.5H48.166Z" stroke="#B3B3B3"
+        stroke-width="2" stroke-miterlimit="10" />
+  <path d="M11.333 22.6654V15.582H56.6663V22.6654" stroke="#B3B3B3" stroke-width="2" stroke-miterlimit="10" />
+  <path d="M15.583 12.75V8.5H52.4163V12.75" stroke="#B3B3B3" stroke-width="2" stroke-miterlimit="10" />
+  <path d="M18.416 5.66602V1.41602H49.5827V5.66602" stroke="#B3B3B3" stroke-width="2" stroke-miterlimit="10" />
+  <path
+    d="M39.666 43.9154H28.3327C27.5535 43.9154 26.916 43.2779 26.916 42.4987V36.832H41.0827V42.4987C41.0827 43.2779 40.4452 43.9154 39.666 43.9154Z"
+    stroke="#B3B3B3" stroke-width="2" stroke-miterlimit="10" />
 </svg>
-</svg>
-            </svg>
-        </g></svg>

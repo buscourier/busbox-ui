@@ -1,52 +1,65 @@
-<footer class="bg-gray-800 text-white py-12">
+<footer class="bg-gray-800 py-12 text-white">
   <div class="container mx-auto px-4">
-    <!-- Горизонтальная навигация -->
-    <div class="mb-6 flex gap-x-20 items-end">
-      <div class="w-32 h-20 bg-red-500"></div>
-      <nav class="pb-6 flex flex-wrap flex-grow justify-between md:gap-6 border-b border-gray-700">
+    <!-- Main navigation -->
+    <div
+      class="mb-6 flex flex-col items-center gap-x-20 border-b border-gray-700 md:flex-row lg:mb-12 lg:items-end lg:border-none"
+    >
+      <img src="/assets/icons/footer-logo.svg" alt="Баскурьер" width="130" height="auto" />
+      <nav
+        class="mt-6 flex flex-grow flex-wrap justify-center gap-4 pb-6 md:flex-wrap md:justify-start md:gap-6 lg:mt-0 lg:justify-between lg:border-b lg:border-gray-700"
+      >
         @for (item of mainNavigation; track item.link) {
-          <a [routerLink]="'/' + item.link" [class]="getLinkClasses('accent')">
+          <a
+            [routerLink]="'/' + item.link"
+            [class]="cn('', getLinkClasses('accent'))"
+            routerLinkActive="text-yellow-500"
+          >
             {{ item.name }}
           </a>
         }
       </nav>
     </div>
-    <!-- Колонки навигации -->
+    <!-- Columns -->
     <div
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[minmax(auto,max-content)_repeat(3,auto)] gap-20 mb-8"
+      class="mb-8 grid grid-cols-1 gap-20 lg:grid-cols-[minmax(auto,max-content)_repeat(3,auto)]"
     >
       @for (column of footerColumns; track getColumnTitle(column); let isLast = $last) {
-        <div>
+        <div class="not-last:hidden lg:block!">
           @if (isNavigationItem(column.title)) {
-            <h3 class="text-lg font-semibold mb-4">
+            <h3 class="mb-4 text-lg font-semibold">
               <a
                 [routerLink]="'/' + column.title.link"
-                class="text-white hover:text-yellow-400 transition-colors"
+                routerLinkActive="text-yellow-300"
+                class="text-white transition-colors hover:text-yellow-400"
                 [title]="column.title.description"
               >
                 {{ column.title.name }}
               </a>
             </h3>
           } @else if (column.title) {
-            <h3 class="text-lg font-semibold mb-4 text-white">
+            <h3 class="mb-4 text-lg font-semibold text-white">
               {{ column.title }}
             </h3>
           }
 
-          <!-- Ссылки колонки -->
+          <!-- Column's links -->
           @for (section of column.sections; track $index) {
             <!-- Подзаголовок секции (если есть) -->
             @if (section.title) {
-              <h4 class="text-md font-medium mt-6 mb-3 text-gray-200">
+              <h4 class="text-md mt-6 mb-3 font-medium text-gray-200">
                 {{ section.title }}
               </h4>
             }
 
-            <!-- Ссылки секции -->
+            <!-- Section's links -->
             <ul class="space-y-2" [class.mb-4]="!$last">
               @for (link of section.links; track link.link) {
                 <li>
-                  <a [routerLink]="'/' + link.link" [class]="getLinkClasses(section.theme)">
+                  <a
+                    [routerLink]="'/' + link.link"
+                    [class]="getLinkClasses(section.theme)"
+                    routerLinkActive="text-yellow-500"
+                  >
                     {{ link.name }}
                   </a>
                 </li>
@@ -54,25 +67,21 @@
             </ul>
           }
 
-          <!-- Контактная информация для последней колонки -->
+          <!-- Contacts info -->
           @if (isLast) {
-            <div class="space-y-2">
-              <div class="flex items-center">
-                <span class="text-lg mr-2">📞</span>
-                <a
-                  [href]="'tel:' + contactInfo.phone"
-                  class="text-white hover:text-gray-300 transition-colors"
-                >
-                  {{ contactInfo.phone }}
-                </a>
-              </div>
+            <div class="flex flex-col items-center gap-y-4">
+              <a
+                [href]="contactInfo.phone | contactLink: 'tel'"
+                routerLinkActive="text-yellow-500"
+                class="relative flex items-center gap-x-3 rounded-full bg-white px-5 py-3 text-gray-900 transition-all hover:bg-gray-100"
+              >
+                <tui-icon icon="phone" [style.font-size.rem]="1" />
+                <span>{{ contactInfo.phone }}</span>
+              </a>
 
-              <div class="flex items-center">
-                <span class="text-lg mr-2">✉️</span>
-                <a
-                  [href]="'mailto:' + contactInfo.email"
-                  class="text-gray-300 hover:text-white transition-colors"
-                >
+              <div class="flex justify-center">
+                <a [href]="contactInfo.email | contactLink: 'email'" class="text-yellow-500">
+                  <!--                  <tui-icon icon="@tui.send" [style.font-size.rem]="1.25" />-->
                   {{ contactInfo.email }}
                 </a>
               </div>
@@ -82,23 +91,29 @@
       }
     </div>
 
-    <!-- Копирайт и доп. ссылки -->
+    <!-- Copyright -->
     <div class="border-t border-gray-700 pt-6">
-      <div class="flex flex-col lg:flex-row justify-between items-end gap-4 text-sm text-gray-400">
-        <!-- Копирайт -->
+      <div
+        class="flex flex-col items-center justify-between gap-4 text-sm text-gray-400 lg:flex-row lg:items-end"
+      >
         <div class="text-center lg:text-left">
-          <p class="mb-1">2013-2025 © ООО «Баскурьер»</p>
-          <p>{{ contactInfo.address }}</p>
+          <p class="mb-1 text-gray-400">2013-2025 © ООО «Баскурьер»</p>
+          <p class="mb-0 text-gray-400">{{ contactInfo.address }}</p>
         </div>
 
-        <a href="/privacy-policy" class="hover:text-white transition-colors whitespace-nowrap">
+        <a
+          href="/privacy-policy"
+          class="whitespace-nowrap transition-colors hover:text-white"
+          routerLinkActive="text-yellow-500"
+        >
           Политика конфиденциальности
         </a>
         <a
           href="https://leadwave.ru"
           target="_blank"
           rel="noopener noreferrer"
-          class="hover:text-white transition-colors whitespace-nowrap"
+          routerLinkActive="text-yellow-500"
+          class="whitespace-nowrap transition-colors hover:text-white"
         >
           Идея и дизайн сайта: LEAD WAVE
         </a>
