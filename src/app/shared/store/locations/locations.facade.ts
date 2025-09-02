@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import type { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import type { DeliveryCity, LocationsErrorStatus, Office, PickupCity } from '@shared/types';
 
@@ -27,7 +28,32 @@ export class LocationsFacade {
   }
 
   getOffices(): Observable<Office[]> {
-    return this.store.select(locationsFeature.selectOffices);
+    return this.store.select(locationsFeature.selectOffices).pipe(
+      map((offices) =>
+        offices.map((office) => ({
+          ...office,
+          services: this.getOfficeServices(office),
+        })),
+      ),
+    );
+  }
+
+  private getOfficeServices(office: Office): string[] {
+    if (!office) {
+      return [];
+    }
+
+    const services = [];
+
+    if (office.get === '1' && office.give === '1') {
+      services.push('Принимает', 'Выдает');
+    } else if (office.get === '1') {
+      services.push('Выдает');
+    } else if (office.give === '1') {
+      services.push('Принимает');
+    }
+
+    return services;
   }
 
   getErrorStatus(): Observable<LocationsErrorStatus> {

@@ -1,24 +1,77 @@
-@if (isLoading()) {
-  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-    <span class="text-sm font-medium text-gray-700"> Загружается карта... </span>
-  </div>
-}
-<ya-map
-  [center]="mapCenter()"
-  [zoom]="currentZoom()"
-  [state]="mapState"
+<!--@if (isLoading()) {-->
+<!--  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">-->
+<!--    <span class="text-sm font-medium text-gray-700">Загружается карта...</span>-->
+<!--  </div>-->
+<!--}-->
+<!--<ya-map-->
+<!--  [center]="mapCenter()"-->
+<!--  [zoom]="currentZoom()"-->
+<!--  [state]="mapState"-->
+<!--  (ready)="onMapReady($event)"-->
+<!--  [class]="-->
+<!--    isLoading()-->
+<!--      ? 'w-full h-full block opacity-30 transition-opacity duration-300'-->
+<!--      : 'w-full h-full block opacity-100 transition-opacity duration-300'-->
+<!--  "-->
+<!--&gt;-->
+<!--  @for (point of points; track point.id) {-->
+<!--    <ya-placemark-->
+<!--      [geometry]="[point.lat, point.lng]"-->
+<!--      [options]="getPlacemarkOptions(point)"-->
+<!--      (yaclick)="onPointClick(point)"-->
+<!--    />-->
+<!--  }-->
+<!--</ya-map>-->
+
+<y-map
+  [props]="{
+    location: {
+      center: [138.273439, 44.154163],
+      zoom: 6,
+    },
+    theme: 'light',
+  }"
   (ready)="onMapReady($event)"
-  [class]="
-    isLoading()
-      ? 'w-full h-full block opacity-30 transition-opacity duration-300'
-      : 'w-full h-full block opacity-100 transition-opacity duration-300'
-  "
 >
-  @for (point of points; track point.id) {
-    <ya-placemark
-      [geometry]="[point.lat, point.lng]"
-      [options]="getPlacemarkOptions(point)"
-      (yaclick)="onPointClick(point)"
-    />
-  }
-</ya-map>
+  <y-map-default-scheme-layer />
+
+  <y-map-default-features-layer>
+    @for (point of points; track point.id) {
+      <y-map-marker
+        [props]="{
+          coordinates: [point.lng, point.lat],
+          properties: {
+            name: point.name,
+            address: point.address,
+            services: point.services,
+            type: 'custom-marker',
+          },
+        }"
+      >
+        <!--        <div class="animate-pulse" (click)="focusPoint(point)">📍 Моя метка</div>-->
+        <button type="button" class="pulse-marker" (click)="onFocusPoint(point)">&nbsp;</button>
+      </y-map-marker>
+    }
+
+    <y-map-hint [props]="{ hint: onHint }">
+      <ng-template let-context>
+        <div class="rounded-md bg-white p-2">
+          <!-- context.hint is the return value of onHint -->
+          <div class="flex items-center justify-between gap-4">
+            <h4>г. {{ context?.hint.name }}</h4>
+            <div class="flex gap-1">
+              @for (service of context?.hint.services; track $index) {
+                <tui-badge appearance="primary" size="s">{{ service }}</tui-badge>
+              }
+            </div>
+          </div>
+          <small>{{ context?.hint.address }}</small>
+        </div>
+      </ng-template>
+    </y-map-hint>
+  </y-map-default-features-layer>
+
+  <y-map-controls [props]="{ position: 'top' }">
+    <y-map-zoom-control-button />
+  </y-map-controls>
+</y-map>

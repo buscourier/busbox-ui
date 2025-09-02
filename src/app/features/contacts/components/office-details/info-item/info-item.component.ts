@@ -14,6 +14,6 @@ export class InfoItemComponent {
   @Input({ required: true }) icon!: 'point' | 'alarm' | 'union' | 'email';
 
   @HostBinding('class') get hostClasses(): string {
-    return cn('grid grid-cols-[auto_1fr]');
+    return cn('flex gap-x-4');
   }
 }

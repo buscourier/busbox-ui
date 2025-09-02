@@ -5,23 +5,26 @@ import {
   EventEmitter,
   inject,
   Input,
-  type OnInit,
+  type OnChanges,
   Output,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import type { FormControl } from '@angular/forms';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { TuiIcon, TuiTextfield } from '@taiga-ui/core';
+import { TuiDropdownMobile } from '@taiga-ui/addon-mobile';
+import { TuiButton, TuiIcon, TuiTextfield } from '@taiga-ui/core';
 import {
+  TuiBadge,
   TuiChevron,
   TuiDataListWrapper,
+  TuiSelect,
   TuiStringifyContentPipe,
   TuiStringifyPipe,
 } from '@taiga-ui/kit';
 
 import { cn } from '@core/utils';
 
-import type { PickupCity } from '@shared/types';
+import type { Office } from '@shared/types';
 
 import { OfficeType } from '../../types';
 
@@ -43,24 +46,25 @@ interface FilterAction {
     ReactiveFormsModule,
     TuiDataListWrapper,
     TuiStringifyContentPipe,
+    TuiButton,
+    TuiBadge,
+    TuiDropdownMobile,
+    TuiSelect,
   ],
   templateUrl: './filter.component.html',
   styleUrl: './filter.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    class: `block`,
-  },
 })
-export class FilterComponent implements OnInit {
-  @Input({ required: true }) cities!: PickupCity[];
-  @Input() initialCity: PickupCity | null = null;
+export class FilterComponent implements OnChanges {
+  @Input({ required: true }) cities!: Office[];
+  @Input() initialCity: Office | null = null;
   @Input() initialOfficeType: OfficeType | null = null;
 
   @Output() filterChange = new EventEmitter<Filter>();
 
   form!: FilterForm;
 
-  get city(): FormControl<PickupCity | null> {
+  get city(): FormControl<Office | null> {
     return this.form.controls.city;
   }
 
@@ -73,32 +77,29 @@ export class FilterComponent implements OnInit {
 
   readonly filterActions: FilterAction[] = [
     { id: OfficeType.ANY, name: 'Все адреса', icon: 'location' },
-    { id: OfficeType.GIVE, name: 'Прием груза', icon: 'give' },
-    { id: OfficeType.GET, name: 'Выдача груза', icon: 'get' },
-    { id: OfficeType.OFFICE, name: 'Офис', icon: 'office' },
+    { id: OfficeType.GIVE, name: 'Прием и выдача', icon: 'give' },
+    { id: OfficeType.GET, name: 'Только выдача', icon: 'get' },
+    // { id: OfficeType.OFFICE, name: 'Офис', icon: 'office' },
   ];
 
   getButtonClasses(isActive: boolean): string {
     return cn(
-      'min-w-14 px-3.5 pt-3 pb-3',
-      'flex flex-grow flex-col items-center',
-      'rounded-sm bg-white shadow-sm transition-colors',
-      'border border-gray-200 hover:border-yellow-500',
-      'cursor-pointer',
+      'flex flex-1/3 grow flex-col items-center justify-center gap-1 lg:flex-row lg:gap-3',
+      'cursor-pointer rounded-lg border border-gray-200 bg-white p-2 md:p-3 lg:h-[50px]',
 
       {
-        'border-yellow-500 bg-yellow-500': isActive,
+        'border-transparent bg-yellow-500/70 text-black': isActive,
       },
     );
   }
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.initializeForm();
   }
 
   initializeForm(): void {
     this.form = this.fb.group({
-      city: this.fb.control<PickupCity | null>(null),
+      city: this.fb.control<Office | null>(null),
       officeType: this.fb.control<OfficeType>(OfficeType.ANY),
     });
 

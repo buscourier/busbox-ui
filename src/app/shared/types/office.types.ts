@@ -14,7 +14,10 @@ export interface Office {
   pickup: string;
   geo_x: number;
   geo_y: number;
+  lat: number;
+  lng: number;
   pvz: string;
+  services?: string[];
   pvz_comment: string;
   video_url: string;
   cargo_restrict: string;

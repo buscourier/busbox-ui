@@ -1,25 +1,69 @@
-<p class="basis-full font-medium">Единая справочная</p>
+<div class="hidden w-full justify-between lg:flex">
+  <div>
+    <p class="mb-0.5 basis-full text-lg font-medium">Единая справочная</p>
+    <small class="text-gray-600">Круглосуточная поддержка клиентов</small>
+  </div>
+  <button type="button" tuiButton appearance="flat" class="self-center">
+    <tui-icon
+      [icon]="expanded ? '@tui.chevron-up' : '@tui.chevron-down'"
+      (click)="expanded = !expanded"
+    />
+  </button>
+</div>
 
-<a [href]="contact.phone | contactLink: 'tel'" class="flex gap-2.5 items-center">
-  <tui-icon icon="headphone" [style.font-size.rem]="1.2" />
-  {{ contact.phone }}
-</a>
+<tui-expand [expanded]="expanded">
+  <div class="flex flex-col gap-2 md:flex-row md:flex-wrap lg:mt-6 lg:gap-4 lg:gap-x-4">
+    <a [href]="contact.phone | contactLink: 'tel'" class="group flex items-center gap-2.5">
+      <div
+        class="w-fit self-start rounded-lg border border-yellow-500 bg-yellow-100 p-2 text-yellow-500 transition-all duration-300 group-hover:bg-yellow-500 group-hover:text-white"
+      >
+        <tui-icon icon="@tui.phone" [style.font-size.rem]="1.25"></tui-icon>
+      </div>
+      <div class="hidden flex-col lg:flex">
+        <span class="text-xs text-gray-400">Телефон</span>
+        <span>{{ contact.phone }}</span>
+      </div>
+    </a>
 
-<a [href]="contact.email | contactLink: 'telegram'" class="flex gap-2.5 items-center">
-  <tui-icon icon="telegram" [style.font-size.rem]="1.5" />
-  {{ contact.telegram }}
-</a>
+    <a [href]="contact.telegram | contactLink: 'telegram'" class="group flex items-center gap-2.5">
+      <div
+        class="w-fit self-start rounded-lg border border-yellow-500 bg-yellow-100 p-2 text-yellow-500 transition-all duration-300 group-hover:bg-yellow-500 group-hover:text-white"
+      >
+        <tui-icon icon="@tui.send" [style.font-size.rem]="1.25"></tui-icon>
+      </div>
+      <div class="hidden flex-col lg:flex">
+        <span class="text-xs text-gray-400">Телеграм</span>
+        <span>{{ contact.telegram }}</span>
+      </div>
+    </a>
 
-<a [href]="contact.email | contactLink: 'email'" class="flex gap-2.5 items-center">
-  <tui-icon icon="email" [style.font-size.rem]="1.2" />
-  {{ contact.email }}
-</a>
+    <a [href]="contact.email | contactLink: 'email'" class="group flex items-center gap-2.5">
+      <div
+        class="w-fit self-start rounded-lg border border-yellow-500 bg-yellow-100 p-2 text-yellow-500 transition-all duration-300 group-hover:bg-yellow-500 group-hover:text-white"
+      >
+        <tui-icon icon="email" [style.font-size.rem]="1.25"></tui-icon>
+      </div>
+      <!--  <tui-icon icon="email" [style.font-size.rem]="1.2" />-->
+      <div class="hidden flex-col lg:flex">
+        <span class="text-xs text-gray-400">Email</span>
+        <span>{{ contact.email }}</span>
+      </div>
+    </a>
 
-<a
-  [href]="contact.whatsapp | contactLink: 'whatsapp'"
-  class="flex gap-2.5 items-center"
-  target="_blank"
->
-  <tui-icon icon="whatsapp" [style.font-size.rem]="1.2" />
-  {{ contact.whatsapp }}
-</a>
+    <a
+      [href]="contact.whatsapp | contactLink: 'whatsapp'"
+      class="group flex items-center gap-2.5"
+      target="_blank"
+    >
+      <div
+        class="w-fit self-start rounded-lg border border-yellow-500 bg-yellow-100 p-2 text-yellow-500 transition-all duration-300 group-hover:bg-yellow-500 group-hover:text-white"
+      >
+        <tui-icon icon="whatsapp" [style.font-size.rem]="1.25"></tui-icon>
+      </div>
+      <div class="hidden flex-col lg:flex">
+        <span class="text-xs text-gray-400">WhatsApp</span>
+        <span>{{ contact.whatsapp }}</span>
+      </div>
+    </a>
+  </div>
+</tui-expand>
