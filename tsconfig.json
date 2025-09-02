@@ -20,7 +20,7 @@
     "module": "ES2022",
     "verbatimModuleSyntax": true,
     "types": [
-      "angular8-yandex-maps"
+      "@yandex/ymaps3-types"
     ],
     "lib": [
       "ES2022",

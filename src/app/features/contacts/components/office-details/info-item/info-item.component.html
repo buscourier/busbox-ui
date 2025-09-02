@@ -1,11 +1,12 @@
-<tui-icon
-  class="col-start-1 row-start-2 row-end-3 mr-3 text-gray-400"
-  [class.text-blue-500!]="icon === 'email'"
-  [icon]="icon"
-/>
-<div class="col-start-2 col-end-3 row-start-1 row-end-2">
-  <ng-content select="p" />
+<div
+  class="w-fit self-start rounded-xl bg-yellow-500/10 p-3 text-yellow-500 transition-all duration-300 group-hover:scale-110 group-hover:bg-yellow-500 group-hover:text-white"
+>
+  <tui-icon [icon]="icon" [style.font-size.rem]="1.5"></tui-icon>
 </div>
-<div class="relative col-start-2 col-end-3 row-start-2 row-end-3 justify-self-start">
+
+<div>
+  <div>
+    <ng-content select="p" />
+  </div>
   <ng-content />
 </div>

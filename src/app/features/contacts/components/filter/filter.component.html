@@ -1,24 +1,68 @@
-<div class="mb-5 flex gap-1 md:col-start-1 md:col-end-2 md:row-start-1 md:row-end-2 md:mb-2.5">
+<!--<tui-textfield-->
+<!--  tuiChevron-->
+<!--  tuiDropdownMobile-->
+<!--  [stringify]="stringify"-->
+<!--  [tuiTextfieldCleaner]="true"-->
+<!--  class="w-full flex-1/2 grow"-->
+<!--&gt;-->
+<!--  <input-->
+<!--    tuiSelect-->
+<!--    placeholder="Выберите отделение"-->
+<!--    [formControl]="city"-->
+<!--    class="text-black! shadow-none!"-->
+<!--  />-->
+
+<!--  <tui-data-list-wrapper *tuiTextfieldDropdown new [items]="cities" [itemContent]="content" />-->
+<!--  <ng-template #content let-item>-->
+<!--    <div class="flex items-center gap-4">-->
+<!--      <div class="grow">-->
+<!--        <div class="flex items-center justify-between gap-2">-->
+<!--          <div>-->
+<!--            {{ item.name }}-->
+<!--            @if (item.id === '1') {-->
+<!--              <tui-badge appearance="primary" size="s">офис</tui-badge>-->
+<!--            }-->
+<!--          </div>-->
+<!--          <div class="flex gap-2">-->
+<!--            @for (service of item.services; track $index) {-->
+<!--              <tui-badge size="s">{{ service }}</tui-badge>-->
+<!--            }-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <small class="text-gray-500">{{ item.address }}</small>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </ng-template>-->
+<!--</tui-textfield>-->
+
+<div class="flex flex-1/2 shrink-0 gap-2">
   @for (action of filterActions; track action.id) {
     <button
       type="button"
       [class]="getButtonClasses(action.id === officeType.value)"
       (click)="setFilter(action.id)"
     >
-      <tui-icon [icon]="action.icon" [style.height.rem]="1.15" class="mb-0.5" />
-      <span class="font-normal text-black text-xs">
+      <tui-icon [icon]="action.icon" [style.font-size.rem]="1.25" />
+      <span
+        class="text-2xs font-normal text-black sm:text-xs md:inline-block lg:text-sm xl:inline-block xl:text-base"
+      >
         {{ action.name }}
       </span>
     </button>
+
+    <!--            <button-->
+    <!--              type="button"-->
+    <!--              [class]="getButtonClasses(action.id === officeType.value)"-->
+    <!--              (click)="setFilter(action.id)"-->
+    <!--            >-->
+    <!--              <tui-icon [icon]="action.icon" [style.height.rem]="1.15" class="mb-0.5" />-->
+    <!--              <span class="text-xs font-normal text-black">-->
+    <!--                {{ action.name }}-->
+    <!--              </span>-->
+    <!--            </button>-->
   }
 </div>
 
-<tui-textfield tuiChevron [stringify]="'name' | tuiStringify" [tuiTextfieldCleaner]="true">
-  <select tuiTextfield placeholder="Все города" [formControl]="city"></select>
-
-  <tui-data-list-wrapper
-    *tuiTextfieldDropdown
-    [items]="cities"
-    [itemContent]="'name' | tuiStringify | tuiStringifyContent"
-  />
-</tui-textfield>
+<!--<button type="button" tuiButton appearance="flat-destructive">-->
+<!--  <tui-icon icon="@tui.funnel-x" />-->
+<!--</button>-->

@@ -13,3 +13,7 @@ ymaps[class*='map-copyrights-promo'] {
 ymaps[class*='controls-pane'] {
   display: none;
 }
+
+y-map ymaps[class*='main-engine-container'] {
+  filter: grayscale(100%) brightness(0.95);
+}

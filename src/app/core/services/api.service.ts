@@ -85,6 +85,8 @@ export class ApiService {
       ...office,
       geo_x: Number(office.geo_x) || 0,
       geo_y: Number(office.geo_y) || 0,
+      lat: Number(office.geo_x) || 0,
+      lng: Number(office.geo_y) || 0,
     }));
   }
 

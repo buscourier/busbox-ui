@@ -1,328 +1,181 @@
-import { HostBinding, type OnChanges, type SimpleChanges } from '@angular/core';
+import type { SimpleChange, OnChanges, SimpleChanges } from '@angular/core';
+import { Input, ChangeDetectionStrategy, Component, Output, EventEmitter } from '@angular/core';
+import { TuiBadge } from '@taiga-ui/kit';
+import type { YMap, LngLat, YMapFeature, YMapHotspot, YMapMarker } from '@yandex/ymaps3-types';
 import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  DestroyRef,
-  EventEmitter,
-  inject,
-  Input,
-  Output,
-  signal,
-} from '@angular/core';
-import type { YaReadyEvent } from 'angular8-yandex-maps';
-import { AngularYandexMapsModule } from 'angular8-yandex-maps';
+  YMapComponent,
+  YMapControlsDirective,
+  YMapDefaultFeaturesLayerDirective,
+  YMapDefaultSchemeLayerDirective,
+  YMapHintDirective,
+  YMapMarkerDirective,
+  YMapZoomControlDirective,
+  type YReadyEvent,
+} from 'angular-yandex-maps-v3';
 
-import { cn } from '@core/utils';
+import { BreakpointDirective } from '@core/directives';
 
-import type { MapPoint } from '@shared/types';
+import type { Office } from '@shared/types';
 
-type AnimationType = 'point' | 'bounds' | 'zoom' | null;
+type LngLatBounds = [LngLat, LngLat];
 
 @Component({
   selector: 'app-map',
   standalone: true,
-  imports: [AngularYandexMapsModule],
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    YMapComponent,
+    YMapDefaultSchemeLayerDirective,
+    YMapControlsDirective,
+    YMapZoomControlDirective,
+    YMapDefaultFeaturesLayerDirective,
+    YMapMarkerDirective,
+    YMapHintDirective,
+    BreakpointDirective,
+    TuiBadge,
+  ],
+  host: {
+    class: `block h-full`,
+  },
 })
 export class MapComponent implements OnChanges {
-  private destroyRef = inject(DestroyRef);
+  /** Input points to render as markers */
+  @Input({ required: true }) points: Office[] = [];
+  @Input({ required: true }) selectedPoint: Office | null = null;
 
-  @Input({ required: true }) points: MapPoint[] = [];
-  @Input() activePoint: MapPoint | null = null;
-  @Input() zoom = 12;
-  @Input() center: [number, number] | null = null;
-  @Input() disableScrollZoom = false;
-  @Input() animationDuration = 800;
-  @Input() autoFitBounds = true;
+  /** Automatically fit all points when they change */
+  @Input() autoFit = true;
 
-  @Output() pointSelect = new EventEmitter<MapPoint>();
-  @Output() mapReady = new EventEmitter<ymaps.Map>();
-  @Output() boundsChange = new EventEmitter<number[][]>();
+  /** Fixed margins (in px) for the map viewport: [top, right, bottom, left] */
+  @Input() margin: [number, number, number, number] = [80, 20, 80, 20];
 
-  @HostBinding('class') get hostClasses(): string {
-    return cn(`relative block h-full w-full overflow-hidden rounded-lg bg-gray-50`);
-  }
+  /** Extra padding ratio around bounds (relative to width/height) */
+  @Input() fitPaddingRatio = 0.08;
 
-  isLoading = signal(true);
-  currentZoom = signal(this.zoom);
-  private animationState = signal<AnimationType>(null);
+  /** Duration (ms) for fit animation */
+  @Input() fitDuration = 700;
 
-  private map: ymaps.Map | null = null;
-  private isMapReady = false;
-  private boundsChangeHandler?: () => void;
-  private animationTimeoutId?: ReturnType<typeof setTimeout>;
+  /** Duration (ms) for focusing on a point */
+  @Input() focusDuration = 700;
 
-  private static readonly ANIMATION_RATIOS = {
-    PAN: 0.7,
-    ZOOM: 0.3,
-  } as const;
+  /** Zoom level when focusing on a point; null = keep current zoom */
+  @Input() focusZoom: number | null = 16;
 
-  private static readonly BUFFERS = {
-    AFTER_PAN: 100,
-    AFTER_ZOOM: 100,
-    ANIMATION_TIMEOUT: 1000,
-  } as const;
+  @Input() autoFitToSelected = true;
 
-  private static readonly DEFAULT_CENTER: [number, number] = [55.751952, 37.600739];
-  private static readonly ZOOM_LIMITS = { MIN: 1, MAX: 19 } as const;
-  private static readonly DEFAULT_MARGIN = [40, 40, 40, 40];
+  /** Emits the id of a focused point */
+  @Output() focusPoint = new EventEmitter<string>();
 
-  readonly mapState: ymaps.IMapState = {
-    behaviors: ['default'],
-    controls: [],
+  private map: YMap | null = null;
+
+  /** Map hint: extract tooltip text from feature/marker properties */
+  onHint = (o?: YMapFeature | YMapMarker | YMapHotspot) => {
+    if (o?.properties?.['type'] === 'custom-marker') {
+      return o.properties;
+    }
+    return null;
   };
 
-  mapCenter = computed(() => {
-    if (this.center) return this.center;
-    if (this.activePoint) return [this.activePoint.lat, this.activePoint.lng];
-    if (this.points.length) return this.calculateCenter();
-    return MapComponent.DEFAULT_CENTER;
-  });
-
   ngOnChanges(changes: SimpleChanges): void {
-    if (!this.isMapReady) return;
+    // Apply margin if it was changed
+    if (changes['margin'] && this.map) this.map.setMargin(this.margin);
 
-    if (changes['activePoint'] && this.activePoint) {
-      void this.handleActivePointChange();
-    }
+    // Auto-fit when points change
+    if (changes['points'] && this.autoFit) this.scheduleFitAll();
 
-    if (changes['points'] && this.points.length && this.autoFitBounds) {
-      void this.handlePointsChange();
-    }
-
-    if (changes['zoom']) {
-      this.currentZoom.set(this.zoom);
+    if (changes['selectedPoint'] && this.autoFitToSelected) {
+      this.handleSelectedPointChange(changes['selectedPoint']);
     }
   }
 
-  async onMapReady(event: YaReadyEvent<ymaps.Map>): Promise<void> {
-    this.map = event.target;
-    this.isMapReady = true;
-    this.isLoading.set(false);
-
-    this.setupMapBehaviors();
-    this.setupEventListeners();
-
-    this.mapReady.emit(this.map);
-
-    await this.delay(200);
-    await this.initializeMapView();
+  onMapReady(e: YReadyEvent<YMap>) {
+    this.map = e.entity;
+    this.map.setMargin(this.margin); // apply fixed margins
+    this.scheduleFitAll(); // initial fit to points
   }
 
-  onPointClick(point: MapPoint): void {
-    if (this.isAnimating()) {
-      console.log('Animation in progress, ignoring click');
-      return;
-    }
+  private handleSelectedPointChange(change: SimpleChange): void {
+    const newPoint = change.currentValue;
+    const prevPoint = change.previousValue;
 
-    this.pointSelect.emit(point);
-
-    if (this.activePoint?.id !== point.id) {
-      void this.animateToPoint(point, {
-        zoom: Math.max(this.currentZoom(), 14),
-        type: 'point',
-      });
+    if (newPoint && newPoint !== prevPoint) {
+      this.onFocusPoint(newPoint);
     }
   }
 
-  zoomIn(levels = 2): void {
-    if (!this.canAnimate()) return;
-    const newZoom = Math.min(this.currentZoom() + levels, MapComponent.ZOOM_LIMITS.MAX);
-    this.animateZoom(newZoom, 'zoom');
-  }
-
-  zoomOut(levels = 2): void {
-    if (!this.canAnimate()) return;
-    const newZoom = Math.max(this.currentZoom() - levels, MapComponent.ZOOM_LIMITS.MIN);
-    this.animateZoom(newZoom, 'zoom');
-  }
-
-  async fitMapBounds(margin = MapComponent.DEFAULT_MARGIN): Promise<void> {
-    if (!this.canAnimate() || !this.points.length) return;
-
-    this.startAnimation('bounds');
-
-    const bounds = this.calculateBounds();
-
-    this.map!.setBounds(bounds, {
-      checkZoomRange: true,
-      duration: this.animationDuration,
-      zoomMargin: margin,
-    });
-
-    await this.delay(this.animationDuration + MapComponent.BUFFERS.AFTER_ZOOM);
-    this.finishAnimation();
-  }
-
-  private setupMapBehaviors(): void {
-    if (this.disableScrollZoom) {
-      this.map!.behaviors.disable('scrollZoom');
-    }
-  }
-
-  private setupEventListeners(): void {
-    this.boundsChangeHandler = () => {
-      const bounds = this.map?.getBounds();
-      if (bounds) {
-        this.boundsChange.emit(bounds);
-      }
-    };
-
-    this.map!.events.add('boundschange', this.boundsChangeHandler);
-
-    this.destroyRef.onDestroy(() => {
-      if (this.boundsChangeHandler) {
-        this.map?.events.remove('boundschange', this.boundsChangeHandler);
-      }
-      if (this.animationTimeoutId) {
-        clearTimeout(this.animationTimeoutId);
-      }
-    });
-  }
-
-  private async initializeMapView(): Promise<void> {
-    if (this.activePoint) {
-      await this.animateToPoint(this.activePoint, { type: 'point' });
-    } else if (this.points.length && this.autoFitBounds) {
-      await this.fitMapBounds();
-    }
-  }
-
-  private async handleActivePointChange(): Promise<void> {
-    if (!this.isAnimating()) {
-      await this.animateToPoint(this.activePoint!, { type: 'point' });
-    }
-  }
-
-  private async handlePointsChange(): Promise<void> {
-    await this.delay(100);
-    if (!this.isAnimating()) {
-      await this.fitMapBounds();
-    }
-  }
-
-  private async animateToPoint(
-    point: MapPoint,
-    options: { zoom?: number; duration?: number; type: AnimationType } = {
-      type: 'point',
-    },
-  ): Promise<void> {
-    if (!this.canAnimate()) return;
-
-    const { zoom, duration = this.animationDuration, type } = options;
-    const panDuration = duration * MapComponent.ANIMATION_RATIOS.PAN;
-    const zoomDuration = duration * MapComponent.ANIMATION_RATIOS.ZOOM;
-
-    this.startAnimation(type);
-
-    this.map!.panTo([point.lat, point.lng], {
-      flying: true,
-      duration: panDuration,
-    });
-
-    await this.delay(panDuration);
-
-    if (zoom !== undefined && zoom !== this.currentZoom()) {
-      this.animateZoom(zoom, type, zoomDuration);
-      await this.delay(zoomDuration + MapComponent.BUFFERS.AFTER_ZOOM);
-    } else {
-      await this.delay(MapComponent.BUFFERS.AFTER_PAN);
-    }
-
-    this.finishAnimation();
-  }
-
-  private animateZoom(zoom: number, type: AnimationType, duration = this.animationDuration): void {
+  /** Called when a custom marker is clicked */
+  onFocusPoint(p: Office): void {
     if (!this.map) return;
 
-    this.map.setZoom(zoom, { duration });
-    this.currentZoom.set(zoom);
+    this.map.update({
+      location: {
+        center: [p.lng, p.lat],
+        zoom: this.focusZoom ?? 16,
+        duration: this.focusDuration,
+        easing: 'ease-in-out',
+      },
+    });
+
+    this.focusPoint.emit(p.id);
   }
 
-  private startAnimation(type: AnimationType): void {
-    if (this.animationTimeoutId) {
-      clearTimeout(this.animationTimeoutId);
+  // ---------- helpers ----------
+
+  /** Schedule auto-fit with requestAnimationFrame (waits for layout) */
+  private scheduleFitAll() {
+    if (!this.map || !this.points?.length) return;
+    requestAnimationFrame(() => this.fitAll(this.points, this.fitDuration));
+  }
+
+  /** Fit map viewport to all points */
+  private fitAll(points: Office[], duration = 600) {
+    if (!this.map || !points?.length) return;
+    const raw = this.computeBounds(points);
+    if (!raw) return;
+    const padded = this.padBounds(raw, this.fitPaddingRatio);
+    this.map.update({ location: { bounds: padded, duration } });
+  }
+
+  /** Compute bounding box for all points */
+  private computeBounds(points: Office[]): LngLatBounds | null {
+    if (!points?.length) return null;
+
+    let minLng = Infinity,
+      minLat = Infinity,
+      maxLng = -Infinity,
+      maxLat = -Infinity;
+    for (const p of points) {
+      if (p.lng < minLng) minLng = p.lng;
+      if (p.lng > maxLng) maxLng = p.lng;
+      if (p.lat < minLat) minLat = p.lat;
+      if (p.lat > maxLat) maxLat = p.lat;
     }
 
-    this.animationState.set(type);
-
-    this.animationTimeoutId = setTimeout(() => {
-      console.warn('Animation timeout, forcing finish');
-      this.finishAnimation();
-    }, this.animationDuration + MapComponent.BUFFERS.ANIMATION_TIMEOUT);
-  }
-
-  private finishAnimation(): void {
-    if (this.animationTimeoutId) {
-      clearTimeout(this.animationTimeoutId);
-      this.animationTimeoutId = undefined;
-    }
-
-    this.animationState.set(null);
-    this.syncZoomState();
-  }
-
-  private isAnimating(): boolean {
-    return this.animationState() !== null;
-  }
-
-  private canAnimate(): boolean {
-    return this.isMapReady && !!this.map;
-  }
-
-  private syncZoomState(): void {
-    const currentMapZoom = this.map?.getZoom();
-    if (currentMapZoom !== undefined && currentMapZoom !== this.currentZoom()) {
-      this.currentZoom.set(currentMapZoom);
-    }
-  }
-
-  private calculateCenter(): [number, number] {
-    if (!this.points.length) return MapComponent.DEFAULT_CENTER;
-
-    const sumLat = this.points.reduce((sum, p) => sum + p.lat, 0);
-    const sumLng = this.points.reduce((sum, p) => sum + p.lng, 0);
-
-    return [sumLat / this.points.length, sumLng / this.points.length];
-  }
-
-  private calculateBounds(): number[][] {
-    if (this.points.length === 1) {
-      const p = this.points[0];
-      const delta = 0.01;
+    // Single point: create a small bbox around it so zoom is not too close
+    if (minLng === maxLng && minLat === maxLat) {
+      const δ = 0.01;
       return [
-        [p.lat - delta, p.lng - delta],
-        [p.lat + delta, p.lng + delta],
+        [minLng - δ, minLat - δ],
+        [maxLng + δ, maxLat + δ],
       ];
     }
-
-    const lats = this.points.map((p) => p.lat);
-    const lngs = this.points.map((p) => p.lng);
-
     return [
-      [Math.min(...lats), Math.min(...lngs)],
-      [Math.max(...lats), Math.max(...lngs)],
+      [minLng as number, minLat as number],
+      [maxLng as number, maxLat as number],
     ];
   }
 
-  getPlacemarkOptions(point: MapPoint): ymaps.IPlacemarkOptions {
-    const isActive = this.activePoint?.id === point.id;
-
-    return {
-      iconLayout: 'default#image',
-      iconImageHref: isActive
-        ? '/assets/icons/map-point-active.svg'
-        : '/assets/icons/map-point.svg',
-      iconImageSize: isActive ? [40, 40] : [32, 32],
-      iconImageOffset: isActive ? [-20, -40] : [-16, -32],
-      zIndex: isActive ? 1000 : 100,
-    };
-  }
-
-  private delay(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+  /** Expand bbox by ratio to add padding around points */
+  private padBounds([sw, ne]: LngLatBounds, r = 0.08): LngLatBounds {
+    const [minLng, minLat] = sw;
+    const [maxLng, maxLat] = ne;
+    const dLng = (maxLng - minLng) * r;
+    const dLat = (maxLat - minLat) * r;
+    return [
+      [minLng - dLng, minLat - dLat],
+      [maxLng + dLng, maxLat + dLat],
+    ];
   }
 }

@@ -1,96 +1,47 @@
-<div [class]="cardClasses">
-  <button
-    *appBreakpoint="{ hideOn: 'sm' }"
-    tuiButton
-    type="button"
-    class="mb-8 w-full"
-    (click)="onCloseDetails()"
-  >
-    Назад
-  </button>
-  <div *appBreakpoint="{ showOn: 'sm' }" class="absolute top-0 right-0">
-    <button
-      tuiIconButton
-      type="button"
-      appearance="icon"
-      iconStart="@tui.x"
-      size="xl"
-      (click)="onCloseDetails()"
-    >
-      &nbsp;
-    </button>
-  </div>
-  <b class="text-2xl">{{ office.name }}</b>
-  <small class="mt-1 mb-2 block text-sm text-yellow-500">{{ getOfficeStatus(office) }}</small>
+<div>
+  <div class="px-6">
+    <div class="mb-4 flex flex-wrap gap-x-6 gap-y-4">
+      <app-info-item icon="point" class="mb-6">
+        <p class="mb-0 leading-7 text-gray-400">Адрес:</p>
+        <span>{{ office.address }}</span>
+      </app-info-item>
 
-  @if (office.cargo_restrict === '1') {
-    <small class="mt-1 mb-8 block text-xxs text-red-500">
-      {{ office.cargo_restrict_info }}
-    </small>
-  }
-  <tui-scrollbar class="scroll-yellow lg:h-80">
-    <div class="grid gap-y-8 sm:grid-cols-2 sm:gap-y-0 sm:gap-x-4 xl:gap-x-11 xl:pr-5">
-      <div>
-        <app-info-item icon="point" class="mb-6">
-          <p class="leading-7">{{ office.address }}</p>
-          <button type="button" class="border-b border-dashed text-gray-400 border-gray-400 pb-0.5">
-            Посмотреть на карте
-          </button>
-        </app-info-item>
+      <app-info-item icon="alarm" class="mb-6">
+        <p class="mb-0 leading-7 text-gray-400">График работы:</p>
+        <span>{{ office.worktime }}</span>
+      </app-info-item>
 
-        <app-info-item icon="alarm" class="mb-6">
-          <p class="text-gray-400 leading-7">График работы:</p>
-          <span>{{ office.worktime }}</span>
-        </app-info-item>
+      <app-info-item icon="union" class="mb-6">
+        <p class="mb-0 leading-7 text-gray-400">Контакты для связи:</p>
+        <a tuiLink [href]="office.phone | contactLink: 'tel'">
+          {{ office.phone }}
+        </a>
+      </app-info-item>
 
-        <app-info-item icon="union" class="mb-6">
-          <p class="text-gray-400 leading-7">Контакты для связи:</p>
-          <a tuiLink [href]="office.phone | contactLink: 'tel'">
-            {{ office.phone }}
-          </a>
-        </app-info-item>
-
-        <app-info-item icon="email" class="mb-6">
-          <p class="text-gray-400 leading-7">Почта отделения:</p>
-          <a
-            [href]="email | contactLink: 'email'"
-            class="text-blue-500 border-b border-dashed border-blue-500"
-          >
-            {{ email }}
-          </a>
-        </app-info-item>
-      </div>
-      <div>
-        <div class="mb-6">
-          @if (office.video_url; as url) {
-            <app-video class="max-w-[500px]" [src]="url" />
-          } @else {
-            <div class="relative h-60 w-full rounded-sm object-cover lg:h-48">
-              <img
-                [ngSrc]="'contacts-office-' + office.id + '.jpg'"
-                [alt]="office.name"
-                ngSrcset="360w, 420w, 640w, 720w, 840w, 1080w, 1280w, 1920w"
-                sizes="(min-width: 640px) 360px, 100vw"
-                fill
-                class="rounded-sm bg-gray-50 object-cover text-gray-50"
-              />
-            </div>
-          }
-        </div>
-        <p class="text-sm">
-          За содержимое грузов и документов (отправление) несет ответственность лицо, являющееся
-          отправителем.
-        </p>
+      <app-info-item icon="email" class="mb-6">
+        <p class="mb-0 leading-7 text-gray-400">Почта отделения:</p>
+        <a [href]="email | contactLink: 'email'" class="border-b border-dashed">
+          {{ email }}
+        </a>
+      </app-info-item>
+    </div>
+    <div>
+      <div class="mb-6">
+        @if (office.video_url; as url) {
+          <app-video class="max-w-[500px]" [src]="url" />
+        } @else {
+          <div class="relative h-60 w-full rounded-sm object-cover lg:h-48">
+            <img
+              [ngSrc]="'contacts-office-' + office.id + '.jpg'"
+              [alt]="office.name"
+              ngSrcset="360w, 420w, 640w, 720w, 840w, 1080w, 1280w, 1920w"
+              sizes="(min-width: 640px) 360px, 100vw"
+              fill
+              class="rounded-sm bg-gray-50 object-cover text-gray-50"
+            />
+          </div>
+        }
       </div>
     </div>
-  </tui-scrollbar>
-  <button
-    *appBreakpoint="{ hideOn: 'sm' }"
-    tuiButton
-    type="button"
-    class="mt-5 mb-5 w-full"
-    (click)="onCloseDetails()"
-  >
-    Назад
-  </button>
+  </div>
 </div>
