@@ -62,6 +62,7 @@
 
 <app-contact-info
   class="relative -top-5 z-20 ml-auto md:mr-auto lg:top-0 lg:mr-0"
+  [class.hidden]="(breakpoint.isMobile() || breakpoint.isTablet()) && selectedOffice.value"
   [expanded]="!selectedOffice.value"
   [contact]="contact"
 />
