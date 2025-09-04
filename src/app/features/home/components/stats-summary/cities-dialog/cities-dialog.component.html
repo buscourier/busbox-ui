@@ -1,0 +1,39 @@
+@let filteredCities = (filteredCities$ | async) || [];
+
+<h1 class="font-roboto mb-6 text-2xl font-medium">{{ title }}</h1>
+
+<label tuiLabel class="mb-10">
+  <tui-textfield>
+    <input
+      tuiTextfield
+      tuiAutoFocus
+      [formControl]="searchControl"
+      [minlength]="3"
+      [maxlength]="80"
+      [attr.maxlength]="80"
+      placeholder="Введите название города"
+      tuiHintAppearance="error"
+      aria-label="Поиск города"
+      role="searchbox"
+    />
+  </tui-textfield>
+</label>
+
+<tui-scrollbar class="h-[400px]">
+  <div class="grid gap-4 sm:grid-cols-2">
+    @for (group of getSortedGroups(filteredCities); track group.letter) {
+      <div class="flex gap-4">
+        <div class="w-8 text-lg font-semibold text-gray-500">{{ group.letter }}</div>
+        <ul class="flex flex-col gap-2">
+          @for (city of group.cities; track city) {
+            <li class="text-base">{{ city }}</li>
+          }
+        </ul>
+      </div>
+    } @empty {
+      <div class="col-span-2 text-center text-gray-500">
+        <b>Такой город не найден...</b>
+      </div>
+    }
+  </div>
+</tui-scrollbar>
