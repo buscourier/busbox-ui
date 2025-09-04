@@ -8,11 +8,13 @@ import {
   type OnInit,
 } from '@angular/core';
 import { FormBuilder, type FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TuiDropdownMobile } from '@taiga-ui/addon-mobile';
 import { TuiButton, TuiLabel, TuiSelect, TuiTextfield } from '@taiga-ui/core';
 import {
   TuiButtonLoading,
   TuiChevron,
   TuiDataListWrapperComponent,
+  TuiSelectDirective,
   TuiStringifyContentPipe,
   TuiStringifyPipe,
 } from '@taiga-ui/kit';
@@ -40,6 +42,8 @@ import type { RouteSelectorForm } from './route-selector.types';
     TuiStringifyPipe,
     TuiButton,
     TuiButtonLoading,
+    TuiSelectDirective,
+    TuiDropdownMobile,
   ],
   templateUrl: './route-selector.component.html',
   styleUrl: './route-selector.component.css',
@@ -48,9 +52,9 @@ import type { RouteSelectorForm } from './route-selector.types';
 export class RouteSelectorComponent implements OnInit {
   @HostBinding('class') get hostClasses(): string {
     return cn(
-      'theme-yellow mx-auto block',
+      'theme-yellow block flex-grow',
 
-      'lg:max-w-[375px]',
+      'lg:max-w-[375px] xl:w-full',
       'lg:before:absolute lg:before:top-[140px] lg:before:right-[-62px]',
       'lg:before:-z-10 lg:before:h-[360px] lg:before:w-[600px]',
       "lg:before:bg-[url('./assets/images/home-bus.jpg')]",
@@ -58,7 +62,7 @@ export class RouteSelectorComponent implements OnInit {
 
       'xl:absolute xl:top-0 xl:right-0 xl:h-[1190px]',
 
-      'xl:before:top-[142px] xl:before:right-[-205px] xl:before:w-[810px] xl:before:bg-size-[810px_360px]',
+      'xl:before:top-[142px] xl:before:right-[-155px] xl:before:w-[810px] xl:before:bg-size-[810px_380px]',
     );
   }
 
@@ -86,8 +90,8 @@ export class RouteSelectorComponent implements OnInit {
 
   getFormClasses(): string {
     return cn(
-      'class="mx-auto w-auto w-full max-w-md min-w-[360px] rounded-md bg-yellow-500 p-12 pb-14',
-      'md:mx-0 md:max-w-full md:basis-1/2 md:p-11 md:pb-12',
+      'class="min-w-[360px] rounded-md bg-yellow-500 p-8 pb-10 md:p-6 md:pb-8 lg:p-8 lg:pb-12',
+      'md:mx-0 md:max-w-full md:basis-1/2',
       'xl:sticky xl:top-22 xl:left-0 xl:z-10',
     );
   }

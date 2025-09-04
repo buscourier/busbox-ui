@@ -1,10 +1,17 @@
+@let pickupCities = locationsFacade.getPickupCities() | async;
+@let deliveryCities = locationsFacade.getDeliveryCities() | async;
+
 <app-stat-card
+  [count]="pickupCities?.length || 0"
+  (showCities)="showPickupCities(pickupCities || [])"
   title="Пунктов отправления<br />в ключевых городах региона"
   text="Список пунктов отправления"
   class="md:mb-6 xl:mb-0"
 />
 
 <app-stat-card
+  [count]="deliveryCities?.length || 0"
+  (showCities)="showDeliveryCities(deliveryCities || [])"
   title="Населенных пунктов<br />для получения ваших посылок"
   text="Список пунктов получения"
   class="md:mb-6 xl:mb-0"
@@ -12,6 +19,6 @@
 
 <app-stat-card
   [count]="58"
-  title="Рейсовых автобуса<br />ежедневно отправляет<br />ваши посылки"
+  title="Рейсовых автобуса<br />ежедневно отправляет<br class='hidden md:block lg:hidden xl:block' />ваши посылки"
   class="md:mb-6 xl:mb-0"
 />

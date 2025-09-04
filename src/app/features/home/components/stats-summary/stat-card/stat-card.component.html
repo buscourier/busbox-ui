@@ -1,14 +1,20 @@
 <b
-  class="flex size-24 flex-shrink-0 items-center justify-center rounded-full bg-yellow-500 text-4xl"
+  class="flex size-24 flex-shrink-0 items-center justify-center rounded-full bg-yellow-500 text-5xl font-bold"
 >
   {{ cities ? cities.length : count }}
 </b>
-<div class="flex flex-col">
-  <p class="mb-3 lg:text-md" [innerHTML]="title"></p>
-  <button type="button" class="text-left" (click)="onShowCities()">
+<div class="flex flex-col text-left">
+  <p class="lg:text-md mb-3" [innerHTML]="title"></p>
+  <button
+    type="button"
+    class="flex cursor-pointer gap-1 text-left focus:outline-0"
+    (click)="onShowCities()"
+  >
     @if (text) {
-      <tui-icon icon="help" [style.font-size.rem]="1.75" class="mr-2" />
-      <span class="border-b border-dotted text-sm text-gray-400">{{ text }}</span>
+      <img src="/assets/icons/help.svg" class="mr-2" alt="Список городов" />
+      <span class="border-b border-dotted text-sm text-gray-400 hover:text-gray-600">
+        {{ text }}
+      </span>
     }
   </button>
 </div>

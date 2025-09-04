@@ -11,17 +11,17 @@
 }
 
 <div class="relative flex items-center">
-  @if (Math.ceil(items.length / itemsCount) > 1) {
-    <button
-      tuiIconButton
-      icon="tuiIconChevronLeftLarge"
-      title="Previous"
-      class="!absolute top-20 -left-6 z-10 !hidden lg:!block"
-      [class.cursor-not-allowed]="currentIndex === 0"
-      [disabled]="currentIndex === 0"
-      (click)="carousel.prev()"
-    ></button>
-  }
+  <!--  @if (Math.ceil(items.length / itemsCount) > 1) {-->
+  <!--    <button-->
+  <!--      tuiIconButton-->
+  <!--      icon="tuiIconChevronLeftLarge"-->
+  <!--      title="Previous"-->
+  <!--      class="!absolute top-20 -left-6 z-10 !hidden lg:!block"-->
+  <!--      [class.cursor-not-allowed]="currentIndex === 0"-->
+  <!--      [disabled]="currentIndex === 0"-->
+  <!--      (click)="carousel.prev()"-->
+  <!--    ></button>-->
+  <!--  }-->
 
   <tui-carousel
     #carousel
@@ -40,17 +40,17 @@
     }
   </tui-carousel>
 
-  @if (Math.ceil(items.length / itemsCount) > 1) {
-    <button
-      tuiIconButton
-      icon="tuiIconChevronRightLarge"
-      title="Next"
-      class="!absolute top-20 -right-6 !hidden lg:!block"
-      [class.cursor-not-allowed]="currentIndex >= Math.ceil(items.length / itemsCount) - 1"
-      [disabled]="currentIndex >= Math.ceil(items.length / itemsCount) - 1"
-      (click)="carousel.next()"
-    ></button>
-  }
+  <!--  @if (Math.ceil(items.length / itemsCount) > 1) {-->
+  <!--    <button-->
+  <!--      tuiIconButton-->
+  <!--      icon="tuiIconChevronRightLarge"-->
+  <!--      title="Next"-->
+  <!--      class="!absolute top-20 -right-6 !hidden lg:!block"-->
+  <!--      [class.cursor-not-allowed]="currentIndex >= Math.ceil(items.length / itemsCount) - 1"-->
+  <!--      [disabled]="currentIndex >= Math.ceil(items.length / itemsCount) - 1"-->
+  <!--      (click)="carousel.next()"-->
+  <!--    ></button>-->
+  <!--  }-->
 </div>
 
 @if (Math.ceil(items.length / itemsCount) > 1 && pagination === 'bottom') {

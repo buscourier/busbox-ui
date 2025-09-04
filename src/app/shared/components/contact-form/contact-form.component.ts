@@ -86,15 +86,48 @@ export class ContactFormComponent implements OnInit {
 
   @HostBinding('class') get hostClasses(): string {
     return cn({
-      'theme-yellow block w-full max-w-[670px] rounded-md bg-yellow-500 p-12 pb-14 shadow-xl':
-        this.formType === 'custom-tasks',
-      'md:p-10': this.formType === 'custom-tasks',
+      'theme-yellow block w-full max-w-[670px] rounded-md bg-yellow-500 p-8 shadow-xl lg:p-10':
+        this.isCustomTasks,
     });
   }
 
-  get layoutClasses(): string {
-    return cn('mb-3 grid gap-4 sm:grid-cols-2 md:grid-cols-3', {
-      'grid gap-3 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2': this.formType === 'custom-tasks',
+  get isSupport(): boolean {
+    return this.formType === 'support';
+  }
+
+  get isCustomTasks(): boolean {
+    return this.formType === 'custom-tasks';
+  }
+
+  get isResume(): boolean {
+    return this.formType === 'resume';
+  }
+
+  get layoutClass(): string {
+    return cn('mb-3 grid gap-4', {
+      'sm:grid-cols-2 md:grid-cols-3': this.isSupport,
+      'sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2': this.isCustomTasks,
+    });
+  }
+
+  get emailFieldClass(): string {
+    return cn({
+      'sm:col-span-2 md:col-span-1': this.isSupport,
+      'sm:col-span-2 md:col-span-1 lg:col-span-2': this.isCustomTasks,
+    });
+  }
+
+  get commentFieldClass(): string {
+    return cn({
+      'sm:col-span-2 md:col-span-3': this.isSupport,
+      'sm:col-span-2 md:col-span-1 lg:col-span-2': this.isCustomTasks,
+    });
+  }
+
+  get processingFieldClass(): string {
+    return cn('mt-2 flex items-start gap-2', {
+      'sm:col-span-2 md:col-span-3': this.isSupport,
+      'sm:col-span-2 md:col-span-1 lg:col-span-2': this.isCustomTasks,
     });
   }
 

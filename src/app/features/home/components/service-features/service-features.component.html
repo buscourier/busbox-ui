@@ -1,16 +1,23 @@
 @for (feature of getFeatures(); track feature.icon) {
   <div class="flex max-w-sm md:max-w-full">
-    <tui-icon [icon]="feature.icon" [style.font-size.rem]="3" class="mr-8" />
+    <img
+      [src]="'/assets/icons/' + feature.icon + '.svg'"
+      [alt]="feature.icon"
+      [class.scale-150]="feature.icon === 'from-airport'"
+      width="50"
+      class="mr-8 block self-start"
+    />
     <div>
       <b
         [class]="
-          cn('mb-2.5 block text-[22px]/8 cursor-not-allowed', {
-            'cursor-pointer hover:underline underline-offset-8': feature.link,
+          cn('mb-2.5 block cursor-not-allowed text-[22px]/8', {
+            'cursor-pointer underline-offset-8 hover:underline': feature.link,
           })
         "
         [routerLink]="['/' + feature.link?.link || '']"
-        >{{ feature.name }}</b
       >
+        {{ feature.name }}
+      </b>
       <p class="text-base text-black/80">{{ feature.description }}</p>
     </div>
   </div>
