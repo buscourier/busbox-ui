@@ -1,6 +1,7 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, HostListener, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { TuiDropdownMobile } from '@taiga-ui/addon-mobile';
 import { TuiActiveZone } from '@taiga-ui/cdk';
 import { TuiButton, TuiDropdown, TuiDropdownManual, TuiIcon, TuiPopup } from '@taiga-ui/core';
 import { TuiDrawer } from '@taiga-ui/kit';
@@ -37,6 +38,7 @@ import { NavigationComponent } from '../navigation';
     TuiPopup,
     RouterLinkActive,
     ContactLinkPipe,
+    TuiDropdownMobile,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
