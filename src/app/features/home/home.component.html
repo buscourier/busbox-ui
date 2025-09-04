@@ -1,15 +1,17 @@
-<section class="relative mt-16 flex flex-col items-start md:flex-row md:gap-x-8">
-  <div
-    class="px-4 sm:mx-auto sm:max-w-md sm:px-0 sm:text-center md:mx-0 md:max-w-full md:flex-grow md:text-left"
-  >
-    <h1 class="font-heading mb-6 text-2xl font-bold lg:text-3xl xl:text-[57px]">
+<section
+  class="relative mb-16 flex flex-col md:mt-6 md:mb-22 md:flex-row md:gap-x-8 lg:mt-10 lg:mb-32 xl:mb-22"
+>
+  <div class="md:text-left">
+    <h1
+      class="font-heading mb-6 max-w-md text-3xl leading-10 font-bold sm:text-4xl sm:leading-12 md:max-w-full lg:text-[57px] lg:leading-16"
+    >
       Срочная доставка
       <br />
       по Приморскому краю
       <br class="hidden sm:block" />
       и в Хабаровск
     </h1>
-    <p class="mb-6 text-sm md:mb-9 lg:text-lg xl:mb-20 xl:text-[26px]">
+    <p class="mb-6 md:mb-9 lg:text-lg xl:mb-20 xl:text-[26px]">
       <b class="inline-block rounded-sm bg-yellow-500 px-2 py-1 font-bold xl:text-[27px]">
         от 2 до 24 часов
       </b>
@@ -26,7 +28,7 @@
       class="hidden w-full max-w-[450px] bg-gray-50 text-gray-50 md:mb-8 md:block lg:hidden"
     />
 
-    <app-cargo-types class="mb-18 md:mb-0 xl:mb-28" />
+    <app-cargo-types class="mb-18 inline-flex md:mb-0 xl:mb-28" />
   </div>
   <app-route-selector />
 </section>
@@ -41,11 +43,7 @@
     )
   "
 >
-  <ng-container class="title">
-    Охватываем всю территорию
-    <br />
-    Приморского края
-  </ng-container>
+  <ng-container class="title">Охватываем всю территорию Приморского края</ng-container>
   <ng-container class="subtitle">
     И даже самые труднодоступные населенные пункты региона
   </ng-container>
@@ -97,7 +95,9 @@
 <section class="full-width-section mt-20 mb-0 bg-yellow-500 py-16 sm:px-4 md:mb-0 xl:mb-0">
   <div class="container mx-auto px-4">
     <div class="mb-12">
-      <h2 class="mb-4 font-bold text-black md:text-4xl lg:text-[42px]">Последние новости</h2>
+      <h2 class="md:4xl mb-4 max-w-md text-3xl font-bold sm:max-w-lg sm:text-3xl lg:text-[42px]">
+        Последние новости
+      </h2>
       <p class="max-w-3xl text-lg text-black/80 lg:text-lg">
         Следите за обновлениями компании, новыми услугами и специальными предложениями
       </p>

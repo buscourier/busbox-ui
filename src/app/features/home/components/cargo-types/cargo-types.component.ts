@@ -8,7 +8,26 @@ import { TuiIcon } from '@taiga-ui/core';
   styleUrl: './cargo-types.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'flex',
+    class: 'flex gap-6',
   },
 })
-export class CargoTypesComponent {}
+export class CargoTypesComponent {
+  items = [
+    {
+      name: 'Посылки',
+      icon: this.getIcon('parcel'),
+    },
+    {
+      name: 'Документы',
+      icon: this.getIcon('docs'),
+    },
+    {
+      name: 'Грузы',
+      icon: this.getIcon('box'),
+    },
+  ];
+
+  getIcon(name: string): string {
+    return `/assets/icons/${name}.svg`;
+  }
+}

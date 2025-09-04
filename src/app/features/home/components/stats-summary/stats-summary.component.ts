@@ -29,7 +29,7 @@ export class StatsSummaryComponent implements OnInit {
   @HostBinding('class') get hostClasses(): string {
     return cn(
       'flex flex-col justify-center',
-      'md:flex-row md:justify-start md:space-x-6',
+      'md:flex-row md:justify-start md:gap-10',
       'xl:flex-col xl:space-x-0',
     );
   }

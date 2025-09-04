@@ -1,12 +1,6 @@
-<div class="mr-6 space-x-2">
-  <tui-icon icon="parcel" [style.font-size.rem]="1.75" />
-  <span>Посылки</span>
-</div>
-<div class="mr-4 space-x-1">
-  <tui-icon icon="docs" [style.font-size.rem]="1.75" />
-  <span>Документы</span>
-</div>
-<div class="gap-2">
-  <tui-icon icon="box" [style.font-size.rem]="1.75" />
-  <span>Грузы</span>
-</div>
+@for (item of items; track item.name) {
+  <div class="flex items-center gap-2">
+    <img [src]="item.icon" [alt]="item.icon" />
+    <span>{{ item.name }}</span>
+  </div>
+}
