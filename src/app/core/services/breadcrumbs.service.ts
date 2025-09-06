@@ -69,7 +69,7 @@ export class BreadcrumbsService {
     let title = data['title'];
 
     if (!title && data['pageKey']) {
-      const content = this.navigationService.getSeoDataByLink(data['pageKey']);
+      const content = this.navigationService.getSeoMeta(data['pageKey']);
       title = content?.title;
     }
 

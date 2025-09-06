@@ -1,10 +1,16 @@
 import { AsyncPipe } from '@angular/common';
-import type { OnInit } from '@angular/core';
+import { DestroyRef, type OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { provideTranslocoScope, TranslocoPipe } from '@jsverse/transloco';
 import { TuiButton } from '@taiga-ui/core';
-import type { Observable } from 'rxjs';
+import { type Observable, take } from 'rxjs';
+import { filter } from 'rxjs/operators';
+
+import { PageContentService } from '@core/services';
+
+import type { SeoMeta } from '@shared/types';
 
 import { DeliveryLayoutService } from '@delivery/services';
 
@@ -46,11 +52,37 @@ export class BookingComponent implements OnInit {
 
   private layoutService = inject(DeliveryLayoutService);
   private bookingFacade = inject(BookingFacade);
+  private readonly pageContentService = inject(PageContentService);
+  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private seoMeta: SeoMeta = {
+    title: 'Оформить доставку — заявка онлайн',
+    description:
+      'Оформите доставку груза онлайн: выбор города, забор курьером, упаковка и страхование. Быстро и удобно.',
+    keywords: [
+      'оформить доставку',
+      'заявка на доставку',
+      'оформить отправление',
+      'курьерский забор',
+      'Баскурьер',
+    ],
+  };
 
   ngOnInit(): void {
     this.vm$ = this.bookingFacade.getViewModel();
     this.isMainLayout$ = this.layoutService.getIsMainLayout();
     this.applicant$ = this.bookingFacade.getApplicant();
+
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        take(1),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(() => {
+        this.pageContentService.setManualSeo(this.seoMeta);
+      });
 
     this.bookingFacade.init();
   }

@@ -17,6 +17,7 @@ export const deliveryRoutes: Routes = [
       {
         path: 'calculator',
         component: CalculatorComponent,
+        data: { pageKey: 'calculator' },
         providers: [
           provideTranslocoScope({
             scope: 'features/delivery/calculator',

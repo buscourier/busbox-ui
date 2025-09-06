@@ -1,0 +1,25 @@
+@let vm = pageViewModel$ | async;
+
+@if (showBreadcrumbs) {
+  <div class="bg-gray-50">
+    <div class="container mx-auto px-4">
+      <app-breadcrumbs />
+    </div>
+  </div>
+}
+
+<main class="container mx-auto mt-10 px-4 md:mt-16">
+  @if ((showTitle ?? vm?.layout?.showTitle) && vm?.content?.title) {
+    <h1 class="text-4xl font-bold">{{ vm?.content?.title }}</h1>
+  }
+
+  @if (vm?.layout?.showDescription && vm?.content?.description) {
+    <div class="mt-2 mb-10 max-w-[800px]">
+      @for (paragraph of vm?.content?.description; track $index) {
+        <p class="text-md text-gray-800">{{ paragraph }}</p>
+      }
+    </div>
+  }
+
+  <ng-content />
+</main>

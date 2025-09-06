@@ -12,6 +12,8 @@ import { TuiButton, TuiLabel, TuiTextfield, TuiTextfieldComponent } from '@taiga
 import { TuiButtonLoading, TuiSkeleton } from '@taiga-ui/kit';
 import { catchError, EMPTY, finalize, type Observable } from 'rxjs';
 
+import { PageLayoutComponent } from '@shared/layouts/page-layout';
+
 import { type OrderStatus, OrderTrackingService } from '@tracking/order-tracking.service';
 import type { TrackingForm } from '@tracking/tracking.types';
 
@@ -33,6 +35,7 @@ import { TimelineComponent } from './timeline';
     NgOptimizedImage,
     ContactsComponent,
     TuiButtonLoading,
+    PageLayoutComponent,
   ],
   templateUrl: './tracking.component.html',
   styleUrl: './tracking.component.css',

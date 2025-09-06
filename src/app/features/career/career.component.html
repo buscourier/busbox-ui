@@ -1,125 +1,133 @@
-<section class="full-width-section relative z-10 bg-gradient-to-br from-yellow-500 to-yellow-400">
-  <div class="container mx-auto px-4">
-    <app-stats />
-  </div>
-</section>
-<div
-  class="relative -top-10 mx-auto flex h-[650px] max-w-[1170px] justify-center bg-[url('src/assets/images/career-map.svg')] bg-[length:460px_650px] bg-center bg-no-repeat px-4"
->
-  <div class="flex h-full w-[480px] flex-col">
-    <div
-      class="before:font-heading relative mt-28 flex items-center before:h-[82px] before:text-[82px] before:leading-tight before:content-['1'] lg:-left-5"
-    >
-      <p class="ml-5 text-lg">
-        филиал
-        <br />
-        в Хабаровске
-      </p>
+<app-page-layout>
+  <section class="full-width-section relative z-10 bg-gradient-to-br from-yellow-500 to-yellow-400">
+    <div class="container mx-auto px-4">
+      <app-stats />
     </div>
-    <div
-      class="before:font-heading relative bottom-10 mt-auto ml-auto flex before:h-[82px] before:text-[82px] before:leading-tight before:content-['6'] sm:-right-20 md:-right-28 lg:-right-44"
-    >
-      <div class="ml-5 text-lg">
-        <b class="mb-2 block">
-          Филиалов
+  </section>
+  <div
+    class="relative -top-10 mx-auto flex h-[650px] max-w-[1170px] justify-center bg-[url('src/assets/images/career-map.svg')] bg-[length:460px_650px] bg-center bg-no-repeat px-4"
+  >
+    <div class="flex h-full w-[480px] flex-col">
+      <div
+        class="before:font-heading relative mt-28 flex items-center before:h-[82px] before:text-[82px] before:leading-tight before:content-['1'] lg:-left-5"
+      >
+        <p class="ml-5 text-lg">
+          филиал
           <br />
-          в Приморском крае
-        </b>
-        <p>
-          Владивосток (2 филиала),
-          <br />
-          Артем,
-          <br />
-          Находка,
-          <br />
-          Уссурийск
+          в Хабаровске
         </p>
+      </div>
+      <div
+        class="before:font-heading relative bottom-10 mt-auto ml-auto flex before:h-[82px] before:text-[82px] before:leading-tight before:content-['6'] sm:-right-20 md:-right-28 lg:-right-44"
+      >
+        <div class="ml-5 text-lg">
+          <b class="mb-2 block">
+            Филиалов
+            <br />
+            в Приморском крае
+          </b>
+          <p>
+            Владивосток (2 филиала),
+            <br />
+            Артем,
+            <br />
+            Находка,
+            <br />
+            Уссурийск
+          </p>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<section class="relative">
-  <div class="relative">
-    <div
-      class="absolute inset-0 -z-10 rotate-3 transform rounded-3xl bg-gradient-to-br from-yellow-500 to-yellow-200 opacity-40"
-    ></div>
-    <div class="">
-      <img
-        ngSrc="career-banner-new.jpg"
-        ngSrcset="420w, 640w, 840w, 1280w, 1680w, 1920w, 2560w, 3840w"
-        alt="Наша команда"
-        width="3510"
-        height="2340"
-        sizes="(min-width: 1024px) 1170px, 100vw"
-        class="min-h-min min-w-[360px] rounded-3xl bg-gray-50 text-gray-50"
-      />
+  <section class="relative">
+    <div class="relative">
+      <div
+        class="absolute inset-0 -z-10 rotate-3 transform rounded-3xl bg-gradient-to-br from-yellow-500 to-yellow-200 opacity-40"
+      ></div>
+      <div class="">
+        <img
+          ngSrc="career-banner-new.jpg"
+          ngSrcset="420w, 640w, 840w, 1280w, 1680w, 1920w, 2560w, 3840w"
+          alt="Наша команда"
+          width="3510"
+          height="2340"
+          sizes="(min-width: 1024px) 1170px, 100vw"
+          class="min-h-min min-w-[360px] rounded-3xl bg-gray-50 text-gray-50"
+        />
+      </div>
     </div>
-  </div>
+
+    <div
+      class="relative -bottom-5 -mt-20 mr-4 ml-4 flex max-w-[345px] flex-col rounded-lg bg-white pt-8 pr-10 pb-7.5 pl-7.5 shadow-xl md:absolute md:ml-5 lg:ml-16 xl:max-w-[404px] xl:p-11 xl:pb-8"
+    >
+      <b class="text-xl font-medium xl:mb-5 xl:text-2xl">
+        Мы ищем активных и целеустремленных сотрудников в команду!
+      </b>
+      <small class="text-lg">Возможно это ты!</small>
+    </div>
+  </section>
 
   <div
-    class="relative -bottom-5 -mt-20 mr-4 ml-4 flex max-w-[345px] flex-col rounded-lg bg-white pt-8 pr-10 pb-7.5 pl-7.5 shadow-xl md:absolute md:ml-5 lg:ml-16 xl:max-w-[404px] xl:p-11 xl:pb-8"
+    class="mt-16 md:grid md:grid-cols-2 md:grid-rows-[repeat(2,auto)] md:gap-x-7 lg:mt-20 xl:mt-28 xl:gap-x-9 xl:pl-16"
   >
-    <b class="text-xl font-medium xl:mb-5 xl:text-2xl">
-      Мы ищем активных и целеустремленных сотрудников в команду!
-    </b>
-    <small class="text-lg">Возможно это ты!</small>
+    <section class="col-start-1 col-end-2 row-span-full row-start-1 mb-7.5 max-w-xl md:mb-0">
+      <h2 class="mb-6 text-3xl font-medium">Мы предлагаем:</h2>
+      <app-list class="max-w-[520px]">
+        @for (item of suggestions; track $index) {
+          <span *appListItem>{{ item }}</span>
+        }
+      </app-list>
+    </section>
+    <section class="col-start-2 col-end-3 row-start-1 row-end-2 mb-7.5 max-w-xl lg:mb-11">
+      <h2 class="mb-6 text-3xl font-medium">Тебе предстоит:</h2>
+      <app-list class="max-w-[520px]">
+        @for (task of tasks; track $index) {
+          <span *appListItem>{{ task }}</span>
+        }
+      </app-list>
+    </section>
+    <section class="col-start-2 col-end-3 row-start-2 row-end-3 mb-12 max-w-xl md:mb-0">
+      <h2 class="mb-6 text-3xl font-medium">Ты - наш человек, если:</h2>
+      <app-list class="max-w-[520px]">
+        @for (item of matches; track $index) {
+          <span *appListItem>{{ item }}</span>
+        }
+      </app-list>
+    </section>
   </div>
-</section>
+  <div class="mt-16">
+    <div class="rounded-2xl bg-gradient-to-br from-yellow-500 to-yellow-400 p-8 text-center">
+      <h3 class="mb-3 text-2xl font-bold text-gray-800">Хотите присоединиться к нашей команде?</h3>
+      <p class="mb-6 text-gray-800/80">
+        Отправьте свое резюме на почту
+        <span class="font-semibold"></span>
+        или заполните форму
+      </p>
+      <div class="flex flex-col justify-center gap-4 sm:flex-row">
+        <button
+          type="button"
+          tuiButton
+          appearance="accent"
+          class="w-[240px]"
+          (click)="openResume()"
+        >
+          Заполнить форму
+        </button>
 
-<div
-  class="mt-16 md:grid md:grid-cols-2 md:grid-rows-[repeat(2,auto)] md:gap-x-7 lg:mt-20 xl:mt-28 xl:gap-x-9 xl:pl-16"
->
-  <section class="col-start-1 col-end-2 row-span-full row-start-1 mb-7.5 max-w-xl md:mb-0">
-    <h2 class="mb-6 text-3xl font-medium">Мы предлагаем:</h2>
-    <app-list class="max-w-[520px]">
-      @for (item of suggestions; track $index) {
-        <span *appListItem>{{ item }}</span>
-      }
-    </app-list>
-  </section>
-  <section class="col-start-2 col-end-3 row-start-1 row-end-2 mb-7.5 max-w-xl lg:mb-11">
-    <h2 class="mb-6 text-3xl font-medium">Тебе предстоит:</h2>
-    <app-list class="max-w-[520px]">
-      @for (task of tasks; track $index) {
-        <span *appListItem>{{ task }}</span>
-      }
-    </app-list>
-  </section>
-  <section class="col-start-2 col-end-3 row-start-2 row-end-3 mb-12 max-w-xl md:mb-0">
-    <h2 class="mb-6 text-3xl font-medium">Ты - наш человек, если:</h2>
-    <app-list class="max-w-[520px]">
-      @for (item of matches; track $index) {
-        <span *appListItem>{{ item }}</span>
-      }
-    </app-list>
-  </section>
-</div>
-<div class="mt-16">
-  <div class="rounded-2xl bg-gradient-to-br from-yellow-500 to-yellow-400 p-8 text-center">
-    <h3 class="mb-3 text-2xl font-bold text-gray-800">Хотите присоединиться к нашей команде?</h3>
-    <p class="mb-6 text-gray-800/80">
-      Отправьте свое резюме на почту
-      <span class="font-semibold"></span>
-      или заполните форму
-    </p>
-    <div class="flex flex-col justify-center gap-4 sm:flex-row">
-      <button type="button" tuiButton appearance="accent" class="w-[240px]" (click)="openResume()">
-        Заполнить форму
-      </button>
-
-      <a
-        [href]="contact.email | contactLink: 'email'"
-        tuiButton
-        appearance="outline"
-        class="group/email relative w-[240px]"
-      >
-        <span class="absolute transition-all group-hover/email:-translate-y-100">
-          Отправить на почту
-        </span>
-        <span class="absolute translate-y-100 transition-all group-hover/email:translate-y-0">
-          {{ contact.email }}
-        </span>
-      </a>
+        <a
+          [href]="contact.email | contactLink: 'email'"
+          tuiButton
+          appearance="outline"
+          class="group/email relative w-[240px]"
+        >
+          <span class="absolute transition-all group-hover/email:-translate-y-100">
+            Отправить на почту
+          </span>
+          <span class="absolute translate-y-100 transition-all group-hover/email:translate-y-0">
+            {{ contact.email }}
+          </span>
+        </a>
+      </div>
     </div>
   </div>
-</div>
+</app-page-layout>

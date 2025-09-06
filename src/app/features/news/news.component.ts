@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { tuiDialog } from '@taiga-ui/core';
 import { type Observable, tap } from 'rxjs';
 
+import { PageLayoutComponent } from '@shared/layouts/page-layout';
+
 import { NewsCardComponent } from './news-card';
 import { NewsDetailsComponent } from './news-details';
 import { NewsFacade } from './news.facade';
@@ -12,7 +14,7 @@ import type { NewsViewModel } from './types';
 
 @Component({
   selector: 'app-news',
-  imports: [AsyncPipe, NewsCardComponent],
+  imports: [AsyncPipe, NewsCardComponent, PageLayoutComponent],
   templateUrl: './news.component.html',
   styleUrl: './news.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

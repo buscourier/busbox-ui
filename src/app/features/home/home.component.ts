@@ -7,6 +7,7 @@ import { BrandCardComponent } from '@shared/components/brand-card';
 import { CarouselComponent } from '@shared/components/carousel';
 import { ContactFormComponent } from '@shared/components/contact-form';
 import { PageSectionComponent } from '@shared/components/page-section';
+import { PageLayoutComponent } from '@shared/layouts/page-layout';
 
 import {
   CargoTypesComponent,
@@ -31,6 +32,7 @@ import {
     PageSectionComponent,
     BrandCardComponent,
     CarouselComponent,
+    PageLayoutComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',

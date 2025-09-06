@@ -18,7 +18,7 @@ export class MobileMenuComponent {
   private readonly navigationService = inject(NavigationService);
 
   get navigationItems(): NavigationItem[] {
-    return this.navigationService.getMobileNavigation().filter((item) => item.link !== 'account');
+    return this.navigationService.getMobileNavigation();
   }
 
   onNavigate(): void {

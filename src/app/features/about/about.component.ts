@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { PageLayoutComponent } from '@shared/layouts/page-layout';
+
 import {
   CompanyFeaturesComponent,
   CompanyOverviewComponent,
@@ -21,6 +23,7 @@ import {
     CompanyOverviewComponent,
     TeamComponent,
     CompanyStatsComponent,
+    PageLayoutComponent,
   ],
 })
 export class AboutComponent {}

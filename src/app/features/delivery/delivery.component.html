@@ -1,12 +1,14 @@
 @let isMainLayout = isMainLayout$ | async;
 
-<div class="flex gap-16">
-  <main class="grow">
-    <router-outlet />
-  </main>
-  @if (isMainLayout) {
-    <aside class="pt-24 basis-1/3">
-      <app-delivery-summary></app-delivery-summary>
-    </aside>
-  }
-</div>
+<app-page-layout [showTitle]="!isBookingPage" [showDescription]="!isBookingPage">
+  <div class="flex gap-16">
+    <main class="grow">
+      <router-outlet />
+    </main>
+    @if (isMainLayout) {
+      <aside class="basis-1/3 pt-24">
+        <app-delivery-summary></app-delivery-summary>
+      </aside>
+    }
+  </div>
+</app-page-layout>

@@ -1,101 +1,110 @@
 @let offices = offices$ | async;
 
-<div
-  class="bottom-0 left-0 z-20 w-full rounded-tl-xl rounded-tr-xl bg-white/80 p-4 shadow-lg backdrop-blur-lg lg:rounded-none"
-  [class.fixed]="scrollTop <= 0"
-  [class.absolute]="scrollTop > 0"
->
-  <div class="container mx-auto flex flex-col gap-4 px-4 lg:flex-row lg:gap-10">
-    <tui-textfield
-      tuiChevron
-      tuiDropdownMobile="Выберите отделение"
-      [stringify]="stringify"
-      class="w-full flex-1/3 grow"
+<app-page-layout>
+  <div class="flex">
+    <div
+      class="bottom-0 left-0 z-20 w-full rounded-tl-xl rounded-tr-xl bg-white/80 p-4 shadow-lg backdrop-blur-lg lg:rounded-none"
+      [class.fixed]="scrollTop <= 0"
+      [class.absolute]="scrollTop > 0"
     >
-      <input
-        tuiSelect
-        placeholder="Выберите отделение"
-        [formControl]="selectedOffice"
-        class="text-base! text-black! opacity-100! shadow-none! placeholder:text-gray-600!"
-      />
+      <div class="container mx-auto flex flex-col gap-4 px-4 lg:flex-row lg:gap-10">
+        <tui-textfield
+          tuiChevron
+          tuiDropdownMobile="Выберите отделение"
+          [stringify]="stringify"
+          class="w-full flex-1/3 grow"
+        >
+          <input
+            tuiSelect
+            placeholder="Выберите отделение"
+            [formControl]="selectedOffice"
+            class="text-base! text-black! opacity-100! shadow-none! placeholder:text-gray-600!"
+          />
 
-      <tui-data-list-wrapper *tuiTextfieldDropdown new [items]="offices" [itemContent]="content" />
-      <ng-template #content let-item>
-        <div class="flex items-center gap-4">
-          <div class="grow">
-            <div class="flex items-center gap-2">
-              <div>
-                {{ item.name }}
-                @if (item.id === '1') {
-                  <tui-badge appearance="primary" size="s">офис</tui-badge>
-                }
+          <tui-data-list-wrapper
+            *tuiTextfieldDropdown
+            new
+            [items]="offices"
+            [itemContent]="content"
+          />
+          <ng-template #content let-item>
+            <div class="flex items-center gap-4">
+              <div class="grow">
+                <div class="flex items-center gap-2">
+                  <div>
+                    {{ item.name }}
+                    @if (item.id === '1') {
+                      <tui-badge appearance="primary" size="s">офис</tui-badge>
+                    }
+                  </div>
+                  <div class="mt-1 flex gap-2">
+                    @for (service of item.services; track $index) {
+                      <tui-badge size="s">{{ service }}</tui-badge>
+                    }
+                  </div>
+                </div>
+                <small class="text-gray-500">{{ item.address }}</small>
               </div>
-              <div class="mt-1 flex gap-2">
-                @for (service of item.services; track $index) {
-                  <tui-badge size="s">{{ service }}</tui-badge>
+            </div>
+          </ng-template>
+        </tui-textfield>
+
+        <app-filter
+          [initialOfficeType]="initialOfficeType$ | async"
+          [cities]="offices || []"
+          (filterChange)="setFilter($event)"
+          class="flex-1/2"
+        />
+      </div>
+    </div>
+
+    <div class="absolute inset-0 z-10 h-full bg-gray-100">
+      <app-map
+        [points]="(filteredOffices$ | async) || []"
+        [selectedPoint]="selectedOffice.value"
+        (focusPoint)="onMapPointFocus($event)"
+        [autoFit]="!selectedOffice.value"
+      />
+    </div>
+
+    <app-contact-info
+      class="relative -top-5 z-20 ml-auto md:mr-auto lg:top-0 lg:mr-0"
+      [class.hidden]="(breakpoint.isMobile() || breakpoint.isTablet()) && selectedOffice.value"
+      [expanded]="!selectedOffice.value"
+      [contact]="contact"
+    />
+
+    @if (selectedOffice.value; as selectedOffice) {
+      <tui-drawer
+        direction="left"
+        [overlay]="false"
+        class="top-96 mt-10 w-[440px]!"
+        *tuiPopup="!!selectedOffice"
+      >
+        <header class="sticky mb-10 bg-white">
+          <div class="flex justify-between">
+            <div class="flex flex-col gap-2">
+              <b class="text-2xl">{{ selectedOffice.name }}</b>
+              <div class="flex gap-2">
+                @for (service of selectedOffice.services; track service) {
+                  <tui-badge appearance="primary" size="s">{{ service }}</tui-badge>
                 }
               </div>
             </div>
-            <small class="text-gray-500">{{ item.address }}</small>
+            <button tuiButton appearance="flat" type="button" (click)="onCloseDetails()">
+              <tui-icon icon="@tui.x" [style.font-size.rem]="1.5"></tui-icon>
+            </button>
           </div>
-        </div>
-      </ng-template>
-    </tui-textfield>
+        </header>
+        <app-office-details [email]="contact.email" [office]="selectedOffice" />
 
-    <app-filter
-      [initialOfficeType]="initialOfficeType$ | async"
-      [cities]="offices || []"
-      (filterChange)="setFilter($event)"
-      class="flex-1/2"
-    />
+        <div class="px-6">
+          <p class="mt-4 text-sm">
+            За содержимое грузов и документов (отправление) несет ответственность лицо, являющееся
+            отправителем.
+          </p>
+        </div>
+      </tui-drawer>
+    }
   </div>
-</div>
-
-<div class="absolute inset-0 z-10 h-full bg-gray-100">
-  <app-map
-    [points]="(filteredOffices$ | async) || []"
-    [selectedPoint]="selectedOffice.value"
-    (focusPoint)="onMapPointFocus($event)"
-    [autoFit]="!selectedOffice.value"
-  />
-</div>
-
-<app-contact-info
-  class="relative -top-5 z-20 ml-auto md:mr-auto lg:top-0 lg:mr-0"
-  [class.hidden]="(breakpoint.isMobile() || breakpoint.isTablet()) && selectedOffice.value"
-  [expanded]="!selectedOffice.value"
-  [contact]="contact"
-/>
-
-@if (selectedOffice.value; as selectedOffice) {
-  <tui-drawer
-    direction="left"
-    [overlay]="false"
-    class="top-96 mt-10 w-[440px]!"
-    *tuiPopup="!!selectedOffice"
-  >
-    <header class="sticky mb-10 bg-white">
-      <div class="flex justify-between">
-        <div class="flex flex-col gap-2">
-          <b class="text-2xl">{{ selectedOffice.name }}</b>
-          <div class="flex gap-2">
-            @for (service of selectedOffice.services; track service) {
-              <tui-badge appearance="primary" size="s">{{ service }}</tui-badge>
-            }
-          </div>
-        </div>
-        <button tuiButton appearance="flat" type="button" (click)="onCloseDetails()">
-          <tui-icon icon="@tui.x" [style.font-size.rem]="1.5"></tui-icon>
-        </button>
-      </div>
-    </header>
-    <app-office-details [email]="contact.email" [office]="selectedOffice" />
-
-    <div class="px-6">
-      <p class="mt-4 text-sm">
-        За содержимое грузов и документов (отправление) несет ответственность лицо, являющееся
-        отправителем.
-      </p>
-    </div>
-  </tui-drawer>
-}
+</app-page-layout>

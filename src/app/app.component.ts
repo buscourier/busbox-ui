@@ -1,4 +1,3 @@
-import { AsyncPipe } from '@angular/common';
 import { Component, DestroyRef, inject, type OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterOutlet } from '@angular/router';
@@ -6,9 +5,6 @@ import { TranslocoService } from '@jsverse/transloco';
 import { TuiAlertService, TuiRoot } from '@taiga-ui/core';
 import type { Observable } from 'rxjs';
 
-import { SeoService } from '@core/services/seo.service';
-
-import { BreadcrumbsComponent } from '@shared/components/breadcrumbs';
 import { FooterComponent } from '@shared/components/footer';
 import { HeaderComponent } from '@shared/components/header';
 import { LocationsFacade } from '@shared/store';
@@ -20,22 +16,12 @@ import type { AuthResponse } from '@auth/types';
 
 @Component({
   selector: 'app-root',
-  imports: [
-    RouterOutlet,
-    TuiRoot,
-    AsyncPipe,
-    BreadcrumbsComponent,
-    FooterComponent,
-    HeaderComponent,
-  ],
+  imports: [RouterOutlet, TuiRoot, FooterComponent, HeaderComponent],
   templateUrl: './app.component.html',
   standalone: true,
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  title$!: Observable<string>;
-  description$!: Observable<string | string[]>;
-
   configName?: string;
   environment?: string;
   apiBaseUrl?: string;
@@ -45,34 +31,16 @@ export class AppComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly alerts = inject(TuiAlertService);
   private transloco = inject(TranslocoService);
-  private readonly seoService = inject(SeoService);
+
   private readonly router = inject(Router);
 
   currentUser$!: Observable<AuthResponse | null>;
 
-  get isHomePage(): boolean {
-    return this.router.url === '/' || this.router.url === '/home';
-  }
-
-  get isServicesPage(): boolean {
-    return this.router.url === '/services';
-  }
-
-  get isAccountPage(): boolean {
-    return (
-      this.router.url.includes('account/orders') || this.router.url.includes('account/profile')
-    );
-  }
-
   constructor() {
-    // this.configName = environment.dopplerConfig;
     this.apiBaseUrl = environment.apiBaseUrl;
   }
 
   ngOnInit(): void {
-    this.title$ = this.seoService.getTitle();
-    this.description$ = this.seoService.getDescription();
-
     this.currentUser$ = this.authFacade.getCurrentUser();
     this.initializeGlobalData();
   }

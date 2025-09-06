@@ -1,36 +1,31 @@
 <tui-root>
   <app-header />
 
-  @if (isAccountPage) {
-    <div class="bg-gray-50">
-      <div class="container mx-auto px-4">
-        <app-breadcrumbs />
-      </div>
-    </div>
-  }
+  <!--  @if (isAccountPage) {-->
+  <!--    <div class="bg-gray-50">-->
+  <!--      <div class="container mx-auto px-4">-->
+  <!--        <app-breadcrumbs />-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  }-->
 
-  <main class="main-content relative overflow-clip">
-    <div class="container mx-auto px-4" [class.pb-10]="!isHomePage">
-      @if (!isServicesPage) {
-        <h1 class="mt-10 inline-block text-4xl font-bold">
-          {{ title$ | async }}
-        </h1>
-      }
+  <!--  <main class="main-content relative overflow-clip pt-16">-->
+  <!--    <div class="container mx-auto px-4" [class.pb-10]="!isHomePage">-->
+  <!--      @if (vm?.layout?.showTitle && vm?.content?.title) {-->
+  <!--        <h1 class="text-4xl font-bold">{{ vm?.content?.title }}</h1>-->
+  <!--      }-->
 
-      @if (description$ | async; as description) {
-        <div class="mt-2 mb-10 max-w-[800px]">
-          @if (Array.isArray(description)) {
-            @for (paragraph of description; track $index) {
-              <p class="text-md text-gray-800">{{ paragraph }}</p>
-            }
-          } @else {
-            <p class="text-md text-gray-800">{{ description }}</p>
-          }
-        </div>
-      }
+  <!--      @if (vm?.layout?.showDescription && vm?.content?.description) {-->
+  <!--        <div class="mt-2 mb-10 max-w-[800px]">-->
+  <!--          @for (paragraph of vm?.content?.description; track $index) {-->
+  <!--            <p class="text-md text-gray-800">{{ paragraph }}</p>-->
+  <!--          }-->
+  <!--        </div>-->
+  <!--      }-->
 
-      <router-outlet />
-    </div>
-  </main>
+  <!--      -->
+  <!--    </div>-->
+  <!--  </main>-->
+  <router-outlet />
   <app-footer></app-footer>
 </tui-root>
