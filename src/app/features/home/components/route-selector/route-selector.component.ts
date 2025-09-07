@@ -8,15 +8,16 @@ import {
   type OnInit,
 } from '@angular/core';
 import { FormBuilder, type FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { TuiDropdownMobile } from '@taiga-ui/addon-mobile';
-import { TuiButton, TuiLabel, TuiSelect, TuiTextfield } from '@taiga-ui/core';
+import type { TuiStringHandler } from '@taiga-ui/cdk';
+import { TuiButton, TuiLabel, TuiTextfield } from '@taiga-ui/core';
 import {
   TuiButtonLoading,
   TuiChevron,
+  TuiComboBox,
   TuiDataListWrapperComponent,
-  TuiSelectDirective,
-  TuiStringifyContentPipe,
-  TuiStringifyPipe,
+  TuiFilterByInputPipe,
 } from '@taiga-ui/kit';
 import type { Observable } from 'rxjs';
 
@@ -35,15 +36,14 @@ import type { RouteSelectorForm } from './route-selector.types';
     TuiChevron,
     TuiDataListWrapperComponent,
     TuiLabel,
-    TuiSelect,
-    TuiStringifyContentPipe,
     TuiTextfield,
     ReactiveFormsModule,
-    TuiStringifyPipe,
     TuiButton,
     TuiButtonLoading,
-    TuiSelectDirective,
     TuiDropdownMobile,
+    TranslocoPipe,
+    TuiComboBox,
+    TuiFilterByInputPipe,
   ],
   templateUrl: './route-selector.component.html',
   styleUrl: './route-selector.component.css',
@@ -70,6 +70,8 @@ export class RouteSelectorComponent implements OnInit {
 
   pickupCities$!: Observable<PickupCity[]>;
   deliveryCities$!: Observable<DeliveryCity[]>;
+
+  protected stringify: TuiStringHandler<PickupCity | DeliveryCity> = (x) => `${x.name}`;
 
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
