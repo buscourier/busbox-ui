@@ -7,8 +7,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { TuiCheckbox } from '@taiga-ui/kit';
-import { TuiTextareaModule } from '@taiga-ui/legacy';
+import { TuiTextfieldComponent } from '@taiga-ui/core';
+import { TuiCheckbox, TuiTextarea, TuiTextareaLimit } from '@taiga-ui/kit';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -30,7 +30,14 @@ import type {
 
 @Component({
   selector: 'app-review-confirmation',
-  imports: [FormsModule, TuiCheckbox, TuiTextareaModule, ReactiveFormsModule],
+  imports: [
+    FormsModule,
+    TuiCheckbox,
+    ReactiveFormsModule,
+    TuiTextarea,
+    TuiTextareaLimit,
+    TuiTextfieldComponent,
+  ],
   templateUrl: './review-confirmation.component.html',
   styleUrl: './review-confirmation.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
