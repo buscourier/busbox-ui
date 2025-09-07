@@ -12,9 +12,16 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import type { FormControl } from '@angular/forms';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { TuiTextfieldComponent } from '@taiga-ui/core';
-import { TuiInputNumber, TuiStringifyContentPipe, TuiStringifyPipe } from '@taiga-ui/kit';
-import { TuiSelectModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
+import { TuiDropdownMobile } from '@taiga-ui/addon-mobile';
+import type { TuiStringHandler } from '@taiga-ui/cdk';
+import { TuiTextfield, TuiTextfieldComponent } from '@taiga-ui/core';
+import {
+  TuiChevron,
+  TuiComboBox,
+  TuiDataListWrapper,
+  TuiFilterByInputPipe,
+  TuiInputNumber,
+} from '@taiga-ui/kit';
 import { merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -27,14 +34,16 @@ import type { OtherCargoForm } from './other-cargo.types';
 @Component({
   selector: 'app-other-cargo',
   imports: [
-    TuiSelectModule,
     ReactiveFormsModule,
-    TuiTextfieldControllerModule,
-    TuiStringifyPipe,
-    TuiStringifyContentPipe,
     TuiInputNumber,
     TuiTextfieldComponent,
     TranslocoPipe,
+    TuiChevron,
+    TuiComboBox,
+    TuiDropdownMobile,
+    TuiFilterByInputPipe,
+    TuiTextfield,
+    TuiDataListWrapper,
   ],
   templateUrl: './other-cargo.component.html',
   styleUrl: './other-cargo.component.css',
@@ -48,6 +57,8 @@ export class OtherCargoComponent implements OnInit, OnChanges {
   @Output() validationChange = new EventEmitter<boolean>();
 
   form!: OtherCargoForm;
+
+  protected stringify: TuiStringHandler<Cargo> = (x) => `${x.name}`;
 
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);

@@ -12,6 +12,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import type { FormControl } from '@angular/forms';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TuiDropdownMobile } from '@taiga-ui/addon-mobile';
+import { TUI_IS_IOS, type TuiStringHandler } from '@taiga-ui/cdk';
 import { TuiHintDirective, TuiTextfield } from '@taiga-ui/core';
 import {
   TUI_VALIDATION_ERRORS,
@@ -19,10 +21,9 @@ import {
   TuiChevron,
   TuiDataListWrapper,
   TuiFieldErrorContentPipe,
-  TuiStringifyContentPipe,
-  TuiStringifyPipe,
+  TuiInputPhone,
+  TuiSelect,
 } from '@taiga-ui/kit';
-import { TuiInputPhoneModule } from '@taiga-ui/legacy';
 import { distinctUntilChanged } from 'rxjs';
 
 import type { ValidationLimits } from '@core/config';
@@ -43,13 +44,13 @@ import type { IndividualForm } from './individual.types';
     ReactiveFormsModule,
     TuiFieldErrorContentPipe,
     TuiHintDirective,
-    TuiStringifyPipe,
-    TuiStringifyContentPipe,
-    TuiInputPhoneModule,
     TuiTextfield,
     TuiChevron,
     TuiDataListWrapper,
     TranslocoPipe,
+    TuiInputPhone,
+    TuiDropdownMobile,
+    TuiSelect,
   ],
   templateUrl: './individual.component.html',
   styleUrl: './individual.component.css',
@@ -69,8 +70,15 @@ export class IndividualComponent implements OnInit {
 
   form!: IndividualForm;
 
+  protected readonly isIos = inject(TUI_IS_IOS);
+
+  protected get pattern(): string | null {
+    return this.isIos ? '+[0-9-]{1,20}' : null;
+  }
+
   protected readonly individualRoles = individualRoles;
   protected limits = inject<ValidationLimits>(VALIDATION_LIMITS);
+  protected stringify: TuiStringHandler<{ value: string; label: string }> = (x) => `${x.label}`;
 
   private fieldValidators = inject(FIELD_VALIDATORS_FACTORY);
   private fb = inject(NonNullableFormBuilder);

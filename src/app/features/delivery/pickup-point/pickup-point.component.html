@@ -2,7 +2,7 @@
 
 @if (vm && form) {
   <div [tuiSkeleton]="vm.cities.isLoading">
-    <b class="mb-3 flex items-center justify-between pb-3 border-b border-gray-100 text-lg">
+    <b class="mb-3 flex items-center justify-between border-b border-gray-100 pb-3 text-lg">
       <ng-content select="span"></ng-content>
       <span class="xl:hidden">
         <tui-icon
@@ -17,22 +17,26 @@
 
   <form [formGroup]="form" class="flex flex-col gap-5">
     <div class="relative">
-      <tui-combo-box
-        [formControl]="city"
-        [stringify]="'name' | tuiStringify"
-        (searchChange)="onSearchChange($event)"
+      <tui-textfield
+        tuiChevron
+        [stringify]="stringifyCity"
         [tuiSkeleton]="vm.cities.isLoading"
-        [tuiHint]="[] | tuiFieldErrorContent"
-        tuiHintAppearance="error"
-        class="w-full"
+        tuiDropdownMobile="Город отправления"
       >
-        <div class="flex items-center">{{ 'pickupPoint.placeholders.city' | transloco }}</div>
-        <tui-data-list-wrapper
-          *tuiDataList
-          [items]="cities$ | async"
-          [itemContent]="'name' | tuiStringify | tuiStringifyContent"
+        <input
+          tuiComboBox
+          [formControl]="city"
+          [tuiHint]="[] | tuiFieldErrorContent"
+          tuiHintAppearance="error"
+          [placeholder]="'pickupPoint.placeholders.city' | transloco"
         />
-      </tui-combo-box>
+
+        <tui-data-list-wrapper
+          *tuiTextfieldDropdown
+          new
+          [items]="vm.cities.items | tuiFilterByInput"
+        />
+      </tui-textfield>
     </div>
 
     @if (vm.cities.selected) {
@@ -57,8 +61,8 @@
     <div class="tab-content">
       @switch (vm.activeTab?.id) {
         @case (TabType.OFFICE) {
-          <div class="p-3 bg-gray-50 rounded-lg">
-            <div class="flex items-center text-gray-600 mb-2 text-sm">
+          <div class="rounded-lg bg-gray-50 p-3">
+            <div class="mb-2 flex items-center text-sm text-gray-600">
               <tui-icon
                 icon="@tui.map-pin"
                 class="mr-2"
@@ -67,24 +71,25 @@
               />
               <span>{{ 'pickupPoint.labels.office' | transloco }}</span>
             </div>
-            <tui-select
-              [formControl]="office"
-              [stringify]="'address' | tuiStringify"
-              [tuiTextfieldLabelOutside]="true"
-              [tuiHint]="[] | tuiFieldErrorContent"
-              tuiHintAppearance="error"
+            <tui-textfield
+              tuiChevron
+              [stringify]="stringifyOffice"
+              [tuiSkeleton]="vm.offices.isLoading"
+              tuiDropdownMobile="Адрес отделения"
             >
-              {{ 'pickupPoint.labels.city' | transloco }}
-              <tui-data-list-wrapper
-                *tuiDataList
-                [items]="vm.offices.items"
-                [itemContent]="'address' | tuiStringify | tuiStringifyContent"
+              <input
+                tuiSelect
+                [formControl]="office"
+                [tuiHint]="[] | tuiFieldErrorContent"
+                [placeholder]="'pickupPoint.placeholders.office' | transloco"
               />
-            </tui-select>
+
+              <tui-data-list-wrapper *tuiTextfieldDropdown new [items]="vm.offices.items" />
+            </tui-textfield>
           </div>
         }
         @case (TabType.COURIER) {
-          <div class="p-3 bg-gray-50 rounded-lg">
+          <div class="rounded-lg bg-gray-50 p-3">
             @defer {
               <app-courier-details [formControl]="courierPoint" />
             } @placeholder (minimum 500ms) {
@@ -93,7 +98,7 @@
                   <span class="mb-1 inline-block" [tuiSkeleton]="true"></span>
                   <div class="h-12" [tuiSkeleton]="true"></div>
                 </div>
-                <div class="mb-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="mb-2 grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
                     <span class="mb-1 inline-block h-4" [tuiSkeleton]="true"></span>
                     <div class="h-12" [tuiSkeleton]="true"></div>
@@ -103,7 +108,7 @@
                     <div class="h-12" [tuiSkeleton]="true"></div>
                   </div>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
                     <span class="mb-1 inline-block h-4" [tuiSkeleton]="true"></span>
                     <div class="h-12" [tuiSkeleton]="true"></div>
@@ -122,18 +127,13 @@
 
     @if (vm.activeTab?.id) {
       <div class="mt-1">
-        <div class="flex items-center text-gray-600 mb-2 text-sm">
+        <div class="mb-2 flex items-center text-sm text-gray-600">
           <span>{{ 'pickupPoint.labels.departureDate' | transloco }}</span>
         </div>
-        <tui-input-date
-          [formControl]="departureDate"
-          [tuiUnfinishedValidator]="'pickupPoint.placeholders.departureDate' | transloco"
-          [tuiTextfieldLabelOutside]="true"
-          [min]="minDate"
-          [tuiHint]="[] | tuiFieldErrorContent"
-          tuiHintAppearance="error"
-          class="w-full"
-        />
+        <tui-textfield tuiDropdownMobile="Pick a date">
+          <input formControlName="departureDate" tuiInputDate />
+          <tui-calendar *tuiTextfieldDropdown />
+        </tui-textfield>
       </div>
     }
   </form>

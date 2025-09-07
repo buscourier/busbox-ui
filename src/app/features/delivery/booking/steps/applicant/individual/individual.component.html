@@ -118,29 +118,33 @@
         {{ 'contacts.labels.phone' | transloco }}
       </span>
 
-      <tui-input-phone
-        [formControl]="phone"
-        [tuiHint]="[] | tuiFieldErrorContent"
-        tuiHintAppearance="error"
-      >
-        {{ 'contacts.placeholders.phone' | transloco }}
-      </tui-input-phone>
+      <tui-textfield>
+        <input
+          autocomplete="tel"
+          mask="+7 ### ###-##-##"
+          tuiInputPhone
+          [attr.pattern]="pattern"
+          [formControl]="phone"
+          [tuiHint]="[] | tuiFieldErrorContent"
+          tuiHintAppearance="error"
+          [placeholder]="'contacts.placeholders.phone' | transloco"
+        />
+      </tui-textfield>
     </div>
     <label tuiLabel>
       <span class="mb-1 block text-sm text-gray-700">
         {{ 'user.labels.role' | transloco }}
       </span>
-      <tui-textfield tuiChevron [stringify]="'label' | tuiStringify" [tuiTextfieldCleaner]="false">
-        <select
-          tuiTextfield
-          [placeholder]="'user.placeholders.role' | transloco"
+      <tui-textfield tuiChevron [stringify]="stringify" tuiDropdownMobile="Роль отправителя">
+        <input
+          tuiSelect
           [formControl]="role"
-        ></select>
-        <tui-data-list-wrapper
-          *tuiTextfieldDropdown
-          [items]="individualRoles"
-          [itemContent]="'label' | tuiStringify | tuiStringifyContent"
+          [tuiHint]="[] | tuiFieldErrorContent"
+          tuiHintAppearance="error"
+          [placeholder]="'user.placeholders.role | transloco' | transloco"
         />
+
+        <tui-data-list-wrapper *tuiTextfieldDropdown new [items]="individualRoles" />
       </tui-textfield>
     </label>
   </div>

@@ -39,13 +39,18 @@
         {{ 'contacts.labels.phone' | transloco }}
       </span>
 
-      <tui-input-phone
-        [formControl]="phone"
-        [tuiHint]="[] | tuiFieldErrorContent"
-        tuiHintAppearance="error"
-      >
-        {{ 'contacts.placeholders.phone' | transloco }}
-      </tui-input-phone>
+      <tui-textfield>
+        <input
+          autocomplete="tel"
+          mask="+7 ### ###-##-##"
+          tuiInputPhone
+          [attr.pattern]="pattern"
+          [formControl]="phone"
+          [tuiHint]="[] | tuiFieldErrorContent"
+          tuiHintAppearance="error"
+          [placeholder]="'contacts.placeholders.phone' | transloco"
+        />
+      </tui-textfield>
     </div>
   </div>
 }
