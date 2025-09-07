@@ -4,18 +4,18 @@
   <div class="space-y-8">
     <div class="mb-12">
       <h2 class="text-3xl font-bold text-gray-800">{{ 'booking.review.title' | transloco }}</h2>
-      <p class="text-sm text-gray-600 mt-1">
+      <p class="mt-1 text-sm text-gray-600">
         {{ 'booking.review.subtitle' | transloco }}
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
       @for (section of review.sections; track $index) {
-        <div class="bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+        <div class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
           <h3
-            class="text-md font-medium text-gray-700 mb-3 pb-2 border-b border-gray-100 flex items-center"
+            class="text-md mb-3 flex items-center border-b border-gray-100 pb-2 font-medium text-gray-700"
           >
-            <span class="text-yellow-500 text-md inline-block mr-2">0{{ $index + 1 }}.</span>
+            <span class="text-md mr-2 inline-block text-yellow-500">0{{ $index + 1 }}.</span>
             {{ section.title | transloco }}
           </h3>
 
@@ -23,7 +23,7 @@
             @for (field of section.fields; track $index) {
               <div class="flex items-baseline justify-between py-1.5">
                 <span class="text-sm text-gray-500">{{ field.label | transloco }}</span>
-                <span class="text-sm font-medium text-gray-800 text-right">{{ field.value }}</span>
+                <span class="text-right text-sm font-medium text-gray-800">{{ field.value }}</span>
               </div>
             }
           </div>
@@ -32,20 +32,20 @@
     </div>
 
     @if (review.order; as order) {
-      <div class="bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+      <div class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
         <h3
-          class="text-md font-medium text-gray-700 mb-3 pb-2 border-b border-gray-100 flex items-center"
+          class="text-md mb-3 flex items-center border-b border-gray-100 pb-2 font-medium text-gray-700"
         >
-          <span class="text-yellow-500 text-md inline-block mr-2">05.</span>
+          <span class="text-md mr-2 inline-block text-yellow-500">05.</span>
           Детали груза
         </h3>
 
         @if (order.cargoType === 'DOCUMENTS' && order.documents) {
-          <div class="bg-gray-50 p-4 rounded-md mb-4">
+          <div class="mb-4 rounded-md bg-gray-50 p-4">
             <div class="flex items-center justify-between">
               <span class="font-medium">Документы</span>
               <span
-                class="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-yellow-400 text-black"
+                class="inline-flex items-center rounded-md bg-yellow-400 px-2.5 py-0.5 text-sm font-medium text-black"
               >
                 {{ order.documents.quantity }} шт
               </span>
@@ -54,13 +54,13 @@
         }
 
         @if (order.cargoType === 'PARCELS' && order.parcels) {
-          <div class="space-y-3 mb-4">
+          <div class="mb-4 space-y-3">
             @for (parcel of order.parcels; track $index) {
-              <div class="bg-gray-50 p-4 rounded-md">
-                <div class="flex justify-between items-center mb-2">
+              <div class="rounded-md bg-gray-50 p-4">
+                <div class="mb-2 flex items-center justify-between">
                   <span class="font-medium">Посылка {{ $index + 1 }}</span>
                   <span
-                    class="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-yellow-400 text-black"
+                    class="inline-flex items-center rounded-md bg-yellow-400 px-2.5 py-0.5 text-sm font-medium text-black"
                   >
                     {{ parcel.quantity }} шт
                   </span>
@@ -72,12 +72,12 @@
                   </div>
                   <div class="flex justify-between">
                     <span class="text-gray-500">Габариты:</span>
-                    <span class="font-medium"
-                      >{{ parcel.dimensions.width }}×{{ parcel.dimensions.height }} ×{{
+                    <span class="font-medium">
+                      {{ parcel.dimensions.width }}×{{ parcel.dimensions.height }} ×{{
                         parcel.dimensions.length
                       }}
-                      см</span
-                    >
+                      см
+                    </span>
                   </div>
                 </div>
               </div>
@@ -86,13 +86,14 @@
         }
 
         @if (order.cargoType === 'AUTO_PARTS' && order.autoParts) {
-          <div class="bg-gray-50 p-4 rounded-md mb-4">
+          <div class="mb-4 rounded-md bg-gray-50 p-4">
             <div class="flex items-center justify-between">
-              <span class="font-medium"
-                >Автозапчасти <span class="color-gray-400">({{ order.autoParts.name }})</span></span
-              >
+              <span class="font-medium">
+                Автозапчасти
+                <span class="color-gray-400">({{ order.autoParts.name }})</span>
+              </span>
               <span
-                class="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-yellow-400 text-black"
+                class="inline-flex items-center rounded-md bg-yellow-400 px-2.5 py-0.5 text-sm font-medium text-black"
               >
                 {{ order.autoParts.quantity }} шт
               </span>
@@ -101,11 +102,11 @@
         }
 
         @if (order.cargoType === 'OTHER' && order.otherCargo) {
-          <div class="bg-gray-50 p-4 rounded-md mb-4">
+          <div class="mb-4 rounded-md bg-gray-50 p-4">
             <div class="flex items-center justify-between">
               <span class="font-medium">Другое ({{ order.otherCargo.name }})</span>
               <span
-                class="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-yellow-400 text-black"
+                class="inline-flex items-center rounded-md bg-yellow-400 px-2.5 py-0.5 text-sm font-medium text-black"
               >
                 {{ order.otherCargo.quantity }} шт
               </span>
@@ -116,20 +117,20 @@
         @if (order.packaging && order.packaging.items.length) {
           <div class="mt-8">
             <h3
-              class="text-md font-medium text-gray-700 mb-3 pb-2 border-b border-gray-100 flex items-center"
+              class="text-md mb-3 flex items-center border-b border-gray-100 pb-2 font-medium text-gray-700"
             >
-              <span class="text-yellow-500 text-md inline-block mr-2">06.</span>
+              <span class="text-md mr-2 inline-block text-yellow-500">06.</span>
               Упаковка
             </h3>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+            <div class="flex flex-wrap gap-4">
               @for (item of order.packaging.items; track $index) {
-                <div class="bg-gray-50 p-2 rounded flex items-center">
+                <div class="flex items-center rounded bg-gray-50 p-2">
                   <div class="flex-grow">
                     <span class="text-sm font-medium">{{ item.type }} {{ item.variant }}</span>
                   </div>
                   <span
-                    class="inline-flex items-center justify-center whitespace-nowrap px-2 py-1 bg-yellow-400 text-black rounded text-xs font-medium ml-2"
+                    class="ml-2 inline-flex items-center justify-center rounded bg-yellow-400 px-2 py-1 text-xs font-medium whitespace-nowrap text-black"
                   >
                     {{ item.quantity }} шт
                   </span>
@@ -142,15 +143,15 @@
         @if (order.additionalServices) {
           <div class="mt-8">
             <h3
-              class="text-md font-medium text-gray-700 mb-3 pb-2 border-b border-gray-100 flex items-center"
+              class="text-md mb-3 flex items-center border-b border-gray-100 pb-2 font-medium text-gray-700"
             >
-              <span class="text-yellow-500 text-md inline-block mr-2">07.</span>
+              <span class="text-md mr-2 inline-block text-yellow-500">07.</span>
               Дополнительные услуги
             </h3>
 
             <div class="flex flex-wrap gap-2">
               @if (order.additionalServices.insurance) {
-                <div class="bg-gray-50 p-2 rounded flex items-center">
+                <div class="flex items-center rounded bg-gray-50 p-2">
                   <tui-icon
                     icon="@tui.check"
                     class="mr-2"
@@ -160,53 +161,53 @@
                   <span class="text-sm font-medium">
                     {{ order.additionalServices.insurance.displayName | transloco }}
                     @if (order.additionalServices.insurance.amount) {
-                      <span class="text-xs text-gray-500"
-                        >({{ order.additionalServices.insurance.amount }} ₽)</span
-                      >
+                      <span class="text-xs text-gray-500">
+                        ({{ order.additionalServices.insurance.amount }} ₽)
+                      </span>
                     }
                   </span>
                 </div>
               }
 
               @if (order.additionalServices.extendedSms) {
-                <div class="bg-gray-50 p-2 rounded flex items-center">
+                <div class="flex items-center rounded bg-gray-50 p-2">
                   <tui-icon
                     icon="@tui.check"
                     class="mr-2"
                     [style.color]="'var(--color-green-600)'"
                     [style.font-size.rem]="1.5"
                   />
-                  <span class="text-sm font-medium">{{
-                    order.additionalServices.extendedSms.displayName | transloco
-                  }}</span>
+                  <span class="text-sm font-medium">
+                    {{ order.additionalServices.extendedSms.displayName | transloco }}
+                  </span>
                 </div>
               }
 
               @if (order.additionalServices.senderSms) {
-                <div class="bg-gray-50 p-2 rounded flex items-center">
+                <div class="flex items-center rounded bg-gray-50 p-2">
                   <tui-icon
                     icon="@tui.check"
                     class="mr-2"
                     [style.color]="'var(--color-green-600)'"
                     [style.font-size.rem]="1.5"
                   />
-                  <span class="text-sm font-medium">{{
-                    order.additionalServices.senderSms.displayName | transloco
-                  }}</span>
+                  <span class="text-sm font-medium">
+                    {{ order.additionalServices.senderSms.displayName | transloco }}
+                  </span>
                 </div>
               }
 
               @if (order.additionalServices.recipientPayment) {
-                <div class="bg-gray-50 p-2 rounded flex items-center">
+                <div class="flex items-center rounded bg-gray-50 p-2">
                   <tui-icon
                     icon="@tui.check"
                     class="mr-2"
                     [style.color]="'var(--color-green-600)'"
                     [style.font-size.rem]="1.5"
                   />
-                  <span class="text-sm font-medium">{{
-                    order.additionalServices.recipientPayment.displayName | transloco
-                  }}</span>
+                  <span class="text-sm font-medium">
+                    {{ order.additionalServices.recipientPayment.displayName | transloco }}
+                  </span>
                 </div>
               }
             </div>

@@ -6,10 +6,10 @@
 @if (vm) {
   <!-- Desktop version -->
   @if (!isMobile) {
-    <div class="sticky top-10 flex flex-col rounded-xl bg-white shadow-lg p-6">
+    <div class="sticky top-10 flex flex-col rounded-xl bg-white p-6 shadow-lg">
       <h2
         [tuiSkeleton]="vm.isLoading"
-        class="text-xl font-semibold mb-6 pb-3 border-b border-gray-100"
+        class="mb-6 border-b border-gray-100 pb-3 text-xl font-semibold"
       >
         {{ 'summary.title' | transloco }}
       </h2>
@@ -24,9 +24,9 @@
       } @else {
         <!-- Direction block -->
         @if (vm.direction; as direction) {
-          <div class="mb-6 pb-4 border-b border-gray-100">
-            <div [tuiSkeleton]="vm.isLoading" class="flex items-center mb-2">
-              <span class="text-gray-500 font-medium text-sm">
+          <div class="mb-6 border-b border-gray-100 pb-4">
+            <div [tuiSkeleton]="vm.isLoading" class="mb-2 flex items-center">
+              <span class="text-sm font-medium text-gray-500">
                 {{ 'summary.labels.direction' | transloco }}
               </span>
             </div>
@@ -39,18 +39,18 @@
         }
 
         <!-- Delivery methods block -->
-        <div class="mb-6 pb-4 border-b border-gray-100">
-          <div class="flex flex-col sm:flex-row gap-3">
+        <div class="mb-6 border-b border-gray-100 pb-4">
+          <div class="flex flex-col gap-3 sm:flex-row">
             <div
-              class="w-full sm:flex-1 border border-gray-100 rounded-lg p-3 transition-shadow hover:shadow-sm"
+              class="w-full rounded-lg border border-gray-100 p-3 transition-shadow hover:shadow-sm sm:flex-1"
               [tuiSkeleton]="vm.isLoading"
             >
-              <div class="flex sm:flex-col items-center sm:justify-center">
+              <div class="flex items-center sm:flex-col sm:justify-center">
                 <div class="flex-1 sm:w-full">
-                  <div class="text-xs text-gray-500 sm:text-center mb-0.5 sm:mb-1">
+                  <div class="mb-0.5 text-xs text-gray-500 sm:mb-1 sm:text-center">
                     {{ 'summary.labels.pickup' | transloco }}
                   </div>
-                  <div class="font-medium text-gray-800 text-sm sm:text-center">
+                  <div class="text-sm font-medium text-gray-800 sm:text-center">
                     {{ vm.methods.pickup | transloco }}
                   </div>
                 </div>
@@ -58,15 +58,15 @@
             </div>
 
             <div
-              class="w-full sm:flex-1 border border-gray-100 rounded-lg p-3 transition-shadow hover:shadow-sm"
+              class="w-full rounded-lg border border-gray-100 p-3 transition-shadow hover:shadow-sm sm:flex-1"
               [tuiSkeleton]="vm.isLoading"
             >
-              <div class="flex sm:flex-col items-center sm:justify-center">
+              <div class="flex items-center sm:flex-col sm:justify-center">
                 <div class="flex-1 sm:w-full">
-                  <div class="text-xs text-gray-500 sm:text-center mb-0.5 sm:mb-1">
+                  <div class="mb-0.5 text-xs text-gray-500 sm:mb-1 sm:text-center">
                     {{ 'summary.labels.delivery' | transloco }}
                   </div>
-                  <div class="font-medium text-gray-800 text-sm sm:text-center">
+                  <div class="text-sm font-medium text-gray-800 sm:text-center">
                     {{ vm.methods.delivery | transloco }}
                   </div>
                 </div>
@@ -78,9 +78,9 @@
         <!-- Details block -->
         @if (vm.orderDetails; as details) {
           <div class="mb-4 pb-4">
-            <div class="bg-gray-50 p-4 rounded-lg">
+            <div class="rounded-lg bg-gray-50 p-4">
               <h4
-                class="text-sm font-medium text-gray-700 mb-3 pb-1 border-b border-gray-200"
+                class="mb-3 border-b border-gray-200 pb-1 text-sm font-medium text-gray-700"
                 [tuiSkeleton]="vm.isLoading"
               >
                 {{ 'deliveryDetails.cargoType' | transloco }}
@@ -91,11 +91,11 @@
                   <div class="group" [tuiSkeleton]="vm.isLoading">
                     <div class="flex items-center justify-between">
                       <div class="flex items-center">
-                        <div class="mr-2 w-1 h-5 bg-yellow-500 rounded-sm"></div>
+                        <div class="mr-2 h-5 w-1 rounded-sm bg-yellow-500"></div>
                         <span class="font-medium text-gray-800">{{ documents.name }}</span>
                       </div>
                       <div
-                        class="text-sm font-semibold text-gray-700 bg-gray-100 px-1.5 py-0.5 rounded group-hover:bg-yellow-100 group-hover:text-yellow-700 transition-colors"
+                        class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-semibold text-gray-700 transition-colors group-hover:bg-yellow-100 group-hover:text-yellow-700"
                       >
                         {{ documents.quantity }}
                       </div>
@@ -107,11 +107,11 @@
                   <div class="group" [tuiSkeleton]="vm.isLoading">
                     <div class="flex items-center justify-between">
                       <div class="flex items-center">
-                        <div class="mr-2 w-1 h-5 bg-yellow-500 rounded-sm"></div>
+                        <div class="mr-2 h-5 w-1 rounded-sm bg-yellow-500"></div>
                         <span class="font-medium text-gray-800">{{ parcels.name }}</span>
                       </div>
                       <div
-                        class="text-sm font-semibold text-gray-700 bg-gray-100 px-1.5 py-0.5 rounded group-hover:bg-yellow-100 group-hover:text-yellow-700 transition-colors"
+                        class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-semibold text-gray-700 transition-colors group-hover:bg-yellow-100 group-hover:text-yellow-700"
                       >
                         {{ parcels.quantity }}
                       </div>
@@ -123,11 +123,11 @@
                   <div class="group" [tuiSkeleton]="vm.isLoading">
                     <div class="flex items-center justify-between">
                       <div class="flex items-center">
-                        <div class="mr-2 w-1 h-5 bg-yellow-500 rounded-sm"></div>
+                        <div class="mr-2 h-5 w-1 rounded-sm bg-yellow-500"></div>
                         <span class="font-medium text-gray-800">{{ autoParts.name }}</span>
                       </div>
                       <div
-                        class="text-sm font-semibold text-gray-700 bg-gray-100 px-1.5 py-0.5 rounded group-hover:bg-yellow-100 group-hover:text-yellow-700 transition-colors"
+                        class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-semibold text-gray-700 transition-colors group-hover:bg-yellow-100 group-hover:text-yellow-700"
                       >
                         {{ autoParts.quantity }}
                       </div>
@@ -139,11 +139,11 @@
                   <div class="group" [tuiSkeleton]="vm.isLoading">
                     <div class="flex items-center justify-between">
                       <div class="flex items-center">
-                        <div class="mr-2 w-1 h-5 bg-yellow-500 rounded-sm"></div>
+                        <div class="mr-2 h-5 w-1 rounded-sm bg-yellow-500"></div>
                         <span class="font-medium text-gray-800">{{ other.name }}</span>
                       </div>
                       <div
-                        class="text-sm font-semibold text-gray-700 bg-gray-100 px-1.5 py-0.5 rounded group-hover:bg-yellow-100 group-hover:text-yellow-700 transition-colors"
+                        class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-semibold text-gray-700 transition-colors group-hover:bg-yellow-100 group-hover:text-yellow-700"
                       >
                         {{ other.quantity }}
                       </div>
@@ -156,15 +156,15 @@
             <!-- Packaging block -->
             @if (details.packaging; as packaging) {
               <div class="mt-6">
-                <div [tuiSkeleton]="vm.isLoading" class="flex items-center mb-2">
-                  <span class="ml-2 text-gray-500 font-medium text-sm">
+                <div [tuiSkeleton]="vm.isLoading" class="mb-2 flex items-center">
+                  <span class="ml-2 text-sm font-medium text-gray-500">
                     {{ 'deliveryDetails.packaging.title' | transloco }}
                   </span>
                 </div>
 
                 <div class="divide-y divide-gray-100">
                   @for (item of packaging.items; track $index) {
-                    <div class="p-2.5 flex items-center justify-between">
+                    <div class="flex items-center justify-between p-2.5">
                       <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
                         <tui-icon
                           icon="@tui.box"
@@ -172,16 +172,17 @@
                           [style.color]="'var(--tui-background-accent-1)'"
                           [style.font-size.rem]="1"
                         />
-                        <span class="text-gray-700"
-                          >{{ item.type }} {{ item.variant }}
-                          <span class="text-xs text-gray-500 ml-1">× {{ item.quantity }}</span>
+                        <span class="text-gray-700">
+                          {{ item.type }} {{ item.variant }}
+                          <span class="ml-1 text-xs text-gray-500">× {{ item.quantity }}</span>
                         </span>
                       </div>
                       <span
                         [tuiSkeleton]="vm.isLoading"
-                        class="bg-gray-50 py-1 px-2 rounded-md font-medium text-gray-800 text-sm"
-                        >{{ +item.price * +item.quantity }} {{ 'RUB' | tuiCurrency }}</span
+                        class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
                       >
+                        {{ +item.price * +item.quantity }} {{ 'RUB' | tuiCurrency }}
+                      </span>
                     </div>
                   }
                 </div>
@@ -191,15 +192,15 @@
             <!-- Additional services block -->
             @if (details.additionalServices; as services) {
               <div class="mt-6">
-                <div [tuiSkeleton]="vm.isLoading" class="flex items-center mb-2">
-                  <span class="ml-2 text-gray-500 font-medium text-sm">
+                <div [tuiSkeleton]="vm.isLoading" class="mb-2 flex items-center">
+                  <span class="ml-2 text-sm font-medium text-gray-500">
                     {{ 'deliveryDetails.additionalServices.title' | transloco }}
                   </span>
                 </div>
 
                 <div class="divide-y divide-gray-100">
                   @if (services.insurance; as insurance) {
-                    <div class="p-2.5 flex items-center justify-between">
+                    <div class="flex items-center justify-between p-2.5">
                       <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
                         <tui-icon
                           icon="@tui.check"
@@ -211,14 +212,15 @@
                       </div>
                       <span
                         [tuiSkeleton]="vm.isLoading"
-                        class="bg-gray-50 py-1 px-2 rounded-md font-medium text-gray-800 text-sm"
-                        >{{ insurance.price }} {{ 'RUB' | tuiCurrency }}</span
+                        class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
                       >
+                        {{ insurance.price }} {{ 'RUB' | tuiCurrency }}
+                      </span>
                     </div>
                   }
 
                   @if (services.extendedSms; as extendedSms) {
-                    <div class="p-2.5 flex items-center justify-between">
+                    <div class="flex items-center justify-between p-2.5">
                       <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
                         <tui-icon
                           icon="@tui.check"
@@ -230,14 +232,15 @@
                       </div>
                       <span
                         [tuiSkeleton]="vm.isLoading"
-                        class="bg-gray-50 py-1 px-2 rounded-md font-medium text-gray-800 text-sm"
-                        >{{ extendedSms.price }} {{ 'RUB' | tuiCurrency }}</span
+                        class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
                       >
+                        {{ extendedSms.price }} {{ 'RUB' | tuiCurrency }}
+                      </span>
                     </div>
                   }
 
                   @if (services.senderSms; as senderSms) {
-                    <div class="p-2.5 flex items-center justify-between">
+                    <div class="flex items-center justify-between p-2.5">
                       <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
                         <tui-icon
                           icon="@tui.check"
@@ -249,14 +252,15 @@
                       </div>
                       <span
                         [tuiSkeleton]="vm.isLoading"
-                        class="bg-gray-50 py-1 px-2 rounded-md font-medium text-gray-800 text-sm"
-                        >{{ senderSms.price }} {{ 'RUB' | tuiCurrency }}</span
+                        class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
                       >
+                        {{ senderSms.price }} {{ 'RUB' | tuiCurrency }}
+                      </span>
                     </div>
                   }
 
                   @if (services.recipientPayment; as recipientPayment) {
-                    <div class="p-2.5 flex items-center justify-between">
+                    <div class="flex items-center justify-between p-2.5">
                       <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
                         <tui-icon
                           icon="@tui.check"
@@ -264,15 +268,16 @@
                           [style.color]="'var(--color-green-600)'"
                           [style.font-size.rem]="1"
                         />
-                        <span class="text-gray-700">{{
-                          recipientPayment.displayName | transloco
-                        }}</span>
+                        <span class="text-gray-700">
+                          {{ recipientPayment.displayName | transloco }}
+                        </span>
                       </div>
                       <span
                         [tuiSkeleton]="vm.isLoading"
-                        class="bg-gray-50 py-1 px-2 rounded-md font-medium text-gray-800 text-sm"
-                        >{{ recipientPayment.price }} {{ 'RUB' | tuiCurrency }}</span
+                        class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
                       >
+                        {{ recipientPayment.price }} {{ 'RUB' | tuiCurrency }}
+                      </span>
                     </div>
                   }
                 </div>
@@ -283,20 +288,20 @@
 
         <!-- Total amount block -->
         <div
-          class="flex justify-between items-center p-4 bg-gray-50 rounded-md mb-6 border border-gray-100"
+          class="mb-6 flex items-center justify-between rounded-md border border-gray-100 bg-gray-50 p-4"
         >
           <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
-            <span class="text-xl text-gray-700 font-medium">
+            <span class="text-xl font-medium text-gray-700">
               {{ 'summary.labels.total' | transloco }}
             </span>
           </div>
           <div
             [tuiSkeleton]="vm.isLoading"
-            class="flex items-center bg-white py-2 px-3 rounded-md shadow-sm"
+            class="flex items-center rounded-md bg-white px-3 py-2 shadow-sm"
           >
-            <span class="text-2xl font-bold text-gray-700"
-              >{{ vm.totalAmount }} {{ 'RUB' | tuiCurrency }}</span
-            >
+            <span class="text-2xl font-bold text-gray-700">
+              {{ vm.totalAmount }} {{ 'RUB' | tuiCurrency }}
+            </span>
           </div>
         </div>
 
@@ -307,7 +312,7 @@
             type="button"
             tuiButton
             size="l"
-            class="w-full mb-3"
+            class="mb-3 w-full"
             [routerLink]="['/delivery', 'booking']"
           >
             {{ 'summary.actions.book' | transloco }}
@@ -316,7 +321,7 @@
           <button
             [tuiSkeleton]="vm.isLoading"
             type="button"
-            class="text-red-500 hover:text-red-600 hover:underline text-center w-full"
+            class="w-full text-center text-red-500 hover:text-red-600 hover:underline"
             (click)="onReset($event)"
           >
             {{ 'summary.actions.reset' | transloco }}
@@ -329,10 +334,10 @@
   @if (isMobile && vm.isLoaded) {
     <!-- Bottom fixed panel with actions -->
     <div
-      class="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t p-3 z-50 summary-trigger"
+      class="summary-trigger fixed right-0 bottom-0 left-0 z-50 border-t bg-white p-3 shadow-lg"
       [@fadeInOut]
     >
-      <div class="flex justify-between items-center">
+      <div class="flex items-center justify-between">
         <div>
           <div [tuiSkeleton]="vm.isLoading" class="text-sm text-gray-500">
             {{ 'summary.labels.total' | transloco }}
@@ -374,30 +379,30 @@
     @if (isSummaryVisible) {
       <!-- eslint-disable-next-line -->
       <div
-        class="fixed inset-0 bg-black bg-opacity-50 z-40"
+        class="bg-opacity-50 fixed inset-0 z-40 bg-black"
         [@fadeInOut]
         (click)="closeSummary()"
       ></div>
 
       <div
-        class="fixed bottom-0 left-0 right-0 bg-white shadow-lg rounded-t-xl p-4 z-50 max-h-[85vh] overflow-y-auto summary-drawer"
+        class="summary-drawer fixed right-0 bottom-0 left-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-xl bg-white p-4 shadow-lg"
         [@slideInOut]
         (touchstart)="swipeDown($event)"
       >
         <!-- Swipe marker -->
-        <div class="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4"></div>
+        <div class="mx-auto mb-4 h-1 w-12 rounded-full bg-gray-300"></div>
 
-        <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-gray-100">
+        <h2 class="mb-4 border-b border-gray-100 pb-2 text-lg font-semibold">
           {{ 'summary.title' | transloco }}
         </h2>
 
         <!-- Direction block -->
         @if (vm.direction; as direction) {
-          <div class="mb-4 pb-3 border-b border-gray-100">
+          <div class="mb-4 border-b border-gray-100 pb-3">
             <div class="mb-1">
-              <span class="text-gray-500 text-sm"
-                >{{ 'summary.labels.direction' | transloco }}:</span
-              >
+              <span class="text-sm text-gray-500">
+                {{ 'summary.labels.direction' | transloco }}:
+              </span>
             </div>
             <div class="font-medium text-gray-800">
               {{ direction.from }}
@@ -408,18 +413,18 @@
         }
 
         <!-- Delivery methods block -->
-        <div class="mb-6 pb-4 border-b border-gray-100">
-          <div class="flex flex-col sm:flex-row gap-3">
+        <div class="mb-6 border-b border-gray-100 pb-4">
+          <div class="flex flex-col gap-3 sm:flex-row">
             <div
-              class="w-full sm:flex-1 border border-gray-100 rounded-lg p-3 transition-shadow hover:shadow-sm"
+              class="w-full rounded-lg border border-gray-100 p-3 transition-shadow hover:shadow-sm sm:flex-1"
               [tuiSkeleton]="vm.isLoading"
             >
-              <div class="flex sm:flex-col items-center sm:justify-center">
+              <div class="flex items-center sm:flex-col sm:justify-center">
                 <div class="flex-1 sm:w-full">
-                  <div class="text-xs text-gray-500 sm:text-center mb-0.5 sm:mb-1">
+                  <div class="mb-0.5 text-xs text-gray-500 sm:mb-1 sm:text-center">
                     {{ 'summary.labels.pickup' | transloco }}
                   </div>
-                  <div class="font-medium text-gray-800 text-sm sm:text-center">
+                  <div class="text-sm font-medium text-gray-800 sm:text-center">
                     {{ vm.methods.pickup }}
                   </div>
                 </div>
@@ -427,15 +432,15 @@
             </div>
 
             <div
-              class="w-full sm:flex-1 border border-gray-100 rounded-lg p-3 transition-shadow hover:shadow-sm"
+              class="w-full rounded-lg border border-gray-100 p-3 transition-shadow hover:shadow-sm sm:flex-1"
               [tuiSkeleton]="vm.isLoading"
             >
-              <div class="flex sm:flex-col items-center sm:justify-center">
+              <div class="flex items-center sm:flex-col sm:justify-center">
                 <div class="flex-1 sm:w-full">
-                  <div class="text-xs text-gray-500 sm:text-center mb-0.5 sm:mb-1">
+                  <div class="mb-0.5 text-xs text-gray-500 sm:mb-1 sm:text-center">
                     {{ 'summary.labels.delivery' | transloco }}
                   </div>
-                  <div class="font-medium text-gray-800 text-sm sm:text-center">
+                  <div class="text-sm font-medium text-gray-800 sm:text-center">
                     {{ vm.methods.delivery }}
                   </div>
                 </div>
@@ -447,9 +452,9 @@
         <!-- Details block -->
         @if (vm.orderDetails; as details) {
           <div class="mb-4 pb-4">
-            <div class="bg-gray-50 p-4 rounded-lg">
+            <div class="rounded-lg bg-gray-50 p-4">
               <h4
-                class="text-sm font-medium text-gray-700 mb-3 pb-1 border-b border-gray-200"
+                class="mb-3 border-b border-gray-200 pb-1 text-sm font-medium text-gray-700"
                 [tuiSkeleton]="vm.isLoading"
               >
                 {{ 'deliveryDetails.cargoType' | transloco }}
@@ -460,11 +465,11 @@
                   <div class="group" [tuiSkeleton]="vm.isLoading">
                     <div class="flex items-center justify-between">
                       <div class="flex items-center">
-                        <div class="mr-2 w-1 h-5 bg-yellow-500 rounded-sm"></div>
+                        <div class="mr-2 h-5 w-1 rounded-sm bg-yellow-500"></div>
                         <span class="font-medium text-gray-800">{{ documents.name }}</span>
                       </div>
                       <div
-                        class="text-sm font-semibold text-gray-700 bg-gray-100 px-1.5 py-0.5 rounded group-hover:bg-yellow-100 group-hover:text-yellow-700 transition-colors"
+                        class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-semibold text-gray-700 transition-colors group-hover:bg-yellow-100 group-hover:text-yellow-700"
                       >
                         {{ documents.quantity }}
                       </div>
@@ -476,11 +481,11 @@
                   <div class="group" [tuiSkeleton]="vm.isLoading">
                     <div class="flex items-center justify-between">
                       <div class="flex items-center">
-                        <div class="mr-2 w-1 h-5 bg-yellow-500 rounded-sm"></div>
+                        <div class="mr-2 h-5 w-1 rounded-sm bg-yellow-500"></div>
                         <span class="font-medium text-gray-800">{{ parcels.name }}</span>
                       </div>
                       <div
-                        class="text-sm font-semibold text-gray-700 bg-gray-100 px-1.5 py-0.5 rounded group-hover:bg-yellow-100 group-hover:text-yellow-700 transition-colors"
+                        class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-semibold text-gray-700 transition-colors group-hover:bg-yellow-100 group-hover:text-yellow-700"
                       >
                         {{ parcels.quantity }}
                       </div>
@@ -492,11 +497,11 @@
                   <div class="group" [tuiSkeleton]="vm.isLoading">
                     <div class="flex items-center justify-between">
                       <div class="flex items-center">
-                        <div class="mr-2 w-1 h-5 bg-yellow-500 rounded-sm"></div>
+                        <div class="mr-2 h-5 w-1 rounded-sm bg-yellow-500"></div>
                         <span class="font-medium text-gray-800">{{ autoParts.name }}</span>
                       </div>
                       <div
-                        class="text-sm font-semibold text-gray-700 bg-gray-100 px-1.5 py-0.5 rounded group-hover:bg-yellow-100 group-hover:text-yellow-700 transition-colors"
+                        class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-semibold text-gray-700 transition-colors group-hover:bg-yellow-100 group-hover:text-yellow-700"
                       >
                         {{ autoParts.quantity }}
                       </div>
@@ -508,11 +513,11 @@
                   <div class="group" [tuiSkeleton]="vm.isLoading">
                     <div class="flex items-center justify-between">
                       <div class="flex items-center">
-                        <div class="mr-2 w-1 h-5 bg-yellow-500 rounded-sm"></div>
+                        <div class="mr-2 h-5 w-1 rounded-sm bg-yellow-500"></div>
                         <span class="font-medium text-gray-800">{{ other.name }}</span>
                       </div>
                       <div
-                        class="text-sm font-semibold text-gray-700 bg-gray-100 px-1.5 py-0.5 rounded group-hover:bg-yellow-100 group-hover:text-yellow-700 transition-colors"
+                        class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-semibold text-gray-700 transition-colors group-hover:bg-yellow-100 group-hover:text-yellow-700"
                       >
                         {{ other.quantity }}
                       </div>
@@ -525,31 +530,32 @@
             <!-- Packaging block -->
             @if (details.packaging; as packaging) {
               <div class="mt-6">
-                <div [tuiSkeleton]="vm.isLoading" class="flex items-center mb-2">
+                <div [tuiSkeleton]="vm.isLoading" class="mb-2 flex items-center">
                   <tui-icon
                     icon="@tui.package-open"
                     [style.color]="'var(--tui-background-accent-1)'"
                     [style.font-size.rem]="1.25"
                   />
-                  <span class="ml-2 text-gray-500 font-medium text-sm">
+                  <span class="ml-2 text-sm font-medium text-gray-500">
                     {{ 'deliveryDetails.packaging.title' | transloco }}
                   </span>
                 </div>
 
                 <div class="divide-y divide-gray-100">
                   @for (item of packaging.items; track $index) {
-                    <div class="p-2.5 flex items-center justify-between">
+                    <div class="flex items-center justify-between p-2.5">
                       <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
-                        <span class="text-gray-700"
-                          >{{ item.type }} {{ item.variant }}
-                          <span class="text-xs text-gray-500 ml-1">× {{ item.quantity }}</span>
+                        <span class="text-gray-700">
+                          {{ item.type }} {{ item.variant }}
+                          <span class="ml-1 text-xs text-gray-500">× {{ item.quantity }}</span>
                         </span>
                       </div>
                       <span
                         [tuiSkeleton]="vm.isLoading"
-                        class="bg-gray-50 py-1 px-2 rounded-md font-medium text-gray-800 text-sm"
-                        >{{ +item.price * +item.quantity }} {{ 'RUB' | tuiCurrency }}</span
+                        class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
                       >
+                        {{ +item.price * +item.quantity }} {{ 'RUB' | tuiCurrency }}
+                      </span>
                     </div>
                   }
                 </div>
@@ -559,15 +565,15 @@
             <!-- Additional services block -->
             @if (details.additionalServices; as services) {
               <div class="mt-6">
-                <div [tuiSkeleton]="vm.isLoading" class="flex items-center mb-2">
-                  <span class="ml-2 text-gray-500 font-medium text-sm">
+                <div [tuiSkeleton]="vm.isLoading" class="mb-2 flex items-center">
+                  <span class="ml-2 text-sm font-medium text-gray-500">
                     {{ 'deliveryDetails.additionalServices.title' | transloco }}
                   </span>
                 </div>
 
                 <div class="divide-y divide-gray-100">
                   @if (services.insurance; as insurance) {
-                    <div class="p-2.5 flex items-center justify-between">
+                    <div class="flex items-center justify-between p-2.5">
                       <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
                         <tui-icon
                           icon="@tui.check"
@@ -579,14 +585,15 @@
                       </div>
                       <span
                         [tuiSkeleton]="vm.isLoading"
-                        class="bg-gray-50 py-1 px-2 rounded-md font-medium text-gray-800 text-sm"
-                        >{{ insurance.price }} {{ 'RUB' | tuiCurrency }}</span
+                        class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
                       >
+                        {{ insurance.price }} {{ 'RUB' | tuiCurrency }}
+                      </span>
                     </div>
                   }
 
                   @if (services.extendedSms; as extendedSms) {
-                    <div class="p-2.5 flex items-center justify-between">
+                    <div class="flex items-center justify-between p-2.5">
                       <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
                         <tui-icon
                           icon="@tui.check"
@@ -598,14 +605,15 @@
                       </div>
                       <span
                         [tuiSkeleton]="vm.isLoading"
-                        class="bg-gray-50 py-1 px-2 rounded-md font-medium text-gray-800 text-sm"
-                        >{{ extendedSms.price }} {{ 'RUB' | tuiCurrency }}</span
+                        class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
                       >
+                        {{ extendedSms.price }} {{ 'RUB' | tuiCurrency }}
+                      </span>
                     </div>
                   }
 
                   @if (services.senderSms; as senderSms) {
-                    <div class="p-2.5 flex items-center justify-between">
+                    <div class="flex items-center justify-between p-2.5">
                       <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
                         <tui-icon
                           icon="@tui.check"
@@ -617,14 +625,15 @@
                       </div>
                       <span
                         [tuiSkeleton]="vm.isLoading"
-                        class="bg-gray-50 py-1 px-2 rounded-md font-medium text-gray-800 text-sm"
-                        >{{ senderSms.price }} {{ 'RUB' | tuiCurrency }}</span
+                        class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
                       >
+                        {{ senderSms.price }} {{ 'RUB' | tuiCurrency }}
+                      </span>
                     </div>
                   }
 
                   @if (services.recipientPayment; as recipientPayment) {
-                    <div class="p-2.5 flex items-center justify-between">
+                    <div class="flex items-center justify-between p-2.5">
                       <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
                         <tui-icon
                           icon="@tui.check"
@@ -636,9 +645,10 @@
                       </div>
                       <span
                         [tuiSkeleton]="vm.isLoading"
-                        class="bg-gray-50 py-1 px-2 rounded-md font-medium text-gray-800 text-sm"
-                        >{{ recipientPayment.price }} {{ 'RUB' | tuiCurrency }}</span
+                        class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
                       >
+                        {{ recipientPayment.price }} {{ 'RUB' | tuiCurrency }}
+                      </span>
                     </div>
                   }
                 </div>
@@ -649,20 +659,20 @@
 
         <!-- Total sum block -->
         <div
-          class="flex justify-between items-center p-4 bg-gray-50 rounded-md mb-6 border border-gray-100"
+          class="mb-6 flex items-center justify-between rounded-md border border-gray-100 bg-gray-50 p-4"
         >
           <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
-            <span class="text-xl text-gray-700 font-medium">
+            <span class="text-xl font-medium text-gray-700">
               {{ 'summary.labels.total' | transloco }}
             </span>
           </div>
           <div
             [tuiSkeleton]="vm.isLoading"
-            class="flex items-center bg-white py-2 px-3 rounded-md shadow-sm"
+            class="flex items-center rounded-md bg-white px-3 py-2 shadow-sm"
           >
-            <span class="text-2xl font-bold text-gray-700"
-              >{{ vm.totalAmount }} {{ 'RUB' | tuiCurrency }}</span
-            >
+            <span class="text-2xl font-bold text-gray-700">
+              {{ vm.totalAmount }} {{ 'RUB' | tuiCurrency }}
+            </span>
           </div>
         </div>
 
@@ -672,7 +682,7 @@
             type="button"
             tuiButton
             size="l"
-            class="w-full mb-2"
+            class="mb-2 w-full"
             [routerLink]="['/delivery', 'booking']"
           >
             {{ 'summary.actions.book' | transloco }}
@@ -680,7 +690,7 @@
 
           <button
             type="button"
-            class="text-red-500 hover:text-red-600 hover:underline text-center w-full"
+            class="w-full text-center text-red-500 hover:text-red-600 hover:underline"
             (click)="onReset($event)"
           >
             {{ 'summary.actions.reset' | transloco }}

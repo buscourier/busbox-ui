@@ -61,7 +61,7 @@ import type { DeliverySummaryViewModel } from './types';
     ]),
   ],
   host: {
-    class: 'block',
+    class: 'block relative z-10',
   },
 })
 export class DeliverySummaryComponent implements OnInit, OnDestroy {
@@ -176,6 +176,6 @@ export class DeliverySummaryComponent implements OnInit, OnDestroy {
   }
 
   private checkIsMobile(): boolean {
-    return window.innerWidth < 768;
+    return window.innerWidth < 1024;
   }
 }
