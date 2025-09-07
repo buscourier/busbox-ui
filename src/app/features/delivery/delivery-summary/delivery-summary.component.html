@@ -1,7 +1,6 @@
 @let vm = vm$ | async;
 @let isCalculatorLayout = isCalculatorLayout$ | async;
 @let isMobile = isMobile$ | async;
-@let isSummaryVisible = isSummaryVisible$ | async;
 
 @if (vm) {
   <!-- Desktop version -->
@@ -22,321 +21,24 @@
           {{ 'summary.info.attention' | transloco }}
         </p>
       } @else {
-        <!-- Direction block -->
-        @if (vm.direction; as direction) {
-          <div class="mb-6 border-b border-gray-100 pb-4">
-            <div [tuiSkeleton]="vm.isLoading" class="mb-2 flex items-center">
-              <span class="text-sm font-medium text-gray-500">
-                {{ 'summary.labels.direction' | transloco }}
-              </span>
-            </div>
-            <div class="font-medium text-gray-800" [tuiSkeleton]="vm.isLoading">
-              {{ direction.from }}
-              <span class="mx-2 text-gray-400">→</span>
-              {{ direction.to }}
-            </div>
-          </div>
-        }
+        <ng-container *ngTemplateOutlet="summaryDetails; context: { vm: vm }"></ng-container>
 
-        <!-- Delivery methods block -->
-        <div class="mb-6 border-b border-gray-100 pb-4">
-          <div class="flex flex-col gap-3 sm:flex-row">
-            <div
-              class="w-full rounded-lg border border-gray-100 p-3 transition-shadow hover:shadow-sm sm:flex-1"
-              [tuiSkeleton]="vm.isLoading"
-            >
-              <div class="flex items-center sm:flex-col sm:justify-center">
-                <div class="flex-1 sm:w-full">
-                  <div class="mb-0.5 text-xs text-gray-500 sm:mb-1 sm:text-center">
-                    {{ 'summary.labels.pickup' | transloco }}
-                  </div>
-                  <div class="text-sm font-medium text-gray-800 sm:text-center">
-                    {{ vm.methods.pickup | transloco }}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div
-              class="w-full rounded-lg border border-gray-100 p-3 transition-shadow hover:shadow-sm sm:flex-1"
-              [tuiSkeleton]="vm.isLoading"
-            >
-              <div class="flex items-center sm:flex-col sm:justify-center">
-                <div class="flex-1 sm:w-full">
-                  <div class="mb-0.5 text-xs text-gray-500 sm:mb-1 sm:text-center">
-                    {{ 'summary.labels.delivery' | transloco }}
-                  </div>
-                  <div class="text-sm font-medium text-gray-800 sm:text-center">
-                    {{ vm.methods.delivery | transloco }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Details block -->
-        @if (vm.orderDetails; as details) {
-          <div class="mb-4 pb-4">
-            <div class="rounded-lg bg-gray-50 p-4">
-              <h4
-                class="mb-3 border-b border-gray-200 pb-1 text-sm font-medium text-gray-700"
-                [tuiSkeleton]="vm.isLoading"
-              >
-                {{ 'deliveryDetails.cargoType' | transloco }}
-              </h4>
-
-              <div class="grid grid-cols-1 gap-2">
-                @if (details.documents; as documents) {
-                  <div class="group" [tuiSkeleton]="vm.isLoading">
-                    <div class="flex items-center justify-between">
-                      <div class="flex items-center">
-                        <div class="mr-2 h-5 w-1 rounded-sm bg-yellow-500"></div>
-                        <span class="font-medium text-gray-800">{{ documents.name }}</span>
-                      </div>
-                      <div
-                        class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-semibold text-gray-700 transition-colors group-hover:bg-yellow-100 group-hover:text-yellow-700"
-                      >
-                        {{ documents.quantity }}
-                      </div>
-                    </div>
-                  </div>
-                }
-
-                @if (details.parcels; as parcels) {
-                  <div class="group" [tuiSkeleton]="vm.isLoading">
-                    <div class="flex items-center justify-between">
-                      <div class="flex items-center">
-                        <div class="mr-2 h-5 w-1 rounded-sm bg-yellow-500"></div>
-                        <span class="font-medium text-gray-800">{{ parcels.name }}</span>
-                      </div>
-                      <div
-                        class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-semibold text-gray-700 transition-colors group-hover:bg-yellow-100 group-hover:text-yellow-700"
-                      >
-                        {{ parcels.quantity }}
-                      </div>
-                    </div>
-                  </div>
-                }
-
-                @if (details.autoParts; as autoParts) {
-                  <div class="group" [tuiSkeleton]="vm.isLoading">
-                    <div class="flex items-center justify-between">
-                      <div class="flex items-center">
-                        <div class="mr-2 h-5 w-1 rounded-sm bg-yellow-500"></div>
-                        <span class="font-medium text-gray-800">{{ autoParts.name }}</span>
-                      </div>
-                      <div
-                        class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-semibold text-gray-700 transition-colors group-hover:bg-yellow-100 group-hover:text-yellow-700"
-                      >
-                        {{ autoParts.quantity }}
-                      </div>
-                    </div>
-                  </div>
-                }
-
-                @if (details.otherCargo; as other) {
-                  <div class="group" [tuiSkeleton]="vm.isLoading">
-                    <div class="flex items-center justify-between">
-                      <div class="flex items-center">
-                        <div class="mr-2 h-5 w-1 rounded-sm bg-yellow-500"></div>
-                        <span class="font-medium text-gray-800">{{ other.name }}</span>
-                      </div>
-                      <div
-                        class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-semibold text-gray-700 transition-colors group-hover:bg-yellow-100 group-hover:text-yellow-700"
-                      >
-                        {{ other.quantity }}
-                      </div>
-                    </div>
-                  </div>
-                }
-              </div>
-            </div>
-
-            <!-- Packaging block -->
-            @if (details.packaging; as packaging) {
-              <div class="mt-6">
-                <div [tuiSkeleton]="vm.isLoading" class="mb-2 flex items-center">
-                  <span class="ml-2 text-sm font-medium text-gray-500">
-                    {{ 'deliveryDetails.packaging.title' | transloco }}
-                  </span>
-                </div>
-
-                <div class="divide-y divide-gray-100">
-                  @for (item of packaging.items; track $index) {
-                    <div class="flex items-center justify-between p-2.5">
-                      <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
-                        <tui-icon
-                          icon="@tui.box"
-                          class="mr-2"
-                          [style.color]="'var(--tui-background-accent-1)'"
-                          [style.font-size.rem]="1"
-                        />
-                        <span class="text-gray-700">
-                          {{ item.type }} {{ item.variant }}
-                          <span class="ml-1 text-xs text-gray-500">× {{ item.quantity }}</span>
-                        </span>
-                      </div>
-                      <span
-                        [tuiSkeleton]="vm.isLoading"
-                        class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
-                      >
-                        {{ +item.price * +item.quantity }} {{ 'RUB' | tuiCurrency }}
-                      </span>
-                    </div>
-                  }
-                </div>
-              </div>
+        <ng-container
+          *ngTemplateOutlet="
+            summaryActions;
+            context: {
+              isCalculatorLayout: isCalculatorLayout,
+              isLoading: vm.isLoading,
             }
-
-            <!-- Additional services block -->
-            @if (details.additionalServices; as services) {
-              <div class="mt-6">
-                <div [tuiSkeleton]="vm.isLoading" class="mb-2 flex items-center">
-                  <span class="ml-2 text-sm font-medium text-gray-500">
-                    {{ 'deliveryDetails.additionalServices.title' | transloco }}
-                  </span>
-                </div>
-
-                <div class="divide-y divide-gray-100">
-                  @if (services.insurance; as insurance) {
-                    <div class="flex items-center justify-between p-2.5">
-                      <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
-                        <tui-icon
-                          icon="@tui.check"
-                          class="mr-2"
-                          [style.color]="'var(--color-green-600)'"
-                          [style.font-size.rem]="1"
-                        />
-                        <span class="text-gray-700">{{ insurance.displayName | transloco }}</span>
-                      </div>
-                      <span
-                        [tuiSkeleton]="vm.isLoading"
-                        class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
-                      >
-                        {{ insurance.price }} {{ 'RUB' | tuiCurrency }}
-                      </span>
-                    </div>
-                  }
-
-                  @if (services.extendedSms; as extendedSms) {
-                    <div class="flex items-center justify-between p-2.5">
-                      <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
-                        <tui-icon
-                          icon="@tui.check"
-                          class="mr-2"
-                          [style.color]="'var(--color-green-600)'"
-                          [style.font-size.rem]="1"
-                        />
-                        <span class="text-gray-700">{{ extendedSms.displayName | transloco }}</span>
-                      </div>
-                      <span
-                        [tuiSkeleton]="vm.isLoading"
-                        class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
-                      >
-                        {{ extendedSms.price }} {{ 'RUB' | tuiCurrency }}
-                      </span>
-                    </div>
-                  }
-
-                  @if (services.senderSms; as senderSms) {
-                    <div class="flex items-center justify-between p-2.5">
-                      <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
-                        <tui-icon
-                          icon="@tui.check"
-                          class="mr-2"
-                          [style.color]="'var(--color-green-600)'"
-                          [style.font-size.rem]="1"
-                        />
-                        <span class="text-gray-700">{{ senderSms.displayName | transloco }}</span>
-                      </div>
-                      <span
-                        [tuiSkeleton]="vm.isLoading"
-                        class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
-                      >
-                        {{ senderSms.price }} {{ 'RUB' | tuiCurrency }}
-                      </span>
-                    </div>
-                  }
-
-                  @if (services.recipientPayment; as recipientPayment) {
-                    <div class="flex items-center justify-between p-2.5">
-                      <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
-                        <tui-icon
-                          icon="@tui.check"
-                          class="mr-2"
-                          [style.color]="'var(--color-green-600)'"
-                          [style.font-size.rem]="1"
-                        />
-                        <span class="text-gray-700">
-                          {{ recipientPayment.displayName | transloco }}
-                        </span>
-                      </div>
-                      <span
-                        [tuiSkeleton]="vm.isLoading"
-                        class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
-                      >
-                        {{ recipientPayment.price }} {{ 'RUB' | tuiCurrency }}
-                      </span>
-                    </div>
-                  }
-                </div>
-              </div>
-            }
-          </div>
-        }
-
-        <!-- Total amount block -->
-        <div
-          class="mb-6 flex items-center justify-between rounded-md border border-gray-100 bg-gray-50 p-4"
-        >
-          <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
-            <span class="text-xl font-medium text-gray-700">
-              {{ 'summary.labels.total' | transloco }}
-            </span>
-          </div>
-          <div
-            [tuiSkeleton]="vm.isLoading"
-            class="flex items-center rounded-md bg-white px-3 py-2 shadow-sm"
-          >
-            <span class="text-2xl font-bold text-gray-700">
-              {{ vm.totalAmount }} {{ 'RUB' | tuiCurrency }}
-            </span>
-          </div>
-        </div>
-
-        <!-- Actions -->
-        @if (isCalculatorLayout) {
-          <button
-            [tuiSkeleton]="vm.isLoading"
-            type="button"
-            tuiButton
-            size="l"
-            class="mb-3 w-full"
-            [routerLink]="['/delivery', 'booking']"
-          >
-            {{ 'summary.actions.book' | transloco }}
-          </button>
-
-          <button
-            [tuiSkeleton]="vm.isLoading"
-            type="button"
-            class="w-full text-center text-red-500 hover:text-red-600 hover:underline"
-            (click)="onReset($event)"
-          >
-            {{ 'summary.actions.reset' | transloco }}
-          </button>
-        }
+          "
+        ></ng-container>
       }
     </div>
   }
 
   @if (isMobile && vm.isLoaded) {
     <!-- Bottom fixed panel with actions -->
-    <div
-      class="summary-trigger fixed right-0 bottom-0 left-0 z-50 border-t bg-white p-3 shadow-lg"
-      [@fadeInOut]
-    >
+    <div class="fixed right-0 bottom-0 left-0 z-50 border-t bg-gray-100 p-3 shadow-lg" [@fadeInOut]>
       <div class="flex items-center justify-between">
         <div>
           <div [tuiSkeleton]="vm.isLoading" class="text-sm text-gray-500">
@@ -362,341 +64,343 @@
             tuiButton
             appearance="outline"
             size="m"
-            class="whitespace-nowrap"
+            class="bg-yellow-500/40! whitespace-nowrap"
             [tuiSkeleton]="vm.isLoading"
-            (click)="toggleSummary($event)"
+            (click)="summaryOpen = true"
           >
-            {{
-              (isSummaryVisible ? 'summary.actions.hideDetails' : 'summary.actions.showDetails')
-                | transloco
-            }}
+            Детали расчета
           </button>
         </div>
       </div>
     </div>
 
     <!-- Slide panel with details -->
-    @if (isSummaryVisible) {
-      <!-- eslint-disable-next-line -->
-      <div
-        class="bg-opacity-50 fixed inset-0 z-40 bg-black"
-        [@fadeInOut]
-        (click)="closeSummary()"
-      ></div>
 
-      <div
-        class="summary-drawer fixed right-0 bottom-0 left-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-xl bg-white p-4 shadow-lg"
-        [@slideInOut]
-        (touchstart)="swipeDown($event)"
-      >
-        <!-- Swipe marker -->
-        <div class="mx-auto mb-4 h-1 w-12 rounded-full bg-gray-300"></div>
+    <ng-template
+      let-observer
+      [tuiSheetDialogOptions]="summaryOptions"
+      [(tuiSheetDialog)]="summaryOpen"
+    >
+      <ng-container *ngTemplateOutlet="summaryDetails; context: { vm: vm }"></ng-container>
 
-        <h2 class="mb-4 border-b border-gray-100 pb-2 text-lg font-semibold">
-          {{ 'summary.title' | transloco }}
-        </h2>
+      <ng-container
+        *ngTemplateOutlet="
+          summaryActions;
+          context: {
+            isCalculatorLayout: isCalculatorLayout,
+            isLoading: vm.isLoading,
+          }
+        "
+      ></ng-container>
+    </ng-template>
+  }
 
-        <!-- Direction block -->
-        @if (vm.direction; as direction) {
-          <div class="mb-4 border-b border-gray-100 pb-3">
-            <div class="mb-1">
-              <span class="text-sm text-gray-500">
-                {{ 'summary.labels.direction' | transloco }}:
+  <ng-template #summaryDetails let-vm="vm">
+    <!-- Direction block -->
+    @if (vm.direction; as direction) {
+      <div class="mb-4 border-b border-gray-100 pb-3">
+        <div class="mb-1">
+          <span class="text-sm text-gray-500">{{ 'summary.labels.direction' | transloco }}:</span>
+        </div>
+        <div class="font-medium text-gray-800">
+          {{ direction.from }}
+          <span class="mx-2 text-gray-400">→</span>
+          {{ direction.to }}
+        </div>
+      </div>
+    }
+
+    <!-- Delivery methods block -->
+    <div class="mb-6 border-b border-gray-100 pb-4">
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <div
+          class="w-full rounded-lg border border-gray-100 p-3 transition-shadow hover:shadow-sm sm:flex-1"
+          [tuiSkeleton]="vm.isLoading"
+        >
+          <div class="flex items-center sm:flex-col sm:justify-center">
+            <div class="flex-1 sm:w-full">
+              <div class="mb-0.5 text-xs text-gray-500 sm:mb-1 sm:text-center">
+                {{ 'summary.labels.pickup' | transloco }}
+              </div>
+              <div class="text-sm font-medium text-gray-800 sm:text-center">
+                {{ vm.methods.pickup }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="w-full rounded-lg border border-gray-100 p-3 transition-shadow hover:shadow-sm sm:flex-1"
+          [tuiSkeleton]="vm.isLoading"
+        >
+          <div class="flex items-center sm:flex-col sm:justify-center">
+            <div class="flex-1 sm:w-full">
+              <div class="mb-0.5 text-xs text-gray-500 sm:mb-1 sm:text-center">
+                {{ 'summary.labels.delivery' | transloco }}
+              </div>
+              <div class="text-sm font-medium text-gray-800 sm:text-center">
+                {{ vm.methods.delivery }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Details block -->
+    @if (vm.orderDetails; as details) {
+      <div class="mb-4 pb-4">
+        <div class="rounded-lg bg-gray-50 p-4">
+          <h4
+            class="mb-3 border-b border-gray-200 pb-1 text-sm font-medium text-gray-700"
+            [tuiSkeleton]="vm.isLoading"
+          >
+            {{ 'deliveryDetails.cargoType' | transloco }}
+          </h4>
+
+          <div class="grid grid-cols-1 gap-2">
+            @if (details.documents; as documents) {
+              <div class="group" [tuiSkeleton]="vm.isLoading">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center">
+                    <div class="mr-2 h-5 w-1 rounded-sm bg-yellow-500"></div>
+                    <span class="font-medium text-gray-800">{{ documents.name }}</span>
+                  </div>
+                  <div
+                    class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-semibold text-gray-700 transition-colors group-hover:bg-yellow-100 group-hover:text-yellow-700"
+                  >
+                    {{ documents.quantity }}
+                  </div>
+                </div>
+              </div>
+            }
+
+            @if (details.parcels; as parcels) {
+              <div class="group" [tuiSkeleton]="vm.isLoading">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center">
+                    <div class="mr-2 h-5 w-1 rounded-sm bg-yellow-500"></div>
+                    <span class="font-medium text-gray-800">{{ parcels.name }}</span>
+                  </div>
+                  <div
+                    class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-semibold text-gray-700 transition-colors group-hover:bg-yellow-100 group-hover:text-yellow-700"
+                  >
+                    {{ parcels.quantity }}
+                  </div>
+                </div>
+              </div>
+            }
+
+            @if (details.autoParts; as autoParts) {
+              <div class="group" [tuiSkeleton]="vm.isLoading">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center">
+                    <div class="mr-2 h-5 w-1 rounded-sm bg-yellow-500"></div>
+                    <span class="font-medium text-gray-800">{{ autoParts.name }}</span>
+                  </div>
+                  <div
+                    class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-semibold text-gray-700 transition-colors group-hover:bg-yellow-100 group-hover:text-yellow-700"
+                  >
+                    {{ autoParts.quantity }}
+                  </div>
+                </div>
+              </div>
+            }
+
+            @if (details.otherCargo; as other) {
+              <div class="group" [tuiSkeleton]="vm.isLoading">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center">
+                    <div class="mr-2 h-5 w-1 rounded-sm bg-yellow-500"></div>
+                    <span class="font-medium text-gray-800">{{ other.name }}</span>
+                  </div>
+                  <div
+                    class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-semibold text-gray-700 transition-colors group-hover:bg-yellow-100 group-hover:text-yellow-700"
+                  >
+                    {{ other.quantity }}
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Packaging block -->
+        @if (details.packaging; as packaging) {
+          <div class="mt-6">
+            <div [tuiSkeleton]="vm.isLoading" class="mb-2 flex items-center">
+              <tui-icon
+                icon="@tui.package-open"
+                [style.color]="'var(--tui-background-accent-1)'"
+                [style.font-size.rem]="1.25"
+              />
+              <span class="ml-2 text-sm font-medium text-gray-500">
+                {{ 'deliveryDetails.packaging.title' | transloco }}
               </span>
             </div>
-            <div class="font-medium text-gray-800">
-              {{ direction.from }}
-              <span class="mx-2 text-gray-400">→</span>
-              {{ direction.to }}
+
+            <div class="divide-y divide-gray-100">
+              @for (item of packaging.items; track $index) {
+                <div class="flex items-center justify-between p-2.5">
+                  <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
+                    <span class="text-gray-700">
+                      {{ item.type }} {{ item.variant }}
+                      <span class="ml-1 text-xs text-gray-500">× {{ item.quantity }}</span>
+                    </span>
+                  </div>
+                  <span
+                    [tuiSkeleton]="vm.isLoading"
+                    class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
+                  >
+                    {{ +item.price * +item.quantity }} {{ 'RUB' | tuiCurrency }}
+                  </span>
+                </div>
+              }
             </div>
           </div>
         }
 
-        <!-- Delivery methods block -->
-        <div class="mb-6 border-b border-gray-100 pb-4">
-          <div class="flex flex-col gap-3 sm:flex-row">
-            <div
-              class="w-full rounded-lg border border-gray-100 p-3 transition-shadow hover:shadow-sm sm:flex-1"
-              [tuiSkeleton]="vm.isLoading"
-            >
-              <div class="flex items-center sm:flex-col sm:justify-center">
-                <div class="flex-1 sm:w-full">
-                  <div class="mb-0.5 text-xs text-gray-500 sm:mb-1 sm:text-center">
-                    {{ 'summary.labels.pickup' | transloco }}
-                  </div>
-                  <div class="text-sm font-medium text-gray-800 sm:text-center">
-                    {{ vm.methods.pickup }}
-                  </div>
-                </div>
-              </div>
+        <!-- Additional services block -->
+        @if (details.additionalServices; as services) {
+          <div class="mt-6">
+            <div [tuiSkeleton]="vm.isLoading" class="mb-2 flex items-center">
+              <span class="ml-2 text-sm font-medium text-gray-500">
+                {{ 'deliveryDetails.additionalServices.title' | transloco }}
+              </span>
             </div>
 
-            <div
-              class="w-full rounded-lg border border-gray-100 p-3 transition-shadow hover:shadow-sm sm:flex-1"
-              [tuiSkeleton]="vm.isLoading"
-            >
-              <div class="flex items-center sm:flex-col sm:justify-center">
-                <div class="flex-1 sm:w-full">
-                  <div class="mb-0.5 text-xs text-gray-500 sm:mb-1 sm:text-center">
-                    {{ 'summary.labels.delivery' | transloco }}
+            <div class="divide-y divide-gray-100">
+              @if (services.insurance; as insurance) {
+                <div class="flex items-center justify-between p-2.5">
+                  <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
+                    <tui-icon
+                      icon="@tui.check"
+                      class="mr-2"
+                      [style.color]="'var(--color-green-600)'"
+                      [style.font-size.rem]="1"
+                    />
+                    <span class="text-gray-700">{{ insurance.displayName }}</span>
                   </div>
-                  <div class="text-sm font-medium text-gray-800 sm:text-center">
-                    {{ vm.methods.delivery }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Details block -->
-        @if (vm.orderDetails; as details) {
-          <div class="mb-4 pb-4">
-            <div class="rounded-lg bg-gray-50 p-4">
-              <h4
-                class="mb-3 border-b border-gray-200 pb-1 text-sm font-medium text-gray-700"
-                [tuiSkeleton]="vm.isLoading"
-              >
-                {{ 'deliveryDetails.cargoType' | transloco }}
-              </h4>
-
-              <div class="grid grid-cols-1 gap-2">
-                @if (details.documents; as documents) {
-                  <div class="group" [tuiSkeleton]="vm.isLoading">
-                    <div class="flex items-center justify-between">
-                      <div class="flex items-center">
-                        <div class="mr-2 h-5 w-1 rounded-sm bg-yellow-500"></div>
-                        <span class="font-medium text-gray-800">{{ documents.name }}</span>
-                      </div>
-                      <div
-                        class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-semibold text-gray-700 transition-colors group-hover:bg-yellow-100 group-hover:text-yellow-700"
-                      >
-                        {{ documents.quantity }}
-                      </div>
-                    </div>
-                  </div>
-                }
-
-                @if (details.parcels; as parcels) {
-                  <div class="group" [tuiSkeleton]="vm.isLoading">
-                    <div class="flex items-center justify-between">
-                      <div class="flex items-center">
-                        <div class="mr-2 h-5 w-1 rounded-sm bg-yellow-500"></div>
-                        <span class="font-medium text-gray-800">{{ parcels.name }}</span>
-                      </div>
-                      <div
-                        class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-semibold text-gray-700 transition-colors group-hover:bg-yellow-100 group-hover:text-yellow-700"
-                      >
-                        {{ parcels.quantity }}
-                      </div>
-                    </div>
-                  </div>
-                }
-
-                @if (details.autoParts; as autoParts) {
-                  <div class="group" [tuiSkeleton]="vm.isLoading">
-                    <div class="flex items-center justify-between">
-                      <div class="flex items-center">
-                        <div class="mr-2 h-5 w-1 rounded-sm bg-yellow-500"></div>
-                        <span class="font-medium text-gray-800">{{ autoParts.name }}</span>
-                      </div>
-                      <div
-                        class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-semibold text-gray-700 transition-colors group-hover:bg-yellow-100 group-hover:text-yellow-700"
-                      >
-                        {{ autoParts.quantity }}
-                      </div>
-                    </div>
-                  </div>
-                }
-
-                @if (details.otherCargo; as other) {
-                  <div class="group" [tuiSkeleton]="vm.isLoading">
-                    <div class="flex items-center justify-between">
-                      <div class="flex items-center">
-                        <div class="mr-2 h-5 w-1 rounded-sm bg-yellow-500"></div>
-                        <span class="font-medium text-gray-800">{{ other.name }}</span>
-                      </div>
-                      <div
-                        class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-semibold text-gray-700 transition-colors group-hover:bg-yellow-100 group-hover:text-yellow-700"
-                      >
-                        {{ other.quantity }}
-                      </div>
-                    </div>
-                  </div>
-                }
-              </div>
-            </div>
-
-            <!-- Packaging block -->
-            @if (details.packaging; as packaging) {
-              <div class="mt-6">
-                <div [tuiSkeleton]="vm.isLoading" class="mb-2 flex items-center">
-                  <tui-icon
-                    icon="@tui.package-open"
-                    [style.color]="'var(--tui-background-accent-1)'"
-                    [style.font-size.rem]="1.25"
-                  />
-                  <span class="ml-2 text-sm font-medium text-gray-500">
-                    {{ 'deliveryDetails.packaging.title' | transloco }}
+                  <span
+                    [tuiSkeleton]="vm.isLoading"
+                    class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
+                  >
+                    {{ insurance.price }} {{ 'RUB' | tuiCurrency }}
                   </span>
                 </div>
+              }
 
-                <div class="divide-y divide-gray-100">
-                  @for (item of packaging.items; track $index) {
-                    <div class="flex items-center justify-between p-2.5">
-                      <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
-                        <span class="text-gray-700">
-                          {{ item.type }} {{ item.variant }}
-                          <span class="ml-1 text-xs text-gray-500">× {{ item.quantity }}</span>
-                        </span>
-                      </div>
-                      <span
-                        [tuiSkeleton]="vm.isLoading"
-                        class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
-                      >
-                        {{ +item.price * +item.quantity }} {{ 'RUB' | tuiCurrency }}
-                      </span>
-                    </div>
-                  }
-                </div>
-              </div>
-            }
-
-            <!-- Additional services block -->
-            @if (details.additionalServices; as services) {
-              <div class="mt-6">
-                <div [tuiSkeleton]="vm.isLoading" class="mb-2 flex items-center">
-                  <span class="ml-2 text-sm font-medium text-gray-500">
-                    {{ 'deliveryDetails.additionalServices.title' | transloco }}
+              @if (services.extendedSms; as extendedSms) {
+                <div class="flex items-center justify-between p-2.5">
+                  <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
+                    <tui-icon
+                      icon="@tui.check"
+                      class="mr-2"
+                      [style.color]="'var(--color-green-600)'"
+                      [style.font-size.rem]="1"
+                    />
+                    <span class="text-gray-700">{{ extendedSms.displayName }}</span>
+                  </div>
+                  <span
+                    [tuiSkeleton]="vm.isLoading"
+                    class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
+                  >
+                    {{ extendedSms.price }} {{ 'RUB' | tuiCurrency }}
                   </span>
                 </div>
+              }
 
-                <div class="divide-y divide-gray-100">
-                  @if (services.insurance; as insurance) {
-                    <div class="flex items-center justify-between p-2.5">
-                      <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
-                        <tui-icon
-                          icon="@tui.check"
-                          class="mr-2"
-                          [style.color]="'var(--color-green-600)'"
-                          [style.font-size.rem]="1"
-                        />
-                        <span class="text-gray-700">{{ insurance.displayName }}</span>
-                      </div>
-                      <span
-                        [tuiSkeleton]="vm.isLoading"
-                        class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
-                      >
-                        {{ insurance.price }} {{ 'RUB' | tuiCurrency }}
-                      </span>
-                    </div>
-                  }
-
-                  @if (services.extendedSms; as extendedSms) {
-                    <div class="flex items-center justify-between p-2.5">
-                      <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
-                        <tui-icon
-                          icon="@tui.check"
-                          class="mr-2"
-                          [style.color]="'var(--color-green-600)'"
-                          [style.font-size.rem]="1"
-                        />
-                        <span class="text-gray-700">{{ extendedSms.displayName }}</span>
-                      </div>
-                      <span
-                        [tuiSkeleton]="vm.isLoading"
-                        class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
-                      >
-                        {{ extendedSms.price }} {{ 'RUB' | tuiCurrency }}
-                      </span>
-                    </div>
-                  }
-
-                  @if (services.senderSms; as senderSms) {
-                    <div class="flex items-center justify-between p-2.5">
-                      <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
-                        <tui-icon
-                          icon="@tui.check"
-                          class="mr-2"
-                          [style.color]="'var(--color-green-600)'"
-                          [style.font-size.rem]="1"
-                        />
-                        <span class="text-gray-700">{{ senderSms.displayName }}</span>
-                      </div>
-                      <span
-                        [tuiSkeleton]="vm.isLoading"
-                        class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
-                      >
-                        {{ senderSms.price }} {{ 'RUB' | tuiCurrency }}
-                      </span>
-                    </div>
-                  }
-
-                  @if (services.recipientPayment; as recipientPayment) {
-                    <div class="flex items-center justify-between p-2.5">
-                      <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
-                        <tui-icon
-                          icon="@tui.check"
-                          class="mr-2"
-                          [style.color]="'var(--color-green-600)'"
-                          [style.font-size.rem]="1"
-                        />
-                        <span class="text-gray-700">{{ recipientPayment.displayName }}</span>
-                      </div>
-                      <span
-                        [tuiSkeleton]="vm.isLoading"
-                        class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
-                      >
-                        {{ recipientPayment.price }} {{ 'RUB' | tuiCurrency }}
-                      </span>
-                    </div>
-                  }
+              @if (services.senderSms; as senderSms) {
+                <div class="flex items-center justify-between p-2.5">
+                  <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
+                    <tui-icon
+                      icon="@tui.check"
+                      class="mr-2"
+                      [style.color]="'var(--color-green-600)'"
+                      [style.font-size.rem]="1"
+                    />
+                    <span class="text-gray-700">{{ senderSms.displayName }}</span>
+                  </div>
+                  <span
+                    [tuiSkeleton]="vm.isLoading"
+                    class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
+                  >
+                    {{ senderSms.price }} {{ 'RUB' | tuiCurrency }}
+                  </span>
                 </div>
-              </div>
-            }
-          </div>
-        }
+              }
 
-        <!-- Total sum block -->
-        <div
-          class="mb-6 flex items-center justify-between rounded-md border border-gray-100 bg-gray-50 p-4"
-        >
-          <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
-            <span class="text-xl font-medium text-gray-700">
-              {{ 'summary.labels.total' | transloco }}
-            </span>
+              @if (services.recipientPayment; as recipientPayment) {
+                <div class="flex items-center justify-between p-2.5">
+                  <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
+                    <tui-icon
+                      icon="@tui.check"
+                      class="mr-2"
+                      [style.color]="'var(--color-green-600)'"
+                      [style.font-size.rem]="1"
+                    />
+                    <span class="text-gray-700">{{ recipientPayment.displayName }}</span>
+                  </div>
+                  <span
+                    [tuiSkeleton]="vm.isLoading"
+                    class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
+                  >
+                    {{ recipientPayment.price }} {{ 'RUB' | tuiCurrency }}
+                  </span>
+                </div>
+              }
+            </div>
           </div>
-          <div
-            [tuiSkeleton]="vm.isLoading"
-            class="flex items-center rounded-md bg-white px-3 py-2 shadow-sm"
-          >
-            <span class="text-2xl font-bold text-gray-700">
-              {{ vm.totalAmount }} {{ 'RUB' | tuiCurrency }}
-            </span>
-          </div>
-        </div>
-
-        <!-- Actions -->
-        @if (isCalculatorLayout) {
-          <button
-            type="button"
-            tuiButton
-            size="l"
-            class="mb-2 w-full"
-            [routerLink]="['/delivery', 'booking']"
-          >
-            {{ 'summary.actions.book' | transloco }}
-          </button>
-
-          <button
-            type="button"
-            class="w-full text-center text-red-500 hover:text-red-600 hover:underline"
-            (click)="onReset($event)"
-          >
-            {{ 'summary.actions.reset' | transloco }}
-          </button>
         }
       </div>
     }
-  }
+
+    <!-- Total sum block -->
+    <div
+      class="mb-6 flex items-center justify-between rounded-md border border-gray-100 bg-gray-50 p-4"
+    >
+      <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
+        <span class="text-xl font-medium text-gray-700">
+          {{ 'summary.labels.total' | transloco }}
+        </span>
+      </div>
+      <div
+        [tuiSkeleton]="vm.isLoading"
+        class="flex items-center rounded-md bg-white px-3 py-2 shadow-sm"
+      >
+        <span class="text-2xl font-bold text-gray-700">
+          {{ vm.totalAmount }} {{ 'RUB' | tuiCurrency }}
+        </span>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Actions template -->
+  <ng-template
+    #summaryActions
+    let-isCalculatorLayout="isCalculatorLayout"
+    let-isLoading="isLoading"
+  >
+    @if (isCalculatorLayout) {
+      <button
+        [tuiSkeleton]="isLoading"
+        type="button"
+        tuiButton
+        size="l"
+        class="mb-3 w-full"
+        [routerLink]="['/delivery', 'booking']"
+      >
+        {{ 'summary.actions.book' | transloco }}
+      </button>
+
+      <button
+        [tuiSkeleton]="isLoading"
+        type="button"
+        class="w-full text-center text-red-500 hover:text-red-600 hover:underline"
+        (click)="onReset($event)"
+      >
+        {{ 'summary.actions.reset' | transloco }}
+      </button>
+    }
+  </ng-template>
 }
