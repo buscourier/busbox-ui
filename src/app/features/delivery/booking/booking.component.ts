@@ -69,6 +69,14 @@ export class BookingComponent implements OnInit {
     ],
   };
 
+  get isSuccessPage(): boolean {
+    return this.router.url.includes('success');
+  }
+
+  get isFailurePage(): boolean {
+    return this.router.url.includes('failure');
+  }
+
   ngOnInit(): void {
     this.vm$ = this.bookingFacade.getViewModel();
     this.isMainLayout$ = this.layoutService.getIsMainLayout();

@@ -1,73 +1,92 @@
 @let bookingResult = bookingResult$ | async;
 
-<div class="flex justify-center items-center min-h-screen bg-gray-50 px-4 py-8">
+<div class="flex justify-center px-4">
   <div
-    class="max-w-3xl w-full flex flex-col items-center bg-white rounded-xl shadow-lg p-6 md:p-10"
+    class="bg-card flex w-full max-w-2xl flex-col items-center rounded-xl bg-gray-50 p-6 shadow-lg md:p-10"
   >
-    <tui-icon
-      icon="@tui.check"
-      [style.color]="'var(--color-green-600)'"
-      [style.font-size.rem]="5"
-    />
-
-    <h1 class="text-3xl font-bold text-gray-900 mb-8 text-center">Заказ успешно оформлен!</h1>
-
-    <div class="mb-8 text-center">
-      <p class="text-gray-600 mb-2">Номер вашего заказа:</p>
-      <div class="flex justify-center items-center space-x-2">
-        <span class="text-2xl md:text-3xl font-bold text-yellow-500 font-mono tracking-wider">{{
-          bookingResult?.orderId
-        }}</span>
+    <div class="mb-6 animate-pulse rounded-full bg-green-500/10 p-6 backdrop-blur-sm">
+      <div class="rounded-full bg-green-500 p-4">
+        <svg class="h-12 w-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="3"
+            d="M5 13l4 4L19 7"
+          ></path>
+        </svg>
       </div>
     </div>
 
-    <div class="mx-auto max-w-[400px] mb-8">
-      <tui-notification size="l" appearance="warning">
-        Вы можете убедиться что ваш заказ создан статус вашего заказа по номеру заказа
-        <a href="">На этой странице</a>
-      </tui-notification>
+    <h1 class="font-roboto mb-8 text-center text-3xl font-bold">Заказ успешно оформлен!</h1>
+
+    <div
+      class="mb-8 w-full max-w-md rounded-2xl bg-gradient-to-r from-yellow-500 to-yellow-500/70 p-6 text-center"
+    >
+      <p class="mb-2 text-sm font-bold tracking-wide text-black uppercase">Номер заказа</p>
+      <div class="font-mono text-3xl font-bold tracking-wider text-white md:text-4xl">
+        #
+        <tui-copy>{{ bookingResult?.orderId }}</tui-copy>
+      </div>
     </div>
 
-    <div class="text-left mb-8">
-      <h2 class="text-xl font-semibold text-gray-900 mb-4">Что дальше?</h2>
+    <div class="mb-8 w-full max-w-md text-left">
       <ul class="space-y-4">
-        <li class="flex items-start">
+        <li class="flex items-start gap-3">
           <tui-icon
-            icon="@tui.check"
-            class="mr-2"
-            [style.color]="'var(--color-green-600)'"
-            [style.font-size.rem]="1.5"
+            icon="@tui.circle-check-big"
+            [style.font-size.rem]="1.25"
+            class="text-green-500"
           />
-          <span class="text-gray-700"
-            >Курьер свяжется с вами для подтверждения деталей доставки</span
-          >
+
+          <span class="text-gray-600">
+            Менеджер свяжется с вами для подтверждения деталей доставки
+          </span>
         </li>
-        <li class="flex items-start">
+        <li class="flex items-start gap-3">
           <tui-icon
-            icon="@tui.check"
-            class="mr-2"
-            [style.color]="'var(--color-green-600)'"
-            [style.font-size.rem]="1.5"
+            icon="@tui.circle-check-big"
+            [style.font-size.rem]="1.25"
+            class="text-green-500"
           />
-          <span class="text-gray-700">Доставка будет осуществлена согласно выбранным условиям</span>
+
+          <span class="text-gray-600">Доставка будет осуществлена согласно выбранным условиям</span>
         </li>
       </ul>
     </div>
 
-    <div class="flex flex-col sm:flex-row justify-center gap-4 mb-8">
-      <button type="button" tuiButton size="m" [routerLink]="['/']">На главную</button>
-      <button type="button" tuiButton size="m" [routerLink]="['/']">Отследить заказ</button>
+    <div class="mb-8 flex flex-col justify-center gap-4 sm:flex-row">
+      <button
+        type="button"
+        tuiButton
+        [routerLink]="['/tracking']"
+        [queryParams]="{ orderNumber: bookingResult?.orderId }"
+        appearance="primary"
+        iconStart="@tui.package"
+      >
+        Отследить заказ
+      </button>
+      <button type="button" tuiButton [routerLink]="['/']" appearance="outline">На главную</button>
     </div>
 
-    <!-- Контактная информация -->
-    <div class="text-gray-500 text-sm text-center">
-      <p>Возникли вопросы? Свяжитесь с нами:</p>
-      <p class="mt-1">
-        <a href="tel:+78001234567" class="text-blue-600 hover:underline">8 (800) 123-45-67</a> •
-        <a href="mailto:support@example.com" class="text-yellow-500 hover:underline"
-          >support&#64;example.com</a
+    <div class="w-full border-t border-gray-200 pt-4 text-center text-sm text-gray-600">
+      <p class="mb-2">Возникли вопросы? Свяжитесь с нами:</p>
+      <div class="flex flex-col items-center justify-center gap-2 sm:flex-row sm:gap-4">
+        <a
+          [href]="contact.phone | contactLink: 'tel'"
+          class="text-accent flex items-center gap-1 hover:underline"
         >
-      </p>
+          <tui-icon icon="@tui.phone" [style.font-size.rem]="1" />
+          {{ contact.phone }}
+        </a>
+        <span class="hidden sm:inline">•</span>
+        <a
+          [href]="contact.email | contactLink: 'email'"
+          class="flex items-center gap-1 text-yellow-500 hover:underline"
+        >
+          <tui-icon icon="@tui.mail" [style.font-size.rem]="1" />
+          {{ contact.email }}
+        </a>
+      </div>
     </div>
   </div>
 </div>

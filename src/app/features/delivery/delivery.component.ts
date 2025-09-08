@@ -1,8 +1,10 @@
 import { AsyncPipe } from '@angular/common';
-import type { OnInit } from '@angular/core';
+import { type OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import type { Observable } from 'rxjs';
+
+import { cn } from '@core/utils';
 
 import { PageLayoutComponent } from '@shared/layouts/page-layout';
 
@@ -25,6 +27,21 @@ export class DeliveryComponent implements OnInit {
 
   get isBookingPage(): boolean {
     return this.router.url.includes('booking');
+  }
+
+  get isSuccessPage(): boolean {
+    return this.router.url.includes('success');
+  }
+
+  get isFailurePage(): boolean {
+    return this.router.url.includes('failure');
+  }
+
+  getPageClasses(): string {
+    return cn({
+      'bg-green-500/10': this.isSuccessPage,
+      'bg-red-500/10': this.isFailurePage,
+    });
   }
 
   ngOnInit(): void {

@@ -4,8 +4,6 @@ import { map } from 'rxjs/operators';
 
 import type { DeliveryCity, PickupCity } from '@shared/types';
 
-import { environment } from '@env/environment';
-
 import type { Order, Parcels } from '@delivery/delivery-details/types';
 import { CargoType, CargoTypeId } from '@delivery/delivery-details/types';
 import { DeliveryBaseService } from '@delivery/services';
@@ -44,13 +42,11 @@ export class BookingService extends DeliveryBaseService {
   submitOrder(booking: Booking): Observable<BookingResult> {
     const requestData = this.mapToRequestData(booking);
 
-    return this.http
-      .post<OrderResponse>(`${this.baseUrl}/order/`, JSON.stringify(requestData))
-      .pipe(
-        map((response) => ({
-          orderId: response.order_id,
-        })),
-      );
+    return this.http.post<OrderResponse>(`${this.baseUrl}/orde/`, JSON.stringify(requestData)).pipe(
+      map((response) => ({
+        orderId: response.order_id,
+      })),
+    );
   }
 
   private mapToRequestData(data: Booking) {
@@ -70,7 +66,7 @@ export class BookingService extends DeliveryBaseService {
     const { recipient } = destination!;
 
     return {
-      'api-key': environment.apiKey,
+      // 'api-key': environment.apiKey,
       start_city: pickupCity!.id,
       end_city: deliveryCity!.id,
       sending_date: departureDate,
