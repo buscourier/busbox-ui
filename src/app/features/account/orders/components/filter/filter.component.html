@@ -2,38 +2,47 @@
   <form
     [formGroup]="form"
     (ngSubmit)="onSubmit()"
-    class="items-bottom mb-8 grid grid-cols-1 items-end gap-4 print:hidden sm:grid-cols-2 md:mb-9 lg:mb-20 lg:grid-cols-4 lg:pt-4 lg:pr-7 lg:pb-9 lg:pl-10 lg:shadow-xl"
+    class="items-bottom mb-8 grid grid-cols-1 items-end gap-4 sm:grid-cols-2 md:mb-9 lg:mb-20 lg:grid-cols-4 lg:pt-4 lg:pr-7 lg:pb-9 lg:pl-10 lg:shadow-xl print:hidden"
   >
     <label tuiLabel>
-      <span class="block text-sm text-gray-700 mb-1">Период</span>
-      <tui-input-date-range
-        formControlName="range"
-        tuiUnfinishedValidator="Finish filling the field"
-      >
-        Выберите период
-        <input placeholder="From - To" tuiTextfieldLegacy />
-      </tui-input-date-range>
+      <span class="mb-1 block text-sm text-gray-700">Период</span>
+      <tui-textfield tuiDropdownMobile="Выберите период">
+        <input formControlName="range" tuiInputDateRange placeholder="дд.мм.гггг - дд.мм.гггг" />
+        <tui-calendar-range *tuiTextfieldDropdown />
+      </tui-textfield>
     </label>
 
     <label tuiLabel>
-      <span class="block text-sm text-gray-700 mb-1"> Город отправления</span>
-      <tui-textfield tuiChevron [stringify]="'name' | tuiStringify" [tuiTextfieldCleaner]="false">
-        <select tuiTextfield [formControl]="pickupCity" [placeholder]="'Выберите город'"></select>
+      <span class="mb-1 block text-sm text-gray-700">Город отправления</span>
+      <tui-textfield tuiChevron [stringify]="stringify" tuiDropdownMobile="Город отправления">
+        <input
+          tuiComboBox
+          [formControl]="pickupCity"
+          tuiHintAppearance="error"
+          [placeholder]="'Выберите город'"
+        />
+
         <tui-data-list-wrapper
           *tuiTextfieldDropdown
-          [items]="pickupCities$ | async"
-          [itemContent]="'name' | tuiStringify | tuiStringifyContent"
+          new
+          [items]="pickupCities$ | async | tuiFilterByInput"
         />
       </tui-textfield>
     </label>
     <label tuiLabel>
-      <span class="block text-sm text-gray-700 mb-1"> Город получения </span>
-      <tui-textfield tuiChevron [stringify]="'name' | tuiStringify" [tuiTextfieldCleaner]="false">
-        <select tuiTextfield [formControl]="deliveryCity" [placeholder]="'Выберите город'"></select>
+      <span class="mb-1 block text-sm text-gray-700">Город получения</span>
+      <tui-textfield tuiChevron [stringify]="stringify" tuiDropdownMobile="Город получения">
+        <input
+          tuiComboBox
+          [formControl]="deliveryCity"
+          tuiHintAppearance="error"
+          [placeholder]="'Выберите город'"
+        />
+
         <tui-data-list-wrapper
           *tuiTextfieldDropdown
-          [items]="deliveryCities$ | async"
-          [itemContent]="'name' | tuiStringify | tuiStringifyContent"
+          new
+          [items]="deliveryCities$ | async | tuiFilterByInput"
         />
       </tui-textfield>
     </label>
@@ -44,7 +53,7 @@
         appearance="primary"
         [disabled]="filter.isListLoading"
         [loading]="filter.isListLoading"
-        class="mt-2 sm:mt-0 grow"
+        class="mt-2 grow sm:mt-0"
       >
         Показать
       </button>
