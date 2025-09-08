@@ -12,7 +12,8 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { TuiAlertService, TuiError, TuiIcon } from '@taiga-ui/core';
+import { TuiResponsiveDialogService } from '@taiga-ui/addon-mobile';
+import { TuiError, TuiIcon } from '@taiga-ui/core';
 import { TUI_VALIDATION_ERRORS, TuiFieldErrorPipe } from '@taiga-ui/kit';
 import { debounceTime } from 'rxjs';
 
@@ -57,7 +58,7 @@ export class ParcelsComponent implements OnChanges, OnInit {
   @Output() dataChange = new EventEmitter<Parcels>();
   @Output() validationChange = new EventEmitter<boolean>();
 
-  private readonly alerts = inject(TuiAlertService);
+  private readonly dialog = inject(TuiResponsiveDialogService);
 
   /** Protected properties */
   protected canAddParcelItem = true;
@@ -167,16 +168,14 @@ export class ParcelsComponent implements OnChanges, OnInit {
   }
 
   protected showNotification(limits: ParcelItemLimits): void {
-    this.alerts
+    this.dialog
       .open(
         `
-          Cумма (Д + Ш + В) ≤ <strong>${limits.DIMENSIONS.MAX} ${this.transloco.translate('units.width')}</strong>
-          <br />${this.transloco.translate('deliveryDetails.parcel.labels.weight')}:
+          Максимальная сумма <b>длины</b>, <b>ширины</b> и <b>высоты</b> - <strong>${limits.DIMENSIONS.MAX} ${this.transloco.translate('units.width')}</strong>
+          <br />Максимальный вес -
           <strong>${limits.WEIGHT.MAX} ${this.transloco.translate('units.weight')}</strong>`,
         {
           label: this.transloco.translate('deliveryDetails.parcel.messages.limits'),
-          autoClose: 5000,
-          appearance: 'warning',
         },
       )
       .pipe(takeUntilDestroyed(this.destroyRef))
