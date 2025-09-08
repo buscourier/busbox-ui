@@ -12,14 +12,15 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import type { FormGroup } from '@angular/forms';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideTranslocoScope, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TUI_IS_IOS } from '@taiga-ui/cdk';
 import { TuiHintDirective, TuiTextfield, TuiTextfieldComponent } from '@taiga-ui/core';
 import {
   TUI_VALIDATION_ERRORS,
   TuiCheckbox,
   TuiFieldErrorContentPipe,
   TuiInputNumberDirective,
+  TuiInputPhone,
 } from '@taiga-ui/kit';
-import { TuiInputPhoneModule } from '@taiga-ui/legacy';
 import { startWith } from 'rxjs';
 
 import { FIELD_VALIDATORS_FACTORY } from '@shared/forms';
@@ -62,11 +63,11 @@ import type {
     TuiFieldErrorContentPipe,
     TuiHintDirective,
     TuiCheckbox,
-    TuiInputPhoneModule,
     TuiInputNumberDirective,
     TuiTextfieldComponent,
     TuiTextfield,
     TranslocoPipe,
+    TuiInputPhone,
   ],
   templateUrl: './additional-services.component.html',
   styleUrl: './additional-services.component.css',
@@ -88,6 +89,12 @@ export class AdditionalServicesComponent implements OnChanges, OnInit {
   @Input() data: AdditionalServices | null = null;
   @Output() validationChange = new EventEmitter<boolean>();
   @Output() dataChange = new EventEmitter<AdditionalServices>();
+
+  protected readonly isIos = inject(TUI_IS_IOS);
+
+  protected get pattern(): string | null {
+    return this.isIos ? '+[0-9-]{1,20}' : null;
+  }
 
   protected readonly INSURANCE_MIN_AMOUNT = INSURANCE_MIN_AMOUNT;
   protected readonly INSURANCE_MAX_AMOUNT = INSURANCE_MAX_AMOUNT;

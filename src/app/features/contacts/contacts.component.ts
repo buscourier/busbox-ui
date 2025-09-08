@@ -23,6 +23,7 @@ import { CONTACT_INFO } from '@core/tokens';
 import { cn } from '@core/utils';
 
 import { MapComponent } from '@shared/components/map';
+import { PageLayoutComponent } from '@shared/layouts/page-layout';
 import { LocationsFacade } from '@shared/store';
 import type { Office } from '@shared/types';
 
@@ -77,6 +78,7 @@ interface PageState {
     TuiSelectDirective,
     TuiTextfieldComponent,
     TuiTextfield,
+    PageLayoutComponent,
   ],
   templateUrl: './contacts.component.html',
   styleUrl: './contacts.component.css',

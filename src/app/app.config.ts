@@ -1,6 +1,7 @@
-import { provideImageKitLoader } from '@angular/common';
+import { provideImageKitLoader, registerLocaleData } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
-import { type ApplicationConfig, inject, signal } from '@angular/core';
+import localeRu from '@angular/common/locales/ru';
+import { type ApplicationConfig, inject, LOCALE_ID, signal } from '@angular/core';
 import { isDevMode, provideZoneChangeDetection } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withInMemoryScrolling, withViewTransitions } from '@angular/router';
@@ -16,16 +17,18 @@ import {
   tuiTextfieldOptionsProvider,
 } from '@taiga-ui/core';
 import { NG_EVENT_PLUGINS } from '@taiga-ui/event-plugins';
+import { TUI_LANGUAGE, TUI_RUSSIAN_LANGUAGE } from '@taiga-ui/i18n';
 import {
-  TUI_DATE_RANGE_VALUE_TRANSFORMER,
-  TUI_DATE_VALUE_TRANSFORMER,
   tuiCheckboxOptionsProvider,
+  tuiInputDateOptionsProviderNew,
+  tuiInputDateRangeOptionsProvider,
   tuiInputNumberOptionsProvider,
   tuiRadioOptionsProvider,
 } from '@taiga-ui/kit';
 import { TUI_TEXTFIELD_LABEL_OUTSIDE, TUI_TEXTFIELD_SIZE } from '@taiga-ui/legacy';
 import type { YConfig } from 'angular-yandex-maps-v3';
 import { provideYConfig } from 'angular-yandex-maps-v3';
+import { of } from 'rxjs';
 
 import { DEFAULT_VALIDATION_LIMITS } from '@core/config';
 import { PreloadIconsService } from '@core/services';
@@ -50,7 +53,7 @@ import {
   VALIDATION_LIMITS,
   WHATSAPP,
 } from '@core/tokens';
-import { CustomDateTransformer, CustomDateRangeTransformer } from '@core/transformers';
+import { CustomDateRangeTransformer, CustomDateTransformer } from '@core/transformers';
 
 import { DocumentsEffects, documentsFeature } from '@shared/features/documents';
 import { LocationsEffects, locationsFeature } from '@shared/store';
@@ -72,6 +75,8 @@ import { PickupPointEffects, pickupPointFeature } from '@delivery/pickup-point';
 
 import { routes } from './app.routes';
 import { TranslocoHttpLoader } from './transloco-loader';
+
+registerLocaleData(localeRu, 'ru');
 
 const mapConfig: YConfig = {
   apikey: environment.mapApiKey,
@@ -167,14 +172,6 @@ export const appConfig: ApplicationConfig = {
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     NG_EVENT_PLUGINS,
     {
-      provide: TUI_DATE_VALUE_TRANSFORMER,
-      useClass: CustomDateTransformer,
-    },
-    {
-      provide: TUI_DATE_RANGE_VALUE_TRANSFORMER,
-      useClass: CustomDateRangeTransformer,
-    },
-    {
       provide: VALIDATION_LIMITS,
       useValue: DEFAULT_VALIDATION_LIMITS,
     },
@@ -265,17 +262,6 @@ export const appConfig: ApplicationConfig = {
       },
       loader: TranslocoHttpLoader,
     }),
-    // {
-    //   provide: TUI_ICON_RESOLVER,
-    //   useFactory: (): TuiStringHandler<string> => {
-    //     return (name: string) => {
-    //       if (name.startsWith('@tui.')) {
-    //         return `assets/taiga-ui/icons/${name.replace('@tui.', '')}.svg`;
-    //       }
-    //       return `/assets/icons/${name}.svg`;
-    //     };
-    //   },
-    // },
     {
       provide: TUI_ICON_RESOLVER,
       useFactory: (preloadService: PreloadIconsService): TuiStringHandler<string> => {
@@ -295,5 +281,13 @@ export const appConfig: ApplicationConfig = {
       deps: [PreloadIconsService],
     },
     provideImageKitLoader(environment.imageProviderUrl),
+    { provide: LOCALE_ID, useValue: 'ru' },
+    { provide: TUI_LANGUAGE, useValue: of(TUI_RUSSIAN_LANGUAGE) },
+    tuiInputDateOptionsProviderNew({
+      valueTransformer: new CustomDateTransformer(),
+    }),
+    tuiInputDateRangeOptionsProvider({
+      valueTransformer: new CustomDateRangeTransformer(),
+    }),
   ],
 };

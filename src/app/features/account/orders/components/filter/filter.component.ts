@@ -13,13 +13,16 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, type FormControl, ReactiveFormsModule } from '@angular/forms';
-import { TuiButton, TuiLabel, TuiSelect, TuiTextfield } from '@taiga-ui/core';
+import { TuiDropdownMobile } from '@taiga-ui/addon-mobile';
+import type { TuiStringHandler } from '@taiga-ui/cdk';
+import { TuiButton, TuiLabel, TuiTextfield } from '@taiga-ui/core';
 import {
   TuiButtonLoading,
   TuiChevron,
+  TuiComboBox,
   TuiDataListWrapperComponent,
-  TuiStringifyContentPipe,
-  TuiStringifyPipe,
+  TuiFilterByInputPipe,
+  TuiInputDateRange,
 } from '@taiga-ui/kit';
 import { TuiInputDateRangeModule, TuiUnfinishedValidator } from '@taiga-ui/legacy';
 import { filter, type Observable } from 'rxjs';
@@ -37,9 +40,6 @@ import type { FilterForm } from './filter.types';
     TuiChevron,
     TuiDataListWrapperComponent,
     TuiLabel,
-    TuiSelect,
-    TuiStringifyPipe,
-    TuiStringifyContentPipe,
     TuiButtonLoading,
     TuiButton,
     TuiInputDateRangeModule,
@@ -47,6 +47,10 @@ import type { FilterForm } from './filter.types';
     TuiTextfield,
     ReactiveFormsModule,
     AsyncPipe,
+    TuiComboBox,
+    TuiDropdownMobile,
+    TuiFilterByInputPipe,
+    TuiInputDateRange,
   ],
   templateUrl: './filter.component.html',
   styleUrl: './filter.component.css',
@@ -62,6 +66,8 @@ export class FilterComponent implements OnInit, OnChanges {
 
   pickupCities$!: Observable<PickupCity[]>;
   deliveryCities$!: Observable<DeliveryCity[]>;
+
+  protected stringify: TuiStringHandler<PickupCity | DeliveryCity> = (x) => `${x.name}`;
 
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);

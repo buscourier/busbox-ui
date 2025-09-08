@@ -5,6 +5,7 @@ import { TuiButton, tuiDialog } from '@taiga-ui/core';
 import { CONTACT_INFO } from '@core/tokens';
 
 import { ListComponent, ListItemDirective } from '@shared/components/list';
+import { PageLayoutComponent } from '@shared/layouts/page-layout';
 import { ContactLinkPipe } from '@shared/pipes';
 
 import { ResumeComponent } from './resume';
@@ -19,6 +20,7 @@ import { StatsComponent } from './stats';
     TuiButton,
     StatsComponent,
     ContactLinkPipe,
+    PageLayoutComponent,
   ],
   templateUrl: './career.component.html',
   styleUrl: './career.component.css',

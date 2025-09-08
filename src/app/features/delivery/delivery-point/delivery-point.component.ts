@@ -5,9 +5,25 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import type { FormControl } from '@angular/forms';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideTranslocoScope, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { TuiResponsiveDialogService } from '@taiga-ui/addon-mobile';
-import { TuiAlertService, TuiButton, TuiError, TuiHint, TuiIcon } from '@taiga-ui/core';
-import { type TuiConfirmData, TuiFieldErrorContentPipe } from '@taiga-ui/kit';
+import { TuiDropdownMobile, TuiResponsiveDialogService } from '@taiga-ui/addon-mobile';
+import type { TuiStringHandler } from '@taiga-ui/cdk';
+import {
+  TuiAlertService,
+  TuiButton,
+  TuiError,
+  TuiHint,
+  TuiIcon,
+  TuiTextfield,
+  TuiTextfieldComponent,
+} from '@taiga-ui/core';
+import {
+  TuiChevron,
+  TuiComboBox,
+  type TuiConfirmData,
+  TuiFieldErrorContentPipe,
+  TuiFilterByInputPipe,
+  TuiSelectDirective,
+} from '@taiga-ui/kit';
 import {
   TUI_CONFIRM,
   TUI_VALIDATION_ERRORS,
@@ -15,19 +31,14 @@ import {
   TuiDataListWrapper,
   TuiFieldErrorPipe,
   TuiSkeleton,
-  TuiStringifyContentPipe,
-  TuiStringifyPipe,
 } from '@taiga-ui/kit';
-import { TuiComboBoxModule, TuiSelectModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
 import {
   combineLatest,
-  debounceTime,
   distinctUntilChanged,
   filter,
   merge,
   of,
   startWith,
-  Subject,
   switchMap,
   tap,
   withLatestFrom,
@@ -36,14 +47,8 @@ import type { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { fadeSlideAnimation } from '@core/animations';
-import { DEBOUNCE_TIME } from '@core/constants';
 
-import {
-  type CitiesFilterSource,
-  type DeliveryCity,
-  FormControlStatus,
-  type Office,
-} from '@shared/types';
+import { type DeliveryCity, FormControlStatus, type Office, type PickupCity } from '@shared/types';
 
 import { CourierDetailsComponent } from '@delivery/base/courier-details';
 import { DeliveryDetailsFacade } from '@delivery/delivery-details';
@@ -63,14 +68,9 @@ import { DeliveryPointTabType, type DeliveryPointViewModel } from './types';
   imports: [
     AsyncPipe,
     ReactiveFormsModule,
-    TuiComboBoxModule,
-    TuiStringifyPipe,
-    TuiTextfieldControllerModule,
-    TuiStringifyContentPipe,
     TuiDataListWrapper,
     TuiError,
     TuiFieldErrorPipe,
-    TuiSelectModule,
     CourierDetailsComponent,
     TuiCheckbox,
     TuiSkeleton,
@@ -79,6 +79,13 @@ import { DeliveryPointTabType, type DeliveryPointViewModel } from './types';
     TuiFieldErrorContentPipe,
     TuiHint,
     TuiButton,
+    TuiChevron,
+    TuiComboBox,
+    TuiDropdownMobile,
+    TuiFilterByInputPipe,
+    TuiTextfieldComponent,
+    TuiTextfield,
+    TuiSelectDirective,
   ],
   templateUrl: './delivery-point.component.html',
   styleUrl: './delivery-point.component.css',
@@ -99,13 +106,13 @@ import { DeliveryPointTabType, type DeliveryPointViewModel } from './types';
 export class DeliveryPointComponent implements OnInit {
   vm$!: Observable<DeliveryPointViewModel>;
   form!: DeliveryPointForm;
-  cities$!: Observable<DeliveryCity[] | null>;
   protected readonly TabType = DeliveryPointTabType;
+  protected stringifyCity: TuiStringHandler<PickupCity> = (x) => `${x.name}`;
+  protected stringifyOffice: TuiStringHandler<Office> = (x) => `${x.address}`;
 
   private readonly alerts = inject(TuiAlertService);
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly searchQuery$ = new Subject<string | null>();
   private readonly dialogs = inject(TuiResponsiveDialogService);
   private readonly deliveryPointFacade = inject(DeliveryPointFacade);
   private readonly deliveryDetailsFacade = inject(DeliveryDetailsFacade);
@@ -130,7 +137,6 @@ export class DeliveryPointComponent implements OnInit {
   ngOnInit(): void {
     this.vm$ = this.deliveryPointFacade.getViewModel();
 
-    this.initValues();
     this.initForm();
     this.setupFormSync();
     this.setupStoreSync();
@@ -139,24 +145,8 @@ export class DeliveryPointComponent implements OnInit {
     this.setupErrorHandling();
   }
 
-  onSearchChange(searchQuery: string | null): void {
-    this.searchQuery$.next(searchQuery);
-  }
-
   onTabChange(activeTabId: DeliveryPointTabType): void {
     this.deliveryPointFacade.setActiveTab(activeTabId);
-  }
-
-  private initValues(): void {
-    this.cities$ = this.filterCities(
-      combineLatest([
-        this.vm$.pipe(map((vm) => vm.cities.items)),
-        this.searchQuery$.pipe(
-          startWith(''),
-          filter((searchQuery: string | null) => searchQuery !== null),
-        ),
-      ]),
-    );
   }
 
   private initForm(): void {
@@ -355,17 +345,6 @@ export class DeliveryPointComponent implements OnInit {
           this.form.markAsPristine();
         }
       });
-  }
-
-  private filterCities(
-    source$: Observable<CitiesFilterSource<DeliveryCity>>,
-  ): Observable<DeliveryCity[]> {
-    return source$.pipe(
-      debounceTime(DEBOUNCE_TIME.DEFAULT),
-      map(([cities, searchQuery]) =>
-        cities.filter((city) => city.name.toLowerCase().includes(searchQuery.toLowerCase())),
-      ),
-    );
   }
 
   private getRequiredControls(activeTabId: DeliveryPointTabType | null): FormControl[] {

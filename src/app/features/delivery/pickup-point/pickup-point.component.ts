@@ -5,33 +5,27 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import type { FormControl } from '@angular/forms';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideTranslocoScope, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { TuiResponsiveDialogService } from '@taiga-ui/addon-mobile';
-import { TuiDay } from '@taiga-ui/cdk';
-import { TuiAlertService, TuiButton, TuiHint, TuiIcon } from '@taiga-ui/core';
-import { type TuiConfirmData, TuiFieldErrorContentPipe, TuiSkeleton } from '@taiga-ui/kit';
+import { TuiDropdownMobile, TuiResponsiveDialogService } from '@taiga-ui/addon-mobile';
+import { TuiDay, type TuiStringHandler } from '@taiga-ui/cdk';
+import { TuiAlertService, TuiButton, TuiHint, TuiIcon, TuiTextfield } from '@taiga-ui/core';
 import {
-  TUI_CONFIRM,
-  TUI_VALIDATION_ERRORS,
-  TuiDataListWrapper,
-  TuiStringifyContentPipe,
-  TuiStringifyPipe,
+  TuiChevron,
+  TuiComboBox,
+  type TuiConfirmData,
+  TuiFieldErrorContentPipe,
+  TuiFilterByInputPipe,
+  TuiInputDate,
+  TuiSelect,
+  TuiSkeleton,
 } from '@taiga-ui/kit';
-import {
-  TuiComboBoxModule,
-  TuiInputDateModule,
-  TuiSelectModule,
-  TuiTextfieldControllerModule,
-  TuiUnfinishedValidator,
-} from '@taiga-ui/legacy';
+import { TUI_CONFIRM, TUI_VALIDATION_ERRORS, TuiDataListWrapper } from '@taiga-ui/kit';
 import {
   combineLatest,
-  debounceTime,
   distinctUntilChanged,
   filter,
   merge,
   of,
   startWith,
-  Subject,
   switchMap,
   tap,
   withLatestFrom,
@@ -40,9 +34,8 @@ import type { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { fadeSlideAnimation } from '@core/animations';
-import { DEBOUNCE_TIME } from '@core/constants';
 
-import type { CitiesFilterSource, Office, PickupCity } from '@shared/types';
+import type { Office, PickupCity } from '@shared/types';
 import { FormControlStatus } from '@shared/types';
 
 import { CourierDetailsComponent } from '@delivery/base/courier-details';
@@ -59,21 +52,21 @@ import { PickupPointTabType, type PickupPointViewModel } from './types';
   imports: [
     AsyncPipe,
     ReactiveFormsModule,
-    TuiComboBoxModule,
-    TuiTextfieldControllerModule,
-    TuiStringifyPipe,
     TuiDataListWrapper,
-    TuiStringifyContentPipe,
-    TuiSelectModule,
     CourierDetailsComponent,
-    TuiInputDateModule,
-    TuiUnfinishedValidator,
     TuiSkeleton,
     TuiIcon,
     TuiHint,
     TranslocoPipe,
     TuiButton,
     TuiFieldErrorContentPipe,
+    TuiTextfield,
+    TuiChevron,
+    TuiComboBox,
+    TuiFilterByInputPipe,
+    TuiDropdownMobile,
+    TuiSelect,
+    TuiInputDate,
   ],
   templateUrl: './pickup-point.component.html',
   styleUrl: './pickup-point.component.css',
@@ -94,13 +87,13 @@ import { PickupPointTabType, type PickupPointViewModel } from './types';
 export class PickupPointComponent implements OnInit {
   vm$!: Observable<PickupPointViewModel>;
   form!: PickupPointForm;
-  cities$!: Observable<PickupCity[] | null>;
   protected readonly TabType = PickupPointTabType;
+  protected stringifyCity: TuiStringHandler<PickupCity> = (x) => `${x.name}`;
+  protected stringifyOffice: TuiStringHandler<Office> = (x) => `${x.address}`;
 
   private readonly alerts = inject(TuiAlertService);
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly searchCity$ = new Subject<string | null>();
   private readonly dialogs = inject(TuiResponsiveDialogService);
   private readonly pickupPointFacade = inject(PickupPointFacade);
   private deliveryPointFacade = inject(DeliveryPointFacade);
@@ -130,7 +123,6 @@ export class PickupPointComponent implements OnInit {
     this.vm$ = this.pickupPointFacade.getViewModel();
     this.pickupPointFacade.init();
 
-    this.initValues();
     this.initForm();
     this.setupFormSync();
     this.setupStoreSync();
@@ -139,24 +131,8 @@ export class PickupPointComponent implements OnInit {
     this.setupErrorHandling();
   }
 
-  onSearchChange(searchQuery: string | null): void {
-    this.searchCity$.next(searchQuery);
-  }
-
   onTabChange(activeTabId: PickupPointTabType): void {
     this.pickupPointFacade.setActiveTab(activeTabId);
-  }
-
-  private initValues(): void {
-    this.cities$ = this.filterCities(
-      combineLatest([
-        this.vm$.pipe(map((vm) => vm.cities.items)),
-        this.searchCity$.pipe(
-          startWith(''),
-          filter((searchQuery: string | null) => searchQuery !== null),
-        ),
-      ]),
-    );
   }
 
   private initForm(): void {
@@ -356,17 +332,6 @@ export class PickupPointComponent implements OnInit {
           this.form.markAsPristine();
         }
       });
-  }
-
-  private filterCities(
-    source$: Observable<CitiesFilterSource<PickupCity>>,
-  ): Observable<PickupCity[]> {
-    return source$.pipe(
-      debounceTime(DEBOUNCE_TIME.DEFAULT),
-      map(([cities, searchQuery]) =>
-        cities.filter((city) => city.name.toLowerCase().includes(searchQuery.toLowerCase())),
-      ),
-    );
   }
 
   private getRequiredControls(activeTabId: PickupPointTabType | null): FormControl[] {

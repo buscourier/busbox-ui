@@ -2,15 +2,17 @@
 @let isMainLayout = isMainLayout$ | async;
 @let applicant = applicant$ | async;
 
-<div class="booking-header">
-  <h1 class="font-heading mt-16 mb-3 text-2xl font-bold lg:text-3xl">
-    {{ 'booking.title' | transloco }}
-  </h1>
+@if (!isSuccessPage && !isFailurePage) {
+  <div class="booking-header">
+    <h1 class="text-4xl font-bold">
+      {{ 'booking.title' | transloco }}
+    </h1>
 
-  <p class="mb-8 text-sm text-gray-700">
-    {{ 'booking.subtitle' | transloco }}
-  </p>
-</div>
+    <p class="mb-8 text-sm text-gray-700">
+      {{ 'booking.subtitle' | transloco }}
+    </p>
+  </div>
+}
 
 @if (vm && isMainLayout) {
   <app-stepper [steps]="vm.steps" />

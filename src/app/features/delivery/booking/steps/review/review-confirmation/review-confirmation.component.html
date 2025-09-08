@@ -1,7 +1,9 @@
 @if (form) {
   <div tuiLabel class="mt-6">
-    <span class="text-sm text-gray-600">Количество мест</span>
-    <tui-textarea [formControl]="comment"></tui-textarea>
+    <span class="text-md mb-1 font-medium text-gray-700">Комментарий</span>
+    <tui-textfield [style.margin-block-end.rem]="1">
+      <textarea tuiTextarea [formControl]="comment" [limit]="100" [max]="6" [min]="3"></textarea>
+    </tui-textfield>
   </div>
   <label class="mt-4 flex items-center gap-2">
     <input tuiCheckbox type="checkbox" [formControl]="rulesAccepted" />
@@ -9,9 +11,8 @@
   </label>
   <label class="mt-4 flex items-center gap-2">
     <input tuiCheckbox type="checkbox" [formControl]="processingAccepted" />
-    <span
-      >Нажимая кнопку «Оформить заказ», я даю свое согласие на обработку моих персональных
-      данных</span
-    >
+    <span>
+      Нажимая кнопку «Оформить заказ», я даю свое согласие на обработку моих персональных данных
+    </span>
   </label>
 }

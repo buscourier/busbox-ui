@@ -1,13 +1,13 @@
 // import { TestBed } from '@angular/core/testing';
 //
-// import { SeoService } from './seo.service';
+// import { PolicyService } from './policy.service';
 //
-// describe('SeoService', () => {
-//   let service: SeoService;
+// describe('PolicyService', () => {
+//   let service: PolicyService;
 //
 //   beforeEach(() => {
 //     TestBed.configureTestingModule({});
-//     service = TestBed.inject(SeoService);
+//     service = TestBed.inject(PolicyService);
 //   });
 //
 //   it('should be created', () => {

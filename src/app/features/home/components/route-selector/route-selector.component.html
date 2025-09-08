@@ -2,35 +2,35 @@
   <b class="mb-6 block text-2xl leading-7 font-bold lg:text-2xl">Рассчитайте стоимость</b>
   <label tuiLabel class="mb-4">
     <span class="mb-1 block text-sm text-gray-700">Город отправления</span>
-    <tui-textfield
-      tuiChevron
-      tuiDropdownMobile="Выберите город отправления"
-      [stringify]="'name' | tuiStringify"
-      [tuiTextfieldCleaner]="false"
-    >
-      <input tuiSelect placeholder="Выберите город" [formControl]="pickupCity" />
+    <tui-textfield tuiChevron [stringify]="stringify" tuiDropdownMobile="Город отправления">
+      <input
+        tuiComboBox
+        [formControl]="pickupCity"
+        tuiHintAppearance="error"
+        [placeholder]="'Выберите город' | transloco"
+      />
+
       <tui-data-list-wrapper
         *tuiTextfieldDropdown
         new
-        [items]="pickupCities$ | async"
-        [itemContent]="'name' | tuiStringify | tuiStringifyContent"
+        [items]="pickupCities$ | async | tuiFilterByInput"
       />
     </tui-textfield>
   </label>
   <label tuiLabel class="mb-6">
     <span class="mb-1 block text-sm text-gray-700">Город получения</span>
-    <tui-textfield
-      tuiChevron
-      tuiDropdownMobile="Выберите город получения"
-      [stringify]="'name' | tuiStringify"
-      [tuiTextfieldCleaner]="false"
-    >
-      <input tuiSelect placeholder="Выберите город" [formControl]="deliveryCity" />
+    <tui-textfield tuiChevron [stringify]="stringify" tuiDropdownMobile="Город получения">
+      <input
+        tuiComboBox
+        [formControl]="deliveryCity"
+        tuiHintAppearance="error"
+        [placeholder]="'Выберите город' | transloco"
+      />
+
       <tui-data-list-wrapper
         *tuiTextfieldDropdown
         new
-        [items]="deliveryCities$ | async"
-        [itemContent]="'name' | tuiStringify | tuiStringifyContent"
+        [items]="deliveryCities$ | async | tuiFilterByInput"
       />
     </tui-textfield>
   </label>

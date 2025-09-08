@@ -16,6 +16,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { provideTranslocoScope, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TUI_IS_IOS } from '@taiga-ui/cdk';
 import {
   TuiAlertService,
   TuiButton,
@@ -29,8 +30,11 @@ import {
   TuiButtonLoading,
   TuiCheckbox,
   TuiFieldErrorContentPipe,
+  TuiInputPhone,
+  TuiTextarea,
+  TuiTextareaLimit,
 } from '@taiga-ui/kit';
-import { TuiInputPhoneModule, TuiTextareaModule } from '@taiga-ui/legacy';
+import { TuiTextareaModule } from '@taiga-ui/legacy';
 import { BehaviorSubject, finalize } from 'rxjs';
 
 import type { ValidationLimits } from '@core/config';
@@ -54,11 +58,13 @@ import type { ContactForm } from './contact-form.types';
     TuiTextfieldDirective,
     TuiHint,
     TuiCheckbox,
-    TuiTextareaModule,
-    TuiInputPhoneModule,
     TuiButton,
     TuiButtonLoading,
     AsyncPipe,
+    TuiInputPhone,
+    TuiTextareaModule,
+    TuiTextarea,
+    TuiTextareaLimit,
   ],
   providers: [
     provideTranslocoScope(
@@ -89,6 +95,12 @@ export class ContactFormComponent implements OnInit {
       'theme-yellow block w-full max-w-[670px] rounded-md bg-yellow-500 p-8 shadow-xl lg:p-10':
         this.isCustomTasks,
     });
+  }
+
+  protected readonly isIos = inject(TUI_IS_IOS);
+
+  protected get pattern(): string | null {
+    return this.isIos ? '+[0-9-]{1,20}' : null;
   }
 
   get isSupport(): boolean {

@@ -1,57 +1,59 @@
 @let statusList = statusList$ | async;
 
-<form
-  [formGroup]="form"
-  (ngSubmit)="onSubmit()"
-  class="flex max-w-[770px] flex-col gap-4 sm:flex-row sm:items-end"
->
-  <label tuiLabel class="grow">
-    <span class="mb-1 block text-sm text-gray-800">
-      Здесь вы можете узнать историю движения заказа.
-    </span>
-    <tui-textfield>
-      <input
-        tuiTextfield
-        [formControl]="orderNumber"
-        [minlength]="7"
-        [maxlength]="7"
-        [attr.maxlength]="7"
-        placeholder="Укажите номер документа"
-        tuiHintAppearance="error"
+<app-page-layout>
+  <form
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    class="flex max-w-[770px] flex-col gap-4 sm:flex-row sm:items-end"
+  >
+    <label tuiLabel class="grow">
+      <span class="mb-1 block text-sm text-gray-800">
+        Здесь вы можете узнать историю движения заказа.
+      </span>
+      <tui-textfield>
+        <input
+          tuiTextfield
+          [formControl]="orderNumber"
+          [minlength]="7"
+          [maxlength]="7"
+          [attr.maxlength]="7"
+          placeholder="Укажите номер документа"
+          tuiHintAppearance="error"
+        />
+      </tui-textfield>
+    </label>
+    <button type="submit" tuiButton [disabled]="isLoading || form.invalid" [loading]="isLoading">
+      Проверить статус
+    </button>
+  </form>
+
+  <div class="mt-16 max-w-[500px]">
+    @if (isLoading) {
+      <div *tuiRepeatTimes="let i of SKELETON_COUNT" [tuiSkeleton]="true" class="mt-4 h-10"></div>
+    } @else if (!isLoading && statusList) {
+      <app-timeline [statusList]="statusList" [orderNumber]="searchedOrderNumber" />
+    }
+  </div>
+
+  <section class="full-width-section mt-16 mb-10! border-t border-gray-300 pt-16">
+    <div class="container mx-auto px-4">
+      <h2 class="font-heading mb-1 text-2xl font-bold lg:text-3xl">Где найти номер заказа?</h2>
+      <img
+        ngSrc="order-example.jpg"
+        alt="Бланк заказа"
+        ngSrcset="400w, 800w, 1200w, 1600w, 2000w, 2400w"
+        sizes="(min-width: 768px) 770px, 100vw"
+        width="2310"
+        height="1303"
+        class="w-full max-w-[770px] bg-gray-50 text-gray-50"
       />
-    </tui-textfield>
-  </label>
-  <button type="submit" tuiButton [disabled]="isLoading || form.invalid" [loading]="isLoading">
-    Проверить статус
-  </button>
-</form>
+    </div>
+  </section>
 
-<div class="mt-16 max-w-[500px]">
-  @if (isLoading) {
-    <div *tuiRepeatTimes="let i of SKELETON_COUNT" [tuiSkeleton]="true" class="mt-4 h-10"></div>
-  } @else if (!isLoading && statusList) {
-    <app-timeline [statusList]="statusList" [orderNumber]="searchedOrderNumber" />
-  }
-</div>
-
-<section class="full-width-section mt-16 mb-10! border-t border-gray-300 pt-16">
-  <div class="container mx-auto px-4">
-    <h2 class="font-heading mb-1 text-2xl font-bold lg:text-3xl">Где найти номер заказа?</h2>
-    <img
-      ngSrc="order-example.jpg"
-      alt="Бланк заказа"
-      ngSrcset="400w, 800w, 1200w, 1600w, 2000w, 2400w"
-      sizes="(min-width: 768px) 770px, 100vw"
-      width="2310"
-      height="1303"
-      class="w-full max-w-[770px] bg-gray-50 text-gray-50"
-    />
-  </div>
-</section>
-
-<section class="full-width-section mt-16 mb-10! border-t border-gray-300 pt-16">
-  <div class="container mx-auto px-4">
-    <h2 class="font-heading mb-8 text-2xl font-bold lg:text-3xl">Нужна помощь специалиста?</h2>
-    <app-contacts />
-  </div>
-</section>
+  <section class="full-width-section mt-16 mb-10! border-t border-gray-300 pt-16">
+    <div class="container mx-auto px-4">
+      <h2 class="font-heading mb-8 text-2xl font-bold lg:text-3xl">Нужна помощь специалиста?</h2>
+      <app-contacts />
+    </div>
+  </section>
+</app-page-layout>

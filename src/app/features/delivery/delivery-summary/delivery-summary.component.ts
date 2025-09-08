@@ -1,16 +1,20 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { AsyncPipe } from '@angular/common';
-import type { OnInit, OnDestroy } from '@angular/core';
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
+import { DestroyRef, type OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component, inject, HostListener } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { provideTranslocoScope, TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { TuiCurrencyPipe } from '@taiga-ui/addon-commerce';
-import { TuiResponsiveDialogService } from '@taiga-ui/addon-mobile';
+import {
+  TuiResponsiveDialogService,
+  TuiSheetDialog,
+  type TuiSheetDialogOptions,
+} from '@taiga-ui/addon-mobile';
 import { TuiButton, TuiIcon } from '@taiga-ui/core';
 import { TUI_CONFIRM, type TuiConfirmData, TuiSkeleton } from '@taiga-ui/kit';
-import { BehaviorSubject, Subject, type Observable, of, switchMap } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, type Observable, of, switchMap } from 'rxjs';
 
 import { DeliveryLayoutService } from '@delivery/services';
 import { DeliveryActions } from '@delivery/store';
@@ -20,7 +24,17 @@ import type { DeliverySummaryViewModel } from './types';
 
 @Component({
   selector: 'app-delivery-summary',
-  imports: [AsyncPipe, RouterLink, TuiButton, TuiSkeleton, TuiIcon, TuiCurrencyPipe, TranslocoPipe],
+  imports: [
+    AsyncPipe,
+    RouterLink,
+    TuiButton,
+    TuiSkeleton,
+    TuiIcon,
+    TuiCurrencyPipe,
+    TranslocoPipe,
+    TuiSheetDialog,
+    NgTemplateOutlet,
+  ],
   templateUrl: './delivery-summary.component.html',
   styleUrl: './delivery-summary.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,13 +59,6 @@ import type { DeliverySummaryViewModel } from './types';
     ),
   ],
   animations: [
-    trigger('slideInOut', [
-      transition(':enter', [
-        style({ transform: 'translateY(100%)' }),
-        animate('300ms ease-out', style({ transform: 'translateY(0)' })),
-      ]),
-      transition(':leave', [animate('300ms ease-in', style({ transform: 'translateY(100%)' }))]),
-    ]),
     trigger('fadeInOut', [
       transition(':enter', [
         style({ opacity: 0 }),
@@ -61,64 +68,33 @@ import type { DeliverySummaryViewModel } from './types';
     ]),
   ],
   host: {
-    class: 'block',
+    class: 'block relative z-10',
   },
 })
-export class DeliverySummaryComponent implements OnInit, OnDestroy {
+export class DeliverySummaryComponent implements OnInit {
   vm$!: Observable<DeliverySummaryViewModel>;
   isCalculatorLayout$!: Observable<boolean>;
-  isSummaryVisible$ = new BehaviorSubject<boolean>(false);
   isMobile$ = new BehaviorSubject<boolean>(this.checkIsMobile());
 
-  private readonly destroy$ = new Subject<void>();
+  protected summaryOpen = false;
+  protected readonly summaryOptions: Partial<TuiSheetDialogOptions> = {
+    label: 'Детали расчета',
+  };
+
   private store = inject(Store);
-  private deliveryLayoutService = inject(DeliveryLayoutService);
+  private deliveryLayout = inject(DeliveryLayoutService);
   private readonly dialogs = inject(TuiResponsiveDialogService);
-  private readonly deliverySummaryFacade = inject(DeliverySummaryFacade);
+  private readonly deliverySummary = inject(DeliverySummaryFacade);
+  private readonly destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
-    this.vm$ = this.deliverySummaryFacade.getViewModel();
-    this.isCalculatorLayout$ = this.deliveryLayoutService.getIsCalculatorLayout();
-
-    document.addEventListener('click', this.handleOutsideClick.bind(this));
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-    document.removeEventListener('click', this.handleOutsideClick.bind(this));
+    this.vm$ = this.deliverySummary.getViewModel();
+    this.isCalculatorLayout$ = this.deliveryLayout.getIsCalculatorLayout();
   }
 
   @HostListener('window:resize')
   onResize(): void {
     this.isMobile$.next(this.checkIsMobile());
-  }
-
-  toggleSummary(event?: Event): void {
-    if (event) {
-      event.stopPropagation();
-    }
-    this.isSummaryVisible$.next(!this.isSummaryVisible$.value);
-  }
-
-  closeSummary(): void {
-    this.isSummaryVisible$.next(false);
-  }
-
-  handleOutsideClick(event: MouseEvent): void {
-    const targetElement = event.target as HTMLElement;
-    const summaryElement = document.querySelector('.summary-drawer');
-    const triggerButton = document.querySelector('.summary-trigger');
-
-    if (
-      this.isSummaryVisible$.value &&
-      summaryElement &&
-      !summaryElement.contains(targetElement) &&
-      triggerButton &&
-      !triggerButton.contains(targetElement)
-    ) {
-      this.closeSummary();
-    }
   }
 
   protected onReset(event?: Event): void {
@@ -142,40 +118,16 @@ export class DeliverySummaryComponent implements OnInit, OnDestroy {
         switchMap((response) => {
           if (response) {
             this.store.dispatch(DeliveryActions.resetDelivery());
-            this.closeSummary();
           }
 
           return of(response);
         }),
-        takeUntil(this.destroy$),
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
   }
 
-  swipeDown(event: TouchEvent): void {
-    const touchStartY = event.touches[0].clientY;
-
-    const handleTouchMove = (moveEvent: TouchEvent) => {
-      const touchMoveY = moveEvent.touches[0].clientY;
-      const distance = touchMoveY - touchStartY;
-
-      if (distance > 100) {
-        this.closeSummary();
-        document.removeEventListener('touchmove', handleTouchMove);
-        document.removeEventListener('touchend', handleTouchEnd);
-      }
-    };
-
-    const handleTouchEnd = () => {
-      document.removeEventListener('touchmove', handleTouchMove);
-      document.removeEventListener('touchend', handleTouchEnd);
-    };
-
-    document.addEventListener('touchmove', handleTouchMove);
-    document.addEventListener('touchend', handleTouchEnd);
-  }
-
   private checkIsMobile(): boolean {
-    return window.innerWidth < 768;
+    return window.innerWidth < 1024;
   }
 }

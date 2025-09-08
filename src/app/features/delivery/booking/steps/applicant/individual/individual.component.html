@@ -1,7 +1,10 @@
 @if (form) {
-  <div [formGroup]="form" class="grid grid-cols-3 gap-5">
+  <div
+    [formGroup]="form"
+    class="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3"
+  >
     <label tuiLabel>
-      <span class="block text-sm text-gray-700 mb-1">
+      <span class="mb-1 block text-sm text-gray-700">
         {{ 'user.labels.lastName' | transloco }}
       </span>
       <div class="relative">
@@ -18,7 +21,7 @@
           />
         </tui-textfield>
         @if (lastNameInput.focused()) {
-          <span class="absolute top-1/2 -translate-y-1/2 right-2">
+          <span class="absolute top-1/2 right-2 -translate-y-1/2">
             <tui-badge
               appearance="secondary"
               size="s"
@@ -32,7 +35,7 @@
     </label>
 
     <label tuiLabel>
-      <span class="block text-sm text-gray-700 mb-1">
+      <span class="mb-1 block text-sm text-gray-700">
         {{ 'user.labels.firstName' | transloco }}
       </span>
       <div class="relative">
@@ -49,7 +52,7 @@
           />
         </tui-textfield>
         @if (firstNameInput.focused()) {
-          <span class="absolute top-1/2 -translate-y-1/2 right-2">
+          <span class="absolute top-1/2 right-2 -translate-y-1/2">
             <tui-badge
               appearance="secondary"
               size="s"
@@ -63,7 +66,7 @@
     </label>
 
     <label tuiLabel>
-      <span class="block text-sm text-gray-700 mb-1">
+      <span class="mb-1 block text-sm text-gray-700">
         {{ 'user.labels.middleName' | transloco }}
       </span>
       <div class="relative">
@@ -80,7 +83,7 @@
           />
         </tui-textfield>
         @if (middleNameInput.focused()) {
-          <span class="absolute top-1/2 -translate-y-1/2 right-2">
+          <span class="absolute top-1/2 right-2 -translate-y-1/2">
             <tui-badge
               appearance="secondary"
               size="s"
@@ -94,7 +97,7 @@
     </label>
 
     <label tuiLabel>
-      <span class="block text-sm text-gray-700 mb-1">
+      <span class="mb-1 block text-sm text-gray-700">
         {{ 'contacts.labels.email' | transloco }}
       </span>
       <div class="relative">
@@ -111,33 +114,37 @@
     </label>
 
     <div tuiLabel>
-      <span class="block text-sm text-gray-700 mb-1">
+      <span class="mb-1 block text-sm text-gray-700">
         {{ 'contacts.labels.phone' | transloco }}
       </span>
 
-      <tui-input-phone
-        [formControl]="phone"
-        [tuiHint]="[] | tuiFieldErrorContent"
-        tuiHintAppearance="error"
-      >
-        {{ 'contacts.placeholders.phone' | transloco }}
-      </tui-input-phone>
+      <tui-textfield>
+        <input
+          autocomplete="tel"
+          mask="+7 ### ###-##-##"
+          tuiInputPhone
+          [attr.pattern]="pattern"
+          [formControl]="phone"
+          [tuiHint]="[] | tuiFieldErrorContent"
+          tuiHintAppearance="error"
+          [placeholder]="'contacts.placeholders.phone' | transloco"
+        />
+      </tui-textfield>
     </div>
     <label tuiLabel>
-      <span class="block text-sm text-gray-700 mb-1">
+      <span class="mb-1 block text-sm text-gray-700">
         {{ 'user.labels.role' | transloco }}
       </span>
-      <tui-textfield tuiChevron [stringify]="'label' | tuiStringify" [tuiTextfieldCleaner]="false">
-        <select
-          tuiTextfield
-          [placeholder]="'user.placeholders.role' | transloco"
+      <tui-textfield tuiChevron [stringify]="stringify" tuiDropdownMobile="Роль отправителя">
+        <input
+          tuiSelect
           [formControl]="role"
-        ></select>
-        <tui-data-list-wrapper
-          *tuiTextfieldDropdown
-          [items]="individualRoles"
-          [itemContent]="'label' | tuiStringify | tuiStringifyContent"
+          [tuiHint]="[] | tuiFieldErrorContent"
+          tuiHintAppearance="error"
+          [placeholder]="'user.placeholders.role | transloco' | transloco"
         />
+
+        <tui-data-list-wrapper *tuiTextfieldDropdown new [items]="individualRoles" />
       </tui-textfield>
     </label>
   </div>

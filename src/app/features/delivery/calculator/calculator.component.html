@@ -1,13 +1,9 @@
-<h1 class="mt-10 mb-10 font-heading text-2xl font-bold lg:mt-20 lg:text-3xl">
-  {{ 'calculator.title' | transloco }}
-</h1>
-
-<div class="mb-10 grid grid-cols-2 gap-6">
+<div class="mb-10 grid gap-12 md:grid-cols-2 md:gap-6 lg:grid-cols-1 xl:grid-cols-2">
   <app-pickup-point>
     <span>{{ 'calculator.pickupPoint.title' | transloco }}</span>
   </app-pickup-point>
   <app-delivery-point>
-    <b class="mb-3 pb-3 border-b border-gray-100 block text-lg">
+    <b class="mb-3 block border-b border-gray-100 pb-3 text-lg">
       {{ 'calculator.deliveryPoint.title' | transloco }}
     </b>
   </app-delivery-point>

@@ -7,11 +7,13 @@ import { TuiAlertService } from '@taiga-ui/core';
 import { TuiSkeleton } from '@taiga-ui/kit';
 import { catchError, EMPTY, finalize, type Observable } from 'rxjs';
 
-import { PageContentService } from '@core/services/page-content.service';
+import { PolicyService } from '@core/services/policy.service';
+
+import { PageLayoutComponent } from '@shared/layouts/page-layout';
 
 @Component({
   selector: 'app-privacy-policy',
-  imports: [AsyncPipe, TuiSkeleton, TuiRepeatTimes],
+  imports: [AsyncPipe, TuiSkeleton, TuiRepeatTimes, PageLayoutComponent],
   templateUrl: './privacy-policy.component.html',
   styleUrl: './privacy-policy.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -19,7 +21,7 @@ import { PageContentService } from '@core/services/page-content.service';
 export class PrivacyPolicyComponent {
   isLoading = false;
 
-  private readonly pageContentService = inject(PageContentService);
+  private readonly policyService = inject(PolicyService);
   private readonly alerts = inject(TuiAlertService);
   private transloco = inject(TranslocoService);
   private readonly destroyRef = inject(DestroyRef);
@@ -27,7 +29,7 @@ export class PrivacyPolicyComponent {
   getPageContent(): Observable<string> {
     this.isLoading = true;
 
-    return this.pageContentService.getPrivacyPolicy().pipe(
+    return this.policyService.getPrivacyPolicy().pipe(
       finalize(() => (this.isLoading = false)),
       catchError((err) => {
         this.showErrorNotification(err);

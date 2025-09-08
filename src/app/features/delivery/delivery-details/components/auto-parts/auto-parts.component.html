@@ -6,19 +6,15 @@
           {{ 'deliveryDetails.autoParts.label' | transloco }}
         </span>
       </div>
-      <tui-select
-        [formControl]="item"
-        [stringify]="'name' | tuiStringify"
-        [tuiTextfieldLabelOutside]="true"
-        class="w-full"
-      >
-        {{ 'deliveryDetails.autoParts.placeholder' | transloco }}
-        <tui-data-list-wrapper
-          *tuiDataList
-          [items]="options"
-          [itemContent]="'name' | tuiStringify | tuiStringifyContent"
+      <tui-textfield tuiChevron [stringify]="stringify" tuiDropdownMobile="Автозапчасти">
+        <input
+          tuiComboBox
+          [formControl]="item"
+          [placeholder]="'deliveryDetails.autoParts.placeholder' | transloco"
         />
-      </tui-select>
+
+        <tui-data-list-wrapper *tuiTextfieldDropdown new [items]="options | tuiFilterByInput" />
+      </tui-textfield>
     </div>
 
     @if (item.value) {

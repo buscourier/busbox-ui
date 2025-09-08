@@ -12,6 +12,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import type { FormControl } from '@angular/forms';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TuiDropdownMobile } from '@taiga-ui/addon-mobile';
+import { TUI_IS_IOS, type TuiStringHandler } from '@taiga-ui/cdk';
 import { TuiHintDirective, TuiTextfield } from '@taiga-ui/core';
 import {
   TUI_VALIDATION_ERRORS,
@@ -19,10 +21,9 @@ import {
   TuiChevron,
   TuiDataListWrapper,
   TuiFieldErrorContentPipe,
-  TuiStringifyContentPipe,
-  TuiStringifyPipe,
+  TuiInputPhone,
+  TuiSelectDirective,
 } from '@taiga-ui/kit';
-import { TuiInputPhoneModule } from '@taiga-ui/legacy';
 import { distinctUntilChanged, startWith } from 'rxjs';
 
 import type { ValidationLimits } from '@core/config';
@@ -43,13 +44,13 @@ import type { SenderForm } from './sender.types';
     ReactiveFormsModule,
     TuiHintDirective,
     TuiFieldErrorContentPipe,
-    TuiInputPhoneModule,
-    TuiStringifyPipe,
-    TuiStringifyContentPipe,
     TuiTextfield,
     TuiChevron,
     TuiDataListWrapper,
     TranslocoPipe,
+    TuiInputPhone,
+    TuiDropdownMobile,
+    TuiSelectDirective,
   ],
   templateUrl: './sender.component.html',
   styleUrl: './sender.component.css',
@@ -69,6 +70,13 @@ export class SenderComponent implements OnInit {
 
   form!: SenderForm;
 
+  protected readonly isIos = inject(TUI_IS_IOS);
+
+  protected get pattern(): string | null {
+    return this.isIos ? '+[0-9-]{1,20}' : null;
+  }
+
+  protected stringify: TuiStringHandler<SenderDocumentOption> = (x) => `${x.label}`;
   protected limits = inject<ValidationLimits>(VALIDATION_LIMITS);
   protected readonly senderDocuments = senderDocuments;
 

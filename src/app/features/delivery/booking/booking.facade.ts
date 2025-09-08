@@ -145,4 +145,8 @@ export class BookingFacade {
       }),
     );
   }
+
+  resetState(): void {
+    this.store.dispatch(BookingActions.resetState());
+  }
 }

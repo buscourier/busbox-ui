@@ -3,7 +3,7 @@
     @for (item of accountLinks; track item.link) {
       <div
         [routerLink]="'/' + item.link"
-        class="mb-2 flex border border-gray-200 py-4 px-4 hover:cursor-pointer hover:border-yellow sm:space-x-13 sm:py-9 sm:px-6 md:space-x-0 md:rounded-sm md:border-x md:px-8 lg:space-x-13 lg:pl-13 lg:pr-10"
+        class="hover:border-yellow mb-2 flex border border-gray-200 px-4 py-4 hover:cursor-pointer sm:space-x-13 sm:px-6 sm:py-9 md:space-x-0 md:rounded-sm md:border-x md:px-8 lg:space-x-13 lg:pr-10 lg:pl-13"
       >
         <div class="hidden sm:block md:hidden lg:block">
           <tui-icon
@@ -13,9 +13,9 @@
             [style.font-size.rem]="5"
           />
         </div>
-        <div class="flex flex-col justify-center basis-full">
+        <div class="flex basis-full flex-col justify-center">
           <h2 class="mb-2 text-xl font-bold">{{ item.name }}</h2>
-          <p>{{ item.description }}</p>
+          <p class="mb-0">{{ item?.page?.description }}</p>
         </div>
         <div class="hidden items-center sm:flex">
           <tui-icon
@@ -39,7 +39,7 @@
       Оформить заказ
     </button>
     <a href="#" class="space-x-1 md:text-xs lg:text-base">
-      <span> Выйти из личного кабинета </span>
+      <span>Выйти из личного кабинета</span>
       <tui-icon
         icon="logout"
         class="rounded-full"

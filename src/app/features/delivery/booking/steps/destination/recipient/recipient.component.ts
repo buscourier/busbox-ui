@@ -12,14 +12,19 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import type { FormControl } from '@angular/forms';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TUI_IS_IOS } from '@taiga-ui/cdk';
 import {
   TuiHintDirective,
   TuiLabel,
   TuiTextfieldComponent,
   TuiTextfieldDirective,
 } from '@taiga-ui/core';
-import { TUI_VALIDATION_ERRORS, TuiBadge, TuiFieldErrorContentPipe } from '@taiga-ui/kit';
-import { TuiInputModule, TuiInputPhoneModule } from '@taiga-ui/legacy';
+import {
+  TUI_VALIDATION_ERRORS,
+  TuiBadge,
+  TuiFieldErrorContentPipe,
+  TuiInputPhone,
+} from '@taiga-ui/kit';
 import { distinctUntilChanged } from 'rxjs';
 
 import type { ValidationLimits } from '@core/config';
@@ -37,15 +42,14 @@ import type { RecipientForm } from './recipient.types';
   selector: 'app-recipient',
   imports: [
     TuiBadge,
-    TuiInputPhoneModule,
     TuiHintDirective,
     TuiFieldErrorContentPipe,
     ReactiveFormsModule,
-    TuiInputModule,
     TuiLabel,
     TuiTextfieldComponent,
     TuiTextfieldDirective,
     TranslocoPipe,
+    TuiInputPhone,
   ],
   templateUrl: './recipient.component.html',
   styleUrl: './recipient.component.css',
@@ -64,6 +68,12 @@ export class RecipientComponent implements OnInit {
   @Output() validationChange = new EventEmitter<boolean>();
 
   form!: RecipientForm;
+
+  protected readonly isIos = inject(TUI_IS_IOS);
+
+  protected get pattern(): string | null {
+    return this.isIos ? '+[0-9-]{1,20}' : null;
+  }
 
   protected limits = inject<ValidationLimits>(VALIDATION_LIMITS);
 

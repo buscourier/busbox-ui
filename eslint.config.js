@@ -187,6 +187,7 @@ module.exports = tseslint.config(
             '@shared/components/*',
             '@shared/features/*',
             '@shared/features/*/types',
+            '@shared/layouts/*',
             'features/*',
             '*/services/*',
             'components/*',

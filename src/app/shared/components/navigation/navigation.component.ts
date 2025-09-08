@@ -24,7 +24,7 @@ export class NavigationComponent {
   get navigationItems(): NavigationItem[] {
     return this.isMobile
       ? this.navigationService.getMobileNavigation()
-      : this.navigationService.getDesktopNavigation();
+      : this.navigationService.getHeaderNavigation();
   }
 
   navLinkClass = cn(

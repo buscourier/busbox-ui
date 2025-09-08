@@ -24,6 +24,7 @@ export const bookingRoutes: Routes = [
         path: 'applicant',
         component: ApplicantComponent,
         canActivate: [stepGuard],
+        data: { pageKey: 'applicant' },
       },
       {
         path: 'departure',

@@ -1,7 +1,9 @@
 @let pageContent = getPageContent() | async;
 
-@if (isLoading) {
-  <div *tuiRepeatTimes="let i of 20" class="mb-3 h-4" [tuiSkeleton]="true"></div>
-} @else if (!isLoading && pageContent) {
-  <div [innerHTML]="pageContent"></div>
-}
+<app-page-layout>
+  @if (isLoading) {
+    <div *tuiRepeatTimes="let i of 20" class="mb-3 h-4" [tuiSkeleton]="true"></div>
+  } @else if (!isLoading && pageContent) {
+    <div class="content" [innerHTML]="pageContent"></div>
+  }
+</app-page-layout>

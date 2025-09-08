@@ -12,9 +12,16 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import type { FormControl } from '@angular/forms';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { TuiNotification, TuiTextfieldComponent } from '@taiga-ui/core';
-import { TuiInputNumber, TuiStringifyContentPipe, TuiStringifyPipe } from '@taiga-ui/kit';
-import { TuiSelectModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
+import { TuiDropdownMobile } from '@taiga-ui/addon-mobile';
+import type { TuiStringHandler } from '@taiga-ui/cdk';
+import { TuiNotification, TuiTextfield, TuiTextfieldComponent } from '@taiga-ui/core';
+import {
+  TuiChevron,
+  TuiComboBox,
+  TuiDataListWrapper,
+  TuiFilterByInputPipe,
+  TuiInputNumber,
+} from '@taiga-ui/kit';
 import { merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -27,15 +34,17 @@ import type { AutoPartsForm } from './auto-parts.types';
 @Component({
   selector: 'app-auto-parts',
   imports: [
-    TuiSelectModule,
     ReactiveFormsModule,
-    TuiTextfieldControllerModule,
-    TuiStringifyPipe,
-    TuiStringifyContentPipe,
     TuiInputNumber,
     TuiTextfieldComponent,
     TuiNotification,
     TranslocoPipe,
+    TuiChevron,
+    TuiComboBox,
+    TuiDropdownMobile,
+    TuiFilterByInputPipe,
+    TuiTextfield,
+    TuiDataListWrapper,
   ],
   templateUrl: './auto-parts.component.html',
   styleUrl: './auto-parts.component.css',
@@ -49,6 +58,8 @@ export class AutoPartsComponent implements OnInit, OnChanges {
   @Output() validationChange = new EventEmitter<boolean>();
 
   form!: AutoPartsForm;
+
+  protected stringify: TuiStringHandler<Cargo> = (x) => `${x.name}`;
 
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
