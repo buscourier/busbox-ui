@@ -18,6 +18,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TuiCurrencyPipe } from '@taiga-ui/addon-commerce';
+import { TuiDropdownMobile } from '@taiga-ui/addon-mobile';
 import {
   type TuiSortChange,
   TuiSortDirection,
@@ -60,6 +61,7 @@ import { type Order, type OrderListViewModel, type SortConfig } from '../../type
     TuiButtonSelect,
     TuiScrollbarDirective,
     TuiButtonLoading,
+    TuiDropdownMobile,
   ],
   templateUrl: './order-list.component.html',
   styleUrl: './order-list.component.css',

@@ -1,5 +1,5 @@
 @if (list.totalCount && list.totalCount > 0) {
-  <div class="mb-1 flex gap-3 items-center text-sm">
+  <div class="mb-1 flex items-center gap-3 text-sm">
     <div class="flex items-center gap-1">
       <span class="text-gray-600">
         Всего {{ list.totalCount }} {{ getOrdersWord(+list.totalCount) }}
@@ -24,6 +24,7 @@
 
       <tui-data-list-wrapper
         *tuiTextfieldDropdown
+        new
         [itemContent]="content"
         [items]="PAGE_SIZE_OPTIONS"
       />
@@ -33,7 +34,7 @@
 
 @if (!list.isLoaded || list.isLoading) {
   @for (item of getSkeletonArray(); track $index) {
-    <div class="h-12 mb-0.5" [tuiSkeleton]="true"></div>
+    <div class="mb-0.5 h-12" [tuiSkeleton]="true"></div>
   }
 } @else if (list.totalCount && +list.totalCount > 0) {
   <div class="mb-7 flex flex-col print:hidden">
@@ -141,6 +142,6 @@
   </div>
 } @else {
   <div class="flex justify-center">
-    <b class="text-gray-300 text-2xl">Заказы с такими параметрами не найдены...</b>
+    <b class="text-2xl text-gray-300">Заказы с такими параметрами не найдены...</b>
   </div>
 }
