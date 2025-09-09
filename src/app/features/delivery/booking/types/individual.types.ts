@@ -5,7 +5,17 @@
 //
 // export type Role = 'sender' | 'recipient';
 
-export type IndividualRole = 'sender' | 'recipient';
+// Temporary trash !!!!!!
+export enum IndividualType {
+  SENDER = 'sender',
+  RECIPIENT = 'recipient',
+}
+
+export interface IndividualRole {
+  value: IndividualType;
+  label: 'Отправитель' | 'Получатель';
+}
+// Temporary trash !!!!!!!
 
 export interface Individual {
   lastName: string;
@@ -13,5 +23,5 @@ export interface Individual {
   middleName: string;
   email: string;
   phone: string;
-  role: string;
+  role: IndividualRole;
 }

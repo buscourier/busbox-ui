@@ -1,15 +1,15 @@
 import type { TranslocoService } from '@jsverse/transloco';
 import type { TuiValidationError } from '@taiga-ui/cdk';
 
-import { IndividualRole } from './individual.types';
+import { type IndividualRole, IndividualType } from './individual.types';
 
-export const individualRoles = [
+export const individualRoles: IndividualRole[] = [
   {
-    value: IndividualRole.SENDER,
+    value: IndividualType.SENDER,
     label: 'Отправитель',
   },
   {
-    value: IndividualRole.RECIPIENT,
+    value: IndividualType.RECIPIENT,
     label: 'Получатель',
   },
 ];
