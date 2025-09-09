@@ -7,11 +7,19 @@
         </span>
       </div>
       <tui-textfield tuiChevron [stringify]="stringify" tuiDropdownMobile="Автозапчасти">
-        <input
-          tuiComboBox
-          [formControl]="item"
-          [placeholder]="'deliveryDetails.autoParts.placeholder' | transloco"
-        />
+        @if (isMobile) {
+          <input
+            tuiSelect
+            [formControl]="item"
+            [placeholder]="'deliveryDetails.autoParts.placeholder' | transloco"
+          />
+        } @else {
+          <input
+            tuiComboBox
+            [formControl]="item"
+            [placeholder]="'deliveryDetails.autoParts.placeholder' | transloco"
+          />
+        }
 
         <tui-data-list-wrapper *tuiTextfieldDropdown new [items]="options | tuiFilterByInput" />
       </tui-textfield>

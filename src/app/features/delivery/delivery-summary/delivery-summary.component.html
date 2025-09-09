@@ -49,22 +49,11 @@
           </div>
         </div>
         <div class="flex gap-2">
-          @if (isCalculatorLayout) {
-            <button
-              tuiButton
-              size="m"
-              class="whitespace-nowrap"
-              [tuiSkeleton]="vm.isLoading"
-              [routerLink]="['/delivery', 'booking']"
-            >
-              Оформить
-            </button>
-          }
           <button
             tuiButton
-            appearance="outline"
+            appearance="primary"
             size="m"
-            class="bg-yellow-500/40! whitespace-nowrap"
+            class="whitespace-nowrap"
             [tuiSkeleton]="vm.isLoading"
             (click)="summaryOpen = true"
           >

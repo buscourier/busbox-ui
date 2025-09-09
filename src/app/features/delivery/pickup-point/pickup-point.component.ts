@@ -6,7 +6,7 @@ import type { FormControl } from '@angular/forms';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideTranslocoScope, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { TuiDropdownMobile, TuiResponsiveDialogService } from '@taiga-ui/addon-mobile';
-import { TuiDay, type TuiStringHandler } from '@taiga-ui/cdk';
+import { TUI_IS_MOBILE, TuiDay, type TuiStringHandler } from '@taiga-ui/cdk';
 import { TuiAlertService, TuiButton, TuiHint, TuiIcon, TuiTextfield } from '@taiga-ui/core';
 import {
   TuiChevron,
@@ -90,6 +90,7 @@ export class PickupPointComponent implements OnInit {
   protected readonly TabType = PickupPointTabType;
   protected stringifyCity: TuiStringHandler<PickupCity> = (x) => `${x.name}`;
   protected stringifyOffice: TuiStringHandler<Office> = (x) => `${x.address}`;
+  protected readonly isMobile = inject(TUI_IS_MOBILE);
 
   private readonly alerts = inject(TuiAlertService);
   private readonly fb = inject(FormBuilder);

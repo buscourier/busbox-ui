@@ -13,13 +13,23 @@
         [tuiSkeleton]="vm.cities.isLoading"
         tuiDropdownMobile="Город отправления"
       >
-        <input
-          tuiComboBox
-          [formControl]="city"
-          [tuiHint]="[] | tuiFieldErrorContent"
-          tuiHintAppearance="error"
-          [placeholder]="'deliveryPoint.placeholders.city' | transloco"
-        />
+        @if (isMobile) {
+          <input
+            tuiSelect
+            [formControl]="city"
+            [tuiHint]="[] | tuiFieldErrorContent"
+            tuiHintAppearance="error"
+            [placeholder]="'deliveryPoint.placeholders.city' | transloco"
+          />
+        } @else {
+          <input
+            tuiComboBox
+            [formControl]="city"
+            [tuiHint]="[] | tuiFieldErrorContent"
+            tuiHintAppearance="error"
+            [placeholder]="'deliveryPoint.placeholders.city' | transloco"
+          />
+        }
 
         <tui-data-list-wrapper
           *tuiTextfieldDropdown
