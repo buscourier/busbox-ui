@@ -3,14 +3,22 @@ import type { OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { provideTranslocoScope, TranslocoPipe } from '@jsverse/transloco';
+import { tuiTakeUntilDestroyed } from '@taiga-ui/cdk';
 import { TuiIcon } from '@taiga-ui/core';
-import { take, withLatestFrom } from 'rxjs';
+import { take, withLatestFrom, combineLatest } from 'rxjs';
 import type { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 import { PickupPointComponent, PickupPointFacade } from '@delivery/pickup-point';
 
 import { BookingFacade } from '../../booking.facade';
-import type { Departure, Sender, StepNumber } from '../../types';
+import {
+  type Departure,
+  IndividualType,
+  type Sender,
+  SenderDocument,
+  type StepNumber,
+} from '../../types';
 
 import { SenderComponent } from './sender';
 
@@ -41,6 +49,7 @@ export class DepartureComponent implements OnInit {
   ngOnInit(): void {
     this.currentStep$ = this.bookingFacade.getCurrentStep();
     this.departure$ = this.bookingFacade.getDeparture();
+    // this.applicant$ = this.bookingFacade.getApplicant();
 
     this.pickupPointFacade
       .getFormState()
@@ -48,6 +57,28 @@ export class DepartureComponent implements OnInit {
       .subscribe(([formState]) => {
         this.isPickupPointValid = formState.valid;
         this.checkStepValidation();
+      });
+
+    combineLatest([
+      this.bookingFacade.getApplicant().pipe(
+        filter(Boolean),
+        map((applicant) => applicant.individual),
+      ),
+      this.departure$,
+    ])
+      .pipe(take(1), tuiTakeUntilDestroyed(this.destroyRef))
+      .subscribe(([individual, departure]) => {
+        if (individual?.role.value === IndividualType.SENDER) {
+          this.updateSender({
+            fullName: `${individual.lastName} ${individual.firstName} ${individual.middleName}`,
+            document: departure?.sender?.document || {
+              value: SenderDocument.PASSPORT,
+              label: 'Паспорт',
+            },
+            documentNumber: departure?.sender?.documentNumber || '',
+            phone: individual.phone,
+          });
+        }
       });
   }
 
