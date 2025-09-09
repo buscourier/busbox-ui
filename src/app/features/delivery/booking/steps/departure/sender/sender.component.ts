@@ -1,4 +1,4 @@
-import type { OnInit } from '@angular/core';
+import { computed, type OnInit, signal } from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -12,6 +12,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import type { FormControl } from '@angular/forms';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { MaskitoDirective } from '@maskito/angular';
+import { type MaskitoOptions } from '@maskito/core';
 import { TuiDropdownMobile } from '@taiga-ui/addon-mobile';
 import { TUI_IS_IOS, type TuiStringHandler } from '@taiga-ui/cdk';
 import { TuiHintDirective, TuiTextfield } from '@taiga-ui/core';
@@ -51,6 +53,7 @@ import type { SenderForm } from './sender.types';
     TuiInputPhone,
     TuiDropdownMobile,
     TuiSelectDirective,
+    MaskitoDirective,
   ],
   templateUrl: './sender.component.html',
   styleUrl: './sender.component.css',
@@ -80,9 +83,15 @@ export class SenderComponent implements OnInit {
   protected limits = inject<ValidationLimits>(VALIDATION_LIMITS);
   protected readonly senderDocuments = senderDocuments;
 
+  protected documentMask = computed(() => this.getDocumentMask(this.selectedDocument()));
+  protected documentPlaceholder = computed(() =>
+    this.getDocumentPlaceholder(this.selectedDocument()),
+  );
+
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly destroyRef = inject(DestroyRef);
   private fieldValidators = inject(FIELD_VALIDATORS_FACTORY);
+  private selectedDocument = signal<SenderDocumentOption | null>(null);
 
   get fullName(): FormControl<string> {
     return this.form.controls.fullName;
@@ -109,6 +118,7 @@ export class SenderComponent implements OnInit {
   ngOnInit(): void {
     this.initializeForm();
     this.setupFormChanges();
+    this.selectedDocument.set(this.document.value);
   }
 
   private initializeForm(): void {
@@ -149,6 +159,14 @@ export class SenderComponent implements OnInit {
   private setupFormChanges(): void {
     this.validationChange.emit(this.form.valid);
 
+    this.document.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((selectedDocument: SenderDocumentOption) => {
+        this.selectedDocument.set(selectedDocument);
+
+        this.documentNumber.setValue('');
+      });
+
     this.form.valueChanges
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -161,5 +179,41 @@ export class SenderComponent implements OnInit {
           this.dataChange.emit(this.form.getRawValue());
         }
       });
+  }
+
+  private getDocumentMask(document: SenderDocumentOption | null): MaskitoOptions {
+    if (!document) {
+      return { mask: [] };
+    }
+
+    switch (document.value) {
+      case SenderDocument.PASSPORT:
+        return {
+          mask: [/\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
+        };
+
+      case SenderDocument.DRIVER_LICENSE:
+        return {
+          mask: [/\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
+        };
+
+      default:
+        return { mask: /^.{0,20}$/ };
+    }
+  }
+
+  private getDocumentPlaceholder(document: SenderDocumentOption | null): string {
+    if (!document) {
+      return '';
+    }
+
+    switch (document.value) {
+      case SenderDocument.PASSPORT:
+        return 'XXXX XXXXXX';
+      case SenderDocument.DRIVER_LICENSE:
+        return 'XX XX XXXXXX';
+      default:
+        return '';
+    }
   }
 }

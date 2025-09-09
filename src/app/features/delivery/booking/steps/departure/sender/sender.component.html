@@ -84,7 +84,8 @@
               [formControl]="documentNumber"
               [tuiHint]="[] | tuiFieldErrorContent"
               tuiHintAppearance="error"
-              [placeholder]="'document.placeholders.documentNumber' | transloco"
+              [placeholder]="documentPlaceholder()"
+              [maskito]="documentMask()"
             />
           </tui-textfield>
         </label>
