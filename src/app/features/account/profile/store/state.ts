@@ -1,6 +1,6 @@
-import { type AsyncState, AsyncStatus } from '@shared/types';
+import { type AsyncState, AsyncStatus, type Confidant } from '@shared/types';
 
-import type { Confidant, ProfileField } from '../types';
+import type { ProfileField } from '../types';
 
 export interface OperationsState {
   updateFields: AsyncState<ProfileField[]>;

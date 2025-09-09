@@ -1,8 +1,8 @@
 import type { MemoizedSelector } from '@ngrx/store';
 
-import type { ApiError, AsyncStatus } from '@shared/types';
+import type { ApiError, AsyncStatus, Confidant } from '@shared/types';
 
-import type { Confidant, ProfileField } from '../../types';
+import type { ProfileField } from '../../types';
 
 export interface BaseSelectors {
   selectFieldsStatus: MemoizedSelector<object, AsyncStatus>;

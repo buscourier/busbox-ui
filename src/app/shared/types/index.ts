@@ -15,3 +15,4 @@ export * from './pdf.types';
 export * from './seo.types';
 export * from './navigation.types';
 export * from './map-point.types';
+export * from './confidant.types';

@@ -1,0 +1,37 @@
+<form [formGroup]="form">
+  <h3 class="mb-4 border-b border-gray-100 pb-3 text-lg font-medium text-gray-800">
+    Доверенное лицо
+  </h3>
+  <div tuiLabel class="mb-5">
+    <tui-textfield tuiChevron [stringify]="stringify" tuiDropdownMobile="Роль отправителя">
+      <input
+        tuiSelect
+        [formControl]="confidant"
+        [tuiHint]="[] | tuiFieldErrorContent"
+        tuiHintAppearance="error"
+        placeholder="Выберите доверенное лицо"
+      />
+
+      <tui-data-list-wrapper *tuiTextfieldDropdown new [items]="confidants$ | async" />
+    </tui-textfield>
+  </div>
+
+  <div tuiLabel>
+    <span class="mb-1 block text-sm text-gray-700">
+      {{ 'contacts.labels.phone' | transloco }}
+    </span>
+
+    <tui-textfield>
+      <input
+        autocomplete="tel"
+        mask="+7 ### ###-##-##"
+        tuiInputPhone
+        [attr.pattern]="pattern"
+        [formControl]="phone"
+        [tuiHint]="[] | tuiFieldErrorContent"
+        tuiHintAppearance="error"
+        [placeholder]="'contacts.placeholders.phone' | transloco"
+      />
+    </tui-textfield>
+  </div>
+</form>

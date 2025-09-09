@@ -1,8 +1,8 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
-import type { ApiError } from '@shared/types';
+import type { ApiError, Confidant } from '@shared/types';
 
-import type { Confidant, ProfileField } from '../types';
+import type { ProfileField } from '../types';
 
 export const ProfileActions = createActionGroup({
   source: 'Profile',

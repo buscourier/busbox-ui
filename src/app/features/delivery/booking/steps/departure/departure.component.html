@@ -1,29 +1,39 @@
 @let currentStep = currentStep$ | async;
 @let departure = departure$ | async;
+@let currentUser = auth.getCurrentUser() | async;
 
 @if (currentStep) {
-  <div class="mt-16 mb-20">
-    <app-sender
-      [data]="departure?.sender || null"
+  @if (currentUser) {
+    <app-confidants
+      [currentUserId]="currentUser.id"
       (dataChange)="updateSender($event)"
       (validationChange)="onSenderValidationChange($event)"
     />
-  </div>
-  <div class="grid xl:grid-cols-2 gap-4">
+  } @else {
+    <div class="mt-16 mb-20">
+      <app-sender
+        [data]="departure?.sender || null"
+        (dataChange)="updateSender($event)"
+        (validationChange)="onSenderValidationChange($event)"
+      />
+    </div>
+  }
+
+  <div class="grid gap-4 xl:grid-cols-2">
     <app-pickup-point class="booking">
       <span>
         {{ 'booking.departure.pickupPoint.title' | transloco }}
       </span>
     </app-pickup-point>
     <div
-      class="relative hidden xl:flex flex-col items-center justify-center gap-4 py-5 bg-gray-50 rounded-md border border-gray-100 before:absolute before:top-[39px] before:-left-6 before:w-6 before:h-[1px] before:bg-gray-100"
+      class="relative hidden flex-col items-center justify-center gap-4 rounded-md border border-gray-100 bg-gray-50 py-5 before:absolute before:top-[39px] before:-left-6 before:h-[1px] before:w-6 before:bg-gray-100 xl:flex"
     >
       <tui-icon
         icon="@tui.info"
         [style.color]="'var(--color-yellow-500)'"
         [style.font-size.rem]="3"
       />
-      <p class="text-sm text-gray-500 max-w-[350px] text-center">
+      <p class="max-w-[350px] text-center text-sm text-gray-500">
         {{ 'pickupPoint.info' | transloco }}
       </p>
     </div>

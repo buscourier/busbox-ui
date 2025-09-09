@@ -9,6 +9,8 @@ import { take, withLatestFrom, combineLatest } from 'rxjs';
 import type { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
+import { AuthFacade } from '@auth';
+
 import { PickupPointComponent, PickupPointFacade } from '@delivery/pickup-point';
 
 import { BookingFacade } from '../../booking.facade';
@@ -20,11 +22,19 @@ import {
   type StepNumber,
 } from '../../types';
 
+import { ConfidantsComponent } from './confidants';
 import { SenderComponent } from './sender';
 
 @Component({
   selector: 'app-departure',
-  imports: [SenderComponent, PickupPointComponent, AsyncPipe, TuiIcon, TranslocoPipe],
+  imports: [
+    SenderComponent,
+    PickupPointComponent,
+    AsyncPipe,
+    TuiIcon,
+    TranslocoPipe,
+    ConfidantsComponent,
+  ],
   templateUrl: './departure.component.html',
   styleUrl: './departure.component.css',
   providers: [
@@ -39,6 +49,8 @@ export class DepartureComponent implements OnInit {
   currentStep$!: Observable<StepNumber>;
   departure$!: Observable<Departure | null>;
 
+  readonly auth = inject(AuthFacade);
+
   private isSenderValid = false;
   private isPickupPointValid = false;
 
@@ -49,7 +61,6 @@ export class DepartureComponent implements OnInit {
   ngOnInit(): void {
     this.currentStep$ = this.bookingFacade.getCurrentStep();
     this.departure$ = this.bookingFacade.getDeparture();
-    // this.applicant$ = this.bookingFacade.getApplicant();
 
     this.pickupPointFacade
       .getFormState()
