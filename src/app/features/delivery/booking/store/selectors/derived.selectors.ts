@@ -2,12 +2,23 @@ import { createSelector } from '@ngrx/store';
 
 import type { ReviewSection } from '@delivery/types';
 
-import type { Step, StepNumber } from '../../types';
+import { ApplicantType, type StepNumber } from '../../types';
 
 import type { BaseSelectors } from './base-selectors.types';
 import type { DerivedSelectors } from './derived-selectors.types';
 
 export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSelectors => {
+  const selectCurrentStepData = createSelector(
+    baseSelectors.selectSteps,
+    baseSelectors.selectCurrentStep,
+    (steps, currentStep) => steps[currentStep],
+  );
+
+  const selectIsLegalEntity = createSelector(
+    baseSelectors.selectApplicant,
+    (applicant) => applicant?.applicantType === ApplicantType.LEGAL,
+  );
+
   return {
     selectStepsView: createSelector(
       baseSelectors.selectCurrentStep,
@@ -20,12 +31,7 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
         })),
     ),
 
-    selectCurrentStepData: createSelector(
-      baseSelectors.selectSteps,
-      baseSelectors.selectCurrentStep,
-      (steps, currentStep) => steps[currentStep],
-    ),
-
+    selectCurrentStepData,
     selectStepPath: (step: StepNumber) =>
       createSelector(baseSelectors.selectSteps, (steps) => steps[step].path),
 
@@ -53,10 +59,11 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
 
     selectStepsValid: createSelector(
       baseSelectors.selectSteps,
-      (steps: Record<StepNumber, Step>): boolean => {
-        return Object.values(steps).every((step) => step.isValid);
-      },
+      selectIsLegalEntity,
+      (steps, isLegal): boolean =>
+        Object.entries(steps).every(([k, s]) => (isLegal && k === '1' ? true : s.isValid)),
     ),
+
     selectSenderReviewSection: createSelector(
       baseSelectors.selectDeparture,
       (departure): ReviewSection => {
@@ -89,6 +96,18 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
           ],
         };
       },
+    ),
+
+    selectApplicantType: createSelector(
+      baseSelectors.selectApplicant,
+      (applicant) => applicant?.applicantType || null,
+    ),
+
+    selectIsLegalEntity,
+
+    selectIsCurrentStepValid: createSelector(
+      selectCurrentStepData,
+      (currenStep) => currenStep.isValid,
     ),
   };
 };

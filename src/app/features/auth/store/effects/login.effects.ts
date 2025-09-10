@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { mapResponse } from '@ngrx/operators';
 import { switchMap, tap } from 'rxjs';
@@ -29,11 +29,12 @@ export const loginEffects = {
   ),
 
   redirectAfterLogin: createEffect(
-    (actions$ = inject(Actions), router = inject(Router)) => {
+    (actions$ = inject(Actions), router = inject(Router), route = inject(ActivatedRoute)) => {
       return actions$.pipe(
         ofType(AuthActions.loginSuccess),
         tap(() => {
-          router.navigate(['/']);
+          const returnUrl = route.snapshot.queryParams['returnUrl'] || '/';
+          router.navigate([returnUrl]);
         }),
       );
     },

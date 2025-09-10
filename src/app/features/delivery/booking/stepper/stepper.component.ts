@@ -12,6 +12,7 @@ import type { StepView } from '../types';
 })
 export class StepperComponent {
   @Input({ required: true }) steps!: StepView[] | null;
+  @Input() isLegalEntity = false;
 
   getStepClasses(step: StepView): string {
     const baseClasses = 'bg-gray-200 text-gray-700';

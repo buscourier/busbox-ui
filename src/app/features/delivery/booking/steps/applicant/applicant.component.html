@@ -29,10 +29,17 @@
   @if (applicant) {
     @switch (applicant.applicantType) {
       @case (ApplicantType.LEGAL) {
-        <p
-          class="text-md mt-11 text-center"
-          [innerHTML]="'booking.applicant.authHint' | transloco"
-        ></p>
+        <div class="mx-auto max-w-xl text-center leading-7">
+          Чтобы оформить заказ как юридическое лицо, вам необходимо
+          <button
+            type="button"
+            (click)="navigateToLogin()"
+            class="text-blue-500 hover:cursor-pointer"
+          >
+            войти
+          </button>
+          затем вы сможете указать ваши данные.
+        </div>
       }
       @default {
         <app-individual

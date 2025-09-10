@@ -2,7 +2,7 @@ import type { MemoizedSelector } from '@ngrx/store';
 
 import type { ReviewSection } from '@delivery/types';
 
-import type { Step, StepNumber, StepView } from '../../types';
+import type { ApplicantType, Step, StepNumber, StepView } from '../../types';
 
 export interface DerivedSelectors {
   selectStepsView: MemoizedSelector<object, StepView[]>;
@@ -15,4 +15,7 @@ export interface DerivedSelectors {
   selectStepsValid: MemoizedSelector<object, boolean>;
   selectSenderReviewSection: MemoizedSelector<object, ReviewSection>;
   selectRecipientReviewSection: MemoizedSelector<object, ReviewSection>;
+  selectApplicantType: MemoizedSelector<object, ApplicantType | null>;
+  selectIsLegalEntity: MemoizedSelector<object, boolean>;
+  selectIsCurrentStepValid: MemoizedSelector<object, boolean>;
 }

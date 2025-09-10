@@ -1,6 +1,9 @@
 @let vm = vm$ | async;
 @let isMainLayout = isMainLayout$ | async;
 @let applicant = applicant$ | async;
+@let currentStep = currentStep$ | async;
+@let currentUser = auth.getCurrentUser() | async;
+@let isLegal = bookingFacade.isLegalEntity() | async;
 
 @if (!isSuccessPage && !isFailurePage) {
   <div class="booking-header">
@@ -15,25 +18,29 @@
 }
 
 @if (vm && isMainLayout) {
-  <app-stepper [steps]="vm.steps" />
+  <app-stepper [isLegalEntity]="!!isLegal" [steps]="vm.steps" />
 }
 <router-outlet />
-@if (vm && isMainLayout && applicant && applicant.applicantType === ApplicantType.INDIVIDUAL) {
+
+@if (vm && isMainLayout && !(isLegal && currentStep === 1)) {
   <div class="mt-10 flex justify-between gap-2">
-    <button
-      type="button"
-      appearance="secondary"
-      tuiButton
-      size="xl"
-      iconStart="@tui.chevron-left"
-      [class.cursor-not-allowed!]="!vm.prevStep"
-      [disabled]="!vm.prevStep"
-      (click)="goPrevStep(vm.prevStep)"
-    >
-      {{ 'buttons.back' | transloco }}
-    </button>
+    @if (!(isLegal && currentStep === 2)) {
+      <button
+        type="button"
+        appearance="secondary"
+        tuiButton
+        size="xl"
+        iconStart="@tui.chevron-left"
+        [class.cursor-not-allowed!]="!vm.prevStep"
+        [disabled]="!vm.prevStep"
+        (click)="goPrevStep(vm.prevStep)"
+      >
+        {{ 'buttons.back' | transloco }}
+      </button>
+    }
     @if (vm.isLastStep) {
       <button
+        class="ml-auto"
         type="button"
         tuiButton
         size="xl"
@@ -45,6 +52,7 @@
       </button>
     } @else {
       <button
+        class="ml-auto"
         type="button"
         tuiButton
         size="xl"

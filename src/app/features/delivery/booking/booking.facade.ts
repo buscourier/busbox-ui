@@ -25,6 +25,7 @@ import type {
   Sender,
   StepNumber,
   ReviewConfirmation,
+  Step,
 } from './types';
 
 @Injectable({
@@ -62,6 +63,14 @@ export class BookingFacade {
 
   submitOrder(): void {
     this.store.dispatch(BookingActions.submitOrder());
+  }
+
+  getSteps(): Observable<Record<StepNumber, Step>> {
+    return this.store.select(bookingFeature.selectSteps);
+  }
+
+  getApplicantType(): Observable<ApplicantType | null> {
+    return this.store.select(bookingFeature.selectApplicantType);
   }
 
   getApplicant(): Observable<Applicant | null> {
@@ -148,5 +157,13 @@ export class BookingFacade {
 
   resetState(): void {
     this.store.dispatch(BookingActions.resetState());
+  }
+
+  isLegalEntity(): Observable<boolean> {
+    return this.store.select(bookingFeature.selectIsLegalEntity);
+  }
+
+  isCurrentStepValid(): Observable<boolean> {
+    return this.store.select(bookingFeature.selectIsCurrentStepValid);
   }
 }
