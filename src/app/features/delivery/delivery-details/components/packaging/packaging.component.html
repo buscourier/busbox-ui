@@ -1,225 +1,235 @@
-<div class="relative mb-12 mt-16 px-4 py-8 rounded-lg border border-gray-200 bg-white shadow-sm">
-  <h2 class="absolute -top-4 px-3 text-lg bg-white text-gray-700 font-semibold">
+<div class="relative mt-16 mb-12 rounded-lg border border-gray-200 bg-white px-4 py-8 shadow-sm">
+  <h2 class="absolute -top-4 bg-white px-3 text-lg font-semibold text-gray-700">
     {{ 'deliveryDetails.packaging.title' | transloco }}
   </h2>
 
   <!-- Boxes -->
-  <div class="mb-6">
-    <h3 class="mb-3 text-sm font-medium text-gray-600">
-      {{ 'deliveryDetails.packaging.type.boxes' | transloco }}:
-    </h3>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-      @for (box of boxes; track box.id) {
-        <div
-          class="border rounded-md p-2 transition-all duration-200 cursor-pointer hover:border-gray-200"
-          [class.bg-gray-50]="isSelected(box.id)"
-          [class.border-gray-300]="isSelected(box.id)"
-        >
-          <label class="flex items-start cursor-pointer">
-            <input
-              type="checkbox"
-              tuiCheckbox
-              [disabled]="isSelected(box.id)"
-              [ngModel]="isSelected(box.id)"
-              (ngModelChange)="handleCheckboxChange(box, $event)"
-              class="mt-1"
-            />
-            <div class="ml-2 flex-1">
-              <div class="flex justify-between">
-                <span class="font-medium text-gray-800">{{ box.site_name }}</span>
-                @if (isSelected(box.id)) {
-                  <button
-                    type="button"
-                    class="text-red-500 hover:text-red-700 ml-1 cursor-pointer"
-                    (click)="removePackagingItem(box.id)"
-                  >
-                    <tui-icon icon="@tui.x" [style.font-size.rem]="1.2" />
-                  </button>
-                }
+  @if (boxes.length) {
+    <div class="mb-6">
+      <h3 class="mb-3 text-sm font-medium text-gray-600">
+        {{ 'deliveryDetails.packaging.type.boxes' | transloco }}
+      </h3>
+      <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        @for (box of boxes; track box.id) {
+          <div
+            class="cursor-pointer rounded-md border p-2 transition-all duration-200 hover:border-gray-200"
+            [class.bg-gray-50]="isSelected(box.id)"
+            [class.border-gray-300]="isSelected(box.id)"
+          >
+            <label class="flex cursor-pointer items-start">
+              <input
+                type="checkbox"
+                tuiCheckbox
+                [disabled]="isSelected(box.id)"
+                [ngModel]="isSelected(box.id)"
+                (ngModelChange)="handleCheckboxChange(box, $event)"
+                class="mt-1"
+              />
+              <div class="ml-2 flex-1">
+                <div class="flex justify-between">
+                  <span class="font-medium text-gray-800">{{ box.site_name }}</span>
+                  @if (isSelected(box.id)) {
+                    <button
+                      type="button"
+                      class="ml-1 cursor-pointer text-red-500 hover:text-red-700"
+                      (click)="removePackagingItem(box.id)"
+                    >
+                      <tui-icon icon="@tui.x" [style.font-size.rem]="1.2" />
+                    </button>
+                  }
+                </div>
+                <div class="mt-1 text-sm text-gray-500">
+                  {{ +box.price * getQuantity(box.id) }} руб. за {{ getQuantity(box.id) }} шт.
+                </div>
               </div>
-              <div class="text-sm text-gray-500 mt-1">
-                {{ +box.price * getQuantity(box.id) }} руб. за {{ getQuantity(box.id) }} шт.
-              </div>
-            </div>
-          </label>
-        </div>
-      }
+            </label>
+          </div>
+        }
+      </div>
     </div>
-  </div>
+  }
 
   <!--Safe Packs -->
-  <div class="mb-6">
-    <h3 class="mb-3 text-sm font-medium text-gray-600">
-      {{ 'deliveryDetails.packaging.type.safePacks' | transloco }} :
-    </h3>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-      @for (pack of safePacks; track pack.id) {
-        <div
-          class="border rounded-md p-2 transition-all duration-200 cursor-pointer hover:border-gray-200"
-          [class.bg-gray-50]="isSelected(pack.id)"
-          [class.border-gray-300]="isSelected(pack.id)"
-        >
-          <label class="flex items-start cursor-pointer">
-            <input
-              type="checkbox"
-              tuiCheckbox
-              [disabled]="isSelected(pack.id)"
-              [ngModel]="isSelected(pack.id)"
-              (ngModelChange)="handleCheckboxChange(pack, $event)"
-              class="mt-1"
-            />
-            <div class="ml-2 flex-1">
-              <div class="flex justify-between">
-                <span class="font-medium text-gray-800">{{ pack.site_name }}</span>
-                @if (isSelected(pack.id)) {
-                  <button
-                    type="button"
-                    class="text-red-500 hover:text-red-700 ml-1 cursor-pointer"
-                    (click)="removePackagingItem(pack.id)"
-                  >
-                    <tui-icon icon="@tui.x" [style.font-size.rem]="1.2" />
-                  </button>
-                }
+  @if (safePacks.length) {
+    <div class="mb-6">
+      <h3 class="mb-3 text-sm font-medium text-gray-600">
+        {{ 'deliveryDetails.packaging.type.safePacks' | transloco }}
+      </h3>
+      <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        @for (pack of safePacks; track pack.id) {
+          <div
+            class="cursor-pointer rounded-md border p-2 transition-all duration-200 hover:border-gray-200"
+            [class.bg-gray-50]="isSelected(pack.id)"
+            [class.border-gray-300]="isSelected(pack.id)"
+          >
+            <label class="flex cursor-pointer items-start">
+              <input
+                type="checkbox"
+                tuiCheckbox
+                [disabled]="isSelected(pack.id)"
+                [ngModel]="isSelected(pack.id)"
+                (ngModelChange)="handleCheckboxChange(pack, $event)"
+                class="mt-1"
+              />
+              <div class="ml-2 flex-1">
+                <div class="flex justify-between">
+                  <span class="font-medium text-gray-800">{{ pack.site_name }}</span>
+                  @if (isSelected(pack.id)) {
+                    <button
+                      type="button"
+                      class="ml-1 cursor-pointer text-red-500 hover:text-red-700"
+                      (click)="removePackagingItem(pack.id)"
+                    >
+                      <tui-icon icon="@tui.x" [style.font-size.rem]="1.2" />
+                    </button>
+                  }
+                </div>
+                <div class="mt-1 text-sm text-gray-500">
+                  {{ +pack.price * getQuantity(pack.id) }} руб. за {{ getQuantity(pack.id) }} шт.
+                </div>
               </div>
-              <div class="text-sm text-gray-500 mt-1">
-                {{ +pack.price * getQuantity(pack.id) }} руб. за {{ getQuantity(pack.id) }} шт.
-              </div>
-            </div>
-          </label>
-        </div>
-      }
+            </label>
+          </div>
+        }
+      </div>
     </div>
-  </div>
+  }
 
   <!--Poly Packs -->
-  <div class="mb-6">
-    <h3 class="mb-3 text-sm font-medium text-gray-600">
-      {{ 'deliveryDetails.packaging.type.polyPacks' | transloco }} :
-    </h3>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-      @for (pack of polyPacks; track pack.id) {
-        <div
-          class="border rounded-md p-2 transition-all duration-200 cursor-pointer hover:border-gray-200"
-          [class.bg-gray-50]="isSelected(pack.id)"
-          [class.border-gray-300]="isSelected(pack.id)"
-        >
-          <label class="flex items-start cursor-pointer">
-            <input
-              type="checkbox"
-              tuiCheckbox
-              [disabled]="isSelected(pack.id)"
-              [ngModel]="isSelected(pack.id)"
-              (ngModelChange)="handleCheckboxChange(pack, $event)"
-              class="mt-1"
-            />
-            <div class="ml-2 flex-1">
-              <div class="flex justify-between">
-                <span class="font-medium text-gray-800">{{ pack.site_name }}</span>
-                @if (isSelected(pack.id)) {
-                  <button
-                    type="button"
-                    class="text-red-500 hover:text-red-700 ml-1 cursor-pointer"
-                    (click)="removePackagingItem(pack.id)"
-                  >
-                    <tui-icon icon="@tui.x" [style.font-size.rem]="1.2" />
-                  </button>
-                }
+  @if (polyPacks.length) {
+    <div class="mb-6">
+      <h3 class="mb-3 text-sm font-medium text-gray-600">
+        {{ 'deliveryDetails.packaging.type.polyPacks' | transloco }}
+      </h3>
+      <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        @for (pack of polyPacks; track pack.id) {
+          <div
+            class="cursor-pointer rounded-md border p-2 transition-all duration-200 hover:border-gray-200"
+            [class.bg-gray-50]="isSelected(pack.id)"
+            [class.border-gray-300]="isSelected(pack.id)"
+          >
+            <label class="flex cursor-pointer items-start">
+              <input
+                type="checkbox"
+                tuiCheckbox
+                [disabled]="isSelected(pack.id)"
+                [ngModel]="isSelected(pack.id)"
+                (ngModelChange)="handleCheckboxChange(pack, $event)"
+                class="mt-1"
+              />
+              <div class="ml-2 flex-1">
+                <div class="flex justify-between">
+                  <span class="font-medium text-gray-800">{{ pack.site_name }}</span>
+                  @if (isSelected(pack.id)) {
+                    <button
+                      type="button"
+                      class="ml-1 cursor-pointer text-red-500 hover:text-red-700"
+                      (click)="removePackagingItem(pack.id)"
+                    >
+                      <tui-icon icon="@tui.x" [style.font-size.rem]="1.2" />
+                    </button>
+                  }
+                </div>
+                <div class="mt-1 text-sm text-gray-500">
+                  {{ +pack.price * getQuantity(pack.id) }} руб. за {{ getQuantity(pack.id) }} шт.
+                </div>
               </div>
-              <div class="text-sm text-gray-500 mt-1">
-                {{ +pack.price * getQuantity(pack.id) }} руб. за {{ getQuantity(pack.id) }} шт.
-              </div>
-            </div>
-          </label>
-        </div>
-      }
+            </label>
+          </div>
+        }
+      </div>
     </div>
-  </div>
+  }
 
   <!-- Film -->
-  <div class="mb-6">
-    <h3 class="mb-3 text-sm font-medium text-gray-600">
-      {{ 'deliveryDetails.packaging.type.films' | transloco }}:
-    </h3>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-      @for (film of films; track film.id) {
-        <div
-          class="border rounded-md p-2 transition-all duration-200 cursor-pointer hover:border-gray-200"
-          [class.bg-gray-50]="isSelected(film.id)"
-          [class.border-gray-300]="isSelected(film.id)"
-        >
-          <label class="flex items-start cursor-pointer">
-            <input
-              type="checkbox"
-              tuiCheckbox
-              [disabled]="isSelected(film.id)"
-              [ngModel]="isSelected(film.id)"
-              (ngModelChange)="handleCheckboxChange(film, $event)"
-              class="mt-1"
-            />
-            <div class="ml-2 flex-1">
-              <div class="flex justify-between">
-                <span class="font-medium text-gray-800">{{ film.site_name }}</span>
-                @if (isSelected(film.id)) {
-                  <button
-                    type="button"
-                    class="text-red-500 hover:text-red-700 ml-1 cursor-pointer"
-                    (click)="removePackagingItem(film.id)"
-                  >
-                    <tui-icon icon="@tui.x" [style.font-size.rem]="1.2" />
-                  </button>
-                }
+  @if (films.length) {
+    <div class="mb-6">
+      <h3 class="mb-3 text-sm font-medium text-gray-600">
+        {{ 'deliveryDetails.packaging.type.films' | transloco }}
+      </h3>
+      <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        @for (film of films; track film.id) {
+          <div
+            class="cursor-pointer rounded-md border p-2 transition-all duration-200 hover:border-gray-200"
+            [class.bg-gray-50]="isSelected(film.id)"
+            [class.border-gray-300]="isSelected(film.id)"
+          >
+            <label class="flex cursor-pointer items-start">
+              <input
+                type="checkbox"
+                tuiCheckbox
+                [disabled]="isSelected(film.id)"
+                [ngModel]="isSelected(film.id)"
+                (ngModelChange)="handleCheckboxChange(film, $event)"
+                class="mt-1"
+              />
+              <div class="ml-2 flex-1">
+                <div class="flex justify-between">
+                  <span class="font-medium text-gray-800">{{ film.site_name }}</span>
+                  @if (isSelected(film.id)) {
+                    <button
+                      type="button"
+                      class="ml-1 cursor-pointer text-red-500 hover:text-red-700"
+                      (click)="removePackagingItem(film.id)"
+                    >
+                      <tui-icon icon="@tui.x" [style.font-size.rem]="1.2" />
+                    </button>
+                  }
+                </div>
+                <div class="mt-1 text-sm text-gray-500">
+                  {{ +film.price * getQuantity(film.id) }} руб. за {{ getQuantity(film.id) }} шт.
+                </div>
               </div>
-              <div class="text-sm text-gray-500 mt-1">
-                {{ +film.price * getQuantity(film.id) }} руб. за {{ getQuantity(film.id) }} шт.
-              </div>
-            </div>
-          </label>
-        </div>
-      }
+            </label>
+          </div>
+        }
+      </div>
     </div>
-  </div>
+  }
 
-  <!--Other Packs -->
-  <div class="mb-6">
-    <h3 class="mb-3 text-sm font-medium text-gray-600">
-      {{ 'deliveryDetails.packaging.type.other' | transloco }}:
-    </h3>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-      @for (pack of other; track pack.id) {
-        <div
-          class="border rounded-md p-2 transition-all duration-200 cursor-pointer hover:border-gray-200"
-          [class.bg-gray-50]="isSelected(pack.id)"
-          [class.border-gray-300]="isSelected(pack.id)"
-        >
-          <label class="flex items-start cursor-pointer">
-            <input
-              type="checkbox"
-              tuiCheckbox
-              [disabled]="isSelected(pack.id)"
-              [ngModel]="isSelected(pack.id)"
-              (ngModelChange)="handleCheckboxChange(pack, $event)"
-              class="mt-1"
-            />
-            <div class="ml-2 flex-1">
-              <div class="flex justify-between">
-                <span class="font-medium text-gray-800">{{ pack.site_name }}</span>
-                @if (isSelected(pack.id)) {
-                  <button
-                    type="button"
-                    class="text-red-500 hover:text-red-700 ml-1 cursor-pointer"
-                    (click)="removePackagingItem(pack.id)"
-                  >
-                    <tui-icon icon="@tui.x" [style.font-size.rem]="1.2" />
-                  </button>
-                }
+  @if (other.length) {
+    <!--Other Packs -->
+    <div class="mb-6">
+      <h3 class="mb-3 text-sm font-medium text-gray-600">
+        {{ 'deliveryDetails.packaging.type.other' | transloco }}
+      </h3>
+      <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        @for (pack of other; track pack.id) {
+          <div
+            class="cursor-pointer rounded-md border p-2 transition-all duration-200 hover:border-gray-200"
+            [class.bg-gray-50]="isSelected(pack.id)"
+            [class.border-gray-300]="isSelected(pack.id)"
+          >
+            <label class="flex cursor-pointer items-start">
+              <input
+                type="checkbox"
+                tuiCheckbox
+                [disabled]="isSelected(pack.id)"
+                [ngModel]="isSelected(pack.id)"
+                (ngModelChange)="handleCheckboxChange(pack, $event)"
+                class="mt-1"
+              />
+              <div class="ml-2 flex-1">
+                <div class="flex justify-between">
+                  <span class="font-medium text-gray-800">{{ pack.site_name }}</span>
+                  @if (isSelected(pack.id)) {
+                    <button
+                      type="button"
+                      class="ml-1 cursor-pointer text-red-500 hover:text-red-700"
+                      (click)="removePackagingItem(pack.id)"
+                    >
+                      <tui-icon icon="@tui.x" [style.font-size.rem]="1.2" />
+                    </button>
+                  }
+                </div>
+                <div class="mt-1 text-sm text-gray-500">
+                  {{ +pack.price * getQuantity(pack.id) }} руб. за {{ getQuantity(pack.id) }} шт.
+                </div>
               </div>
-              <div class="text-sm text-gray-500 mt-1">
-                {{ +pack.price * getQuantity(pack.id) }} руб. за {{ getQuantity(pack.id) }} шт.
-              </div>
-            </div>
-          </label>
-        </div>
-      }
+            </label>
+          </div>
+        }
+      </div>
     </div>
-  </div>
+  }
 </div>
