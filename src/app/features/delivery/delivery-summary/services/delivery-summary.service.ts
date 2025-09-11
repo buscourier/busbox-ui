@@ -30,7 +30,7 @@ export class DeliverySummaryService extends DeliveryBaseService {
       ),
     ).pipe(
       map((results) => ({
-        price: results.reduce((sum, { price }) => sum + price, 0),
+        price: results.reduce((sum, { price }) => sum + +price, 0),
       })),
     );
   }

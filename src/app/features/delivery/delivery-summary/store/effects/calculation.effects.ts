@@ -30,7 +30,14 @@ export const calculationEffects = {
         deliveryDetailsFacade.isAllOrdersValid(),
         pickupPointFacade.getCourier(),
         deliveryPointFacade.getCourier(),
-      ]).pipe(map(() => DeliverySummaryActions.loadTotalAmount()));
+      ]).pipe(
+        debounceTime(DEBOUNCE_TIME.DEFAULT),
+        filter(
+          ([pickupCity, deliveryCity, orders, isAllOrdersValid]) =>
+            !!pickupCity?.id && !!deliveryCity?.id && orders.length > 0 && isAllOrdersValid,
+        ),
+        map(() => DeliverySummaryActions.loadTotalAmount()),
+      );
     },
     { functional: true },
   ),
@@ -50,11 +57,11 @@ export const calculationEffects = {
         pickupPointFacade.getCourier(),
         deliveryPointFacade.getCourier(),
       ]).pipe(
-        debounceTime(DEBOUNCE_TIME.DEFAULT),
-        filter(
-          ([pickupCity, deliveryCity, orders, isAllOrdersValid]) =>
-            !!pickupCity?.id && !!deliveryCity?.id && orders.length > 0 && isAllOrdersValid,
-        ),
+        // debounceTime(DEBOUNCE_TIME.DEFAULT),
+        // filter(
+        //   ([pickupCity, deliveryCity, orders, isAllOrdersValid]) =>
+        //     !!pickupCity?.id && !!deliveryCity?.id && orders.length > 0 && isAllOrdersValid,
+        // ),
         switchMap(([pickupCity, deliveryCity, orders, , pickupCourier, deliveryCourier]) => {
           return deliverySummaryService
             .calculateTotalAmount({
