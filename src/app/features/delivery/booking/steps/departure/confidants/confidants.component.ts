@@ -21,6 +21,7 @@ import {
   TuiFieldErrorContentPipe,
   TuiInputPhone,
   TuiSelect,
+  TuiSkeleton,
 } from '@taiga-ui/kit';
 import { distinctUntilChanged, type Observable, startWith, take } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -49,6 +50,7 @@ import type { ConfidantForm } from './confidants.types';
     AsyncPipe,
     TranslocoPipe,
     TuiInputPhone,
+    TuiSkeleton,
   ],
   templateUrl: './confidants.component.html',
   styleUrl: './confidants.component.css',

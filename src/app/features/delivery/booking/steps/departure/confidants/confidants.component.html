@@ -1,9 +1,16 @@
+@let confidants = confidants$ | async;
+
 <form [formGroup]="form">
   <h3 class="mb-4 border-b border-gray-100 pb-3 text-lg font-medium text-gray-800">
     Доверенное лицо
   </h3>
   <div tuiLabel class="mb-5">
-    <tui-textfield tuiChevron [stringify]="stringify" tuiDropdownMobile="Роль отправителя">
+    <tui-textfield
+      tuiChevron
+      [stringify]="stringify"
+      tuiDropdownMobile="Роль отправителя"
+      [tuiSkeleton]="!confidants"
+    >
       <input
         tuiSelect
         [formControl]="confidant"
@@ -12,7 +19,7 @@
         placeholder="Выберите доверенное лицо"
       />
 
-      <tui-data-list-wrapper *tuiTextfieldDropdown new [items]="confidants$ | async" />
+      <tui-data-list-wrapper *tuiTextfieldDropdown new [items]="confidants" />
     </tui-textfield>
   </div>
 
@@ -21,7 +28,7 @@
       {{ 'contacts.labels.phone' | transloco }}
     </span>
 
-    <tui-textfield>
+    <tui-textfield [tuiSkeleton]="!confidants">
       <input
         autocomplete="tel"
         mask="+7 ### ###-##-##"
