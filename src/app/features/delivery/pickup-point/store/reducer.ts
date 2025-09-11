@@ -203,22 +203,16 @@ export const pickupPointReducer = createReducer(
    * @param city - the new city to set after the reset
    */
   on(PickupPointActions.resetState, (state, { keepCity, city }): PickupPointState => {
-    const savedData = keepCity
-      ? {
-          cities: {
-            ...state.cities,
-            selected: city || state.cities.selected,
-          },
-          offices: {
-            ...state.offices,
-            selected: null,
-          },
-        }
-      : {};
-
     return {
       ...initialState,
-      ...savedData,
+      cities: {
+        ...state.cities,
+        selected: keepCity ? (city ?? state.cities.selected) : null,
+      },
+      offices: {
+        ...state.offices,
+        selected: null,
+      },
     };
   }),
 );

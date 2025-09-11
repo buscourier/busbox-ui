@@ -1,7 +1,7 @@
 @let vm = vm$ | async;
 
 @if (vm && form) {
-  <div [tuiSkeleton]="vm.cities.isLoading">
+  <div>
     <b class="mb-3 flex items-center justify-between border-b border-gray-100 pb-3 text-lg">
       <ng-content select="span"></ng-content>
       <span class="xl:hidden">
