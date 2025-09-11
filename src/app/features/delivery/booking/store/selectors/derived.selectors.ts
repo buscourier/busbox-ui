@@ -35,8 +35,14 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
     selectStepPath: (step: StepNumber) =>
       createSelector(baseSelectors.selectSteps, (steps) => steps[step].path),
 
-    selectPrevStep: createSelector(baseSelectors.selectCurrentStep, (currentStep) =>
-      currentStep > 1 ? ((currentStep - 1) as StepNumber) : null,
+    selectPrevStep: createSelector(
+      baseSelectors.selectCurrentStep,
+      selectIsLegalEntity,
+      (currentStep, isLegal) => {
+        const minStep = isLegal ? 2 : 1;
+
+        return currentStep > minStep ? ((currentStep - 1) as StepNumber) : null;
+      },
     ),
 
     selectNextStep: createSelector(
