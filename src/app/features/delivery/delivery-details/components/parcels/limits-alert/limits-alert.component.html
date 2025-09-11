@@ -1,0 +1,19 @@
+<small class="ml-1 block">
+  {{ limits.WEIGHT.MAX === 100 ? 'при передачи в отделение' : 'при передачи курьеру' }}
+</small>
+<div class="m-2 text-black">
+  <div class="grid grid-cols-2 gap-4 text-center">
+    <div class="rounded-lg border border-black p-2">
+      <div class="text-lg font-bold">
+        {{ limits.DIMENSIONS.MAX }} {{ transloco.translate('units.width') }}
+      </div>
+      <div class="text-xs opacity-90">Габариты</div>
+    </div>
+    <div class="rounded-lg border border-black p-2">
+      <div class="text-lg font-bold">
+        {{ limits.WEIGHT.MAX }} {{ transloco.translate('units.weight') }}
+      </div>
+      <div class="text-xs opacity-90">Вес</div>
+    </div>
+  </div>
+</div>

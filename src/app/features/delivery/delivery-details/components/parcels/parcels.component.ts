@@ -12,9 +12,9 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { TuiResponsiveDialogService } from '@taiga-ui/addon-mobile';
-import { TuiError, TuiIcon } from '@taiga-ui/core';
+import { TuiAlertService, TuiError, TuiIcon } from '@taiga-ui/core';
 import { TUI_VALIDATION_ERRORS, TuiFieldErrorPipe } from '@taiga-ui/kit';
+import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { debounceTime } from 'rxjs';
 
 import { DEBOUNCE_TIME } from '@core/constants';
@@ -22,6 +22,7 @@ import { isObjectsEqual } from '@core/utils';
 
 import type { ParcelItem, ParcelItemLimits, Parcels, ParcelsLimits } from '../../types';
 
+import { LimitsAlertComponent } from './limits-alert';
 import { PARCEL_ITEM_DEFAULTS, ParcelItemComponent } from './parcel-item';
 import { parcelItemAnimation } from './parcels.animations';
 import { parcelsValidationErrors } from './parcels.constants';
@@ -58,7 +59,7 @@ export class ParcelsComponent implements OnChanges, OnInit {
   @Output() dataChange = new EventEmitter<Parcels>();
   @Output() validationChange = new EventEmitter<boolean>();
 
-  private readonly dialog = inject(TuiResponsiveDialogService);
+  private readonly alert = inject(TuiAlertService);
 
   /** Protected properties */
   protected canAddParcelItem = true;
@@ -168,16 +169,23 @@ export class ParcelsComponent implements OnChanges, OnInit {
   }
 
   protected showNotification(limits: ParcelItemLimits): void {
-    this.dialog
-      .open(
-        `
-          Максимальная сумма <b>длины</b>, <b>ширины</b> и <b>высоты</b> - <strong>${limits.DIMENSIONS.MAX} ${this.transloco.translate('units.width')}</strong>
-          <br />Максимальный вес -
-          <strong>${limits.WEIGHT.MAX} ${this.transloco.translate('units.weight')}</strong>`,
-        {
-          label: this.transloco.translate('deliveryDetails.parcel.messages.limits'),
-        },
-      )
+    // this.dialog
+    //   .open(
+    //    ,
+    //     {
+    //       label: this.transloco.translate('deliveryDetails.parcel.messages.limits'),
+    //     },
+    //   )
+    //   .pipe(takeUntilDestroyed(this.destroyRef))
+    //   .subscribe();
+
+    this.alert
+      .open<number>(new PolymorpheusComponent(LimitsAlertComponent), {
+        label: this.transloco.translate('deliveryDetails.parcel.messages.limits'),
+        data: limits,
+        appearance: 'warning',
+        autoClose: 0,
+      })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe();
   }
