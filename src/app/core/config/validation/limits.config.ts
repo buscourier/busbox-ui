@@ -52,8 +52,8 @@ export const DEFAULT_VALIDATION_LIMITS: ValidationLimits = {
   },
   address: {
     street: { minLength: 3, maxLength: 30, pattern: TEXT_BASE_REGEX },
-    building: { minLength: 3, maxLength: 10, pattern: TEXT_BASE_REGEX },
-    apartment: { minLength: 3, maxLength: 10, pattern: TEXT_BASE_REGEX },
+    building: { minLength: 1, maxLength: 10, pattern: TEXT_BASE_REGEX },
+    apartment: { minLength: 1, maxLength: 10, pattern: TEXT_BASE_REGEX },
   },
   document: {
     passport: {
