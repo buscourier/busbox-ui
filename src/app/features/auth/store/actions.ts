@@ -12,6 +12,10 @@ import type {
 export const AuthActions = createActionGroup({
   source: 'Auth',
   events: {
+    Initialize: emptyProps(),
+    InitializeSuccess: props<{ user: AuthResponse }>(),
+    InitializeFailure: emptyProps(),
+
     Login: props<{ credentials: LoginCredentials }>(),
     'Login Success': props<{ response: AuthResponse }>(),
     'Login Failure': props<{ error: ApiError }>(),

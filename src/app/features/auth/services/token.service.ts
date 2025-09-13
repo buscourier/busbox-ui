@@ -48,6 +48,28 @@ export class TokenService {
     // }
   }
 
+  // getUserFromToken(): AuthResponse | null {
+  //   const token = this.getAccessToken();
+  //
+  //   if (!token) {
+  //     return null;
+  //   }
+  //
+  //   // if (payload.exp * 1000 < Date.now()) {
+  //   //   this.clearTokens(); // Удаляем истекший токен
+  //   //   return null;
+  //   // }
+  //
+  //   try {
+  //     const payload = this.decodeToken(token);
+  //     console.log('payload', payload);
+  //     return payload;
+  //   } catch (error) {
+  //     console.error('Error decoding JWT token:', error);
+  //     return null;
+  //   }
+  // }
+
   getTokenExpirationTime(): number | null {
     const token = this.getAccessToken();
 

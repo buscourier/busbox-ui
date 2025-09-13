@@ -2,6 +2,9 @@ import type { Routes } from '@angular/router';
 
 import { NotFoundComponent } from '@shared/components/not-found';
 
+// eslint-disable-next-line import/no-internal-modules
+import { authGuard } from '@auth/guards/auth.guard';
+
 export const routes: Routes = [
   {
     path: '',
@@ -23,6 +26,7 @@ export const routes: Routes = [
   {
     path: 'account',
     loadChildren: () => import('./features/account').then((m) => m.accountRoutes),
+    canActivate: [authGuard],
   },
   {
     path: 'info',

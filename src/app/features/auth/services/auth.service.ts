@@ -31,23 +31,10 @@ export class AuthService {
           ...credentials,
         }),
       )
-      .pipe(
-        map((response) => {
-          if ('error' in response) {
-            const errorMessage =
-              typeof response.error === 'string' ? response.error : 'Unknown error';
-
-            throw new Error(errorMessage);
-          }
-          return response as AuthResponse;
-        }),
-        tap((response) => this.handleAuthentication(response)),
-        catchError((error) => this.handleError('Login Failed', error)),
-      );
+      .pipe(catchError((error) => this.handleError('Login Failed', error)));
   }
 
   register(userData: RegisterPayload): Observable<AuthResponse> {
-    console.log('register', userData);
     return this.http.post<AuthResponse>(`${this.apiBaseUrl}/users`, userData).pipe(
       tap((response) => this.handleAuthentication(response)),
       catchError((error) => this.handleError('Registration Failed', error)),
@@ -58,7 +45,6 @@ export class AuthService {
     return this.http.post<void>(`${this.apiBaseUrl}/account/logout`, {}).pipe(
       tap(() => this.handleLogout()),
       catchError(() => {
-        // Even if the API call fails, we still want to log out locally
         this.handleLogout();
         return of(void 0);
       }),
