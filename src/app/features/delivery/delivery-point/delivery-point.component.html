@@ -68,12 +68,17 @@
               <!--                  </div>-->
               <!--                }-->
               <div class="mb-2 flex items-center text-sm text-gray-600">
-                <tui-icon
-                  icon="@tui.map-pin"
-                  class="mr-2"
-                  [style.color]="'var(--color-gray-600)'"
-                  [style.font-size.rem]="1"
-                />
+                <a
+                  [href]="'/contacts?officeId=' + office.value?.id"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <tui-icon
+                    icon="@tui.map-pin"
+                    class="mr-2 text-gray-600 hover:text-yellow-500"
+                    [style.font-size.rem]="1"
+                  />
+                </a>
                 <span>
                   {{ 'deliveryPoint.labels.office' | transloco }}
                 </span>
