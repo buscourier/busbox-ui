@@ -138,7 +138,7 @@
           }
           @case (TabType.BUS) {
             <div class="rounded-lg bg-gray-50 p-3">
-              <label class="flex cursor-pointer items-center">
+              <label class="flex cursor-pointer items-center" [tuiSkeleton]="vm.cities.isLoading">
                 <input tuiCheckbox type="checkbox" [formControl]="busPickup" />
                 <span class="ml-2 inline-block text-gray-700">
                   {{ 'deliveryPoint.methods.busPickup' | transloco }}
