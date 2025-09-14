@@ -11,9 +11,8 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { TuiResponsiveDialogService } from '@taiga-ui/addon-mobile';
 import type { TuiBooleanHandler } from '@taiga-ui/cdk';
-import { TuiButton, TuiHintDirective } from '@taiga-ui/core';
+import { TuiAlertService, TuiButton, TuiHintDirective } from '@taiga-ui/core';
 import { TuiRadioList } from '@taiga-ui/kit';
 import { filter } from 'rxjs';
 
@@ -44,7 +43,7 @@ export class CargoPickerComponent implements OnInit, OnChanges {
   typeControl = new FormControl<MappedCargoType | null>(null);
   mappedTypes: MappedCargoType[] = [];
 
-  private readonly dialog = inject(TuiResponsiveDialogService);
+  private readonly alert = inject(TuiAlertService);
   private readonly destroyRef = inject(DestroyRef);
   private transloco = inject(TranslocoService);
 
@@ -96,9 +95,11 @@ export class CargoPickerComponent implements OnInit, OnChanges {
   }
 
   protected showNotification(): void {
-    this.dialog
+    this.alert
       .open(this.getNotificationMessage(this.typeControl.value?.name || ''), {
         label: 'Ограничение',
+        appearance: 'warning',
+        autoClose: 0,
       })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe();
@@ -182,7 +183,7 @@ export class CargoPickerComponent implements OnInit, OnChanges {
   }
 
   private getNotificationMessage(cargoName: string) {
-    return `К сожалению тип груза <strong>${cargoName}</strong> недоступен при курьерской доставке.
-          Переключено на <strong>Документы</strong>`;
+    return `Вы выбрали <strong>${this.transloco.translate(cargoName)}</strong> для отправки.
+     Этот тип груза <strong>невозмонжо</strong> передать курьеру.`;
   }
 }
