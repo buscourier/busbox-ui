@@ -45,6 +45,10 @@ export class AppComponent implements OnInit {
     this.initializeGlobalData();
   }
 
+  get isContactsPage(): boolean {
+    return this.router.url.includes('contacts');
+  }
+
   logout(): void {
     this.authFacade.logout();
   }
