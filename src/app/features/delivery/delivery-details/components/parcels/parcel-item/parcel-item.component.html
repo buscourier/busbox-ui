@@ -1,7 +1,7 @@
-<div [formGroup]="form" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+<div [formGroup]="form" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
   <div tuiLabel class="relative">
-    <div class="flex justify-between mb-1">
-      <span class="text-sm text-gray-600 flex items-center">
+    <div class="mb-1 flex justify-between">
+      <span class="flex items-center text-sm text-gray-600">
         {{ 'deliveryDetails.parcel.labels.quantity' | transloco }}
       </span>
       @if (quantityInput.focused()) {
@@ -29,8 +29,8 @@
   </div>
 
   <div tuiLabel class="relative">
-    <div class="flex justify-between mb-1">
-      <span class="text-sm text-gray-600 flex items-center">
+    <div class="mb-1 flex justify-between">
+      <span class="flex items-center text-sm text-gray-600">
         {{ 'deliveryDetails.parcel.labels.weight' | transloco }}
       </span>
       @if (weightInput.focused()) {
@@ -59,9 +59,9 @@
   </div>
 
   <div class="col-span-full">
-    <div class="rounded-md border border-gray-100 p-3 bg-gray-50">
-      <div class="flex justify-between mb-3">
-        <span class="text-sm text-gray-600 flex items-center">
+    <div class="rounded-md border border-gray-100 bg-gray-50 p-3">
+      <div class="mb-3 flex justify-between">
+        <span class="flex items-center text-sm text-gray-600">
           <tui-icon
             icon="@tui.proportions"
             class="mr-2"
@@ -71,18 +71,24 @@
           {{ 'deliveryDetails.parcel.labels.dimensions' | transloco }}
         </span>
         @if (widthInput.focused() || heightInput.focused() || lengthInput.focused()) {
-          <app-limit-badge
-            [value]="getAvailableDimension()"
-            [units]="'units.width' | transloco"
-            [hintText]="'hint.messages.available' | transloco"
-            size="s"
-          />
+          <small [tuiHint]="'hint.messages.available' | transloco">
+            <b>
+              <span class="text-yellow-500">{{ getAvailableDimension() }} см</span>
+              / {{ limits.DIMENSIONS.MAX }} cм
+            </b>
+          </small>
+          <!--          <app-limit-badge-->
+          <!--            [value]="getAvailableDimension()"-->
+          <!--            [units]="'units.width' | transloco"-->
+          <!--            [hintText]="'hint.messages.available' | transloco"-->
+          <!--            size="s"-->
+          <!--          />-->
         }
       </div>
 
       <div formGroupName="dimensions" class="grid grid-cols-3 gap-2">
         <div tuiLabel>
-          <span class="text-xs text-gray-500 mb-1 inline-block">
+          <span class="mb-1 inline-block text-xs text-gray-500">
             {{ 'deliveryDetails.parcel.labels.width' | transloco }}
           </span>
           <tui-textfield #widthInput class="w-full">
@@ -101,7 +107,7 @@
         </div>
 
         <div tuiLabel>
-          <span class="text-xs text-gray-500 mb-1 inline-block">
+          <span class="mb-1 inline-block text-xs text-gray-500">
             {{ 'deliveryDetails.parcel.labels.height' | transloco }}
           </span>
           <tui-textfield #heightInput class="w-full">
@@ -120,7 +126,7 @@
         </div>
 
         <div tuiLabel>
-          <span class="text-xs text-gray-500 mb-1 inline-block">
+          <span class="mb-1 inline-block text-xs text-gray-500">
             {{ 'deliveryDetails.parcel.labels.length' | transloco }}
           </span>
           <tui-textfield #lengthInput class="w-full">
