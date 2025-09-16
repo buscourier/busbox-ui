@@ -1,10 +1,9 @@
 import type { MemoizedSelector } from '@ngrx/store';
 
-import type { ApiError } from '@shared/types';
+import type { ApiError, AsyncStatus } from '@shared/types';
 
 export interface BaseSelectors {
-  selectIsLoading: MemoizedSelector<object, boolean>;
-  selectIsLoaded: MemoizedSelector<object, boolean>;
+  selectStatus: MemoizedSelector<object, AsyncStatus>;
   selectError: MemoizedSelector<object, ApiError | null>;
   selectTotalAmount: MemoizedSelector<object, number>;
 }

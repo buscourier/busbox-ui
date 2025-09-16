@@ -157,7 +157,7 @@ export class DeliveryPointComponent implements OnInit {
       courierDetails: this.fb.control<CourierDetails | null>(null, [Validators.required]),
       busPickup: this.fb.control<boolean>(false, {
         nonNullable: true,
-        validators: [Validators.required],
+        validators: [Validators.requiredTrue],
       }),
     });
 
@@ -246,7 +246,7 @@ export class DeliveryPointComponent implements OnInit {
       .subscribe((courierDetails) => this.deliveryPointFacade.updateCourierDetails(courierDetails));
 
     this.busPickup.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef), filter(Boolean))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((enabled) => this.deliveryPointFacade.setBusPickup(enabled));
   }
 

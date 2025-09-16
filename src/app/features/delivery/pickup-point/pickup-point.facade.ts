@@ -139,4 +139,12 @@ export class PickupPointFacade {
   getReviewSection(): Observable<ReviewSection> {
     return this.store.select(pickupPointFeature.selectReviewSection);
   }
+
+  isComplete(): Observable<boolean> {
+    return this.store.select(pickupPointFeature.selectIsPickupPointComplete);
+  }
+
+  isValid(): Observable<boolean> {
+    return this.store.select(pickupPointFeature.selectIsPickupPointValid);
+  }
 }

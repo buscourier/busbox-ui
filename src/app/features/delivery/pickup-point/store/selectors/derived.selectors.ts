@@ -139,6 +139,26 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
     },
   );
 
+  const selectIsPickupPointValid = createSelector(selectFormState, (form) => form.valid);
+
+  const selectIsPickupPointComplete = createSelector(
+    baseSelectors.selectSelectedCity,
+    baseSelectors.selectSelectedOffice,
+    selectIsCourierSelected,
+    baseSelectors.selectCourierDetails,
+    (city, office, isCourierSelected, courierDetails) => {
+      if (!city?.id) return false;
+
+      const isCourierDetailsComplete =
+        !!courierDetails &&
+        !!courierDetails.apartment &&
+        !!courierDetails.building &&
+        !!courierDetails.street;
+
+      return isCourierSelected ? isCourierDetailsComplete : !!office;
+    },
+  );
+
   return {
     selectAvailableOffices,
     selectIsOfficeLimited,
@@ -151,5 +171,7 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
     selectErrorStatus,
     selectIsPickupLimited,
     selectReviewSection,
+    selectIsPickupPointValid,
+    selectIsPickupPointComplete,
   };
 };

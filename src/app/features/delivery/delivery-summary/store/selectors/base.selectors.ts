@@ -10,8 +10,7 @@ type DeliverySummaryStateSelector = MemoizedSelector<object, DeliverySummaryStat
 export const createBaseSelectors = (
   selectDeliverySummaryState: DeliverySummaryStateSelector,
 ): BaseSelectors => ({
-  selectIsLoading: createSelector(selectDeliverySummaryState, (state) => state.isLoading),
-  selectIsLoaded: createSelector(selectDeliverySummaryState, (state) => state.isLoaded),
+  selectStatus: createSelector(selectDeliverySummaryState, (state) => state.status),
   selectError: createSelector(selectDeliverySummaryState, (state) => state.error),
   selectTotalAmount: createSelector(selectDeliverySummaryState, (state) => state.totalAmount),
 });

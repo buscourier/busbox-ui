@@ -18,4 +18,6 @@ export interface DerivedSelectors {
   selectIsDeliveryLimited: MemoizedSelector<object, boolean>;
   selectReviewSection: MemoizedSelector<object, ReviewSection>;
   selectActiveTabName: MemoizedSelector<object, string>;
+  selectIsDeliveryPointValid: MemoizedSelector<object, boolean>;
+  selectIsDeliveryPointComplete: MemoizedSelector<object, boolean>;
 }

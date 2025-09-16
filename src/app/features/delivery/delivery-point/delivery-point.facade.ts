@@ -217,4 +217,12 @@ export class DeliveryPointFacade {
   getReviewSection(): Observable<ReviewSection> {
     return this.store.select(deliveryPointFeature.selectReviewSection);
   }
+
+  isComplete(): Observable<boolean> {
+    return this.store.select(deliveryPointFeature.selectIsDeliveryPointComplete);
+  }
+
+  isValid(): Observable<boolean> {
+    return this.store.select(deliveryPointFeature.selectIsDeliveryPointValid);
+  }
 }

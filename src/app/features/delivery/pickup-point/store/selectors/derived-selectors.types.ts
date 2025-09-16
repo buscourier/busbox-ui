@@ -18,4 +18,6 @@ export interface DerivedSelectors {
   selectErrorStatus: MemoizedSelector<object, ErrorStatus>;
   selectReviewSection: MemoizedSelector<object, ReviewSection>;
   selectActiveTabName: MemoizedSelector<object, string>;
+  selectIsPickupPointValid: MemoizedSelector<object, boolean>;
+  selectIsPickupPointComplete: MemoizedSelector<object, boolean>;
 }

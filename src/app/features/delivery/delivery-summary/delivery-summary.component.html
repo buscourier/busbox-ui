@@ -2,6 +2,11 @@
 @let isCalculatorLayout = isCalculatorLayout$ | async;
 @let isMobile = isMobile$ | async;
 
+@let isPickupPointValid = pickupPoint.isValid() | async;
+@let isDeliveryPointValid = deliveryPoint.isValid() | async;
+@let isAllOrdersValid = deliveryDetails.isAllOrdersValid() | async;
+@let canBooking = isPickupPointValid && isDeliveryPointValid && isAllOrdersValid;
+
 @if (vm) {
   <!-- Desktop version -->
   @if (!isMobile) {
@@ -10,7 +15,7 @@
         {{ 'summary.title' | transloco }}
       </h2>
 
-      @if (!vm.isLoaded) {
+      @if (vm.isIdle) {
         <p [tuiSkeleton]="vm.isLoading" class="mb-3 text-gray-700">
           {{ 'summary.info.needCityDelivery' | transloco }}
         </p>
@@ -33,30 +38,43 @@
     </div>
   }
 
-  @if (isMobile && vm.isLoaded) {
+  @if (isMobile) {
     <!-- Bottom fixed panel with actions -->
-    <div class="fixed right-0 bottom-0 left-0 z-50 border-t bg-gray-100 p-3 shadow-lg" [@fadeInOut]>
-      <div class="flex items-center justify-between">
-        <div>
-          <div [tuiSkeleton]="vm.isLoading" class="text-sm text-gray-500">
-            {{ 'summary.labels.total' | transloco }}
+    <div
+      class="fixed right-0 bottom-0 left-0 z-50 rounded-tl-xl rounded-tr-xl border-t bg-white p-3 shadow-lg"
+      [@fadeInOut]
+    >
+      <div class="absolute left-1/2 h-1 w-8 -translate-x-1/2 rounded-sm bg-gray-200"></div>
+      <div class="mt-3 flex items-center justify-between">
+        @if (vm.isIdle) {
+          <button
+            type="button"
+            [tuiSkeleton]="vm.isLoading"
+            class="line-clamp-2 text-left text-gray-700 italic"
+            (click)="summaryOpen = true"
+          >
+            {{ 'summary.info.needCityDelivery' | transloco }}
+          </button>
+        } @else {
+          <div [tuiSkeleton]="vm.totalAmount === 0" class="rounded-md">
+            <div [tuiSkeleton]="vm.isLoading" class="text-sm text-gray-500">
+              {{ 'summary.labels.total' | transloco }}
+            </div>
+            <div [tuiSkeleton]="vm.isLoading" class="text-xl font-bold">
+              {{ vm.totalAmount }} руб.
+            </div>
           </div>
-          <div [tuiSkeleton]="vm.isLoading" class="text-xl font-bold">
-            {{ vm.totalAmount }} руб.
-          </div>
-        </div>
-        <div class="flex gap-2">
           <button
             tuiButton
             appearance="primary"
             size="m"
-            class="whitespace-nowrap"
+            class="ml-auto whitespace-nowrap"
             [tuiSkeleton]="vm.isLoading"
             (click)="summaryOpen = true"
           >
             Детали расчета
           </button>
-        </div>
+        }
       </div>
     </div>
 
@@ -67,17 +85,26 @@
       [tuiSheetDialogOptions]="summaryOptions"
       [(tuiSheetDialog)]="summaryOpen"
     >
-      <ng-container *ngTemplateOutlet="summaryDetails; context: { vm: vm }"></ng-container>
+      @if (vm.isIdle) {
+        <p [tuiSkeleton]="vm.isLoading" class="mb-3 text-gray-700 italic">
+          {{ 'summary.info.needCityDelivery' | transloco }}
+        </p>
+        <p [tuiSkeleton]="vm.isLoading" class="text-gray-700 italic">
+          {{ 'summary.info.attention' | transloco }}
+        </p>
+      } @else {
+        <ng-container *ngTemplateOutlet="summaryDetails; context: { vm: vm }"></ng-container>
 
-      <ng-container
-        *ngTemplateOutlet="
-          summaryActions;
-          context: {
-            isCalculatorLayout: isCalculatorLayout,
-            isLoading: vm.isLoading,
-          }
-        "
-      ></ng-container>
+        <ng-container
+          *ngTemplateOutlet="
+            summaryActions;
+            context: {
+              isCalculatorLayout: isCalculatorLayout,
+              isLoading: vm.isLoading,
+            }
+          "
+        ></ng-container>
+      }
     </ng-template>
   }
 
@@ -351,13 +378,13 @@
     <div
       class="mb-6 flex items-center justify-between rounded-md border border-gray-100 bg-gray-50 p-4"
     >
-      <div [tuiSkeleton]="vm.isLoading" class="flex items-center">
+      <div [tuiSkeleton]="vm.totalAmount === 0" class="flex items-center">
         <span class="text-xl font-medium text-gray-700">
           {{ 'summary.labels.total' | transloco }}
         </span>
       </div>
       <div
-        [tuiSkeleton]="vm.isLoading"
+        [tuiSkeleton]="vm.totalAmount === 0"
         class="flex items-center rounded-md bg-white px-3 py-2 shadow-sm"
       >
         <span class="text-2xl font-bold text-gray-700">
@@ -375,14 +402,32 @@
   >
     @if (isCalculatorLayout) {
       <button
-        [tuiSkeleton]="isLoading"
         type="button"
         tuiButton
         size="l"
         class="mb-3 w-full"
-        [routerLink]="['/delivery', 'booking']"
+        [tuiSkeleton]="isLoading"
+        [appearance]="canBooking ? 'primary' : 'secondary-grayscale'"
+        [disabled]="!canBooking"
+        (click)="goToBooking()"
       >
-        {{ 'summary.actions.book' | transloco }}
+        <div class="flex flex-col">
+          <span [class.line-through]="!canBooking">{{ 'summary.actions.book' | transloco }}</span>
+
+          @if (!isPickupPointValid) {
+            <small class="text-2xs text-red-500">
+              (Данные для отправления указаны не полностью или неверно)
+            </small>
+          } @else if (!isDeliveryPointValid) {
+            <small class="text-2xs text-red-500">
+              (Данные для получения указаны не коректно или неверно)
+            </small>
+          } @else if (!isAllOrdersValid) {
+            <small class="text-2xs text-red-500">
+              (Детали заказа указаны не коректно или неверно)
+            </small>
+          }
+        </div>
       </button>
 
       <button

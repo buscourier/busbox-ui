@@ -1,14 +1,15 @@
 import { createFeature } from '@ngrx/store';
 
 import { deliverySummaryReducer } from './reducer';
-import { createBaseSelectors, createViewModelSelector } from './selectors';
+import { createBaseSelectors, createDerivedSelectors, createViewModelSelector } from './selectors';
 
 export const deliverySummaryFeature = createFeature({
   name: 'deliverySummary',
   reducer: deliverySummaryReducer,
   extraSelectors: ({ selectDeliverySummaryState }) => {
     const baseSelectors = createBaseSelectors(selectDeliverySummaryState);
-    const viewModelSelector = createViewModelSelector(baseSelectors);
+    const derivedSelectors = createDerivedSelectors(baseSelectors);
+    const viewModelSelector = createViewModelSelector(baseSelectors, derivedSelectors);
 
     return {
       ...baseSelectors,

@@ -1,8 +1,7 @@
-import type { ApiError } from '@shared/types';
+import type { ApiError, AsyncStatus } from '@shared/types';
 
 export interface DeliverySummaryState {
+  status: AsyncStatus;
   totalAmount: number;
-  isLoading: boolean;
-  isLoaded: boolean;
   error: ApiError | null;
 }
