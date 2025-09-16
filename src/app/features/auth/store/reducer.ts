@@ -6,6 +6,24 @@ import { type AuthState, initialState } from './state';
 export const authReducer = createReducer(
   initialState,
   on(
+    AuthActions.initializeSuccess,
+    (state, { user }): AuthState => ({
+      ...state,
+      isInitialized: true,
+      isAuthenticated: true,
+      user,
+    }),
+  ),
+
+  on(
+    AuthActions.initializeFailure,
+    (state): AuthState => ({
+      ...state,
+      isInitialized: true,
+      isAuthenticated: false,
+    }),
+  ),
+  on(
     AuthActions.login,
     (state): AuthState => ({
       ...state,
@@ -64,27 +82,26 @@ export const authReducer = createReducer(
 
   on(
     AuthActions.logout,
-    (state): AuthState => ({
-      ...state,
-      isLoading: true,
-      error: null,
-    }),
-  ),
-  on(
-    AuthActions.logoutSuccess,
     (): AuthState => ({
       ...initialState,
+      isInitialized: true,
     }),
   ),
-  on(
-    AuthActions.logoutFailure,
-    (state, { error }): AuthState => ({
-      ...state,
-      isLoading: false,
-      // isAuthenticated: false,
-      error,
-    }),
-  ),
+  // on(
+  //   AuthActions.logoutSuccess,
+  //   (): AuthState => ({
+  //     ...initialState,
+  //   }),
+  // ),
+  // on(
+  //   AuthActions.logoutFailure,
+  //   (state, { error }): AuthState => ({
+  //     ...state,
+  //     isLoading: false,
+  //     // isAuthenticated: false,
+  //     error,
+  //   }),
+  // ),
 
   on(
     AuthActions.forgotPassword,

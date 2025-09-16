@@ -3,14 +3,16 @@ import type { OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { tuiTakeUntilDestroyed } from '@taiga-ui/cdk';
 import { take, withLatestFrom } from 'rxjs';
 import type { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 import { DeliveryDetailsComponent, DeliveryDetailsFacade } from '@delivery/delivery-details';
 import { DeliveryPointComponent, DeliveryPointFacade } from '@delivery/delivery-point';
 
 import { BookingFacade } from '../../booking.facade';
-import type { Destination, Recipient, StepNumber } from '../../types';
+import { type Destination, IndividualType, type Recipient, type StepNumber } from '../../types';
 
 import { RecipientComponent } from './recipient';
 
@@ -58,6 +60,22 @@ export class DestinationComponent implements OnInit {
       .subscribe(([isOrdersValid]) => {
         this.isDeliveryDetailsValid = isOrdersValid;
         this.checkStepValidation();
+      });
+
+    this.bookingFacade
+      .getApplicant()
+      .pipe(
+        filter(Boolean),
+        map((applicant) => applicant.individual),
+      )
+      .pipe(take(1), tuiTakeUntilDestroyed(this.destroyRef))
+      .subscribe((individual) => {
+        if (individual?.role.value === IndividualType.RECIPIENT) {
+          this.updateRecipient({
+            fullName: `${individual.lastName} ${individual.firstName} ${individual.middleName}`,
+            phone: individual.phone,
+          });
+        }
       });
   }
 

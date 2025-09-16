@@ -1,7 +1,7 @@
 @let vm = vm$ | async;
 
 @if (vm && form) {
-  <div [tuiSkeleton]="vm.cities.isLoading">
+  <div>
     <ng-content select="b"></ng-content>
   </div>
 
@@ -13,13 +13,23 @@
         [tuiSkeleton]="vm.cities.isLoading"
         tuiDropdownMobile="Город отправления"
       >
-        <input
-          tuiComboBox
-          [formControl]="city"
-          [tuiHint]="[] | tuiFieldErrorContent"
-          tuiHintAppearance="error"
-          [placeholder]="'deliveryPoint.placeholders.city' | transloco"
-        />
+        @if (isMobile) {
+          <input
+            tuiSelect
+            [formControl]="city"
+            [tuiHint]="[] | tuiFieldErrorContent"
+            tuiHintAppearance="error"
+            [placeholder]="'deliveryPoint.placeholders.city' | transloco"
+          />
+        } @else {
+          <input
+            tuiComboBox
+            [formControl]="city"
+            [tuiHint]="[] | tuiFieldErrorContent"
+            tuiHintAppearance="error"
+            [placeholder]="'deliveryPoint.placeholders.city' | transloco"
+          />
+        }
 
         <tui-data-list-wrapper
           *tuiTextfieldDropdown
@@ -58,12 +68,17 @@
               <!--                  </div>-->
               <!--                }-->
               <div class="mb-2 flex items-center text-sm text-gray-600">
-                <tui-icon
-                  icon="@tui.map-pin"
-                  class="mr-2"
-                  [style.color]="'var(--color-gray-600)'"
-                  [style.font-size.rem]="1"
-                />
+                <a
+                  [href]="'/contacts?officeId=' + office.value?.id"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <tui-icon
+                    icon="@tui.map-pin"
+                    class="mr-2 text-gray-600 hover:text-yellow-500"
+                    [style.font-size.rem]="1"
+                  />
+                </a>
                 <span>
                   {{ 'deliveryPoint.labels.office' | transloco }}
                 </span>
@@ -122,8 +137,10 @@
             </div>
           }
           @case (TabType.BUS) {
-            <div class="rounded-lg bg-gray-50 p-3">
-              <label class="flex cursor-pointer items-center">
+            <div
+              class="relative rounded-lg bg-gray-50 p-3 before:absolute before:inset-0 before:z-10"
+            >
+              <label class="flex cursor-pointer" [tuiSkeleton]="vm.cities.isLoading">
                 <input tuiCheckbox type="checkbox" [formControl]="busPickup" />
                 <span class="ml-2 inline-block text-gray-700">
                   {{ 'deliveryPoint.methods.busPickup' | transloco }}

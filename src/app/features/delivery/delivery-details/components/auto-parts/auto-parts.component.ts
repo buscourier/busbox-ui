@@ -13,7 +13,7 @@ import type { FormControl } from '@angular/forms';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { TuiDropdownMobile } from '@taiga-ui/addon-mobile';
-import type { TuiStringHandler } from '@taiga-ui/cdk';
+import { TUI_IS_MOBILE, type TuiStringHandler } from '@taiga-ui/cdk';
 import { TuiNotification, TuiTextfield, TuiTextfieldComponent } from '@taiga-ui/core';
 import {
   TuiChevron,
@@ -21,6 +21,7 @@ import {
   TuiDataListWrapper,
   TuiFilterByInputPipe,
   TuiInputNumber,
+  TuiSelect,
 } from '@taiga-ui/kit';
 import { merge } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -45,6 +46,7 @@ import type { AutoPartsForm } from './auto-parts.types';
     TuiFilterByInputPipe,
     TuiTextfield,
     TuiDataListWrapper,
+    TuiSelect,
   ],
   templateUrl: './auto-parts.component.html',
   styleUrl: './auto-parts.component.css',
@@ -60,6 +62,7 @@ export class AutoPartsComponent implements OnInit, OnChanges {
   form!: AutoPartsForm;
 
   protected stringify: TuiStringHandler<Cargo> = (x) => `${x.name}`;
+  protected readonly isMobile = inject(TUI_IS_MOBILE);
 
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);

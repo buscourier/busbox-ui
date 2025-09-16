@@ -1,6 +1,8 @@
 @let vm = vm$ | async;
 @let isMainLayout = isMainLayout$ | async;
-@let applicant = applicant$ | async;
+@let currentStep = currentStep$ | async;
+@let isAuth = auth.isAuthenticated() | async;
+@let isLegal = bookingFacade.isLegalEntity() | async;
 
 @if (!isSuccessPage && !isFailurePage) {
   <div class="booking-header">
@@ -15,10 +17,11 @@
 }
 
 @if (vm && isMainLayout) {
-  <app-stepper [steps]="vm.steps" />
+  <app-stepper [isLegalEntity]="!!isAuth" [steps]="vm.steps" />
 }
 <router-outlet />
-@if (vm && isMainLayout && applicant && applicant.applicantType === ApplicantType.INDIVIDUAL) {
+
+@if (vm && isMainLayout && !(isLegal && currentStep === 1)) {
   <div class="mt-10 flex justify-between gap-2">
     <button
       type="button"
@@ -34,17 +37,20 @@
     </button>
     @if (vm.isLastStep) {
       <button
+        class="ml-auto"
         type="button"
         tuiButton
         size="xl"
         iconEnd="@tui.handshake"
         [disabled]="!vm.stepsValid"
+        [loading]="vm.isBooking"
         (click)="submitOrder()"
       >
         {{ 'buttons.sendOrder' | transloco }}
       </button>
     } @else {
       <button
+        class="ml-auto"
         type="button"
         tuiButton
         size="xl"
@@ -56,4 +62,8 @@
       </button>
     }
   </div>
+}
+
+@if (vm?.isBooking) {
+  <div class="absolute inset-0 z-20"></div>
 }

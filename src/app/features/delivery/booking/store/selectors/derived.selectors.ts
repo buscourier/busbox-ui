@@ -1,14 +1,47 @@
 import { createSelector } from '@ngrx/store';
 
+import { AsyncStatus } from '@shared/types';
+
 import type { ReviewSection } from '@delivery/types';
 
-import type { Step, StepNumber } from '../../types';
+import { ApplicantType, type StepNumber } from '../../types';
 
 import type { BaseSelectors } from './base-selectors.types';
 import type { DerivedSelectors } from './derived-selectors.types';
 
 export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSelectors => {
+  const selectCurrentStepData = createSelector(
+    baseSelectors.selectSteps,
+    baseSelectors.selectCurrentStep,
+    (steps, currentStep) => steps[currentStep],
+  );
+
+  const selectIsLegalEntity = createSelector(
+    baseSelectors.selectApplicant,
+    (applicant) => applicant?.applicantType === ApplicantType.LEGAL,
+  );
+
   return {
+    selectIsIdle: createSelector(
+      baseSelectors.selectBookingStatus,
+      (status) => status === AsyncStatus.IDLE,
+    ),
+
+    selectIsBooking: createSelector(
+      baseSelectors.selectBookingStatus,
+      (status) => status === AsyncStatus.LOADING,
+    ),
+
+    selectIsBookingSuccess: createSelector(
+      baseSelectors.selectBookingStatus,
+      (status) => status === AsyncStatus.LOADED,
+    ),
+
+    selectIsBookingFailed: createSelector(
+      baseSelectors.selectBookingStatus,
+      (status) => status === AsyncStatus.ERROR,
+    ),
+
     selectStepsView: createSelector(
       baseSelectors.selectCurrentStep,
       baseSelectors.selectSteps,
@@ -20,17 +53,18 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
         })),
     ),
 
-    selectCurrentStepData: createSelector(
-      baseSelectors.selectSteps,
-      baseSelectors.selectCurrentStep,
-      (steps, currentStep) => steps[currentStep],
-    ),
-
+    selectCurrentStepData,
     selectStepPath: (step: StepNumber) =>
       createSelector(baseSelectors.selectSteps, (steps) => steps[step].path),
 
-    selectPrevStep: createSelector(baseSelectors.selectCurrentStep, (currentStep) =>
-      currentStep > 1 ? ((currentStep - 1) as StepNumber) : null,
+    selectPrevStep: createSelector(
+      baseSelectors.selectCurrentStep,
+      selectIsLegalEntity,
+      (currentStep, isLegal) => {
+        const minStep = isLegal ? 2 : 1;
+
+        return currentStep > minStep ? ((currentStep - 1) as StepNumber) : null;
+      },
     ),
 
     selectNextStep: createSelector(
@@ -53,10 +87,11 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
 
     selectStepsValid: createSelector(
       baseSelectors.selectSteps,
-      (steps: Record<StepNumber, Step>): boolean => {
-        return Object.values(steps).every((step) => step.isValid);
-      },
+      selectIsLegalEntity,
+      (steps, isLegal): boolean =>
+        Object.entries(steps).every(([k, s]) => (isLegal && k === '1' ? true : s.isValid)),
     ),
+
     selectSenderReviewSection: createSelector(
       baseSelectors.selectDeparture,
       (departure): ReviewSection => {
@@ -89,6 +124,18 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
           ],
         };
       },
+    ),
+
+    selectApplicantType: createSelector(
+      baseSelectors.selectApplicant,
+      (applicant) => applicant?.applicantType || null,
+    ),
+
+    selectIsLegalEntity,
+
+    selectIsCurrentStepValid: createSelector(
+      selectCurrentStepData,
+      (currenStep) => currenStep.isValid,
     ),
   };
 };

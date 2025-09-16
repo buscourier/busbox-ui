@@ -12,6 +12,7 @@ export const {
   selectUser,
   selectIsAuthenticated,
   selectIsLoading,
+  selectIsInitialized,
   selectIsRefreshingToken,
   selectError,
 } = authFeature;

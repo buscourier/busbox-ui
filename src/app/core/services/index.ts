@@ -6,3 +6,4 @@ export * from './page-content.service';
 export * from './navigation.service';
 export * from './preload-icons.service';
 export * from './cases.service';
+export * from './confidants.service';

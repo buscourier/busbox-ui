@@ -1,10 +1,15 @@
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { mapResponse } from '@ngrx/operators';
 import { switchMap, tap } from 'rxjs';
 
+import { PersistenceService } from '@core/services';
+
 import type { ApiError } from '@shared/types';
+
+import { TokenService } from '@auth/services/token.service';
+import type { AuthResponse } from '@auth/types';
 
 import { AuthService } from '../../services/auth.service';
 
@@ -28,12 +33,30 @@ export const loginEffects = {
     { functional: true },
   ),
 
+  loginSuccess: createEffect(
+    (
+      actions$ = inject(Actions),
+      tokenService = inject(TokenService),
+      persistenceService = inject(PersistenceService),
+    ) => {
+      return actions$.pipe(
+        ofType(AuthActions.loginSuccess),
+        tap(({ response }) => {
+          tokenService.setTokens(response.auth_key);
+          persistenceService.save<'user', { user: AuthResponse }>('user', response);
+        }),
+      );
+    },
+    { functional: true, dispatch: false },
+  ),
+
   redirectAfterLogin: createEffect(
-    (actions$ = inject(Actions), router = inject(Router)) => {
+    (actions$ = inject(Actions), router = inject(Router), route = inject(ActivatedRoute)) => {
       return actions$.pipe(
         ofType(AuthActions.loginSuccess),
         tap(() => {
-          router.navigate(['/']);
+          const returnUrl = route.snapshot.queryParams['returnUrl'] || '/';
+          router.navigate([returnUrl]);
         }),
       );
     },

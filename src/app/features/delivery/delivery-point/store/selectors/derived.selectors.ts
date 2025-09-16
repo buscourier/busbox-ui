@@ -1,6 +1,7 @@
 import { createSelector } from '@ngrx/store';
 
 import type { DeliveryCity, Office } from '@shared/types';
+import { isNonEmpty } from '@shared/utils';
 
 import { LIMITED_OFFICE } from '@delivery/constants';
 import type { Courier, ErrorStatus, ReviewSection } from '@delivery/types';
@@ -95,6 +96,15 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
     },
   );
 
+  const selectIsBusSelected = createSelector(
+    baseSelectors.selectActiveTabId,
+    (activeTabId: string | null): boolean => {
+      if (!activeTabId) return false;
+
+      return activeTabId === DeliveryPointTabType.BUS;
+    },
+  );
+
   const selectCourier = createSelector(
     selectIsCourierSelected,
     baseSelectors.selectCourierDetails,
@@ -166,6 +176,31 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
     }),
   );
 
+  const selectIsDeliveryPointValid = createSelector(selectFormState, (form) => form.valid);
+
+  const selectIsDeliveryPointComplete = createSelector(
+    baseSelectors.selectSelectedCity,
+    baseSelectors.selectSelectedOffice,
+    selectIsCourierSelected,
+    selectIsBusSelected,
+    baseSelectors.selectCourierDetails,
+    (city, office, isCourierSelected, isBusSelected, courierDetails) => {
+      if (!city?.id) return false;
+
+      const isCourierDetailsComplete =
+        !!courierDetails &&
+        isNonEmpty(courierDetails.apartment) &&
+        isNonEmpty(courierDetails.building) &&
+        isNonEmpty(courierDetails.street);
+
+      if (isCourierSelected) {
+        return isCourierDetailsComplete;
+      }
+
+      return isBusSelected || !!office?.id;
+    },
+  );
+
   return {
     selectAvailableOffices,
     selectIsOfficeLimited,
@@ -178,5 +213,7 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
     selectErrorStatus,
     selectIsDeliveryLimited,
     selectReviewSection,
+    selectIsDeliveryPointValid,
+    selectIsDeliveryPointComplete,
   };
 };

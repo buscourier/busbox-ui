@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { catchError, type Observable, shareReplay } from 'rxjs';
 
-import { ApiService } from '@core/services';
+import { ConfidantsService } from '@core/services';
 
 import { environment } from '@env/environment';
 
-import type { Confidant, ProfileField } from '../types';
+import type { ProfileField } from '../types';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ProfileService extends ApiService {
+export class ProfileService extends ConfidantsService {
   getFields(userId: string): Observable<ProfileField[]> {
     return this.http
       .get<ProfileField[]>(`${this.baseUrl}/account/details/${environment.apiKey}/${userId}`)
@@ -22,12 +22,6 @@ export class ProfileService extends ApiService {
       .post<
         ProfileField[]
       >(`${this.baseUrl}/account/details/${environment.apiKey}/${userId}`, payload)
-      .pipe(catchError(this.handleError.bind(this)), shareReplay(1));
-  }
-
-  getConfidants(userId: string): Observable<Confidant[]> {
-    return this.http
-      .get<Confidant[]>(`${this.baseUrl}/account/contactperson/${environment.apiKey}/${userId}`)
       .pipe(catchError(this.handleError.bind(this)), shareReplay(1));
   }
 }

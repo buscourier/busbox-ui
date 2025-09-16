@@ -52,15 +52,15 @@ export const DEFAULT_VALIDATION_LIMITS: ValidationLimits = {
   },
   address: {
     street: { minLength: 3, maxLength: 30, pattern: TEXT_BASE_REGEX },
-    building: { minLength: 3, maxLength: 10, pattern: TEXT_BASE_REGEX },
-    apartment: { minLength: 3, maxLength: 10, pattern: TEXT_BASE_REGEX },
+    building: { minLength: 1, maxLength: 10, pattern: TEXT_BASE_REGEX },
+    apartment: { minLength: 1, maxLength: 10, pattern: TEXT_BASE_REGEX },
   },
   document: {
     passport: {
-      number: { minLength: 1, maxLength: 6, pattern: DocumentRegex.PASSPORT },
+      number: { minLength: 1, maxLength: 12, pattern: DocumentRegex.PASSPORT },
     },
     driverLicense: {
-      number: { minLength: 1, maxLength: 2, pattern: DocumentRegex.DRIVER_LICENSE },
+      number: { minLength: 1, maxLength: 12, pattern: DocumentRegex.DRIVER_LICENSE },
     },
     other: {
       number: { minLength: 1, maxLength: 20, pattern: TEXT_BASE_REGEX },

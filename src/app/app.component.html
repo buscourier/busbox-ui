@@ -1,31 +1,7 @@
 <tui-root>
   <app-header />
-
-  <!--  @if (isAccountPage) {-->
-  <!--    <div class="bg-gray-50">-->
-  <!--      <div class="container mx-auto px-4">-->
-  <!--        <app-breadcrumbs />-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--  }-->
-
-  <!--  <main class="main-content relative overflow-clip pt-16">-->
-  <!--    <div class="container mx-auto px-4" [class.pb-10]="!isHomePage">-->
-  <!--      @if (vm?.layout?.showTitle && vm?.content?.title) {-->
-  <!--        <h1 class="text-4xl font-bold">{{ vm?.content?.title }}</h1>-->
-  <!--      }-->
-
-  <!--      @if (vm?.layout?.showDescription && vm?.content?.description) {-->
-  <!--        <div class="mt-2 mb-10 max-w-[800px]">-->
-  <!--          @for (paragraph of vm?.content?.description; track $index) {-->
-  <!--            <p class="text-md text-gray-800">{{ paragraph }}</p>-->
-  <!--          }-->
-  <!--        </div>-->
-  <!--      }-->
-
-  <!--      -->
-  <!--    </div>-->
-  <!--  </main>-->
-  <router-outlet />
+  <div class="min-h-screen" [class.min-h-auto!]="isContactsPage">
+    <router-outlet />
+  </div>
   <app-footer></app-footer>
 </tui-root>

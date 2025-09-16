@@ -16,13 +16,23 @@ export const createViewModelSelector = (
     derivedSelectors.selectNextStep,
     derivedSelectors.selectIsLastStep,
     derivedSelectors.selectStepsValid,
-    (currentStep, steps, prevStep, nextStep, isLastStep, stepsValid): BookingViewModel => ({
+    derivedSelectors.selectIsBooking,
+    (
       currentStep,
       steps,
       prevStep,
       nextStep,
       isLastStep,
       stepsValid,
+      isBooking,
+    ): BookingViewModel => ({
+      currentStep,
+      steps,
+      prevStep,
+      nextStep,
+      isLastStep,
+      stepsValid,
+      isBooking,
     }),
   ),
 });

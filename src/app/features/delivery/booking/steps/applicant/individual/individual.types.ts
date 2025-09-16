@@ -6,10 +6,12 @@ export type IndividualForm = FormGroup<{
   [K in keyof Individual]: FormControl<Individual[K]>;
 }>;
 
-export const IndividualRole = {
-  SENDER: 'sender',
-  RECIPIENT: 'recipient',
-} as const;
+export enum IndividualType {
+  SENDER = 'sender',
+  RECIPIENT = 'recipient',
+}
 
-// Type: 'sender' | 'recipient'
-export type IndividualRole = (typeof IndividualRole)[keyof typeof IndividualRole];
+export interface IndividualRole {
+  value: IndividualType;
+  label: 'Отправитель' | 'Получатель';
+}

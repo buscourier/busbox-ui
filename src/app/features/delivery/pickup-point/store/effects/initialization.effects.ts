@@ -1,10 +1,12 @@
 import { inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 
 import { PersistenceService } from '@core/services';
 
 import type { DeliveryStorageKey, DeliveryStorageSchema } from '@delivery/types';
+import { canInitializeFromUrl } from '@delivery/utils';
 
 import { PickupPointActions } from '../actions';
 
@@ -28,7 +30,7 @@ export const initializationEffects = {
     { functional: true },
   ),
 
-  initCitiesLoad: createEffect(
+  initCitiesLoading: createEffect(
     (actions$ = inject(Actions)) => {
       return actions$.pipe(
         ofType(PickupPointActions.initState),
@@ -38,21 +40,20 @@ export const initializationEffects = {
     { functional: true },
   ),
 
-  // validateFormAfterStateRestore: createEffect(
-  //   (actions$ = inject(Actions)) => {
-  //     return actions$.pipe(
-  //       ofType(PickupPointActions.restoreState),
-  //       map(({ restoredState }) => {
-  //         const isValid = !!(
-  //           restoredState.cities?.selected &&
-  //           (restoredState.offices?.selected || restoredState.courierDetails) &&
-  //           restoredState.departureDate
-  //         );
-  //
-  //         return PickupPointActions.setFormValidity({ isValid });
-  //       }),
-  //     );
-  //   },
-  //   { functional: true },
-  // ),
+  initializeCityFromUrl: createEffect(
+    (actions$ = inject(Actions), route = inject(ActivatedRoute)) => {
+      return actions$.pipe(
+        ofType(PickupPointActions.loadCitiesSuccess),
+        filter(() => canInitializeFromUrl(route)),
+        map(({ cities }) => {
+          const pickupCityId = route.snapshot.queryParams['pickupCityId'];
+
+          return cities.find((city) => city.id === pickupCityId);
+        }),
+        filter(Boolean),
+        map((city) => PickupPointActions.selectCity({ city })),
+      );
+    },
+    { functional: true },
+  ),
 };

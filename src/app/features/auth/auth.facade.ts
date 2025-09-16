@@ -8,6 +8,7 @@ import {
   AuthActions,
   selectError,
   selectIsAuthenticated,
+  selectIsInitialized,
   selectIsLoading,
   selectUser,
 } from './store';
@@ -18,6 +19,10 @@ import type { AuthResponse, LoginCredentials, RegisterPayload } from './types';
 })
 export class AuthFacade {
   private readonly store = inject(Store);
+
+  initialize(): void {
+    this.store.dispatch(AuthActions.initialize());
+  }
 
   login(credentials: LoginCredentials): void {
     this.store.dispatch(AuthActions.login({ credentials }));
@@ -41,6 +46,10 @@ export class AuthFacade {
 
   isAuthenticated(): Observable<boolean> {
     return this.store.select(selectIsAuthenticated);
+  }
+
+  isInitialized(): Observable<boolean> {
+    return this.store.select(selectIsInitialized);
   }
 
   loadCurrentUser(): void {

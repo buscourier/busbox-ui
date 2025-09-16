@@ -12,7 +12,6 @@ import { LocationsFacade } from '@shared/store';
 import { environment } from '@env/environment';
 
 import { AuthFacade } from '@auth';
-import type { AuthResponse } from '@auth/types';
 
 @Component({
   selector: 'app-root',
@@ -34,15 +33,20 @@ export class AppComponent implements OnInit {
 
   private readonly router = inject(Router);
 
-  currentUser$!: Observable<AuthResponse | null>;
+  isInitialized$!: Observable<boolean>;
 
   constructor() {
     this.apiBaseUrl = environment.apiBaseUrl;
   }
 
   ngOnInit(): void {
-    this.currentUser$ = this.authFacade.getCurrentUser();
+    this.isInitialized$ = this.authFacade.isInitialized();
+
     this.initializeGlobalData();
+  }
+
+  get isContactsPage(): boolean {
+    return this.router.url.includes('contacts');
   }
 
   logout(): void {
@@ -50,7 +54,7 @@ export class AppComponent implements OnInit {
   }
 
   private initializeGlobalData() {
-    this.authFacade.loadCurrentUser();
+    this.authFacade.initialize();
     this.locationsFacade.loadPickupCities();
     this.locationsFacade.loadOffices();
     this.setupErrorHandling();

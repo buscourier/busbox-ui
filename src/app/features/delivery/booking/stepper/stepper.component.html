@@ -22,6 +22,8 @@
               <tui-icon icon="@tui.check" class="text-black" />
             } @else if (!step.isValid && step.isActive) {
               <tui-icon icon="@tui.circle-alert" class="animate-bounce" />
+            } @else if (isLegalEntity && $first) {
+              <tui-icon icon="@tui.x" />
             } @else {
               <span
                 class="transform transition-transform duration-500"

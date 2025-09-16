@@ -35,7 +35,7 @@ import { FIELD_VALIDATORS_FACTORY } from '@shared/forms';
 import type { Individual } from '../../../types';
 
 import { individualRoles, individualValidationErrors } from './individual.constants';
-import type { IndividualForm } from './individual.types';
+import type { IndividualForm, IndividualRole } from './individual.types';
 
 @Component({
   selector: 'app-individual',
@@ -104,7 +104,7 @@ export class IndividualComponent implements OnInit {
     return this.form.controls.phone;
   }
 
-  get role(): FormControl<string> {
+  get role(): FormControl<IndividualRole> {
     return this.form.controls.role;
   }
 
@@ -138,7 +138,7 @@ export class IndividualComponent implements OnInit {
       middleName: ['', this.fieldValidators.getValidators('user', 'middleName')],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', this.fieldValidators.getValidators('contact', 'phone')],
-      role: ['', [Validators.required]],
+      role: [individualRoles[0], [Validators.required]],
     });
 
     if (this.data) {

@@ -1,11 +1,16 @@
 import { inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { map } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { tap, withLatestFrom } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 import { PersistenceService } from '@core/services';
 
+import { deliveryPointFeature } from '@delivery/delivery-point';
 import { initPickupPoint } from '@delivery/pickup-point';
 import type { DeliveryStorageKey, DeliveryStorageSchema } from '@delivery/types';
+import { canInitializeFromUrl } from '@delivery/utils';
 
 import { DeliveryPointActions } from '../actions';
 
@@ -37,5 +42,47 @@ export const initializationEffects = {
       );
     },
     { functional: true },
+  ),
+
+  initializeCityFromUrl: createEffect(
+    (actions$ = inject(Actions), route = inject(ActivatedRoute)) => {
+      return actions$.pipe(
+        ofType(DeliveryPointActions.loadCitiesSuccess),
+        filter(() => canInitializeFromUrl(route)),
+        map(({ cities }) => {
+          const pickupCityId = route.snapshot.queryParams['deliveryCityId'];
+
+          return cities.find((city) => city.id === pickupCityId);
+        }),
+        filter(Boolean),
+        map((city) => DeliveryPointActions.selectCity({ city })),
+      );
+    },
+    { functional: true },
+  ),
+
+  // Final step of initialization if data init from queryParams
+  // If delivery city selected, then all sequence success, and now we can remove query params
+  deleteQueryParamsAfterInitialize: createEffect(
+    (
+      actions$ = inject(Actions),
+      store = inject(Store),
+      router = inject(Router),
+      route = inject(ActivatedRoute),
+    ) => {
+      return actions$.pipe(
+        ofType(DeliveryPointActions.selectCity),
+        filter(() => canInitializeFromUrl(route)),
+        withLatestFrom(store.select(deliveryPointFeature.selectSelectedCity)),
+        filter(Boolean),
+        tap(() => {
+          router.navigate([], {
+            queryParams: {},
+            replaceUrl: true,
+          });
+        }),
+      );
+    },
+    { functional: true, dispatch: false },
   ),
 };

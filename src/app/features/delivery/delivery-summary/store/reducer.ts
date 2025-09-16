@@ -1,11 +1,12 @@
 import { createReducer, on } from '@ngrx/store';
 
+import { AsyncStatus } from '@shared/types';
+
 import { DeliverySummaryActions } from './actions';
 import type { DeliverySummaryState } from './state';
 
 export const initialState: DeliverySummaryState = {
-  isLoading: false,
-  isLoaded: false,
+  status: AsyncStatus.IDLE,
   totalAmount: 0,
   error: null,
 };
@@ -13,29 +14,34 @@ export const initialState: DeliverySummaryState = {
 export const deliverySummaryReducer = createReducer(
   initialState,
   on(
-    DeliverySummaryActions.loadTotalAmount,
+    DeliverySummaryActions.calculateTotalAmount,
     (state): DeliverySummaryState => ({
       ...state,
-      isLoading: true,
+      status: AsyncStatus.LOADING,
     }),
   ),
   on(
-    DeliverySummaryActions.loadTotalAmountSuccess,
+    DeliverySummaryActions.calculateTotalAmountSuccess,
     (state, { totalAmount }): DeliverySummaryState => ({
       ...state,
       totalAmount,
-      isLoading: false,
-      isLoaded: true,
+      status: AsyncStatus.LOADED,
     }),
   ),
   on(
-    DeliverySummaryActions.loadTotalAmountFailure,
+    DeliverySummaryActions.calculateTotalAmountFailure,
     (state, { error }): DeliverySummaryState => ({
       ...state,
-      isLoading: false,
-      isLoaded: false,
+      status: AsyncStatus.ERROR,
       error,
     }),
   ),
   on(DeliverySummaryActions.resetState, (): DeliverySummaryState => initialState),
+  on(
+    DeliverySummaryActions.clearCalculation,
+    (state): DeliverySummaryState => ({
+      ...initialState,
+      status: state.status,
+    }),
+  ),
 );

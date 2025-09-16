@@ -1,23 +1,23 @@
 @let currentStep = currentStep$ | async;
 @let applicant = applicant$ | async;
 
-<h1 class="mt-10 font-heading text-2xl font-bold lg:mt-20 lg:text-3xl">
+<h1 class="font-heading mt-10 text-2xl font-bold lg:mt-20 lg:text-3xl">
   {{ 'booking.applicant.title' | transloco }}
 </h1>
-<p class="mb-10 text-sm text-gray-600 mt-2">
+<p class="mt-2 mb-10 text-sm text-gray-600">
   {{ 'booking.applicant.subtitle' | transloco }}
 </p>
 
 @if (currentStep) {
   <div
-    class="relative flex gap-4 mb-10 before:absolute before:bottom-0 before:z-10 before:w-full before:border-b-2 before:border-yellow-500 w-full"
+    class="relative mb-10 flex w-full gap-4 before:absolute before:bottom-0 before:z-10 before:w-full before:border-b-2 before:border-yellow-500"
   >
     @for (tab of tabs; track tab.id) {
       <button
         type="button"
         tuiButton
         size="xl"
-        class="border-b-0 rounded-b-none!"
+        class="rounded-b-none! border-b-0 text-sm! sm:text-base!"
         [appearance]="applicant?.applicantType === tab.id ? 'primary' : 'outline'"
         (click)="updateApplicantType(tab.id)"
       >
@@ -29,10 +29,17 @@
   @if (applicant) {
     @switch (applicant.applicantType) {
       @case (ApplicantType.LEGAL) {
-        <p
-          class="mt-11 text-center text-md"
-          [innerHTML]="'booking.applicant.authHint' | transloco"
-        ></p>
+        <div class="mx-auto max-w-xl text-center leading-7">
+          Чтобы оформить заказ как юридическое лицо, вам необходимо
+          <button
+            type="button"
+            (click)="navigateToLogin()"
+            class="text-blue-500 hover:cursor-pointer"
+          >
+            войти
+          </button>
+          затем вы сможете указать ваши данные.
+        </div>
       }
       @default {
         <app-individual
@@ -43,7 +50,7 @@
       }
     }
   } @else {
-    <p class="mt-12 text-center text-md text-gray-500">
+    <p class="text-md mt-12 text-center text-gray-500">
       {{ 'booking.applicant.typeText' | transloco }}
     </p>
   }

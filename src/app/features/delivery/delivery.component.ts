@@ -39,8 +39,8 @@ export class DeliveryComponent implements OnInit {
 
   getPageClasses(): string {
     return cn({
-      'bg-green-500/10': this.isSuccessPage,
-      'bg-red-500/10': this.isFailurePage,
+      'bg-green-500/5': this.isSuccessPage,
+      'bg-red-500/5': this.isFailurePage,
     });
   }
 

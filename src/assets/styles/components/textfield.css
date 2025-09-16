@@ -1,5 +1,5 @@
 [tuiAppearance][data-appearance='textfield'] {
-  @apply text-gray-600 focus:text-gray-400 placeholder:text-gray-300;
+  @apply text-gray-600 placeholder:text-gray-300 focus:text-gray-400;
 
   /*&.ng-invalid.ng-touched {*/
   /*  @apply text-red-400 placeholder:text-red-400;*/
@@ -20,4 +20,8 @@ input[automation-id='tui-primitive-textfield__native-input'] {
 
 tui-textfield select:defined._empty {
   @apply text-gray-300! placeholder:text-gray-400!;
+}
+
+tui-textfield {
+  @apply text-[15px]!;
 }

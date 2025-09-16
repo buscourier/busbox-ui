@@ -1,6 +1,5 @@
-import type { ApiError } from '@shared/types';
+import type { ApiError, Confidant } from '@shared/types';
 
-import type { Confidant } from './confidant.types';
 import type { ProfileField } from './profile-field.types';
 
 export interface FieldsViewModel {

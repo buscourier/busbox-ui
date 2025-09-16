@@ -7,19 +7,21 @@ import {
   inject,
   type OnInit,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, type FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { Router } from '@angular/router';
 import { TuiDropdownMobile } from '@taiga-ui/addon-mobile';
-import type { TuiStringHandler } from '@taiga-ui/cdk';
-import { TuiButton, TuiLabel, TuiTextfield } from '@taiga-ui/core';
+import { TUI_IS_MOBILE, type TuiStringHandler } from '@taiga-ui/cdk';
+import { TuiButton, TuiTextfield } from '@taiga-ui/core';
 import {
-  TuiButtonLoading,
   TuiChevron,
   TuiComboBox,
   TuiDataListWrapperComponent,
   TuiFilterByInputPipe,
+  TuiSelect,
 } from '@taiga-ui/kit';
 import type { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 import { cn } from '@core/utils';
 
@@ -35,15 +37,13 @@ import type { RouteSelectorForm } from './route-selector.types';
     FormsModule,
     TuiChevron,
     TuiDataListWrapperComponent,
-    TuiLabel,
     TuiTextfield,
     ReactiveFormsModule,
     TuiButton,
-    TuiButtonLoading,
     TuiDropdownMobile,
-    TranslocoPipe,
     TuiComboBox,
     TuiFilterByInputPipe,
+    TuiSelect,
   ],
   templateUrl: './route-selector.component.html',
   styleUrl: './route-selector.component.css',
@@ -72,10 +72,12 @@ export class RouteSelectorComponent implements OnInit {
   deliveryCities$!: Observable<DeliveryCity[]>;
 
   protected stringify: TuiStringHandler<PickupCity | DeliveryCity> = (x) => `${x.name}`;
+  protected readonly isMobile = inject(TUI_IS_MOBILE);
 
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
   private readonly locationsFacade = inject(LocationsFacade);
+  private readonly router = inject(Router);
 
   get pickupCity(): FormControl<PickupCity | null> {
     return this.form.controls.pickupCity;
@@ -108,9 +110,28 @@ export class RouteSelectorComponent implements OnInit {
   private initializeCities(): void {
     this.pickupCities$ = this.locationsFacade.getPickupCities();
     this.deliveryCities$ = this.locationsFacade.getDeliveryCities();
+
+    this.pickupCity.valueChanges
+      .pipe(
+        filter(Boolean),
+        takeUntilDestroyed(this.destroyRef),
+        map((city) => this.locationsFacade.loadDeliveryCities(city?.id)),
+      )
+      .subscribe();
   }
 
   onSubmit() {
-    console.log('routes submit');
+    if (!this.form.valid) return;
+
+    const { pickupCity, deliveryCity } = this.form.getRawValue();
+
+    if (pickupCity && deliveryCity) {
+      this.router.navigate(['/delivery/calculator'], {
+        queryParams: {
+          pickupCityId: pickupCity.id,
+          deliveryCityId: deliveryCity.id,
+        },
+      });
+    }
   }
 }

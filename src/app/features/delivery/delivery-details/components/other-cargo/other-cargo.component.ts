@@ -21,6 +21,7 @@ import {
   TuiDataListWrapper,
   TuiFilterByInputPipe,
   TuiInputNumber,
+  TuiSelect,
 } from '@taiga-ui/kit';
 import { merge } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -44,6 +45,7 @@ import type { OtherCargoForm } from './other-cargo.types';
     TuiFilterByInputPipe,
     TuiTextfield,
     TuiDataListWrapper,
+    TuiSelect,
   ],
   templateUrl: './other-cargo.component.html',
   styleUrl: './other-cargo.component.css',

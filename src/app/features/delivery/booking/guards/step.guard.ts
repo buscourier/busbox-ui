@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import type { ActivatedRouteSnapshot, CanActivateFn, UrlTree } from '@angular/router';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import type { Observable } from 'rxjs';
+import { combineLatest, type Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { bookingFeature } from '../store';
@@ -16,10 +16,18 @@ export const stepGuard: CanActivateFn = (
 
   const stepNumber = getStepNumber(route.url[0].path);
 
-  return store.select(bookingFeature.selectCanAccessStep(stepNumber)).pipe(
-    map((canAccess) => {
+  return combineLatest([
+    store.select(bookingFeature.selectCanAccessStep(stepNumber)),
+    store.select(bookingFeature.selectIsLegalEntity),
+  ]).pipe(
+    map(([canAccess, isLegal]) => {
+      if (isLegal && stepNumber === 1) {
+        return router.createUrlTree(['/delivery/booking/departure']);
+      }
+
       if (!canAccess) {
-        return router.createUrlTree(['/delivery/booking/applicant']);
+        const defaultStep = isLegal ? '/delivery/booking/departure' : '/delivery/booking/applicant';
+        return router.createUrlTree([defaultStep]);
       }
 
       return true;
