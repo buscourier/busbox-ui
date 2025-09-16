@@ -62,7 +62,7 @@ export class BookingFacade {
   }
 
   submitOrder(): void {
-    this.store.dispatch(BookingActions.submitOrder());
+    this.store.dispatch(BookingActions.booking());
   }
 
   getSteps(): Observable<Record<StepNumber, Step>> {

@@ -5,6 +5,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { provideTranslocoScope, TranslocoPipe } from '@jsverse/transloco';
 import { TuiButton } from '@taiga-ui/core';
+import { TuiButtonLoading } from '@taiga-ui/kit';
 import { type Observable, take, distinctUntilChanged } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -22,7 +23,7 @@ import { type StepNumber, type BookingViewModel, type Applicant, ApplicantType }
 
 @Component({
   selector: 'app-booking',
-  imports: [RouterOutlet, TuiButton, AsyncPipe, StepperComponent, TranslocoPipe],
+  imports: [RouterOutlet, TuiButton, AsyncPipe, StepperComponent, TranslocoPipe, TuiButtonLoading],
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.css',
   providers: [

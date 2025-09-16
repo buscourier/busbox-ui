@@ -1,4 +1,4 @@
-import type { ApiError } from '@shared/types';
+import type { ApiError, AsyncStatus } from '@shared/types';
 
 import type { BookingResult, Step, StepNumber, StepsData } from '../types';
 
@@ -7,8 +7,7 @@ export interface BookingState {
   maxAvailableStep: StepNumber;
   steps: Record<StepNumber, Step>;
   stepsData: StepsData;
-  isSubmitSuccessful: boolean;
-  isSubmitFailed: boolean;
   error: ApiError | null;
+  status: AsyncStatus;
   bookingResult: BookingResult | null;
 }

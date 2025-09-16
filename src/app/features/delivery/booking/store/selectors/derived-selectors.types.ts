@@ -18,4 +18,8 @@ export interface DerivedSelectors {
   selectApplicantType: MemoizedSelector<object, ApplicantType | null>;
   selectIsLegalEntity: MemoizedSelector<object, boolean>;
   selectIsCurrentStepValid: MemoizedSelector<object, boolean>;
+  selectIsIdle: MemoizedSelector<object, boolean>;
+  selectIsBooking: MemoizedSelector<object, boolean>;
+  selectIsBookingSuccess: MemoizedSelector<object, boolean>;
+  selectIsBookingFailed: MemoizedSelector<object, boolean>;
 }

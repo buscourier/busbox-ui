@@ -31,7 +31,7 @@ export const bookingEffects = {
       bookingService = inject(BookingService),
     ) => {
       return actions$.pipe(
-        ofType(BookingActions.submitOrder),
+        ofType(BookingActions.booking),
         debounceTime(DEBOUNCE_TIME.DEFAULT),
         withLatestFrom(
           pickupPointFacade.getSelectedCity(),
@@ -91,8 +91,8 @@ export const bookingEffects = {
               })
               .pipe(
                 mapResponse({
-                  next: (bookingResult) => BookingActions.submitOrderSuccess({ bookingResult }),
-                  error: (error: ApiError) => BookingActions.submitOrderFailure({ error }),
+                  next: (bookingResult) => BookingActions.bookingSuccess({ bookingResult }),
+                  error: (error: ApiError) => BookingActions.bookingFailure({ error }),
                 }),
               );
           },
@@ -104,7 +104,7 @@ export const bookingEffects = {
   goToSuccess: createEffect(
     (actions$ = inject(Actions), router = inject(Router)) => {
       return actions$.pipe(
-        ofType(BookingActions.submitOrderSuccess),
+        ofType(BookingActions.bookingSuccess),
         tap(() => router.navigate(['/delivery/booking/success'])),
       );
     },
@@ -114,7 +114,7 @@ export const bookingEffects = {
   resetOnSuccess: createEffect(
     (actions$ = inject(Actions)) => {
       return actions$.pipe(
-        ofType(BookingActions.submitOrderSuccess),
+        ofType(BookingActions.bookingSuccess),
         delay(0),
         map(() => DeliveryActions.resetDelivery()),
       );
@@ -124,7 +124,7 @@ export const bookingEffects = {
   goToFailure: createEffect(
     (actions$ = inject(Actions), router = inject(Router)) => {
       return actions$.pipe(
-        ofType(BookingActions.submitOrderFailure),
+        ofType(BookingActions.bookingFailure),
         tap(() => router.navigate(['/delivery/booking/failure'])),
       );
     },

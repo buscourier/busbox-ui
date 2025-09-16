@@ -30,9 +30,9 @@ export const BookingActions = createActionGroup({
       }>
     >(),
     'Skip Restore': emptyProps(),
-    'Submit Order': emptyProps(),
-    'Submit Order Success': props<{ bookingResult: BookingResult }>(),
-    'Submit Order Failure': props<{ error: ApiError }>(),
+    Booking: emptyProps(),
+    'Booking Success': props<{ bookingResult: BookingResult }>(),
+    'Booking Failure': props<{ error: ApiError }>(),
     Init: emptyProps(),
     'Reset State': emptyProps(),
   },

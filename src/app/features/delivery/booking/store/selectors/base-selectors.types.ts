@@ -1,6 +1,6 @@
 import type { MemoizedSelector } from '@ngrx/store';
 
-import type { ApiError } from '@shared/types';
+import type { ApiError, AsyncStatus } from '@shared/types';
 
 import type {
   Applicant,
@@ -22,8 +22,7 @@ export interface BaseSelectors {
   selectDestination: MemoizedSelector<object, Destination | null>;
   selectReview: MemoizedSelector<object, Review>;
   selectReviewConfirmation: MemoizedSelector<object, ReviewConfirmation>;
-  selectIsSubmitSuccessful: MemoizedSelector<object, boolean>;
-  selectIsSubmitFailed: MemoizedSelector<object, boolean>;
+  selectBookingStatus: MemoizedSelector<object, AsyncStatus>;
   selectError: MemoizedSelector<object, ApiError | null>;
   selectBookingResult: MemoizedSelector<object, BookingResult | null>;
 }

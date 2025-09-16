@@ -1,5 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 
+import { AsyncStatus } from '@shared/types';
+
 import type { StepNumber } from '../types';
 
 import { BookingActions } from './actions';
@@ -26,8 +28,7 @@ const initialState: BookingState = {
       },
     },
   },
-  isSubmitSuccessful: false,
-  isSubmitFailed: false,
+  status: AsyncStatus.IDLE,
   error: null,
   bookingResult: null,
 };
@@ -132,29 +133,29 @@ export const bookingReducer = createReducer(
     },
   ),
   on(
-    BookingActions.submitOrder,
+    BookingActions.booking,
     (state): BookingState => ({
       ...state,
-      isSubmitSuccessful: false,
-      isSubmitFailed: false,
+      status: AsyncStatus.LOADING,
+      error: null,
+      bookingResult: null,
     }),
   ),
   on(
-    BookingActions.submitOrderSuccess,
+    BookingActions.bookingSuccess,
     (state, { bookingResult }): BookingState => ({
       ...state,
-      isSubmitSuccessful: true,
-      isSubmitFailed: false,
+      status: AsyncStatus.LOADED,
       bookingResult,
       error: null,
     }),
   ),
   on(
-    BookingActions.submitOrderFailure,
+    BookingActions.bookingFailure,
     (state, { error }): BookingState => ({
       ...state,
-      isSubmitSuccessful: false,
-      isSubmitFailed: true,
+      status: AsyncStatus.ERROR,
+      bookingResult: null,
       error,
     }),
   ),

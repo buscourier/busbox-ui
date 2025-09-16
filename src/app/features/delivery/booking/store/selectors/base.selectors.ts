@@ -20,11 +20,7 @@ export const createBaseSelectors = (selectBookingState: BookingStateSelector): B
     selectDestination: createSelector(selectStepsData, (data) => data.destination),
     selectReview,
     selectReviewConfirmation: createSelector(selectReview, (review) => review.confirmation),
-    selectIsSubmitSuccessful: createSelector(
-      selectBookingState,
-      (state) => state.isSubmitSuccessful,
-    ),
-    selectIsSubmitFailed: createSelector(selectBookingState, (state) => state.isSubmitFailed),
+    selectBookingStatus: createSelector(selectBookingState, (state) => state.status),
     selectError: createSelector(selectBookingState, (state) => state.error),
     selectBookingResult: createSelector(selectBookingState, (state) => state.bookingResult),
   };

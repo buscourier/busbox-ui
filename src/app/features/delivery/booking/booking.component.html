@@ -43,6 +43,7 @@
         size="xl"
         iconEnd="@tui.handshake"
         [disabled]="!vm.stepsValid"
+        [loading]="vm.isBooking"
         (click)="submitOrder()"
       >
         {{ 'buttons.sendOrder' | transloco }}
@@ -61,4 +62,8 @@
       </button>
     }
   </div>
+}
+
+@if (vm?.isBooking) {
+  <div class="absolute inset-0 z-20"></div>
 }

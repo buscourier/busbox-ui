@@ -1,5 +1,7 @@
 import { createSelector } from '@ngrx/store';
 
+import { AsyncStatus } from '@shared/types';
+
 import type { ReviewSection } from '@delivery/types';
 
 import { ApplicantType, type StepNumber } from '../../types';
@@ -20,6 +22,26 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
   );
 
   return {
+    selectIsIdle: createSelector(
+      baseSelectors.selectBookingStatus,
+      (status) => status === AsyncStatus.IDLE,
+    ),
+
+    selectIsBooking: createSelector(
+      baseSelectors.selectBookingStatus,
+      (status) => status === AsyncStatus.LOADING,
+    ),
+
+    selectIsBookingSuccess: createSelector(
+      baseSelectors.selectBookingStatus,
+      (status) => status === AsyncStatus.LOADED,
+    ),
+
+    selectIsBookingFailed: createSelector(
+      baseSelectors.selectBookingStatus,
+      (status) => status === AsyncStatus.ERROR,
+    ),
+
     selectStepsView: createSelector(
       baseSelectors.selectCurrentStep,
       baseSelectors.selectSteps,

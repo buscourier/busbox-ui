@@ -16,8 +16,8 @@ export const bookingResultGuard: CanActivateFn = (
 
   const isSuccessPage = route.routeConfig?.path === 'success';
   const selector = isSuccessPage
-    ? bookingFeature.selectIsSubmitSuccessful
-    : bookingFeature.selectIsSubmitFailed;
+    ? bookingFeature.selectIsBookingSuccess
+    : bookingFeature.selectIsBookingFailed;
 
   return store.select(selector).pipe(
     take(1),
