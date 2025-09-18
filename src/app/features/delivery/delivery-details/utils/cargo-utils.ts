@@ -19,10 +19,10 @@ export function getParcels(parcels: Parcels | null): CargoDetails | null {
 }
 
 export function getAutoParts(data: AutoParts | null): CargoDetails | null {
-  return data?.item?.name && data.quantity
+  return data?.items.length
     ? {
-        name: data?.item?.name || null,
-        quantity: data?.quantity || 0,
+        name: 'Автозапчасти',
+        quantity: data?.items.length || 0,
       }
     : null;
 }

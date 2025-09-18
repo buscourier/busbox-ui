@@ -44,7 +44,9 @@ export class DeliverySummaryService extends DeliveryBaseService {
 
     return params.order.cargoType === CargoType.PARCELS
       ? this.calculateParcelsAmount(params, servicesIds)
-      : this.calculateCargoAmount(params, servicesIds);
+      : params.order.cargoType === CargoType.AUTO_PARTS
+        ? this.calculateAutopartsAmount(params, servicesIds)
+        : this.calculateCargoAmount(params, servicesIds);
   }
 
   private calculateParcelsAmount(
@@ -52,6 +54,31 @@ export class DeliverySummaryService extends DeliveryBaseService {
     servicesIds: string[],
   ): Observable<TotalAmount> {
     if (!params.order.parcels?.items.length) {
+      return of({ price: 0 });
+    }
+
+    return forkJoin([
+      this.calculateParcelsWithoutServices(params),
+      this.makeCalculationRequest({
+        pickupCityId: params.pickupCityId,
+        deliveryCityId: params.deliveryCityId,
+        cargo: '0',
+        servicesIds,
+        weight: 0,
+        dimensions: 0,
+      }),
+    ]).pipe(
+      map((results) => ({
+        price: results.reduce((sum, { price }) => sum + price, 0),
+      })),
+    );
+  }
+
+  private calculateAutopartsAmount(
+    params: OrderAmountParams,
+    servicesIds: string[],
+  ): Observable<TotalAmount> {
+    if (!params.order.autoParts?.items.length) {
       return of({ price: 0 });
     }
 
@@ -91,7 +118,10 @@ export class DeliverySummaryService extends DeliveryBaseService {
   }
 
   private calculateParcelsWithoutServices(params: OrderAmountParams): Observable<TotalAmount> {
-    const parcels = params.order.parcels!.items;
+    const parcels =
+      params.order.cargoType === CargoType.AUTO_PARTS
+        ? params.order.autoParts!.items.map((autoPart) => autoPart.params)
+        : params.order.parcels!.items;
 
     return forkJoin(
       parcels.map((parcelItem) => {
@@ -101,7 +131,7 @@ export class DeliverySummaryService extends DeliveryBaseService {
         return this.makeCalculationRequest({
           pickupCityId: params.pickupCityId,
           deliveryCityId: params.deliveryCityId,
-          cargo: params.order.cargoType ? CargoTypeId[params.order.cargoType] : '',
+          cargo: '2',
           servicesIds: null,
           weight: parcelItem.weight,
           dimensions,

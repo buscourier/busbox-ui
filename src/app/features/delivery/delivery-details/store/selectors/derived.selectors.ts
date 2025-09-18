@@ -83,10 +83,14 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
     return cargos.filter((cargo) => cargo.parent_id === CargoTypeId.ROOT);
   });
 
-  const selectAutoPartsOptions = createSelector(baseSelectors.selectOptions, (options) => {
-    const cargos = Array.isArray(options?.cargos) ? options.cargos : [];
+  // const selectAutoPartsOptions = createSelector(baseSelectors.selectOptions, (options) => {
+  //   const cargos = Array.isArray(options?.cargos) ? options.cargos : [];
+  //
+  //   return cargos.filter((cargo) => cargo.parent_id === CargoTypeId.AUTO_PARTS);
+  // });
 
-    return cargos.filter((cargo) => cargo.parent_id === CargoTypeId.AUTO_PARTS);
+  const selectAutoPartsOptions = createSelector(baseSelectors.selectOptions, (options) => {
+    return Array.isArray(options?.autoPartPresets) ? options.autoPartPresets : [];
   });
 
   const selectOtherCargosOptions = createSelector(baseSelectors.selectOptions, (options) => {

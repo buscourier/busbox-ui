@@ -1,5 +1,6 @@
 import type { ApiError, LoadingStatus } from '@shared/types';
 
+import type { AutoPartPreset } from './auto-parts.types';
 import type { Cargo } from './cargo.types';
 import type { DeliveryOptions } from './delivery-options.types';
 import type { Service } from './service.types';
@@ -15,7 +16,7 @@ export interface OptionsViewModel {
   isLoaded: boolean;
   error: ApiError | null;
   cargoTypes: Cargo[];
-  autoParts: Cargo[];
+  autoParts: AutoPartPreset[];
   otherCargos: Cargo[];
   additionalServices: Service[];
   packaging: Service[];

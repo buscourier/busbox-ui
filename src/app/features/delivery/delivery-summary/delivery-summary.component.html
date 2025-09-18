@@ -416,16 +416,12 @@
 
           @if (!isPickupPointValid) {
             <small class="text-2xs text-red-500">
-              (Данные для отправления указаны не полностью или неверно)
+              (Данные для отправления указаны не полностью)
             </small>
           } @else if (!isDeliveryPointValid) {
-            <small class="text-2xs text-red-500">
-              (Данные для получения указаны не коректно или неверно)
-            </small>
+            <small class="text-2xs text-red-500">(Данные для получения указаны не коректно)</small>
           } @else if (!isAllOrdersValid) {
-            <small class="text-2xs text-red-500">
-              (Детали заказа указаны не коректно или неверно)
-            </small>
+            <small class="text-2xs text-red-500">(Детали заказа указаны не коректно)</small>
           }
         </div>
       </button>

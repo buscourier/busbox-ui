@@ -20,11 +20,15 @@ import { debounceTime } from 'rxjs';
 import { DEBOUNCE_TIME } from '@core/constants';
 import { isObjectsEqual } from '@core/utils';
 
+import {
+  PARCEL_ITEM_DEFAULTS,
+  parcelItemAnimation,
+  ParcelItemComponent,
+  // eslint-disable-next-line import/no-internal-modules
+} from '../../shared/components/parcel-item';
 import type { ParcelItem, ParcelItemLimits, Parcels, ParcelsLimits } from '../../types';
 
 import { LimitsAlertComponent } from './limits-alert';
-import { PARCEL_ITEM_DEFAULTS, ParcelItemComponent } from './parcel-item';
-import { parcelItemAnimation } from './parcels.animations';
 import { parcelsValidationErrors } from './parcels.constants';
 import type { ParcelsErrors } from './parcels.types';
 import { parcelsValidator } from './parcels.validator';

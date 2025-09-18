@@ -56,7 +56,8 @@ export class DeliveryBaseService extends ApiService {
         quantity = order.documents?.quantity || 0;
         break;
       case CargoType.AUTO_PARTS:
-        quantity = order.autoParts?.quantity || 0;
+        // Подсчет количества Автозапчастей
+        quantity = order.autoParts?.items.length || 0;
         break;
       case CargoType.OTHER:
         quantity = order.otherCargo?.quantity || 0;

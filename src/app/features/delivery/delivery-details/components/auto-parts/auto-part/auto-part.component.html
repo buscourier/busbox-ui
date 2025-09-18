@@ -1,0 +1,33 @@
+<div [formGroup]="form">
+  <div>
+    <div tuiLabel class="mb-6">
+      <!--      <div class="mb-1.5 flex items-center">-->
+      <!--        <span class="text-sm text-gray-600">-->
+      <!--          {{ 'deliveryDetails.autoParts.label' | transloco }}-->
+      <!--        </span>-->
+      <!--      </div>-->
+      <tui-textfield tuiChevron [stringify]="stringify" tuiDropdownMobile="Автозапчасти">
+        @if (isMobile) {
+          <input
+            tuiSelect
+            [formControl]="preset"
+            [placeholder]="'deliveryDetails.autoParts.placeholder' | transloco"
+          />
+        } @else {
+          <input
+            tuiComboBox
+            [formControl]="preset"
+            [placeholder]="'deliveryDetails.autoParts.placeholder' | transloco"
+          />
+        }
+
+        <tui-data-list-wrapper *tuiTextfieldDropdown new [items]="options | tuiFilterByInput" />
+      </tui-textfield>
+    </div>
+    @if (preset.value) {
+      <div class="rounded-md border border-dashed border-gray-300 p-4">
+        <app-parcel-item [limits]="restrictions" [formControl]="params" />
+      </div>
+    }
+  </div>
+</div>

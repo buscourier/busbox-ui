@@ -73,7 +73,7 @@
         @if (widthInput.focused() || heightInput.focused() || lengthInput.focused()) {
           <small [tuiHint]="'hint.messages.available' | transloco">
             <b>
-              <span class="text-yellow-500">{{ getAvailableDimension() }} см</span>
+              <span class="text-red-500">{{ getAvailableDimension() }} см</span>
               / {{ limits.DIMENSIONS.MAX }} cм
             </b>
           </small>
