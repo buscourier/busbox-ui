@@ -25,15 +25,9 @@ import { debounceTime, skip } from 'rxjs';
 
 import { DEBOUNCE_TIME } from '@core/constants';
 
-import type {
-  AutoPart,
-  AutoPartPreset,
-  ParcelItem,
-  ParcelItemLimits,
-} from '@delivery/delivery-details/types';
-
 // eslint-disable-next-line import/no-internal-modules
 import { ParcelItemComponent } from '../../../shared/components/parcel-item';
+import type { AutoPart, AutoPartPreset, ParcelItem } from '../../../types';
 
 import type { AutoPartForm } from './auto-part.types';
 
@@ -70,7 +64,6 @@ import type { AutoPartForm } from './auto-part.types';
 })
 export class AutoPartComponent implements OnInit {
   @Input({ required: true }) options!: AutoPartPreset[];
-  @Input({ required: true }) restrictions!: ParcelItemLimits;
 
   form!: AutoPartForm;
 

@@ -1,4 +1,10 @@
-import type { OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  effect,
+  type OnChanges,
+  type OnInit,
+  type Signal,
+  type SimpleChanges,
+} from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -16,9 +22,11 @@ import { TuiAlertService, TuiButton, TuiHintDirective } from '@taiga-ui/core';
 import { TuiRadioList } from '@taiga-ui/kit';
 import { filter } from 'rxjs';
 
+import { CargoRestrictionsService } from '../../services';
+import { CARGO_LIMITS } from '../../tokens';
 import {
   type Cargo,
-  type CargoRestrictions,
+  type CargoItemRestrictions,
   CargoType,
   CargoTypeId,
   type MappedCargoType,
@@ -29,6 +37,13 @@ import {
   imports: [TuiRadioList, ReactiveFormsModule, TuiHintDirective, TuiButton, TranslocoPipe],
   templateUrl: './cargo-picker.component.html',
   styleUrl: './cargo-picker.component.css',
+  providers: [
+    {
+      provide: CARGO_LIMITS,
+      useFactory: (limits: CargoRestrictionsService) => limits.cargoLimits,
+      deps: [CargoRestrictionsService],
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'block mb-6',
@@ -37,7 +52,6 @@ import {
 export class CargoPickerComponent implements OnInit, OnChanges {
   @Input({ required: true }) types!: Cargo[];
   @Input() activeType: CargoType | null = null;
-  @Input() restrictions: CargoRestrictions | null = null;
   @Output() typeChange = new EventEmitter<CargoType>();
 
   typeControl = new FormControl<MappedCargoType | null>(null);
@@ -47,6 +61,13 @@ export class CargoPickerComponent implements OnInit, OnChanges {
   private readonly destroyRef = inject(DestroyRef);
   private transloco = inject(TranslocoService);
 
+  private restrictions: Signal<CargoItemRestrictions> = inject(CARGO_LIMITS);
+
+  private readonly limitsEffect = effect(() => {
+    this.restrictions();
+    this.handleRestrictionsChange();
+  });
+
   ngOnInit(): void {
     this.setupTypeChanges();
   }
@@ -54,7 +75,6 @@ export class CargoPickerComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     this.handleTypesChange(changes);
     this.handleActiveTypeChange(changes);
-    this.handleRestrictionsChange(changes);
   }
 
   identityMatcher = (a: MappedCargoType | null, b: MappedCargoType | null): boolean => {
@@ -63,18 +83,18 @@ export class CargoPickerComponent implements OnInit, OnChanges {
   };
 
   hasRestriction(data: MappedCargoType): boolean {
-    if (!this.restrictions) return false;
+    if (!this.restrictions()) return false;
     if (!this.isRestrictedType(data.value)) return false;
 
     return !!(
-      this.restrictions.autoParts?.pickupCourier ||
-      this.restrictions.autoParts?.deliveryCourier ||
-      this.restrictions.autoParts?.pickupOffice ||
-      this.restrictions.autoParts?.deliveryOffice ||
-      this.restrictions.otherCargo?.pickupCourier ||
-      this.restrictions.otherCargo?.deliveryCourier ||
-      this.restrictions.otherCargo?.pickupOffice ||
-      this.restrictions.otherCargo?.deliveryOffice
+      this.restrictions().pickupCourier ||
+      this.restrictions().deliveryCourier ||
+      this.restrictions().pickupOffice ||
+      this.restrictions().deliveryOffice ||
+      this.restrictions().pickupCourier ||
+      this.restrictions().deliveryCourier ||
+      this.restrictions().pickupOffice ||
+      this.restrictions().deliveryOffice
     );
   }
 
@@ -82,14 +102,14 @@ export class CargoPickerComponent implements OnInit, OnChanges {
     if (!this.hasRestriction(data)) return null;
 
     return (
-      this.restrictions?.autoParts?.pickupCourier?.message ||
-      this.restrictions?.autoParts?.deliveryCourier?.message ||
-      this.restrictions?.autoParts?.pickupOffice?.message ||
-      this.restrictions?.autoParts?.deliveryOffice?.message ||
-      this.restrictions?.otherCargo?.pickupCourier?.message ||
-      this.restrictions?.otherCargo?.deliveryCourier?.message ||
-      this.restrictions?.otherCargo?.pickupOffice?.message ||
-      this.restrictions?.otherCargo?.deliveryOffice?.message ||
+      this.restrictions().pickupCourier?.message ||
+      this.restrictions().deliveryCourier?.message ||
+      this.restrictions().pickupOffice?.message ||
+      this.restrictions().deliveryOffice?.message ||
+      this.restrictions().pickupCourier?.message ||
+      this.restrictions().deliveryCourier?.message ||
+      this.restrictions().pickupOffice?.message ||
+      this.restrictions().deliveryOffice?.message ||
       null
     );
   }
@@ -116,6 +136,7 @@ export class CargoPickerComponent implements OnInit, OnChanges {
   }
 
   private handleTypesChange(changes: SimpleChanges): void {
+    console.log("changes['types'] ", changes['types']);
     if (changes['types'] && changes['types'].firstChange) {
       this.mappedTypes = this.mapCargoTypes(this.types);
     }
@@ -131,8 +152,8 @@ export class CargoPickerComponent implements OnInit, OnChanges {
     }
   }
 
-  private handleRestrictionsChange(changes: SimpleChanges): void {
-    if (!changes['restrictions'] || !this.typeControl.value) return;
+  private handleRestrictionsChange(): void {
+    if (!this.typeControl.value) return;
 
     const hasRestrictions = this.hasRestriction(this.typeControl.value);
 

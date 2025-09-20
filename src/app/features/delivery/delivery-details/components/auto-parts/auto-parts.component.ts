@@ -1,4 +1,4 @@
-import type { OnInit } from '@angular/core';
+import { type OnInit, signal } from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -17,7 +17,8 @@ import { DEBOUNCE_TIME } from '@core/constants';
 
 // eslint-disable-next-line import/no-internal-modules
 import { PARCEL_ITEM_DEFAULTS, parcelItemAnimation } from '../../shared/components/parcel-item';
-import type { AutoPart, AutoPartPreset, AutoParts, ParcelItemLimits } from '../../types';
+import { PARCEL_ITEM_LIMIT_TOKEN } from '../../tokens';
+import type { AutoPart, AutoPartPreset, AutoParts } from '../../types';
 
 import { AutoPartComponent } from './auto-part';
 
@@ -27,12 +28,30 @@ import { AutoPartComponent } from './auto-part';
   templateUrl: './auto-parts.component.html',
   styleUrl: './auto-parts.component.css',
   animations: [parcelItemAnimation],
+  providers: [
+    {
+      provide: PARCEL_ITEM_LIMIT_TOKEN,
+      useValue: signal({
+        QUANTITY: {
+          MIN: 1,
+          MAX: 10,
+        },
+        WEIGHT: {
+          MIN: 1,
+          MAX: 60,
+        },
+        DIMENSIONS: {
+          MIN: 1,
+          MAX: 380,
+        },
+      }),
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AutoPartsComponent implements OnInit {
   @Input() data: AutoParts | null = null;
   @Input({ required: true }) options!: AutoPartPreset[];
-  @Input({ required: true }) restrictions!: ParcelItemLimits;
   @Output() dataChange = new EventEmitter<AutoParts>();
   @Output() validationChange = new EventEmitter<boolean>();
 
@@ -61,8 +80,6 @@ export class AutoPartsComponent implements OnInit {
   }
 
   addItem(item?: AutoPart): void {
-    console.log('iteeeem', item);
-
     this.items.push(
       this.fb.control(
         item ?? {

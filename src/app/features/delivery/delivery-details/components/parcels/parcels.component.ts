@@ -1,5 +1,11 @@
 import { AsyncPipe } from '@angular/common';
-import type { OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  effect,
+  type OnChanges,
+  type OnInit,
+  type Signal,
+  type SimpleChanges,
+} from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -20,12 +26,14 @@ import { debounceTime } from 'rxjs';
 import { DEBOUNCE_TIME } from '@core/constants';
 import { isObjectsEqual } from '@core/utils';
 
+import { CargoRestrictionsService } from '../../services';
 import {
   PARCEL_ITEM_DEFAULTS,
   parcelItemAnimation,
   ParcelItemComponent,
   // eslint-disable-next-line import/no-internal-modules
 } from '../../shared/components/parcel-item';
+import { PARCEL_ITEM_LIMIT_TOKEN, PARCELS_LIMIT_TOKEN } from '../../tokens';
 import type { ParcelItem, ParcelItemLimits, Parcels, ParcelsLimits } from '../../types';
 
 import { LimitsAlertComponent } from './limits-alert';
@@ -48,6 +56,16 @@ import { parcelsValidator } from './parcels.validator';
   styleUrl: './parcels.component.css',
   providers: [
     {
+      provide: PARCELS_LIMIT_TOKEN,
+      useFactory: (limits: CargoRestrictionsService) => limits.parcelsLimits,
+      deps: [CargoRestrictionsService],
+    },
+    {
+      provide: PARCEL_ITEM_LIMIT_TOKEN,
+      useFactory: (limits: CargoRestrictionsService) => limits.parcelItemLimits,
+      deps: [CargoRestrictionsService],
+    },
+    {
       provide: TUI_VALIDATION_ERRORS,
       useFactory: parcelsValidationErrors,
       deps: [TranslocoService],
@@ -58,12 +76,21 @@ import { parcelsValidator } from './parcels.validator';
 })
 export class ParcelsComponent implements OnChanges, OnInit {
   @Input() data: Parcels | null = null;
-  @Input() parcelsLimits!: ParcelsLimits;
-  @Input() parcelItemLimits!: ParcelItemLimits;
   @Output() dataChange = new EventEmitter<Parcels>();
   @Output() validationChange = new EventEmitter<boolean>();
 
   private readonly alert = inject(TuiAlertService);
+
+  public parcelsLimits: Signal<ParcelsLimits> = inject(PARCELS_LIMIT_TOKEN);
+  public parcelItemLimits: Signal<ParcelItemLimits> = inject(PARCEL_ITEM_LIMIT_TOKEN);
+
+  private readonly limitsEffect = effect(() => {
+    this.showNotification(this.parcelItemLimits());
+
+    if (!this.parcels) return;
+
+    this.updateValidator();
+  });
 
   /** Protected properties */
   protected canAddParcelItem = true;
@@ -84,23 +111,12 @@ export class ParcelsComponent implements OnChanges, OnInit {
 
   /** Lifecycle hooks */
   ngOnChanges(changes: SimpleChanges): void {
-    const parcelsLimits = changes['parcelsLimits']?.currentValue;
-    const parcelItemLimits = changes['parcelItemLimits']?.currentValue;
-
     if (
       changes['data'] &&
       !changes['data'].firstChange &&
       !isObjectsEqual(changes['data'].previousValue, changes['data'].currentValue)
     ) {
       this.reinitializeForm();
-    }
-
-    if (parcelsLimits) {
-      this.updateValidator();
-    }
-
-    if (parcelItemLimits) {
-      this.showNotification(parcelItemLimits);
     }
   }
 
@@ -144,7 +160,7 @@ export class ParcelsComponent implements OnChanges, OnInit {
   }
 
   private updateValidator(): void {
-    this.parcels.setValidators(parcelsValidator(this.parcelsLimits));
+    this.parcels.setValidators(parcelsValidator(this.parcelsLimits()));
     this.parcels.updateValueAndValidity();
   }
 
@@ -167,22 +183,12 @@ export class ParcelsComponent implements OnChanges, OnInit {
       this.parcelsError.setErrors(this.parcels.errors);
       this.parcelsError.markAsTouched();
       this.canAddParcelItem =
-        !this.parcels.invalid && this.parcels.length < (this.parcelsLimits?.MAX_PARCELS || 0);
+        !this.parcels.invalid && this.parcels.length < (this.parcelsLimits()?.MAX_PARCELS || 0);
       this.validationChange.emit(!this.parcels.invalid);
     });
   }
 
   protected showNotification(limits: ParcelItemLimits): void {
-    // this.dialog
-    //   .open(
-    //    ,
-    //     {
-    //       label: this.transloco.translate('deliveryDetails.parcel.messages.limits'),
-    //     },
-    //   )
-    //   .pipe(takeUntilDestroyed(this.destroyRef))
-    //   .subscribe();
-
     this.alert
       .open<number>(new PolymorpheusComponent(LimitsAlertComponent), {
         label: this.transloco.translate('deliveryDetails.parcel.messages.limits'),

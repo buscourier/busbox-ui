@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, type Signal, signal } from '@angular/core';
 
 import type { DeliveryCity } from '@shared/types';
 
@@ -6,7 +6,6 @@ import { PARCEL_ITEM_LIMITS, PARCELS_LIMITS, RESTRICTION_MESSAGES } from '../con
 import type {
   CargoItemRestrictions,
   CargoPointRestriction,
-  CargoRestrictions,
   GetCargoRestrictionsParams,
   GetParcelItemLimitsParams,
   ParcelItemLimits,
@@ -20,29 +19,45 @@ export class CargoRestrictionsService {
   private readonly cityParcelsLimits = new Map<string, ParcelsLimits>();
   private readonly cityParcelItemLimits = new Map<string, ParcelItemLimits>();
 
+  private readonly _parcelsLimits = signal<ParcelsLimits>({ ...PARCELS_LIMITS.DEFAULT });
+  private readonly _parcelItemLimits = signal<ParcelItemLimits>({ ...PARCEL_ITEM_LIMITS.DEFAULT });
+  private readonly _cargoLimits = signal<CargoItemRestrictions>({
+    pickupOffice: null,
+    deliveryOffice: null,
+    pickupCourier: null,
+    deliveryCourier: null,
+  });
+
+  readonly parcelsLimits: Signal<ParcelsLimits> = this._parcelsLimits.asReadonly();
+  readonly parcelItemLimits: Signal<ParcelItemLimits> = this._parcelItemLimits.asReadonly();
+  readonly cargoLimits: Signal<CargoItemRestrictions> = this._cargoLimits.asReadonly();
+
   constructor() {
     this.cityParcelsLimits = this.initCityParcelsLimits();
     this.cityParcelItemLimits = this.initCityParcelItemLimits();
   }
 
-  getRestrictions(params: GetCargoRestrictionsParams): CargoRestrictions {
+  setRestrictions(params: GetCargoRestrictionsParams): void {
     const isOfficeLimited = params.isPickupOfficeLimited || params.isDeliveryOfficeLimited;
     const isCourierLimited = params.isPickupCourierSelected || params.isDeliveryCourierSelected;
 
-    return {
-      autoParts: this.getCargoItemRestrictions(params),
-      otherCargo: this.getCargoItemRestrictions(params),
-      parcels: this.getParcelsLimits({
+    this._parcelsLimits.set(
+      this.getParcelsLimits({
         deliveryCity: params.deliveryCity,
         isOfficeLimited,
         isCourierLimited,
       }),
-      parcelItem: this.getParcelItemLimits({
+    );
+
+    this._parcelItemLimits.set(
+      this.getParcelItemLimits({
         deliveryCity: params.deliveryCity,
         isOfficeLimited,
         isCourierLimited,
       }),
-    };
+    );
+
+    this._cargoLimits.set(this.getCargoItemRestrictions(params));
   }
 
   private getParcelsLimits({

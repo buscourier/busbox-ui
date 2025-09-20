@@ -223,7 +223,13 @@ export const appConfig: ApplicationConfig = {
       provide: DOCUMENT_RENDERER,
       useClass: DualDocumentRenderer,
     },
-
+    // {
+    //   provide: PARCEL_ITEM_LIMIT_TOKEN,
+    //   useFactory: (limits: CargoRestrictionsService) => {
+    //     return limits.parcelItem;
+    //   },
+    //   deps: [CargoRestrictionsService],
+    // },
     {
       provide: CONTACT_INFO,
       useFactory: (phone: string, telegram: string, email: string, whatsapp: string) => ({

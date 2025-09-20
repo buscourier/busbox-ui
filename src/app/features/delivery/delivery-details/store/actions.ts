@@ -7,7 +7,6 @@ import type {
   AutoParts,
   CargoType,
   DeliveryOptions,
-  DeliveryRestrictions,
   Documents,
   OrderValidationState,
   OtherCargo,
@@ -30,9 +29,6 @@ export const DeliveryDetailsActions = createActionGroup({
       error: ApiError;
     }>(),
     'Skip Load Options': emptyProps(),
-    'Set Restrictions': props<{
-      restrictions: DeliveryRestrictions;
-    }>(),
     // 'Clear Parcel Restrictions': emptyProps(),
     'Reset Options': emptyProps(),
     'Restore State': props<{

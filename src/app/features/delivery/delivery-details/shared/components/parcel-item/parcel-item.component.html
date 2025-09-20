@@ -17,8 +17,8 @@
       <input
         tuiInputNumber
         [formControl]="quantity"
-        [min]="limits.QUANTITY.MIN"
-        [max]="limits.QUANTITY.MAX"
+        [min]="limits().QUANTITY.MIN"
+        [max]="limits().QUANTITY.MAX"
         [tuiHint]="[] | tuiFieldErrorContent"
         [invalid]="quantity.invalid || totalQuantityMaxError"
         (blur)="setMinValueOnBlur(quantity.value, 'quantity')"
@@ -48,8 +48,8 @@
         tuiInputNumber
         tuiHintAppearance="error"
         [formControl]="weight"
-        [min]="limits.WEIGHT.MIN"
-        [max]="limits.WEIGHT.MAX"
+        [min]="limits().WEIGHT.MIN"
+        [max]="limits().WEIGHT.MAX"
         [tuiHint]="[] | tuiFieldErrorContent"
         [invalid]="weight.invalid || totalWeightMaxError"
         (blur)="setMinValueOnBlur(weight.value, 'weight')"
@@ -74,7 +74,7 @@
           <small [tuiHint]="'hint.messages.available' | transloco">
             <b>
               <span class="text-red-500">{{ getAvailableDimension() }} см</span>
-              / {{ limits.DIMENSIONS.MAX }} cм
+              / {{ limits().DIMENSIONS.MAX }} cм
             </b>
           </small>
           <!--          <app-limit-badge-->
@@ -96,7 +96,7 @@
               tuiInputNumber
               tuiHintAppearance="error"
               [formControl]="width"
-              [min]="limits.DIMENSIONS.MIN"
+              [min]="limits().DIMENSIONS.MIN"
               [max]="getMaxDimension(width)"
               [tuiHint]="[] | tuiFieldErrorContent"
               [invalid]="dimensions.invalid || totalDimensionsMaxError"
@@ -115,7 +115,7 @@
               tuiInputNumber
               tuiHintAppearance="error"
               [formControl]="height"
-              [min]="limits.DIMENSIONS.MIN"
+              [min]="limits().DIMENSIONS.MIN"
               [max]="getMaxDimension(height)"
               [tuiHint]="[] | tuiFieldErrorContent"
               [invalid]="dimensions.invalid || totalDimensionsMaxError"
@@ -134,7 +134,7 @@
               tuiInputNumber
               tuiHintAppearance="error"
               [formControl]="length"
-              [min]="limits.DIMENSIONS.MIN"
+              [min]="limits().DIMENSIONS.MIN"
               [max]="getMaxDimension(length)"
               [tuiHint]="[] | tuiFieldErrorContent"
               [invalid]="dimensions.invalid || totalDimensionsMaxError"

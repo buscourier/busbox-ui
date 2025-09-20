@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import type { OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, effect, type OnInit, type Signal } from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -30,11 +30,11 @@ import { TuiTextfieldControllerModule } from '@taiga-ui/legacy';
 import { debounceTime } from 'rxjs';
 
 import { DEBOUNCE_TIME } from '@core/constants';
-import { isObjectsEqual } from '@core/utils';
 
 import { LimitBadgeComponent } from '@shared/components/limit-badge';
 import { customMaxValidator, customMinValidator } from '@shared/validators';
 
+import { PARCEL_ITEM_LIMIT_TOKEN } from '../../../tokens';
 import type { ParcelItem, ParcelItemDimensions, ParcelItemLimits } from '../../../types';
 
 import { limitKeyMap, PARCEL_ITEM_DEFAULTS, parcelValidationErrors } from './parcel-item.constants';
@@ -77,14 +77,26 @@ import type { ParcelItemForm } from './parcel-item.types';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ParcelItemComponent implements OnInit, OnChanges {
-  @Input({ required: true }) limits!: ParcelItemLimits;
+export class ParcelItemComponent implements OnInit {
   @Input() totalQuantityMaxError = false;
   @Input() totalWeightMaxError = false;
   @Input() totalDimensionsMaxError = false;
 
   form!: ParcelItemForm;
   dimensionsError = new FormControl(null);
+
+  public limits: Signal<ParcelItemLimits> = inject(PARCEL_ITEM_LIMIT_TOKEN);
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  private readonly limitsEffect = effect(() => {
+    this.limits();
+
+    if (!this.form) return;
+
+    this.updateValidators();
+    this.form.updateValueAndValidity({ emitEvent: false });
+    this.cdr.markForCheck();
+  });
 
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly destroyRef = inject(DestroyRef);
@@ -118,50 +130,38 @@ export class ParcelItemComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.initializeForm();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.form) {
-      return;
-    }
-
-    if (
-      changes['limits'] &&
-      !isObjectsEqual(changes['limits'].previousValue, changes['limits'].currentValue)
-    ) {
-      this.updateValidators();
-    }
+    this.updateValidators();
   }
 
   getMaxDimension(control: FormControl<number>): number {
     const { width, height, length } = this.dimensions.getRawValue();
     const otherFieldsSum = width + height + length - control.value;
 
-    return Math.max(0, this.limits.DIMENSIONS.MAX - otherFieldsSum);
+    return Math.max(0, this.limits().DIMENSIONS.MAX - otherFieldsSum);
   }
 
   getAvailableDimension(): number {
     const { width, height, length } = this.dimensions.getRawValue();
     const currentSum = width + height + length;
 
-    return Math.max(0, this.limits.DIMENSIONS.MAX - currentSum);
+    return Math.max(0, this.limits().DIMENSIONS.MAX - currentSum);
   }
 
   getAvailableQuantity(): number {
     const { quantity } = this.form.getRawValue();
 
-    return this.limits.QUANTITY.MAX - quantity;
+    return this.limits().QUANTITY.MAX - quantity;
   }
 
   getAvailableWeight(): number {
     const { weight } = this.form.getRawValue();
 
-    return this.limits.WEIGHT.MAX - weight;
+    return this.limits().WEIGHT.MAX - weight;
   }
 
   setMinDimensionOnBlur(controlValue: number, controlName: keyof ParcelItemDimensions): void {
     if (!controlValue) {
-      this.dimensions.controls[controlName].setValue(this.limits.DIMENSIONS.MIN);
+      this.dimensions.controls[controlName].setValue(this.limits().DIMENSIONS.MIN);
     }
   }
 
@@ -172,7 +172,7 @@ export class ParcelItemComponent implements OnInit, OnChanges {
     const limitKey = limitKeyMap[controlName];
 
     if (!controlValue) {
-      this.form.controls[controlName].setValue(this.limits[limitKey].MIN);
+      this.form.controls[controlName].setValue(this.limits()[limitKey].MIN);
     }
   }
 
@@ -245,36 +245,36 @@ export class ParcelItemComponent implements OnInit, OnChanges {
   private updateValidators(): void {
     this.quantity.setValidators([
       Validators.required,
-      customMinValidator(this.limits.QUANTITY.MIN, 'quantity'),
-      customMaxValidator(this.limits.QUANTITY.MAX, 'quantity'),
+      customMinValidator(this.limits().QUANTITY.MIN, 'quantity'),
+      customMaxValidator(this.limits().QUANTITY.MAX, 'quantity'),
     ]);
     this.quantity.updateValueAndValidity({ emitEvent: true });
 
     this.weight.setValidators([
       Validators.required,
-      customMinValidator(this.limits.WEIGHT.MIN, 'weight'),
-      customMaxValidator(this.limits.WEIGHT.MAX, 'weight'),
+      customMinValidator(this.limits().WEIGHT.MIN, 'weight'),
+      customMaxValidator(this.limits().WEIGHT.MAX, 'weight'),
     ]);
     this.weight.updateValueAndValidity({ emitEvent: true });
 
     this.width.setValidators([
       Validators.required,
-      customMinValidator(this.limits.DIMENSIONS.MIN, 'width'),
-      customMaxValidator(this.limits.DIMENSIONS.MAX, 'width'),
+      customMinValidator(this.limits().DIMENSIONS.MIN, 'width'),
+      customMaxValidator(this.limits().DIMENSIONS.MAX, 'width'),
     ]);
     this.width.updateValueAndValidity({ emitEvent: true });
 
     this.height.setValidators([
       Validators.required,
-      customMinValidator(this.limits.DIMENSIONS.MIN, 'height'),
-      customMaxValidator(this.limits.DIMENSIONS.MAX, 'height'),
+      customMinValidator(this.limits().DIMENSIONS.MIN, 'height'),
+      customMaxValidator(this.limits().DIMENSIONS.MAX, 'height'),
     ]);
     this.height.updateValueAndValidity({ emitEvent: true });
 
     this.length.setValidators([
       Validators.required,
-      customMinValidator(this.limits.DIMENSIONS.MIN, 'length'),
-      customMaxValidator(this.limits.DIMENSIONS.MAX, 'length'),
+      customMinValidator(this.limits().DIMENSIONS.MIN, 'length'),
+      customMaxValidator(this.limits().DIMENSIONS.MAX, 'length'),
     ]);
     this.length.updateValueAndValidity({ emitEvent: true });
 
@@ -289,8 +289,8 @@ export class ParcelItemComponent implements OnInit, OnChanges {
     if (!width || !height || !length) return null;
 
     const dimensionsSum = width + height + length;
-    if (dimensionsSum > this.limits.DIMENSIONS.MAX) {
-      return { dimensions: { error: true, diff: dimensionsSum - this.limits.DIMENSIONS.MAX } };
+    if (dimensionsSum > this.limits().DIMENSIONS.MAX) {
+      return { dimensions: { error: true, diff: dimensionsSum - this.limits().DIMENSIONS.MAX } };
     }
 
     return null;
