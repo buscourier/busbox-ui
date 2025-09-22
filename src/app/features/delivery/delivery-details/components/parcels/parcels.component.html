@@ -15,13 +15,16 @@
           {{ 'deliveryDetails.parcel.name' | transloco }} {{ $index + 1 }}
         </h3>
         @if (parcels.length > 1) {
-          <button type="button" class="cursor-pointer" (click)="removeParcelItem($index)">
-            <tui-icon
-              icon="@tui.trash"
-              class="mr-2"
-              [style.color]="'var(--color-red-500)'"
-              [style.font-size.rem]="1.25"
-            />
+          <button
+            appearance="secondary-destructive"
+            iconStart="@tui.trash"
+            size="s"
+            tuiIconButton
+            type="button"
+            [style.border-radius.%]="100"
+            (click)="removeParcelItem($index)"
+          >
+            Favorite
           </button>
         }
       </div>

@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { TuiIcon } from '@taiga-ui/core';
+import { TuiButton, TuiIcon } from '@taiga-ui/core';
 import { debounceTime } from 'rxjs';
 
 import { DEBOUNCE_TIME } from '@core/constants';
@@ -24,7 +24,7 @@ import { AutoPartComponent } from './auto-part';
 
 @Component({
   selector: 'app-auto-parts',
-  imports: [ReactiveFormsModule, TuiIcon, AutoPartComponent],
+  imports: [ReactiveFormsModule, TuiIcon, AutoPartComponent, TuiButton],
   templateUrl: './auto-parts.component.html',
   styleUrl: './auto-parts.component.css',
   animations: [parcelItemAnimation],

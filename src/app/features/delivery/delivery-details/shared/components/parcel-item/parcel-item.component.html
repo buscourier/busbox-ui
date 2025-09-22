@@ -1,15 +1,15 @@
 <div [formGroup]="form" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
   <div tuiLabel class="relative">
-    <div class="mb-1 flex justify-between">
+    <div class="mb-1 flex items-center justify-between">
       <span class="flex items-center text-sm text-gray-600">
         {{ type === 'AutoPart' ? 'Количество' : 'Количество мест' }}
       </span>
       @if (quantityInput.focused()) {
-        <app-limit-badge
-          [value]="getAvailableQuantity()"
-          [hintText]="'hint.messages.available' | transloco"
-          size="s"
-        />
+        <span class="text-xs">
+          <span class="text-red-500">{{ getAvailableQuantity() }}</span>
+          /
+          <b>{{ this.limits().QUANTITY.MAX }}</b>
+        </span>
       }
     </div>
 
@@ -29,17 +29,16 @@
   </div>
 
   <div tuiLabel class="relative">
-    <div class="mb-1 flex justify-between">
+    <div class="mb-1 flex items-center justify-between">
       <span class="flex items-center text-sm text-gray-600">
         {{ 'deliveryDetails.parcel.labels.weight' | transloco }}
       </span>
       @if (weightInput.focused()) {
-        <app-limit-badge
-          [value]="getAvailableWeight()"
-          [units]="'units.weight' | transloco"
-          [hintText]="'hint.messages.available' | transloco"
-          size="s"
-        />
+        <span class="text-xs">
+          <span class="text-red-500">{{ getAvailableWeight() }} кг</span>
+          /
+          <b>{{ this.limits().WEIGHT.MAX }} кг</b>
+        </span>
       }
     </div>
 

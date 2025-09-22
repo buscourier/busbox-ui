@@ -19,7 +19,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { TuiError, TuiHintDirective, TuiIcon, TuiTextfieldComponent } from '@taiga-ui/core';
+import { TuiError, TuiHintDirective, TuiTextfieldComponent } from '@taiga-ui/core';
 import {
   TUI_VALIDATION_ERRORS,
   TuiFieldErrorContentPipe,
@@ -31,7 +31,6 @@ import { debounceTime } from 'rxjs';
 
 import { DEBOUNCE_TIME } from '@core/constants';
 
-import { LimitBadgeComponent } from '@shared/components/limit-badge';
 import { customMaxValidator, customMinValidator } from '@shared/validators';
 
 import { PARCEL_ITEM_LIMIT_TOKEN } from '../../../tokens';
@@ -52,8 +51,6 @@ import type { ParcelItemForm } from './parcel-item.types';
     AsyncPipe,
     TuiTextfieldComponent,
     TuiInputNumber,
-    TuiIcon,
-    LimitBadgeComponent,
     TranslocoPipe,
   ],
   templateUrl: './parcel-item.component.html',

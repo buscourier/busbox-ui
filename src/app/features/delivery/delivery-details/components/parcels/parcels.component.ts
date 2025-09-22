@@ -18,7 +18,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { TuiAlertService, TuiError, TuiIcon } from '@taiga-ui/core';
+import { TuiAlertService, TuiButton, TuiError, TuiIcon } from '@taiga-ui/core';
 import { TUI_VALIDATION_ERRORS, TuiFieldErrorPipe } from '@taiga-ui/kit';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { debounceTime } from 'rxjs';
@@ -51,6 +51,7 @@ import { parcelsValidator } from './parcels.validator';
     AsyncPipe,
     TuiIcon,
     TranslocoPipe,
+    TuiButton,
   ],
   templateUrl: './parcels.component.html',
   styleUrl: './parcels.component.css',
