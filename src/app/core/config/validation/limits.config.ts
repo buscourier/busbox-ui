@@ -3,7 +3,7 @@ import { DocumentRegex, PHONE_REGEX, TEXT_BASE_REGEX } from '@shared/regex';
 export interface FieldConfig {
   minLength: number;
   maxLength: number;
-  pattern: RegExp;
+  pattern?: RegExp;
 }
 
 // export type FieldGroup = Record<string, FieldConfig | Record<string, FieldConfig>>;
@@ -45,15 +45,15 @@ export interface ValidationLimits {
 
 export const DEFAULT_VALIDATION_LIMITS: ValidationLimits = {
   user: {
-    fullName: { minLength: 2, maxLength: 40, pattern: TEXT_BASE_REGEX },
-    lastName: { minLength: 2, maxLength: 15, pattern: TEXT_BASE_REGEX },
-    firstName: { minLength: 2, maxLength: 15, pattern: TEXT_BASE_REGEX },
-    middleName: { minLength: 2, maxLength: 15, pattern: TEXT_BASE_REGEX },
+    fullName: { minLength: 1, maxLength: 128 },
+    lastName: { minLength: 1, maxLength: 64 },
+    firstName: { minLength: 1, maxLength: 64 },
+    middleName: { minLength: 1, maxLength: 64 },
   },
   address: {
-    street: { minLength: 3, maxLength: 30, pattern: TEXT_BASE_REGEX },
-    building: { minLength: 1, maxLength: 10, pattern: TEXT_BASE_REGEX },
-    apartment: { minLength: 1, maxLength: 10, pattern: TEXT_BASE_REGEX },
+    street: { minLength: 1, maxLength: 64 },
+    building: { minLength: 1, maxLength: 64 },
+    apartment: { minLength: 1, maxLength: 64 },
   },
   document: {
     passport: {

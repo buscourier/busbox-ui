@@ -2,7 +2,7 @@
   <div tuiLabel class="relative">
     <div class="mb-1 flex justify-between">
       <span class="flex items-center text-sm text-gray-600">
-        {{ 'deliveryDetails.parcel.labels.quantity' | transloco }}
+        {{ type === 'AutoPart' ? 'Количество' : 'Количество мест' }}
       </span>
       @if (quantityInput.focused()) {
         <app-limit-badge
@@ -59,33 +59,33 @@
   </div>
 
   <div class="col-span-full">
-    <div class="rounded-md border border-gray-100 bg-gray-50 p-3">
-      <div class="mb-3 flex justify-between">
-        <span class="flex items-center text-sm text-gray-600">
-          <tui-icon
-            icon="@tui.proportions"
-            class="mr-2"
-            [style.color]="'var(--tui-background-accent-1)'"
-            [style.font-size.rem]="1"
-          />
-          {{ 'deliveryDetails.parcel.labels.dimensions' | transloco }}
-        </span>
-        @if (widthInput.focused() || heightInput.focused() || lengthInput.focused()) {
-          <small [tuiHint]="'hint.messages.available' | transloco">
-            <b>
-              <span class="text-red-500">{{ getAvailableDimension() }} см</span>
-              / {{ limits().DIMENSIONS.MAX }} cм
-            </b>
-          </small>
-          <!--          <app-limit-badge-->
-          <!--            [value]="getAvailableDimension()"-->
-          <!--            [units]="'units.width' | transloco"-->
-          <!--            [hintText]="'hint.messages.available' | transloco"-->
-          <!--            size="s"-->
-          <!--          />-->
-        }
-      </div>
+    <div class="mb-2 flex justify-between">
+      <span class="flex items-center text-sm text-gray-600">
+        <!--        <tui-icon-->
+        <!--          icon="@tui.proportions"-->
+        <!--          class="mr-2"-->
+        <!--          [style.color]="'var(&#45;&#45;tui-background-accent-1)'"-->
+        <!--          [style.font-size.rem]="1"-->
+        <!--        />-->
+        {{ 'deliveryDetails.parcel.labels.dimensions' | transloco }}
+      </span>
+      @if (widthInput.focused() || heightInput.focused() || lengthInput.focused()) {
+        <small [tuiHint]="'hint.messages.available' | transloco">
+          <b>
+            <span class="text-red-500">{{ getAvailableDimension() }} см</span>
+            / {{ limits().DIMENSIONS.MAX }} cм
+          </b>
+        </small>
+        <!--          <app-limit-badge-->
+        <!--            [value]="getAvailableDimension()"-->
+        <!--            [units]="'units.width' | transloco"-->
+        <!--            [hintText]="'hint.messages.available' | transloco"-->
+        <!--            size="s"-->
+        <!--          />-->
+      }
+    </div>
 
+    <div class="rounded-md border border-gray-100 bg-gray-50 p-3">
       <div formGroupName="dimensions" class="grid grid-cols-3 gap-2">
         <div tuiLabel>
           <span class="mb-1 inline-block text-xs text-gray-500">

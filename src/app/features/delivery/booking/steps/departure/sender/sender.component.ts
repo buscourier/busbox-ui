@@ -19,7 +19,6 @@ import { TUI_IS_IOS, type TuiStringHandler } from '@taiga-ui/cdk';
 import { TuiHintDirective, TuiTextfield } from '@taiga-ui/core';
 import {
   TUI_VALIDATION_ERRORS,
-  TuiBadge,
   TuiChevron,
   TuiDataListWrapper,
   TuiFieldErrorContentPipe,
@@ -42,7 +41,6 @@ import type { SenderForm } from './sender.types';
 @Component({
   selector: 'app-sender',
   imports: [
-    TuiBadge,
     ReactiveFormsModule,
     TuiHintDirective,
     TuiFieldErrorContentPipe,
@@ -107,12 +105,6 @@ export class SenderComponent implements OnInit {
 
   get phone(): FormControl<string> {
     return this.form.controls.phone;
-  }
-
-  get availableFullNameLength(): number {
-    const fullName = this.form.getRawValue().fullName as string;
-
-    return this.limits.user.fullName.maxLength - fullName.length;
   }
 
   ngOnInit(): void {

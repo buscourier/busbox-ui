@@ -19,12 +19,7 @@ import {
   TuiTextfieldComponent,
   TuiTextfieldDirective,
 } from '@taiga-ui/core';
-import {
-  TUI_VALIDATION_ERRORS,
-  TuiBadge,
-  TuiFieldErrorContentPipe,
-  TuiInputPhone,
-} from '@taiga-ui/kit';
+import { TUI_VALIDATION_ERRORS, TuiFieldErrorContentPipe, TuiInputPhone } from '@taiga-ui/kit';
 import { distinctUntilChanged } from 'rxjs';
 
 import type { ValidationLimits } from '@core/config';
@@ -41,7 +36,6 @@ import type { RecipientForm } from './recipient.types';
 @Component({
   selector: 'app-recipient',
   imports: [
-    TuiBadge,
     TuiHintDirective,
     TuiFieldErrorContentPipe,
     ReactiveFormsModule,
@@ -87,12 +81,6 @@ export class RecipientComponent implements OnInit {
 
   get phone(): FormControl<string> {
     return this.form.controls.phone;
-  }
-
-  get availableFullNameLength(): number {
-    const { fullName } = this.form.getRawValue();
-
-    return this.limits.user.fullName.maxLength - fullName.length;
   }
 
   ngOnInit(): void {

@@ -17,7 +17,7 @@ import {
   TuiTextfieldComponent,
   TuiTextfieldDirective,
 } from '@taiga-ui/core';
-import { TUI_VALIDATION_ERRORS, TuiBadge, TuiFieldErrorContentPipe } from '@taiga-ui/kit';
+import { TUI_VALIDATION_ERRORS, TuiFieldErrorContentPipe } from '@taiga-ui/kit';
 import { TuiInputModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
 import { map } from 'rxjs/operators';
 
@@ -41,7 +41,6 @@ import type { CourierDetailsForm } from './courier-details.types';
     ReactiveFormsModule,
     TuiFieldErrorContentPipe,
     TuiInputModule,
-    TuiBadge,
     TuiLabel,
     TuiTextfieldComponent,
     TuiTextfieldDirective,
@@ -106,24 +105,6 @@ export class CourierDetailsComponent implements OnInit {
 
   get preferredTime(): FormControl<PreferredTimeSlot> {
     return this.form.controls.preferredTime;
-  }
-
-  get availableStreetLength(): number {
-    const { street } = this.form.getRawValue();
-
-    return this.limits.address.street.maxLength - street.length;
-  }
-
-  get availableBuildingLength(): number {
-    const { building } = this.form.getRawValue();
-
-    return this.limits.address.building.maxLength - building.length;
-  }
-
-  get availableApartmentLength(): number {
-    const { apartment } = this.form.getRawValue();
-
-    return this.limits.address.apartment.maxLength - apartment.length;
   }
 
   ngOnInit(): void {

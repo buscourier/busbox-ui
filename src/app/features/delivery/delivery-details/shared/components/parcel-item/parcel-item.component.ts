@@ -78,6 +78,7 @@ import type { ParcelItemForm } from './parcel-item.types';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ParcelItemComponent implements OnInit {
+  @Input() type: 'AutoPart' | 'Default' = 'Default';
   @Input() totalQuantityMaxError = false;
   @Input() totalWeightMaxError = false;
   @Input() totalDimensionsMaxError = false;
