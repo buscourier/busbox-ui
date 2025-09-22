@@ -21,9 +21,14 @@
 
           <div class="space-y-2">
             @for (field of section.fields; track $index) {
-              <div class="flex items-baseline justify-between py-1.5">
+              <div class="flex justify-between gap-4 py-1.5">
                 <span class="text-sm text-gray-500">{{ field.label | transloco }}</span>
-                <span class="text-right text-sm font-medium text-gray-800">{{ field.value }}</span>
+                <tui-line-clamp
+                  [linesLimit]="1"
+                  [lineHeight]="20"
+                  [content]="field.value"
+                  class="max-w-[210px] text-right text-sm font-medium text-gray-800"
+                />
               </div>
             }
           </div>
