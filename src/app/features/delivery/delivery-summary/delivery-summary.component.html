@@ -322,7 +322,7 @@
                     [tuiSkeleton]="vm.isLoading"
                     class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
                   >
-                    {{ extendedSms.price }} {{ 'RUB' | tuiCurrency }}
+                    {{ +extendedSms.price || 0 }} {{ 'RUB' | tuiCurrency }}
                   </span>
                 </div>
               }
@@ -342,7 +342,7 @@
                     [tuiSkeleton]="vm.isLoading"
                     class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
                   >
-                    {{ senderSms.price }} {{ 'RUB' | tuiCurrency }}
+                    {{ +senderSms.price || 0 }} {{ 'RUB' | tuiCurrency }}
                   </span>
                 </div>
               }
@@ -364,7 +364,7 @@
                     [tuiSkeleton]="vm.isLoading"
                     class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
                   >
-                    {{ recipientPayment.price }} {{ 'RUB' | tuiCurrency }}
+                    {{ +recipientPayment.price || 0 }} {{ 'RUB' | tuiCurrency }}
                   </span>
                 </div>
               }
