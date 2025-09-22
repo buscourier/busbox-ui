@@ -155,7 +155,8 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
       cargoType: order?.cargoType || null,
       documents: order?.cargoType === CargoType.DOCUMENTS ? getDocuments(order.documents) : null,
       parcels: order?.cargoType === CargoType.PARCELS && order.parcels ? order.parcels.items : null,
-      autoParts: order?.cargoType === CargoType.AUTO_PARTS ? getAutoParts(order.autoParts) : null,
+      autoParts:
+        order?.cargoType === CargoType.AUTO_PARTS && order.autoParts ? order.autoParts.items : null,
       otherCargo: order?.cargoType === CargoType.OTHER ? getOtherCargo(order.otherCargo) : null,
       packaging,
       additionalServices: order?.additionalServices || null,
