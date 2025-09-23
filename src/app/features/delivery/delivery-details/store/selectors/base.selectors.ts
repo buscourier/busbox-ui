@@ -52,11 +52,6 @@ export const createBaseSelectors = (
     (state: DeliveryDetailsState) => state.activeOrderId,
   );
 
-  const selectRestrictions = createSelector(
-    selectDeliveryDetailsState,
-    (state) => state.restrictions,
-  );
-
   return {
     // Entity selectors
     selectAll,
@@ -70,6 +65,5 @@ export const createBaseSelectors = (
     selectOptionsError,
     selectOptions,
     selectActiveOrderId,
-    selectRestrictions,
   };
 };

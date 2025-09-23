@@ -15,3 +15,4 @@ export * from './service.types';
 export * from './storage.types';
 export * from './view-model.types';
 export * from './parcels.types';
+export * from './dimensions.types';

@@ -4,33 +4,19 @@
     class="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3"
   >
     <label tuiLabel>
-      <span class="mb-1 block text-sm text-gray-700">
+      <span class="block text-sm text-gray-700">
         {{ 'user.labels.lastName' | transloco }}
       </span>
       <div class="relative">
-        <tui-textfield #lastNameInput>
+        <tui-textfield>
           <input
             tuiTextfield
             [formControl]="lastName"
             [tuiHint]="[] | tuiFieldErrorContent"
-            [minlength]="limits.user.lastName.minLength"
-            [maxlength]="limits.user.lastName.maxLength"
-            [attr.maxlength]="limits.user.lastName.maxLength"
             [placeholder]="'user.placeholders.lastName' | transloco"
             tuiHintAppearance="error"
           />
         </tui-textfield>
-        @if (lastNameInput.focused()) {
-          <span class="absolute top-1/2 right-2 -translate-y-1/2">
-            <tui-badge
-              appearance="secondary"
-              size="s"
-              [tuiHint]="'hint.messages.availableSymbols' | transloco"
-            >
-              {{ availableLastNameLength }}
-            </tui-badge>
-          </span>
-        }
       </div>
     </label>
 
@@ -39,29 +25,15 @@
         {{ 'user.labels.firstName' | transloco }}
       </span>
       <div class="relative">
-        <tui-textfield #firstNameInput>
+        <tui-textfield>
           <input
             tuiTextfield
             [formControl]="firstName"
             [tuiHint]="[] | tuiFieldErrorContent"
-            [minlength]="limits.user.firstName.minLength"
-            [maxlength]="limits.user.firstName.maxLength"
-            [attr.maxlength]="limits.user.firstName.maxLength"
             [placeholder]="'user.placeholders.firstName' | transloco"
             tuiHintAppearance="error"
           />
         </tui-textfield>
-        @if (firstNameInput.focused()) {
-          <span class="absolute top-1/2 right-2 -translate-y-1/2">
-            <tui-badge
-              appearance="secondary"
-              size="s"
-              [tuiHint]="'hint.messages.availableSymbols' | transloco"
-            >
-              {{ availableFirstNameLength }}
-            </tui-badge>
-          </span>
-        }
       </div>
     </label>
 
@@ -70,29 +42,15 @@
         {{ 'user.labels.middleName' | transloco }}
       </span>
       <div class="relative">
-        <tui-textfield #middleNameInput>
+        <tui-textfield>
           <input
             tuiTextfield
             [formControl]="middleName"
             [tuiHint]="[] | tuiFieldErrorContent"
-            [minlength]="limits.user.middleName.minLength"
-            [maxlength]="limits.user.middleName.maxLength"
-            [attr.maxlength]="limits.user.middleName.maxLength"
             [placeholder]="'user.placeholders.middleName' | transloco"
             tuiHintAppearance="error"
           />
         </tui-textfield>
-        @if (middleNameInput.focused()) {
-          <span class="absolute top-1/2 right-2 -translate-y-1/2">
-            <tui-badge
-              appearance="secondary"
-              size="s"
-              [tuiHint]="'hint.messages.availableSymbols' | transloco"
-            >
-              {{ availableMiddleNameLength }}
-            </tui-badge>
-          </span>
-        }
       </div>
     </label>
 

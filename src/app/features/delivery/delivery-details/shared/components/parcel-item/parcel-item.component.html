@@ -1,15 +1,15 @@
 <div [formGroup]="form" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
   <div tuiLabel class="relative">
-    <div class="mb-1 flex justify-between">
+    <div class="mb-1 flex items-center justify-between">
       <span class="flex items-center text-sm text-gray-600">
-        {{ 'deliveryDetails.parcel.labels.quantity' | transloco }}
+        {{ type === 'AutoPart' ? 'Количество' : 'Количество мест' }}
       </span>
       @if (quantityInput.focused()) {
-        <app-limit-badge
-          [value]="getAvailableQuantity()"
-          [hintText]="'hint.messages.available' | transloco"
-          size="s"
-        />
+        <span class="text-xs">
+          <span class="text-red-500">{{ getAvailableQuantity() }}</span>
+          /
+          <b>{{ this.limits().QUANTITY.MAX }}</b>
+        </span>
       }
     </div>
 
@@ -17,8 +17,8 @@
       <input
         tuiInputNumber
         [formControl]="quantity"
-        [min]="limits.QUANTITY.MIN"
-        [max]="limits.QUANTITY.MAX"
+        [min]="limits().QUANTITY.MIN"
+        [max]="limits().QUANTITY.MAX"
         [tuiHint]="[] | tuiFieldErrorContent"
         [invalid]="quantity.invalid || totalQuantityMaxError"
         (blur)="setMinValueOnBlur(quantity.value, 'quantity')"
@@ -29,17 +29,16 @@
   </div>
 
   <div tuiLabel class="relative">
-    <div class="mb-1 flex justify-between">
+    <div class="mb-1 flex items-center justify-between">
       <span class="flex items-center text-sm text-gray-600">
         {{ 'deliveryDetails.parcel.labels.weight' | transloco }}
       </span>
       @if (weightInput.focused()) {
-        <app-limit-badge
-          [value]="getAvailableWeight()"
-          [units]="'units.weight' | transloco"
-          [hintText]="'hint.messages.available' | transloco"
-          size="s"
-        />
+        <span class="text-xs">
+          <span class="text-red-500">{{ getAvailableWeight() }} кг</span>
+          /
+          <b>{{ this.limits().WEIGHT.MAX }} кг</b>
+        </span>
       }
     </div>
 
@@ -48,8 +47,8 @@
         tuiInputNumber
         tuiHintAppearance="error"
         [formControl]="weight"
-        [min]="limits.WEIGHT.MIN"
-        [max]="limits.WEIGHT.MAX"
+        [min]="limits().WEIGHT.MIN"
+        [max]="limits().WEIGHT.MAX"
         [tuiHint]="[] | tuiFieldErrorContent"
         [invalid]="weight.invalid || totalWeightMaxError"
         (blur)="setMinValueOnBlur(weight.value, 'weight')"
@@ -59,33 +58,33 @@
   </div>
 
   <div class="col-span-full">
-    <div class="rounded-md border border-gray-100 bg-gray-50 p-3">
-      <div class="mb-3 flex justify-between">
-        <span class="flex items-center text-sm text-gray-600">
-          <tui-icon
-            icon="@tui.proportions"
-            class="mr-2"
-            [style.color]="'var(--tui-background-accent-1)'"
-            [style.font-size.rem]="1"
-          />
-          {{ 'deliveryDetails.parcel.labels.dimensions' | transloco }}
-        </span>
-        @if (widthInput.focused() || heightInput.focused() || lengthInput.focused()) {
-          <small [tuiHint]="'hint.messages.available' | transloco">
-            <b>
-              <span class="text-yellow-500">{{ getAvailableDimension() }} см</span>
-              / {{ limits.DIMENSIONS.MAX }} cм
-            </b>
-          </small>
-          <!--          <app-limit-badge-->
-          <!--            [value]="getAvailableDimension()"-->
-          <!--            [units]="'units.width' | transloco"-->
-          <!--            [hintText]="'hint.messages.available' | transloco"-->
-          <!--            size="s"-->
-          <!--          />-->
-        }
-      </div>
+    <div class="mb-2 flex justify-between">
+      <span class="flex items-center text-sm text-gray-600">
+        <!--        <tui-icon-->
+        <!--          icon="@tui.proportions"-->
+        <!--          class="mr-2"-->
+        <!--          [style.color]="'var(&#45;&#45;tui-background-accent-1)'"-->
+        <!--          [style.font-size.rem]="1"-->
+        <!--        />-->
+        {{ 'deliveryDetails.parcel.labels.dimensions' | transloco }}
+      </span>
+      @if (widthInput.focused() || heightInput.focused() || lengthInput.focused()) {
+        <small [tuiHint]="'hint.messages.available' | transloco">
+          <b>
+            <span class="text-red-500">{{ getAvailableDimension() }} см</span>
+            / {{ limits().DIMENSIONS.MAX }} cм
+          </b>
+        </small>
+        <!--          <app-limit-badge-->
+        <!--            [value]="getAvailableDimension()"-->
+        <!--            [units]="'units.width' | transloco"-->
+        <!--            [hintText]="'hint.messages.available' | transloco"-->
+        <!--            size="s"-->
+        <!--          />-->
+      }
+    </div>
 
+    <div class="rounded-md border border-gray-100 bg-gray-50 p-3">
       <div formGroupName="dimensions" class="grid grid-cols-3 gap-2">
         <div tuiLabel>
           <span class="mb-1 inline-block text-xs text-gray-500">
@@ -96,7 +95,7 @@
               tuiInputNumber
               tuiHintAppearance="error"
               [formControl]="width"
-              [min]="limits.DIMENSIONS.MIN"
+              [min]="limits().DIMENSIONS.MIN"
               [max]="getMaxDimension(width)"
               [tuiHint]="[] | tuiFieldErrorContent"
               [invalid]="dimensions.invalid || totalDimensionsMaxError"
@@ -115,7 +114,7 @@
               tuiInputNumber
               tuiHintAppearance="error"
               [formControl]="height"
-              [min]="limits.DIMENSIONS.MIN"
+              [min]="limits().DIMENSIONS.MIN"
               [max]="getMaxDimension(height)"
               [tuiHint]="[] | tuiFieldErrorContent"
               [invalid]="dimensions.invalid || totalDimensionsMaxError"
@@ -134,7 +133,7 @@
               tuiInputNumber
               tuiHintAppearance="error"
               [formControl]="length"
-              [min]="limits.DIMENSIONS.MIN"
+              [min]="limits().DIMENSIONS.MIN"
               [max]="getMaxDimension(length)"
               [tuiHint]="[] | tuiFieldErrorContent"
               [invalid]="dimensions.invalid || totalDimensionsMaxError"

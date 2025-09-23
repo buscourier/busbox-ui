@@ -9,9 +9,6 @@
           tuiTextfield
           [formControl]="userName"
           [tuiHint]="[] | tuiFieldErrorContent"
-          [minlength]="limits.user.fullName.minLength"
-          [maxlength]="limits.user.fullName.maxLength"
-          [attr.maxlength]="limits.user.lastName.maxLength"
           [placeholder]="'user.placeholders.lastName' | transloco"
           tuiHintAppearance="error"
         />

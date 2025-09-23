@@ -1,4 +1,4 @@
-import type { ParcelItem } from '@delivery/delivery-details/types';
+import type { AutoPart, ParcelItem } from '@delivery/delivery-details/types';
 
 import type { AdditionalServices } from './additional-services.types';
 import type { CargoDetails, CargoType } from './cargo.types';
@@ -24,7 +24,7 @@ export interface OrderReviewDetails {
   cargoType: CargoType | null;
   documents: CargoDetails | null;
   parcels: ParcelItem[] | null;
-  autoParts: CargoDetails | null;
+  autoParts: AutoPart[] | null;
   otherCargo: CargoDetails | null;
   packaging: { items: PackagingDetails[] } | null;
   additionalServices: AdditionalServices | null;

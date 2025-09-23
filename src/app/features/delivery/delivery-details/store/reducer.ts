@@ -45,14 +45,6 @@ export const deliveryDetailsReducer = createReducer(
       },
     }),
   ),
-
-  on(
-    DeliveryDetailsActions.setRestrictions,
-    (state, { restrictions }): DeliveryDetailsState => ({
-      ...state,
-      restrictions: restrictions,
-    }),
-  ),
   on(DeliveryDetailsActions.resetOptions, (): DeliveryDetailsState => initialState),
   on(DeliveryDetailsActions.restoreState, (state, { restoredState }) => {
     const orders = Object.values(restoredState.entities).filter((order): order is Order => !!order);

@@ -3,7 +3,7 @@ import type { MemoizedSelector } from '@ngrx/store';
 
 import type { ApiError } from '@shared/types';
 
-import type { DeliveryOptions, DeliveryRestrictions, Order } from '../../types';
+import type { DeliveryOptions, Order } from '../../types';
 
 export interface BaseSelectors {
   // Entity selectors
@@ -17,6 +17,5 @@ export interface BaseSelectors {
   selectIsOptionsLoaded: MemoizedSelector<object, boolean>;
   selectOptions: MemoizedSelector<object, DeliveryOptions | null>;
   selectActiveOrderId: MemoizedSelector<object, string | null>;
-  selectRestrictions: MemoizedSelector<object, DeliveryRestrictions>;
   selectOptionsError: MemoizedSelector<object, ApiError | null>;
 }

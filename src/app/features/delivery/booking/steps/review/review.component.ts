@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { provideTranslocoScope, TranslocoPipe } from '@jsverse/transloco';
 import { TuiIcon } from '@taiga-ui/core';
+import { TuiLineClamp } from '@taiga-ui/kit';
 import { TuiTextareaModule } from '@taiga-ui/legacy';
 import type { Observable } from 'rxjs';
 
@@ -21,6 +22,7 @@ import { ReviewConfirmationComponent } from './review-confirmation';
     ReviewConfirmationComponent,
     TuiIcon,
     TranslocoPipe,
+    TuiLineClamp,
   ],
   templateUrl: './review.component.html',
   styleUrl: './review.component.css',

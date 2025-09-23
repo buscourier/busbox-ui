@@ -322,7 +322,7 @@
                     [tuiSkeleton]="vm.isLoading"
                     class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
                   >
-                    {{ extendedSms.price }} {{ 'RUB' | tuiCurrency }}
+                    {{ +extendedSms.price || 0 }} {{ 'RUB' | tuiCurrency }}
                   </span>
                 </div>
               }
@@ -342,7 +342,7 @@
                     [tuiSkeleton]="vm.isLoading"
                     class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
                   >
-                    {{ senderSms.price }} {{ 'RUB' | tuiCurrency }}
+                    {{ +senderSms.price || 0 }} {{ 'RUB' | tuiCurrency }}
                   </span>
                 </div>
               }
@@ -364,7 +364,7 @@
                     [tuiSkeleton]="vm.isLoading"
                     class="rounded-md bg-gray-50 px-2 py-1 text-sm font-medium whitespace-nowrap text-gray-800"
                   >
-                    {{ recipientPayment.price }} {{ 'RUB' | tuiCurrency }}
+                    {{ +recipientPayment.price || 0 }} {{ 'RUB' | tuiCurrency }}
                   </span>
                 </div>
               }
@@ -416,16 +416,12 @@
 
           @if (!isPickupPointValid) {
             <small class="text-2xs text-red-500">
-              (Данные для отправления указаны не полностью или неверно)
+              (Данные для отправления указаны не полностью)
             </small>
           } @else if (!isDeliveryPointValid) {
-            <small class="text-2xs text-red-500">
-              (Данные для получения указаны не коректно или неверно)
-            </small>
+            <small class="text-2xs text-red-500">(Данные для получения указаны не коректно)</small>
           } @else if (!isAllOrdersValid) {
-            <small class="text-2xs text-red-500">
-              (Детали заказа указаны не коректно или неверно)
-            </small>
+            <small class="text-2xs text-red-500">(Детали заказа указаны не коректно)</small>
           }
         </div>
       </button>

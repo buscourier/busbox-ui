@@ -56,11 +56,9 @@ export const createViewModelSelector = (
     selectViewModel: createSelector(
       selectOrdersViewModel,
       selectOptionsViewModel,
-      baseSelectors.selectRestrictions,
-      (orders, options, restrictions): DeliveryDetailsViewModel => ({
+      (orders, options): DeliveryDetailsViewModel => ({
         orders,
         options,
-        restrictions,
       }),
     ),
   };

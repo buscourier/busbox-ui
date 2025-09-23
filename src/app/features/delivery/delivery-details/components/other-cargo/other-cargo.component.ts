@@ -17,7 +17,6 @@ import type { TuiStringHandler } from '@taiga-ui/cdk';
 import { TuiTextfield, TuiTextfieldComponent } from '@taiga-ui/core';
 import {
   TuiChevron,
-  TuiComboBox,
   TuiDataListWrapper,
   TuiFilterByInputPipe,
   TuiInputNumber,
@@ -28,7 +27,7 @@ import { map } from 'rxjs/operators';
 
 import { isObjectsEqual } from '@core/utils';
 
-import type { Cargo, CargoItemRestrictions, OtherCargo } from '../../types';
+import type { Cargo, OtherCargo } from '../../types';
 
 import type { OtherCargoForm } from './other-cargo.types';
 
@@ -40,7 +39,6 @@ import type { OtherCargoForm } from './other-cargo.types';
     TuiTextfieldComponent,
     TranslocoPipe,
     TuiChevron,
-    TuiComboBox,
     TuiDropdownMobile,
     TuiFilterByInputPipe,
     TuiTextfield,
@@ -54,7 +52,6 @@ import type { OtherCargoForm } from './other-cargo.types';
 export class OtherCargoComponent implements OnInit, OnChanges {
   @Input() data: OtherCargo | null = null;
   @Input({ required: true }) options!: Cargo[];
-  @Input() restrictions: CargoItemRestrictions | null = null;
   @Output() dataChange = new EventEmitter<OtherCargo>();
   @Output() validationChange = new EventEmitter<boolean>();
 
@@ -97,7 +94,7 @@ export class OtherCargoComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (!this.form) return;
 
-    const { data, restrictions } = changes;
+    const { data } = changes;
 
     /**
      * Updates input value when active order changes.
@@ -110,10 +107,6 @@ export class OtherCargoComponent implements OnInit, OnChanges {
           quantity: 1,
         },
       );
-    }
-
-    if (restrictions) {
-      this.updateFormState();
     }
   }
 
@@ -131,29 +124,5 @@ export class OtherCargoComponent implements OnInit, OnChanges {
         validators: [Validators.required],
       }),
     });
-
-    this.updateFormState();
-  }
-
-  private updateFormState(): void {
-    if (this.hasRestriction()) {
-      this.form.disable({ emitEvent: false });
-    } else {
-      this.form.enable({ emitEvent: false });
-      this.form.markAsUntouched();
-    }
-  }
-
-  private hasRestriction(): boolean {
-    if (!this.restrictions) {
-      return false;
-    }
-
-    return !!(
-      this.restrictions.pickupCourier ||
-      this.restrictions.deliveryCourier ||
-      this.restrictions.pickupOffice ||
-      this.restrictions.deliveryOffice
-    );
   }
 }

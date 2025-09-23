@@ -1,4 +1,4 @@
-import type { OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { type OnInit, signal } from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -9,153 +9,111 @@ import {
   Output,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import type { FormControl } from '@angular/forms';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TranslocoPipe } from '@jsverse/transloco';
-import { TuiDropdownMobile } from '@taiga-ui/addon-mobile';
-import { TUI_IS_MOBILE, type TuiStringHandler } from '@taiga-ui/cdk';
-import { TuiNotification, TuiTextfield, TuiTextfieldComponent } from '@taiga-ui/core';
-import {
-  TuiChevron,
-  TuiComboBox,
-  TuiDataListWrapper,
-  TuiFilterByInputPipe,
-  TuiInputNumber,
-  TuiSelect,
-} from '@taiga-ui/kit';
-import { merge } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { FormControl, NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { TuiButton, TuiIcon } from '@taiga-ui/core';
+import { debounceTime } from 'rxjs';
 
-import { isObjectsEqual } from '@core/utils';
+import { DEBOUNCE_TIME } from '@core/constants';
 
-import type { AutoParts, Cargo, CargoItemRestrictions } from '../../types';
+// eslint-disable-next-line import/no-internal-modules
+import { PARCEL_ITEM_DEFAULTS, parcelItemAnimation } from '../../shared/components/parcel-item';
+import { PARCEL_ITEM_LIMIT_TOKEN } from '../../tokens';
+import type { AutoPart, AutoPartPreset, AutoParts } from '../../types';
 
-import type { AutoPartsForm } from './auto-parts.types';
+import { AutoPartComponent } from './auto-part';
 
 @Component({
   selector: 'app-auto-parts',
-  imports: [
-    ReactiveFormsModule,
-    TuiInputNumber,
-    TuiTextfieldComponent,
-    TuiNotification,
-    TranslocoPipe,
-    TuiChevron,
-    TuiComboBox,
-    TuiDropdownMobile,
-    TuiFilterByInputPipe,
-    TuiTextfield,
-    TuiDataListWrapper,
-    TuiSelect,
-  ],
+  imports: [ReactiveFormsModule, TuiIcon, AutoPartComponent, TuiButton],
   templateUrl: './auto-parts.component.html',
   styleUrl: './auto-parts.component.css',
+  animations: [parcelItemAnimation],
+  providers: [
+    {
+      provide: PARCEL_ITEM_LIMIT_TOKEN,
+      useValue: signal({
+        QUANTITY: {
+          MIN: 1,
+          MAX: 10,
+        },
+        WEIGHT: {
+          MIN: 1,
+          MAX: 60,
+        },
+        DIMENSIONS: {
+          MIN: 1,
+          MAX: 380,
+        },
+      }),
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AutoPartsComponent implements OnInit, OnChanges {
+export class AutoPartsComponent implements OnInit {
   @Input() data: AutoParts | null = null;
-  @Input({ required: true }) options!: Cargo[];
-  @Input({ required: true }) restrictions!: CargoItemRestrictions | null;
+  @Input({ required: true }) options!: AutoPartPreset[];
   @Output() dataChange = new EventEmitter<AutoParts>();
   @Output() validationChange = new EventEmitter<boolean>();
 
-  form!: AutoPartsForm;
-
-  protected stringify: TuiStringHandler<Cargo> = (x) => `${x.name}`;
-  protected readonly isMobile = inject(TUI_IS_MOBILE);
-
-  private readonly fb = inject(FormBuilder);
+  private readonly fb = inject(NonNullableFormBuilder);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly DEFAULT_QUANTITY = 1;
 
-  get item(): FormControl<Cargo | null> {
-    return this.form.controls.item;
-  }
+  protected canAddItem = true;
 
-  get quantity(): FormControl<number> {
-    return this.form.controls.quantity;
-  }
+  items = this.fb.array<AutoPart>([]);
+  itemsError = new FormControl(null);
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.initializeForm();
-
-    if (this.data) {
-      this.form.patchValue(this.data, { emitEvent: false });
-    }
-
-    this.validationChange.emit(this.form.valid);
-
-    merge(this.form.valueChanges, this.form.statusChanges.pipe(map(() => this.form.valid)))
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((value) => {
-        if (typeof value === 'boolean') {
-          this.validationChange.emit(value);
-        } else {
-          this.dataChange.emit(value as AutoParts);
-        }
-      });
+    this.setupValueChanges();
+    this.setupErrorHandling();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (!this.form) return;
+  private initializeForm(): void {
+    if (!this.data?.items.length) {
+      this.addItem();
+    }
 
-    const { data, restrictions } = changes;
+    if (this.data?.items) {
+      this.data.items.forEach((autoPart) => this.addItem(autoPart));
+    }
+  }
 
-    /**
-     * Updates input value when active order changes.
-     * If new order has no quantity data, uses default value.
-     */
-    if (data && !data.firstChange && !isObjectsEqual(data.previousValue, data.currentValue)) {
-      this.form.patchValue(
-        this.data ?? {
-          item: null,
-          quantity: 1,
+  addItem(item?: AutoPart): void {
+    this.items.push(
+      this.fb.control(
+        item ?? {
+          preset: null,
+          params: {
+            quantity: PARCEL_ITEM_DEFAULTS.QUANTITY,
+            weight: PARCEL_ITEM_DEFAULTS.WEIGHT,
+            dimensions: {
+              width: PARCEL_ITEM_DEFAULTS.DIMENSIONS,
+              height: PARCEL_ITEM_DEFAULTS.DIMENSIONS,
+              length: PARCEL_ITEM_DEFAULTS.DIMENSIONS,
+            },
+          },
         },
-      );
-    }
-
-    if (restrictions) {
-      this.updateFormState();
-    }
-  }
-
-  setMinQuantityOnBlur(): void {
-    if (!this.quantity.value) {
-      this.quantity.setValue(this.DEFAULT_QUANTITY);
-    }
-  }
-
-  initializeForm(): void {
-    this.form = this.fb.group({
-      item: this.fb.control<Cargo | null>(null, [Validators.required]),
-      quantity: this.fb.control<number>(1, {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-    });
-
-    this.updateFormState();
-  }
-
-  private updateFormState(): void {
-    if (this.hasRestriction()) {
-      this.form.disable({ emitEvent: false });
-    } else {
-      this.form.enable({ emitEvent: false });
-      this.form.markAsUntouched();
-    }
-  }
-
-  private hasRestriction(): boolean {
-    if (!this.restrictions) {
-      return false;
-    }
-
-    return !!(
-      this.restrictions.pickupCourier ||
-      this.restrictions.deliveryCourier ||
-      this.restrictions.pickupOffice ||
-      this.restrictions.deliveryOffice
+      ),
     );
+  }
+
+  removeItem(index: number): void {
+    this.items.removeAt(index);
+  }
+
+  private setupValueChanges(): void {
+    this.items.valueChanges.pipe(debounceTime(DEBOUNCE_TIME.DEFAULT)).subscribe((items) => {
+      this.dataChange.emit({ items });
+    });
+  }
+
+  private setupErrorHandling(): void {
+    this.items.statusChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.itemsError.setErrors(this.items.errors);
+      this.itemsError.markAsTouched();
+
+      this.validationChange.emit(!this.items.invalid);
+    });
   }
 }

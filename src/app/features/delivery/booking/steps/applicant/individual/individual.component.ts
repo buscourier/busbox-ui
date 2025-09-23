@@ -17,7 +17,6 @@ import { TUI_IS_IOS, type TuiStringHandler } from '@taiga-ui/cdk';
 import { TuiHintDirective, TuiTextfield } from '@taiga-ui/core';
 import {
   TUI_VALIDATION_ERRORS,
-  TuiBadge,
   TuiChevron,
   TuiDataListWrapper,
   TuiFieldErrorContentPipe,
@@ -40,7 +39,6 @@ import type { IndividualForm, IndividualRole } from './individual.types';
 @Component({
   selector: 'app-individual',
   imports: [
-    TuiBadge,
     ReactiveFormsModule,
     TuiFieldErrorContentPipe,
     TuiHintDirective,
@@ -106,24 +104,6 @@ export class IndividualComponent implements OnInit {
 
   get role(): FormControl<IndividualRole> {
     return this.form.controls.role;
-  }
-
-  get availableLastNameLength(): number {
-    const { lastName } = this.form.getRawValue();
-
-    return this.limits.user.lastName.maxLength - lastName.length;
-  }
-
-  get availableFirstNameLength(): number {
-    const { firstName } = this.form.getRawValue();
-
-    return this.limits.user.firstName.maxLength - firstName.length;
-  }
-
-  get availableMiddleNameLength(): number {
-    const { middleName } = this.form.getRawValue();
-
-    return this.limits.user.middleName.maxLength - middleName.length;
   }
 
   ngOnInit(): void {

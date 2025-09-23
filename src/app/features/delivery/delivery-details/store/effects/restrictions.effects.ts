@@ -8,8 +8,6 @@ import { PickupPointFacade } from '@delivery/pickup-point';
 
 import { CargoRestrictionsService } from '../../services';
 
-import { DeliveryDetailsActions } from '../actions';
-
 export const restrictionsEffects = {
   setRestrictions: createEffect(
     (
@@ -32,7 +30,7 @@ export const restrictionsEffects = {
             isPickupCourierSelected,
             isDeliveryCourierSelected,
           ]) =>
-            restrictionsService.getRestrictions({
+            restrictionsService.setRestrictions({
               deliveryCity,
               isPickupOfficeLimited,
               isDeliveryOfficeLimited,
@@ -40,9 +38,8 @@ export const restrictionsEffects = {
               isDeliveryCourierSelected,
             }),
         ),
-        map((restrictions) => DeliveryDetailsActions.setRestrictions({ restrictions })),
       );
     },
-    { functional: true },
+    { functional: true, dispatch: false },
   ),
 };

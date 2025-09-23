@@ -1,6 +1,10 @@
 @let vm = vm$ | async;
 
 @if (vm && vm.options.isLoaded) {
+  <b class="mb-3 flex items-center justify-between border-b border-gray-100 pb-3 text-lg">
+    Тип груза
+  </b>
+
   <app-order-tabs
     [tabs]="vm.orders.items"
     [isActiveOrderValid]="vm.orders.isActiveValid"
@@ -13,7 +17,6 @@
     <app-cargo-picker
       [activeType]="order.cargoType"
       [types]="vm.options.cargoTypes"
-      [restrictions]="vm.restrictions"
       (typeChange)="setCargoType(order.id, $event)"
     />
 
@@ -23,8 +26,6 @@
           @defer {
             <app-parcels
               [data]="order.parcels"
-              [parcelsLimits]="vm.restrictions.parcels"
-              [parcelItemLimits]="vm.restrictions.parcelItem"
               (dataChange)="updateOrderData(order.id, 'parcels', $event)"
               (validationChange)="updateOrderValidation(order.id, 'parcels', $event)"
             />
@@ -35,7 +36,6 @@
             <app-auto-parts
               [data]="order.autoParts"
               [options]="vm.options.autoParts"
-              [restrictions]="vm.restrictions.autoParts"
               (dataChange)="updateOrderData(order.id, 'autoParts', $event)"
               (validationChange)="updateOrderValidation(order.id, 'autoParts', $event)"
             />
@@ -46,7 +46,6 @@
             <app-other-cargo
               [data]="order.otherCargo"
               [options]="vm.options.otherCargos"
-              [restrictions]="vm.restrictions.otherCargo"
               (dataChange)="updateOrderData(order.id, 'otherCargo', $event)"
               (validationChange)="updateOrderValidation(order.id, 'otherCargo', $event)"
             />
@@ -81,159 +80,159 @@
   }
 } @else if (vm?.options?.isLoading) {
   <div class="p-4">
-    <!-- Скелетон для табов заказов -->
-    <div class="flex items-center gap-3 mb-6">
-      <!-- Основные табы заказов -->
+    <!-- Skeleton for orders's tabs -->
+    <div class="mb-6 flex items-center gap-3">
+      <!-- Orders tabs -->
       <div
-        class="flex items-center justify-between px-3 py-2 w-32 h-9 rounded-lg"
+        class="flex h-9 w-32 items-center justify-between rounded-lg px-3 py-2"
         [tuiSkeleton]="true"
       ></div>
       <div
-        class="flex items-center justify-between px-3 py-2 w-32 h-9 rounded-lg"
+        class="flex h-9 w-32 items-center justify-between rounded-lg px-3 py-2"
         [tuiSkeleton]="true"
       ></div>
       <div
-        class="flex items-center justify-between px-3 py-2 w-32 h-9 rounded-lg"
+        class="flex h-9 w-32 items-center justify-between rounded-lg px-3 py-2"
         [tuiSkeleton]="true"
       ></div>
 
-      <!-- Таб "Добавить" -->
-      <div class="w-28 h-9 rounded-lg" [tuiSkeleton]="true"></div>
+      <!-- Tab "Add" -->
+      <div class="h-9 w-28 rounded-lg" [tuiSkeleton]="true"></div>
     </div>
 
-    <!-- Скелетон для cargo-picker -->
+    <!-- Skeleton for cargo-picker -->
     <div class="mb-8">
       <div class="flex gap-4">
-        <div class="flex-1 p-3 h-12 rounded-lg" [tuiSkeleton]="true"></div>
-        <div class="flex-1 p-3 h-12 rounded-lg" [tuiSkeleton]="true"></div>
-        <div class="flex-1 p-3 h-12 rounded-lg" [tuiSkeleton]="true"></div>
-        <div class="flex-1 p-3 h-12 rounded-lg" [tuiSkeleton]="true"></div>
+        <div class="h-12 flex-1 rounded-lg p-3" [tuiSkeleton]="true"></div>
+        <div class="h-12 flex-1 rounded-lg p-3" [tuiSkeleton]="true"></div>
+        <div class="h-12 flex-1 rounded-lg p-3" [tuiSkeleton]="true"></div>
+        <div class="h-12 flex-1 rounded-lg p-3" [tuiSkeleton]="true"></div>
       </div>
     </div>
 
-    <!-- Скелетон для основного содержимого (динамический контент в зависимости от типа груза) -->
+    <!-- Skeleton for order details -->
     <div class="mb-8">
-      <!-- Имитация полей формы для посылок -->
-      <div class="mb-6 p-5 border border-gray-100 rounded-lg">
-        <!-- Заголовок компонента -->
-        <div class="w-1/6 h-6 mb-4" [tuiSkeleton]="true"></div>
+      <!-- Parcels skeleton -->
+      <div class="mb-6 rounded-lg border border-gray-100 p-5">
+        <!-- Title -->
+        <div class="mb-4 h-6 w-1/6" [tuiSkeleton]="true"></div>
 
-        <!-- Поля формы -->
-        <div class="grid grid-cols-3 gap-6 mb-4">
+        <!--Form fields -->
+        <div class="mb-4 grid grid-cols-3 gap-6">
           <div>
-            <div class="w-1/2 h-5 mb-2" [tuiSkeleton]="true"></div>
-            <div class="w-full h-10 rounded" [tuiSkeleton]="true"></div>
+            <div class="mb-2 h-5 w-1/2" [tuiSkeleton]="true"></div>
+            <div class="h-10 w-full rounded" [tuiSkeleton]="true"></div>
           </div>
           <div>
-            <div class="w-1/2 h-5 mb-2" [tuiSkeleton]="true"></div>
-            <div class="w-full h-10 rounded" [tuiSkeleton]="true"></div>
+            <div class="mb-2 h-5 w-1/2" [tuiSkeleton]="true"></div>
+            <div class="h-10 w-full rounded" [tuiSkeleton]="true"></div>
           </div>
           <div>
-            <div class="w-1/2 h-5 mb-2" [tuiSkeleton]="true"></div>
-            <div class="w-full h-10 rounded" [tuiSkeleton]="true"></div>
+            <div class="mb-2 h-5 w-1/2" [tuiSkeleton]="true"></div>
+            <div class="h-10 w-full rounded" [tuiSkeleton]="true"></div>
           </div>
         </div>
 
-        <!-- Вторая строка полей с габаритами -->
-        <div class="grid grid-cols-3 gap-6 mb-4">
+        <!-- Dimensions-->
+        <div class="mb-4 grid grid-cols-3 gap-6">
           <div>
-            <div class="w-1/2 h-5 mb-2" [tuiSkeleton]="true"></div>
-            <div class="w-full h-10 rounded" [tuiSkeleton]="true"></div>
+            <div class="mb-2 h-5 w-1/2" [tuiSkeleton]="true"></div>
+            <div class="h-10 w-full rounded" [tuiSkeleton]="true"></div>
           </div>
           <div>
-            <div class="w-1/2 h-5 mb-2" [tuiSkeleton]="true"></div>
-            <div class="w-full h-10 rounded" [tuiSkeleton]="true"></div>
+            <div class="mb-2 h-5 w-1/2" [tuiSkeleton]="true"></div>
+            <div class="h-10 w-full rounded" [tuiSkeleton]="true"></div>
           </div>
           <div>
-            <div class="w-1/2 h-5 mb-2" [tuiSkeleton]="true"></div>
-            <div class="w-full h-10 rounded" [tuiSkeleton]="true"></div>
+            <div class="mb-2 h-5 w-1/2" [tuiSkeleton]="true"></div>
+            <div class="h-10 w-full rounded" [tuiSkeleton]="true"></div>
           </div>
         </div>
 
-        <!-- Кнопка "Удалить" -->
+        <!-- Delete button -->
         <div class="flex justify-end">
-          <div class="w-10 h-10 rounded-full" [tuiSkeleton]="true"></div>
+          <div class="h-10 w-10 rounded-full" [tuiSkeleton]="true"></div>
         </div>
       </div>
 
-      <!-- Кнопка "Добавить еще 1 позицию" -->
-      <div class="w-64 h-10 rounded-lg" [tuiSkeleton]="true"></div>
+      <!-- Button add 1 more -->
+      <div class="h-10 w-64 rounded-lg" [tuiSkeleton]="true"></div>
     </div>
 
     <!-- Скелетон для блоков упаковки и доп. услуг -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
       <!-- Скелетон для упаковки -->
       <div>
-        <!-- Заголовок и группы упаковки -->
+        <!-- Packaging title -->
         <div class="mb-6">
-          <div class="w-1/3 h-6 mb-3" [tuiSkeleton]="true"></div>
+          <div class="mb-3 h-6 w-1/3" [tuiSkeleton]="true"></div>
 
-          <!-- Элементы упаковки (коробки) -->
+          <!-- Packaging -->
           <div class="mb-4">
-            <div class="flex items-center mb-2">
-              <div class="w-5 h-5 rounded-sm mr-3" [tuiSkeleton]="true"></div>
-              <div class="w-40 h-5" [tuiSkeleton]="true"></div>
-              <div class="ml-auto w-20 h-5" [tuiSkeleton]="true"></div>
+            <div class="mb-2 flex items-center">
+              <div class="mr-3 h-5 w-5 rounded-sm" [tuiSkeleton]="true"></div>
+              <div class="h-5 w-40" [tuiSkeleton]="true"></div>
+              <div class="ml-auto h-5 w-20" [tuiSkeleton]="true"></div>
             </div>
-            <div class="flex items-center mb-2">
-              <div class="w-5 h-5 rounded-sm mr-3" [tuiSkeleton]="true"></div>
-              <div class="w-36 h-5" [tuiSkeleton]="true"></div>
-              <div class="ml-auto w-20 h-5" [tuiSkeleton]="true"></div>
+            <div class="mb-2 flex items-center">
+              <div class="mr-3 h-5 w-5 rounded-sm" [tuiSkeleton]="true"></div>
+              <div class="h-5 w-36" [tuiSkeleton]="true"></div>
+              <div class="ml-auto h-5 w-20" [tuiSkeleton]="true"></div>
             </div>
           </div>
 
-          <!-- Элементы упаковки (сейф-пакеты) -->
+          <!-- Safe packs -->
           <div class="mb-4">
-            <div class="w-1/3 h-6 mb-3" [tuiSkeleton]="true"></div>
-            <div class="flex items-center mb-2">
-              <div class="w-5 h-5 rounded-sm mr-3" [tuiSkeleton]="true"></div>
-              <div class="w-44 h-5" [tuiSkeleton]="true"></div>
-              <div class="ml-auto w-20 h-5" [tuiSkeleton]="true"></div>
+            <div class="mb-3 h-6 w-1/3" [tuiSkeleton]="true"></div>
+            <div class="mb-2 flex items-center">
+              <div class="mr-3 h-5 w-5 rounded-sm" [tuiSkeleton]="true"></div>
+              <div class="h-5 w-44" [tuiSkeleton]="true"></div>
+              <div class="ml-auto h-5 w-20" [tuiSkeleton]="true"></div>
             </div>
-            <div class="flex items-center mb-2">
-              <div class="w-5 h-5 rounded-sm mr-3" [tuiSkeleton]="true"></div>
-              <div class="w-48 h-5" [tuiSkeleton]="true"></div>
-              <div class="ml-auto w-20 h-5" [tuiSkeleton]="true"></div>
+            <div class="mb-2 flex items-center">
+              <div class="mr-3 h-5 w-5 rounded-sm" [tuiSkeleton]="true"></div>
+              <div class="h-5 w-48" [tuiSkeleton]="true"></div>
+              <div class="ml-auto h-5 w-20" [tuiSkeleton]="true"></div>
             </div>
           </div>
 
-          <!-- Другие группы упаковки (пакеты, пленка) -->
+          <!-- Other packging -->
           <div class="mb-4">
-            <div class="w-1/3 h-6 mb-3" [tuiSkeleton]="true"></div>
-            <div class="flex items-center mb-2">
-              <div class="w-5 h-5 rounded-sm mr-3" [tuiSkeleton]="true"></div>
-              <div class="w-40 h-5" [tuiSkeleton]="true"></div>
-              <div class="ml-auto w-20 h-5" [tuiSkeleton]="true"></div>
+            <div class="mb-3 h-6 w-1/3" [tuiSkeleton]="true"></div>
+            <div class="mb-2 flex items-center">
+              <div class="mr-3 h-5 w-5 rounded-sm" [tuiSkeleton]="true"></div>
+              <div class="h-5 w-40" [tuiSkeleton]="true"></div>
+              <div class="ml-auto h-5 w-20" [tuiSkeleton]="true"></div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Скелетон для дополнительных услуг -->
+      <!-- Skeleton for additional services -->
       <div>
-        <!-- Страхование -->
+        <!-- Insurance -->
         <div class="mb-6">
-          <div class="flex items-center mb-3">
-            <div class="w-5 h-5 rounded-sm mr-3" [tuiSkeleton]="true"></div>
-            <div class="w-32 h-5" [tuiSkeleton]="true"></div>
+          <div class="mb-3 flex items-center">
+            <div class="mr-3 h-5 w-5 rounded-sm" [tuiSkeleton]="true"></div>
+            <div class="h-5 w-32" [tuiSkeleton]="true"></div>
           </div>
-          <div class="w-full h-10 rounded-lg" [tuiSkeleton]="true"></div>
+          <div class="h-10 w-full rounded-lg" [tuiSkeleton]="true"></div>
         </div>
 
-        <!-- СМС услуги -->
+        <!-- SMS Services -->
         <div class="mb-6">
-          <div class="flex items-center mb-3">
-            <div class="w-5 h-5 rounded-sm mr-3" [tuiSkeleton]="true"></div>
-            <div class="w-40 h-5" [tuiSkeleton]="true"></div>
+          <div class="mb-3 flex items-center">
+            <div class="mr-3 h-5 w-5 rounded-sm" [tuiSkeleton]="true"></div>
+            <div class="h-5 w-40" [tuiSkeleton]="true"></div>
           </div>
-          <div class="w-full h-10 rounded-lg" [tuiSkeleton]="true"></div>
+          <div class="h-10 w-full rounded-lg" [tuiSkeleton]="true"></div>
         </div>
 
-        <!-- Оплата получателем -->
+        <!-- Recipient payment -->
         <div class="mb-6">
           <div class="flex items-center">
-            <div class="w-5 h-5 rounded-sm mr-3" [tuiSkeleton]="true"></div>
-            <div class="w-44 h-5" [tuiSkeleton]="true"></div>
+            <div class="mr-3 h-5 w-5 rounded-sm" [tuiSkeleton]="true"></div>
+            <div class="h-5 w-44" [tuiSkeleton]="true"></div>
           </div>
         </div>
       </div>

@@ -11,29 +11,15 @@
             {{ 'user.labels.fullName' | transloco }}
           </span>
           <div class="relative">
-            <tui-textfield #fullNameInput class="w-full">
+            <tui-textfield class="w-full">
               <input
                 tuiTextfield
                 [formControl]="fullName"
                 [tuiHint]="[] | tuiFieldErrorContent"
-                [minlength]="limits.user.fullName.minLength"
-                [maxlength]="limits.user.fullName.maxLength"
-                [attr.maxlength]="limits.user.fullName.maxLength"
                 tuiHintAppearance="error"
                 [placeholder]="'user.placeholders.fullName' | transloco"
               />
             </tui-textfield>
-            @if (fullNameInput.focused()) {
-              <span class="absolute top-1/2 right-2 -translate-y-1/2">
-                <tui-badge
-                  appearance="secondary"
-                  size="s"
-                  [tuiHint]="'hint.messages.availableSymbols' | transloco"
-                >
-                  {{ availableFullNameLength }}
-                </tui-badge>
-              </span>
-            }
           </div>
         </label>
 

@@ -5,61 +5,33 @@
         {{ 'address.labels.street' | transloco }}
       </span>
       <div class="relative">
-        <tui-textfield #streetInput class="w-full">
+        <tui-textfield class="w-full">
           <input
             tuiTextfield
             tuiHintAppearance="error"
             [formControl]="street"
             [tuiHint]="[] | tuiFieldErrorContent"
-            [minlength]="limits.address.street.minLength"
-            [maxlength]="limits.address.street.maxLength"
-            [attr.maxlength]="limits.address.street.maxLength"
             [placeholder]="'address.placeholders.street' | transloco"
           />
         </tui-textfield>
-        @if (streetInput.focused()) {
-          <span class="absolute top-1/2 -translate-y-1/2 right-2">
-            <tui-badge
-              [tuiHint]="'common.hint.availableSymbols' | transloco"
-              appearance="secondary"
-              size="s"
-            >
-              {{ availableStreetLength }}
-            </tui-badge>
-          </span>
-        }
       </div>
     </label>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <label tuiLabel class="block">
         <span class="mb-1 inline-block text-sm text-gray-700">
           {{ 'address.labels.building' | transloco }}
         </span>
         <div class="relative">
-          <tui-textfield #buildingInput class="w-full">
+          <tui-textfield class="w-full">
             <input
               tuiTextfield
               tuiHintAppearance="error"
               [formControl]="building"
               [tuiHint]="[] | tuiFieldErrorContent"
-              [minlength]="limits.address.building.minLength"
-              [maxlength]="limits.address.building.maxLength"
-              [attr.maxlength]="limits.address.building.maxLength"
               [placeholder]="'address.placeholders.building' | transloco"
             />
           </tui-textfield>
-          @if (buildingInput.focused()) {
-            <span class="absolute top-1/2 -translate-y-1/2 right-2">
-              <tui-badge
-                [tuiHint]="'common.hint.availableSymbols' | transloco"
-                appearance="secondary"
-                size="s"
-              >
-                {{ availableBuildingLength }}
-              </tui-badge>
-            </span>
-          }
         </div>
       </label>
 
@@ -68,29 +40,15 @@
           {{ 'address.labels.apartment' | transloco }}
         </span>
         <div class="relative">
-          <tui-textfield #apartmentInput class="w-full">
+          <tui-textfield class="w-full">
             <input
               tuiTextfield
               tuiHintAppearance="error"
               [formControl]="apartment"
               [tuiHint]="[] | tuiFieldErrorContent"
-              [minlength]="limits.address.apartment.minLength"
-              [maxlength]="limits.address.apartment.maxLength"
-              [attr.maxlength]="limits.address.apartment.maxLength"
               [placeholder]="'address.placeholders.apartment' | transloco"
             />
           </tui-textfield>
-          @if (apartmentInput.focused()) {
-            <span class="absolute top-1/2 -translate-y-1/2 right-2">
-              <tui-badge
-                [tuiHint]="'common.hint.availableSymbols' | transloco"
-                appearance="secondary"
-                size="s"
-              >
-                {{ availableApartmentLength }}
-              </tui-badge>
-            </span>
-          }
         </div>
       </label>
     </div>
@@ -119,7 +77,7 @@
             [formControl]="preferredTime"
           />
           <div
-            class="flex items-center justify-center p-3 border border-gray-200 rounded-md text-center text-gray-700 transition-all peer-checked:border-yellow-500 peer-checked:bg-yellow-50 peer-checked:text-yellow-600 peer-checked:font-medium hover:bg-gray-50"
+            class="flex items-center justify-center rounded-md border border-gray-200 p-3 text-center text-gray-700 transition-all peer-checked:border-yellow-500 peer-checked:bg-yellow-50 peer-checked:font-medium peer-checked:text-yellow-600 hover:bg-gray-50"
           >
             {{ slot.label }}
           </div>

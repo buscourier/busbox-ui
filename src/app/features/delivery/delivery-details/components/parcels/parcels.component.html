@@ -1,11 +1,11 @@
 <div class="mb-6">
   @for (parcelItem of parcels.controls; track $index) {
     <div
-      class="mb-6 p-4 bg-white border border-gray-200 rounded-md shadow-sm transition-all"
+      class="mb-6 rounded-md border border-gray-200 bg-white p-4 shadow-sm transition-all"
       [@parcelItem]
     >
-      <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
-        <h3 class="text-md font-medium text-gray-700 flex items-center">
+      <div class="mb-4 flex items-center justify-between border-b border-gray-100 pb-2">
+        <h3 class="text-md flex items-center font-medium text-gray-700">
           <tui-icon
             icon="@tui.box"
             class="mr-2"
@@ -15,13 +15,16 @@
           {{ 'deliveryDetails.parcel.name' | transloco }} {{ $index + 1 }}
         </h3>
         @if (parcels.length > 1) {
-          <button type="button" class="cursor-pointer" (click)="removeParcelItem($index)">
-            <tui-icon
-              icon="@tui.trash"
-              class="mr-2"
-              [style.color]="'var(--color-red-500)'"
-              [style.font-size.rem]="1.25"
-            />
+          <button
+            appearance="secondary-destructive"
+            iconStart="@tui.trash"
+            size="s"
+            tuiIconButton
+            type="button"
+            [style.border-radius.%]="100"
+            (click)="removeParcelItem($index)"
+          >
+            Favorite
           </button>
         }
       </div>
@@ -30,10 +33,8 @@
         [totalQuantityMaxError]="!!errors?.totalQuantityMax"
         [totalWeightMaxError]="!!errors?.totalWeightMax"
         [totalDimensionsMaxError]="!!errors?.totalDimensionsMax"
-        [limits]="parcelItemLimits"
         [formControl]="parcelItem"
-      >
-      </app-parcel-item>
+      ></app-parcel-item>
     </div>
   }
 
@@ -43,7 +44,7 @@
 
   <button
     type="button"
-    class="flex items-center justify-center cursor-pointer w-full p-3 border border-dashed border-yellow-300 rounded-md text-yellow-600 hover:bg-yellow-50 hover:border-yellow-400 transition-colors"
+    class="flex w-full cursor-pointer items-center justify-center rounded-md border border-dashed border-yellow-300 p-3 text-yellow-600 transition-colors hover:border-yellow-400 hover:bg-yellow-50"
     [disabled]="!canAddParcelItem"
     (click)="addParcelItem()"
   >

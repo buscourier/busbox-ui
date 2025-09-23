@@ -3,13 +3,11 @@ import { createEntityAdapter } from '@ngrx/entity';
 
 import { LoadingStatus } from '@shared/types';
 
-import { PARCEL_ITEM_LIMITS, PARCELS_LIMITS } from '../constants';
-import type { DeliveryRestrictions, OptionsState, Order } from '../types';
+import type { OptionsState, Order } from '../types';
 
 export interface DeliveryDetailsState extends EntityState<Order> {
   activeOrderId: string | null;
   options: OptionsState;
-  restrictions: DeliveryRestrictions; // По-факту тут сейчас cargoRestrictions,
 }
 
 export const adapter: EntityAdapter<Order> = createEntityAdapter<Order>({
@@ -22,11 +20,5 @@ export const initialState: DeliveryDetailsState = adapter.getInitialState({
     status: LoadingStatus.IDLE,
     data: null,
     error: null,
-  },
-  restrictions: {
-    autoParts: null,
-    otherCargo: null,
-    parcels: PARCELS_LIMITS.DEFAULT,
-    parcelItem: PARCEL_ITEM_LIMITS.DEFAULT,
   },
 });
