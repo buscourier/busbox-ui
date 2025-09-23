@@ -105,12 +105,13 @@ export class DeliverySummaryService extends DeliveryBaseService {
   ): Observable<TotalAmount> {
     const order = params.order;
 
+    const cargoTypeId =
+      order.cargoType === 'OTHER' ? order.otherCargo?.item?.id : CargoTypeId[order.cargoType!];
+
     return this.makeCalculationRequest({
       pickupCityId: params.pickupCityId,
       deliveryCityId: params.deliveryCityId,
-      cargo: order.cargoType
-        ? `${CargoTypeId[order.cargoType]}, ${this.getCargoQuantity(order)}`
-        : '',
+      cargo: order.cargoType ? `${cargoTypeId},${this.getCargoQuantity(order)}` : '',
       servicesIds,
       weight: 0,
       dimensions: 0,
@@ -156,8 +157,7 @@ export class DeliverySummaryService extends DeliveryBaseService {
 
   private makeCalculationRequest(params: CalculationRequestParams): Observable<TotalAmount> {
     return this.http.get<TotalAmount>(
-      `${this.baseUrl}/calc/${params.pickupCityId}/${params.deliveryCityId}/` +
-        `${params.cargo}/${params.servicesIds}/${params.weight}/${params.dimensions}`,
+      `${this.baseUrl}/calc/${params.pickupCityId}/${params.deliveryCityId}/${params.cargo}/${params.servicesIds}/${params.weight}/${params.dimensions}`,
     );
   }
 }
