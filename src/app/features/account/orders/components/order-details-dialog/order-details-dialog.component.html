@@ -3,41 +3,41 @@
 @if (vm) {
   @if (vm.order.isLoading) {
     @for (item of getSkeletonArray(); track $index) {
-      <div class="h-3 mb-3" [tuiSkeleton]="true"></div>
+      <div class="mb-3 h-3" [tuiSkeleton]="true"></div>
     }
   } @else {
     @if (vm.order.details; as details) {
-      <div class="flex flex-col text-left font-base">
+      <div class="font-base flex flex-col text-left">
         <b class="text-2xl font-bold">№ {{ details.order.order_id }}</b>
-        <div class="flex text-xs">
+        <div class="flex items-baseline text-xs">
           <small class="mr-2">от {{ details.order.order_date.date }}</small>
-          <b class="lowercase text-yellow">{{ details.order.order_name }}</b>
+          <b class="text-yellow lowercase">{{ details.order.order_name }}</b>
         </div>
 
         <div class="mt-6">
-          <p class="text-2xs text-gray-600">Направление перевозки:</p>
-          <p class="mb-3 text-2xs">
+          <b class="text-sm">Направление перевозки:</b>
+          <p class="mb-3 text-sm">
             г. {{ details.order.city_from }} &#8212; г. {{ details.order.city_to }}
           </p>
-          <p class="text-2xs text-gray-600">Получатель:</p>
-          <p class="mb-3 text-2xs">
+          <b class="text-sm">Получатель:</b>
+          <p class="mb-3 text-sm">
             {{ details.order.recipient_name }}
           </p>
-          <p class="text-2xs text-gray-600">Телефон получателя:</p>
-          <p class="mb-3 text-2xs">
+          <b class="text-sm">Телефон получателя:</b>
+          <p class="mb-3 text-sm">
             {{ details.order.recipient_phone }}
           </p>
-          <p class="text-2xs text-gray-600">Тип груза:</p>
-          <p class="mb-3 text-2xs">
+          <b class="text-sm">Тип груза:</b>
+          <p class="mb-3 text-sm">
             {{ details.order.cargo_type }} (мест: {{ details.order.cargo_count }})
           </p>
 
           @if (details.order.dimensions_raw.length) {
             <tui-scrollbar class="scroll-yellow max-h-[142px]">
               @for (dim of details.order.dimensions_raw; let i = $index; track i) {
-                <div class="mb-4 flex items-end text-2xs">
+                <div class="mb-4 flex items-end text-sm">
                   <div class="mr-10">
-                    <p class="mb-1.5 text-2xs text-gray-600">Габариты груза:</p>
+                    <b class="mb-1.5 block text-sm">Габариты груза:</b>
                     <div class="flex items-center space-x-4">
                       <span class="flex flex-col">
                         <small>Ширина:</small>
@@ -45,26 +45,27 @@
                       </span>
                       <b>x</b>
                       <span class="flex flex-col">
-                        <small>Длина:</small> <b>{{ dim.length }} см</b>
+                        <small>Длина:</small>
+                        <b>{{ dim.length }} см</b>
                       </span>
                       <b>x</b>
                       <span class="flex flex-col">
-                        <small>Высота:</small> <b>{{ dim.height }} см</b>
+                        <small>Высота:</small>
+                        <b>{{ dim.height }} см</b>
                       </span>
                     </div>
                   </div>
                   <div class="flex flex-col items-center">
-                    <p class="mb-3 text-2xs text-gray-600">Вес груза:</p>
+                    <b class="mb-3 block text-sm">Вес груза:</b>
                     <b class="text-[24px] leading-[24px]">{{ dim.weight }} кг</b>
                   </div>
                 </div>
               }
             </tui-scrollbar>
           }
-
           @if (details.order.cargo_description) {
-            <p class="text-2xs text-gray-600">Описание:</p>
-            <p class="mb-3 text-2xs">
+            <b class="text-sm">Описание:</b>
+            <p class="text-sm">
               {{ details.order.cargo_description }}
             </p>
           }
@@ -73,8 +74,8 @@
             <div class="flex justify-between">
               @if (carrier.time_departure; as departure) {
                 <div>
-                  <p class="text-2xs text-gray-600">Время отправки:</p>
-                  <p class="mb-3 text-2xs">
+                  <b class="text-sm">Время отправки:</b>
+                  <p class="mb-3 text-sm">
                     {{ departure.date }}
                     {{ departure.time }}
                   </p>
@@ -83,8 +84,8 @@
 
               @if (carrier.time_arrival; as arrival) {
                 <div>
-                  <p class="text-2xs text-gray-600">Время доставки:</p>
-                  <p class="mb-3 text-2xs">
+                  <b class="text-sm">Время доставки:</b>
+                  <p class="mb-3 text-sm">
                     {{ arrival.date }}
                     {{ arrival.time }}
                   </p>
@@ -93,10 +94,12 @@
             </div>
           }
 
-          <div class="mt-5 text-xl">
-            <span class="text-gray-500">Итого: </span>
-            <b>{{ details.order.order_price }} руб.</b>
-          </div>
+          @if (!!parseInt(details.order.order_price, 10)) {
+            <div class="mt-5 text-xl">
+              <span class="text-gray-500">Итого:&nbsp;</span>
+              <b>{{ details.order.order_price }} руб.</b>
+            </div>
+          }
         </div>
 
         @if (vm.order.canCancel) {
