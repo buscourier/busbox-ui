@@ -98,7 +98,7 @@
 
           <div class="">
             <app-content-scroller>
-              <table #parcelsFirstContainer class="w-full">
+              <table #parcelsFirstContainer class="w-full min-w-[400px]">
                 <thead class="">
                   <tr>
                     <th class="px-2 py-3 text-sm font-semibold whitespace-nowrap">Габариты</th>
@@ -125,7 +125,7 @@
                         let isEven = $even
                       ) {
                         <tr [class.bg-gray-50]="$odd">
-                          <td class="w-1/5 px-2 py-3 text-center text-sm">
+                          <td class="w-1/5 px-2 py-3 text-center text-sm whitespace-nowrap">
                             {{ row.size }}
                           </td>
                           <td class="w-1/5 px-2 py-3 text-center text-sm">
@@ -162,7 +162,7 @@
                   }
                 }
               </table>
-              <table #parcelsSecondContainer class="w-full">
+              <table #parcelsSecondContainer class="w-full min-w-[400px]">
                 <thead class="t-head-print-only">
                   <tr>
                     <th class="px-2 py-3 text-sm font-semibold whitespace-nowrap">Габариты</th>
@@ -189,7 +189,7 @@
                         let isEven = $even
                       ) {
                         <tr [class.bg-gray-50]="$odd">
-                          <td class="w-1/5 px-2 py-3 text-center text-sm">
+                          <td class="w-1/5 px-2 py-3 text-center text-sm whitespace-nowrap">
                             {{ row.size }}
                           </td>
                           <td class="w-1/5 px-2 py-3 text-center text-sm">
@@ -270,13 +270,13 @@
 
             <div class="">
               <app-content-scroller>
-                <table #autopartsContainer class="w-full text-sm">
+                <table #autopartsContainer class="w-full min-w-[600px] text-sm">
                   <thead>
                     <tr>
                       <th class="px-3 py-3 text-left"></th>
                       @for (zone of vm.zoneTariffs.autopartsTable.zones; track zone.zone_id) {
                         <th
-                          class="bg-yellow-500/40 px-3 py-3 text-center text-sm"
+                          class="bg-yellow-500/40 px-3 py-3 text-center text-sm whitespace-nowrap"
                           [class.rounded-l-sm]="$first"
                           [class.rounded-r-sm]="$last"
                         >
@@ -298,7 +298,7 @@
                         </td>
 
                         @for (zone of vm.zoneTariffs.autopartsTable.zones; track zone.zone_id) {
-                          <td class="px-3 py-3 text-center text-sm">
+                          <td class="px-3 py-3 text-center text-sm whitespace-nowrap">
                             @if (row.zones[zone.zone_id]) {
                               <span>{{ row.zones[zone.zone_id] }} ₽</span>
                             } @else {
