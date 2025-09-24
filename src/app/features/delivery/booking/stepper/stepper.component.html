@@ -17,6 +17,9 @@
           <div
             class="mb-2 flex size-14 items-center justify-center rounded-full text-2xl font-medium transition-all duration-400 ease-out"
             [class]="getStepClasses(step)"
+            [tuiHint]="isLegalEntity && $first ? 'Для физ. лиц' : null"
+            tuiHintDirection="top"
+            tuiHintAppearance="dark"
           >
             @if (step.isCompleted) {
               <tui-icon icon="@tui.check" class="text-black" />
@@ -39,6 +42,7 @@
           <span
             class="text-center text-xs font-medium whitespace-nowrap text-gray-700 transition-colors duration-300"
             [class.text-red-700]="!step.isValid && step.isActive"
+            [class.line-through]="isLegalEntity && $first"
           >
             {{ step.title }}
           </span>

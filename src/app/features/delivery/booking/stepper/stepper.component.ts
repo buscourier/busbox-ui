@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { TuiIcon } from '@taiga-ui/core';
+import { TuiHint, TuiIcon } from '@taiga-ui/core';
 
 import type { StepView } from '../types';
 
 @Component({
   selector: 'app-stepper',
-  imports: [TuiIcon],
+  imports: [TuiIcon, TuiHint],
   templateUrl: './stepper.component.html',
   styleUrl: './stepper.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
