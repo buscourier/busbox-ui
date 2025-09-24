@@ -14,7 +14,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, type FormControl, ReactiveFormsModule } from '@angular/forms';
 import { TuiDropdownMobile } from '@taiga-ui/addon-mobile';
-import type { TuiStringHandler } from '@taiga-ui/cdk';
+import { TUI_IS_MOBILE, type TuiStringHandler } from '@taiga-ui/cdk';
 import { TuiButton, TuiLabel, TuiTextfield } from '@taiga-ui/core';
 import {
   TuiButtonLoading,
@@ -23,6 +23,7 @@ import {
   TuiDataListWrapperComponent,
   TuiFilterByInputPipe,
   TuiInputDateRange,
+  TuiSelectDirective,
 } from '@taiga-ui/kit';
 import { TuiInputDateRangeModule, TuiUnfinishedValidator } from '@taiga-ui/legacy';
 import { filter, type Observable } from 'rxjs';
@@ -51,6 +52,7 @@ import type { FilterForm } from './filter.types';
     TuiDropdownMobile,
     TuiFilterByInputPipe,
     TuiInputDateRange,
+    TuiSelectDirective,
   ],
   templateUrl: './filter.component.html',
   styleUrl: './filter.component.css',
@@ -68,6 +70,7 @@ export class FilterComponent implements OnInit, OnChanges {
   deliveryCities$!: Observable<DeliveryCity[]>;
 
   protected stringify: TuiStringHandler<PickupCity | DeliveryCity> = (x) => `${x.name}`;
+  protected readonly isMobile = inject(TUI_IS_MOBILE);
 
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
