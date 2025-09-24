@@ -49,6 +49,32 @@ export class AppComponent implements OnInit {
     return this.router.url.includes('contacts');
   }
 
+  get isAccountPage(): boolean {
+    return this.router.url.includes('account');
+  }
+
+  get isCalculatorPage(): boolean {
+    return this.router.url.includes('calculator');
+  }
+
+  get isDocumentsPage(): boolean {
+    return this.router.url.includes('documents');
+  }
+
+  get isAuthPage(): boolean {
+    return this.router.url.includes('auth');
+  }
+
+  get isAuthHeight(): boolean {
+    return (
+      this.isContactsPage ||
+      this.isAccountPage ||
+      this.isCalculatorPage ||
+      this.isDocumentsPage ||
+      this.isAuthPage
+    );
+  }
+
   logout(): void {
     this.authFacade.logout();
   }
