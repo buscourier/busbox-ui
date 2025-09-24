@@ -32,7 +32,7 @@ export class StepsComponent implements AfterViewInit, OnDestroy {
   private observer?: IntersectionObserver;
 
   @HostBinding('class') get hostClasses(): string {
-    return cn('block');
+    return cn('mt-16 block min-[460px]:mt-0');
   }
 
   get shadowClass(): string {
@@ -46,7 +46,7 @@ export class StepsComponent implements AfterViewInit, OnDestroy {
   get stepPointClass(): string {
     return cn(
       // Layout & positioning
-      'relative z-10 flex h-12 w-12 items-center justify-center',
+      'relative z-10 flex size-12 items-center justify-center',
       // Shape & spacing
       'rounded-full',
       // Background & effects
@@ -58,7 +58,7 @@ export class StepsComponent implements AfterViewInit, OnDestroy {
 
   get stepContentClass(): string {
     return cn(
-      'rounded-2xl p-6',
+      'rounded-2xl p-4 min-[460px]:p-6',
       'bg-gradient-card shadow-card hover:shadow-elevated',
       'transition-all duration-300',
     );
