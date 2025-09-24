@@ -47,7 +47,7 @@ export class ServiceCardComponent {
     return cn('mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50', {
       'bg-red-50': this.service.type === 'guard',
       'bg-yellow-50': this.service.type === 'task',
-      'bg-green-50': this.service.type === 'courier',
+      'bg-orange-50': this.service.type === 'courier',
     });
   }
 
@@ -55,7 +55,7 @@ export class ServiceCardComponent {
     return cn('text-xs font-medium tracking-wide uppercase', {
       'text-red-500': this.service.type === 'guard',
       'text-white': this.service.type === 'task',
-      'text-green-600': this.service.type === 'courier',
+      'text-orange-600': this.service.type === 'courier',
     });
   }
 
@@ -63,7 +63,7 @@ export class ServiceCardComponent {
     return cn({
       'text-red-500': this.service.type === 'guard',
       'text-yellow-500': this.service.type === 'task',
-      'text-green-600': this.service.type === 'courier',
+      'text-orange-600': this.service.type === 'courier',
     });
   }
 
@@ -71,7 +71,7 @@ export class ServiceCardComponent {
     return cn('flex items-center font-medium transition-colors', {
       'text-red-500 group-hover:text-red-400': this.service.type === 'guard',
       'text-yellow-500 group-hover:text-yellow-400': this.service.type === 'task',
-      'text-green-600 group-hover:text-green-500': this.service.type === 'courier',
+      'text-orange-600 group-hover:text-orange-500': this.service.type === 'courier',
     });
   }
 

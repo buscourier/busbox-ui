@@ -1,17 +1,26 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { BreakpointDirective } from '@core/directives';
 import { NavigationService } from '@core/services/navigation.service';
 import { CAROUSEL_BREAKPOINTS } from '@core/tokens';
 
 import { CarouselComponent } from '@shared/components/carousel';
+import { PageLayoutComponent } from '@shared/layouts/page-layout';
 
 import { RouteMapComponent } from './route-map';
 import { type ServiceCard, ServiceCardComponent } from './service-card';
 
 @Component({
   selector: 'app-services-index',
-  imports: [RouterLink, RouteMapComponent, ServiceCardComponent, CarouselComponent],
+  imports: [
+    RouterLink,
+    RouteMapComponent,
+    ServiceCardComponent,
+    CarouselComponent,
+    BreakpointDirective,
+    PageLayoutComponent,
+  ],
   templateUrl: './services-index.component.html',
   styleUrl: './services-index.component.css',
   providers: [
@@ -30,7 +39,11 @@ export class ServicesIndexComponent {
   private readonly navigationService = inject(NavigationService);
 
   get deliveryLink(): string {
-    return '/' + this.navigationService.findByLink('delivery')?.link;
+    return '/' + this.navigationService.findByLink('calculator')?.link;
+  }
+
+  get feedbackLink(): string {
+    return '/' + this.navigationService.findByLink('feedback')?.link;
   }
 
   readonly services: ServiceCard[] = [

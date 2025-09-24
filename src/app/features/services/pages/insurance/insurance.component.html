@@ -1,79 +1,82 @@
-<div class="max-w-[570px]">
-  <!--  <img-->
-  <!--    ngSrc="energogarant.jpg"-->
-  <!--    alt="Страховая акционерная компания Энергогарант"-->
-  <!--    width="1182"-->
-  <!--    height="297"-->
-  <!--    class="w-full max-w-96 rounded-sm"-->
-  <!--    (load)="onImageLoad()"-->
-  <!--    (error)="onImageError()"-->
-  <!--    [tuiSkeleton]="!imageLoaded"-->
-  <!--  />-->
+<app-page-layout>
+  <div class="max-w-[570px]">
+    <!--  <img-->
+    <!--    ngSrc="energogarant.jpg"-->
+    <!--    alt="Страховая акционерная компания Энергогарант"-->
+    <!--    width="1182"-->
+    <!--    height="297"-->
+    <!--    class="w-full max-w-96 rounded-sm"-->
+    <!--    (load)="onImageLoad()"-->
+    <!--    (error)="onImageError()"-->
+    <!--    [tuiSkeleton]="!imageLoaded"-->
+    <!--  />-->
 
-  <tui-notification icon="@tui.shield-check" appearance="positive">
-    Наш партнёр — ПАО «Энергогарант», надёжная страховая компания, с которой мы работаем много лет.
-  </tui-notification>
+    <tui-notification icon="@tui.shield-check" appearance="positive">
+      Наш партнёр — ПАО «Энергогарант», надёжная страховая компания, с которой мы работаем много
+      лет.
+    </tui-notification>
 
-  <h2 class="mt-12 mb-4 text-xl font-medium">Тарифы на страхование:</h2>
-  <div class="mb-12 max-w-96">
-    <app-content-scroller>
-      <app-simple-table
-        class="relative col-start-1 -ml-[60px] sm:ml-0"
-        [columns]="table.columns"
-        [data]="table.rows"
-      />
-      <ng-container class="footer">
-        <small class="text-3xs mt-4 block text-gray-700">
-          <sup>*</sup>
-          Максимальная страховая сумма — 30 000 руб.
-        </small>
-      </ng-container>
-    </app-content-scroller>
+    <h2 class="mt-12 mb-4 text-xl font-medium">Тарифы на страхование:</h2>
+    <div class="mb-12 max-w-96">
+      <app-content-scroller>
+        <app-simple-table
+          class="relative col-start-1 -ml-[60px] sm:ml-0"
+          [columns]="table.columns"
+          [data]="table.rows"
+        />
+        <ng-container class="footer">
+          <small class="text-3xs mt-4 block text-gray-700">
+            <sup>*</sup>
+            Максимальная страховая сумма — 30 000 руб.
+          </small>
+        </ng-container>
+      </app-content-scroller>
+    </div>
+
+    <h2 class="mt-12 mb-5 text-xl font-medium">Условия страхования:</h2>
+    <app-list>
+      <span *appListItem>
+        Мы гарантируем 100% возмещение убытков в течение 30 дней после подачи заявления о страховом
+        случае.
+      </span>
+      <span *appListItem>
+        Страхование действует только при условии, что груз упакован надёжно и обеспечена его
+        сохранность.
+      </span>
+      <span *appListItem>Страховым случаем не считается потеря груза.</span>
+      <span *appListItem>
+        Выплата производится по объявленной ценности груза
+        <br />
+        (но не выше его реальной стоимости).
+      </span>
+    </app-list>
+
+    <h2 class="mt-12 mb-5 text-xl font-medium">Что делать, если что‑то случилось с грузом?</h2>
+    <dl>
+      <dt class="mb-2 font-bold">1. При получении в нашем филиале</dt>
+      <dd class="mb-4 ml-4">
+        Если заметили повреждение упаковки или груза — сообщите менеджеру, зафиксируйте факт и
+        составьте претензию на месте.
+      </dd>
+      <dt class="mb-2 font-bold">2. При получении на автостанции</dt>
+      <dd class="mb-4 ml-4">
+        Если груз доставлен автобусом и упаковка повреждена, сделайте фото/видео и оставьте отметку
+        в журнале водителя об обнаружении повреждения.
+      </dd>
+      <dt class="mb-2 font-bold">3. Свяжитесь с нами</dt>
+      <dd class="mb-4 ml-4">
+        Позвоните по номеру
+        <a [href]="contact.phone | contactLink: 'tel'" class="link-blue-500">
+          {{ contact.phone }}
+        </a>
+        или напишите на
+        <a [href]="contact.email | contactLink: 'email'" class="link-blue-500">
+          {{ contact.email }}.
+        </a>
+        — мы объясним, что делать дальше и как оформить выплату.
+      </dd>
+    </dl>
+
+    <!--  <p>Вы также можете обратиться в онлайн-чат справа и задать вопрос нашему онлайн-консультанту.</p>-->
   </div>
-
-  <h2 class="mt-12 mb-5 text-xl font-medium">Условия страхования:</h2>
-  <app-list>
-    <span *appListItem>
-      Мы гарантируем 100% возмещение убытков в течение 30 дней после подачи заявления о страховом
-      случае.
-    </span>
-    <span *appListItem>
-      Страхование действует только при условии, что груз упакован надёжно и обеспечена его
-      сохранность.
-    </span>
-    <span *appListItem>Страховым случаем не считается потеря груза.</span>
-    <span *appListItem>
-      Выплата производится по объявленной ценности груза
-      <br />
-      (но не выше его реальной стоимости).
-    </span>
-  </app-list>
-
-  <h2 class="mt-12 mb-5 text-xl font-medium">Что делать, если что‑то случилось с грузом?</h2>
-  <dl>
-    <dt class="mb-2 font-bold">1. При получении в нашем филиале</dt>
-    <dd class="mb-4 ml-4">
-      Если заметили повреждение упаковки или груза — сообщите менеджеру, зафиксируйте факт и
-      составьте претензию на месте.
-    </dd>
-    <dt class="mb-2 font-bold">2. При получении на автостанции</dt>
-    <dd class="mb-4 ml-4">
-      Если груз доставлен автобусом и упаковка повреждена, сделайте фото/видео и оставьте отметку в
-      журнале водителя об обнаружении повреждения.
-    </dd>
-    <dt class="mb-2 font-bold">3. Свяжитесь с нами</dt>
-    <dd class="mb-4 ml-4">
-      Позвоните по номеру
-      <a [href]="contact.phone | contactLink: 'tel'" class="link-blue-500">
-        {{ contact.phone }}
-      </a>
-      или напишите на
-      <a [href]="contact.email | contactLink: 'email'" class="link-blue-500">
-        {{ contact.email }}.
-      </a>
-      — мы объясним, что делать дальше и как оформить выплату.
-    </dd>
-  </dl>
-
-  <!--  <p>Вы также можете обратиться в онлайн-чат справа и задать вопрос нашему онлайн-консультанту.</p>-->
-</div>
+</app-page-layout>

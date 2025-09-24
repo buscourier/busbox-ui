@@ -15,6 +15,7 @@ import {
   StepsComponent,
 } from '@shared/components/steps';
 import { SidebarLayoutComponent } from '@shared/layouts';
+import { PageLayoutComponent } from '@shared/layouts/page-layout';
 import type { ApiError } from '@shared/types';
 
 import { CourierService, type GroupedCities } from './courier.service';
@@ -32,6 +33,7 @@ import { CourierService, type GroupedCities } from './courier.service';
     TuiRepeatTimes,
     TuiSkeleton,
     StepCardComponent,
+    PageLayoutComponent,
   ],
   templateUrl: './courier.component.html',
   styleUrl: './courier.component.css',
