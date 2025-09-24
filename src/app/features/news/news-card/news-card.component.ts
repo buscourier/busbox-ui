@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TuiIcon } from '@taiga-ui/core';
-import { TuiSkeleton } from '@taiga-ui/kit';
+import { TuiLineClamp, TuiSkeleton } from '@taiga-ui/kit';
 
 import { cn } from '@core/utils';
 
@@ -9,7 +9,7 @@ import type { NewsItem } from '../types';
 
 @Component({
   selector: 'app-news-card',
-  imports: [TuiIcon, RouterLink, TuiSkeleton],
+  imports: [TuiIcon, RouterLink, TuiSkeleton, TuiLineClamp],
   templateUrl: './news-card.component.html',
   styleUrl: './news-card.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
