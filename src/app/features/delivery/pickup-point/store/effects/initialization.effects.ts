@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { delay } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
 import { PersistenceService } from '@core/services';
@@ -45,6 +46,7 @@ export const initializationEffects = {
       return actions$.pipe(
         ofType(PickupPointActions.loadCitiesSuccess),
         filter(() => canInitializeFromUrl(route)),
+        delay(0),
         map(({ cities }) => {
           const pickupCityId = route.snapshot.queryParams['pickupCityId'];
 

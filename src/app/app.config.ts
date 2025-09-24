@@ -65,7 +65,6 @@ import { BalanceEffects, balanceFeature } from '@account/balance';
 import { OrdersEffects, ordersFeature } from '@account/orders';
 import { ProfileEffects, profileFeature } from '@account/profile';
 import { AuthEffects, authFeature } from '@auth';
-import { DeliveryEffects } from '@delivery';
 import { NewsEffects, newsFeature } from '@news/store';
 
 import { BookingEffects, bookingFeature } from '@delivery/booking';
@@ -157,7 +156,6 @@ export const appConfig: ApplicationConfig = {
     provideEffects(
       LocationsEffects,
       PickupPointEffects,
-      DeliveryEffects,
       DeliveryPointEffects,
       DeliveryDetailsEffects,
       DeliverySummaryEffects,

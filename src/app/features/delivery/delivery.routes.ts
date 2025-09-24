@@ -3,6 +3,7 @@ import { provideTranslocoScope } from '@jsverse/transloco';
 
 import { CalculatorComponent } from './calculator';
 import { DeliveryComponent } from './delivery.component';
+import { calculatorGuard } from './guards';
 
 export const deliveryRoutes: Routes = [
   {
@@ -17,6 +18,8 @@ export const deliveryRoutes: Routes = [
       {
         path: 'calculator',
         component: CalculatorComponent,
+        canActivate: [calculatorGuard],
+        runGuardsAndResolvers: 'paramsOrQueryParamsChange',
         data: { pageKey: 'calculator' },
         providers: [
           provideTranslocoScope({
