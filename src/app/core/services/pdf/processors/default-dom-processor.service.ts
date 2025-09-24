@@ -28,6 +28,16 @@ export class DefaultDomProcessor implements DomProcessor {
     printOnlyElements.forEach((el) => {
       (el as HTMLElement).style.display = 'block';
     });
+
+    const tHeadPrintOnlyElements = element.querySelectorAll('.t-head-print-only');
+    tHeadPrintOnlyElements.forEach((el) => {
+      (el as HTMLElement).style.display = 'table-header-group';
+    });
+
+    const tFootPrintOnlyElements = element.querySelectorAll('.t-foot-print-only');
+    tFootPrintOnlyElements.forEach((el) => {
+      (el as HTMLElement).style.display = 'table-footer-group';
+    });
   }
 
   cleanupInteractiveElements(element: HTMLElement): void {

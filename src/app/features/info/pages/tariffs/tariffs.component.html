@@ -34,7 +34,7 @@
     </section>
 
     <div>
-      <section #zonesContainer class="mb-20">
+      <section class="mb-20">
         @if (vm.zones.hasData) {
           <h2 class="font-heading mb-4 text-3xl font-bold text-gray-900">Зоны доставки</h2>
 
@@ -64,11 +64,28 @@
         } @else {
           <div
             *tuiRepeatTimes="let i of SKELETON_COUNT"
-            class="mb-2.5 h-32"
+            class="mb-2.5 h-32 rounded-lg"
             [tuiSkeleton]="true"
           ></div>
         }
       </section>
+
+      <div #zonesContainer>
+        <div class="print-only">
+          @if (vm.zones.hasData) {
+            @for (zone of vm.zones.data; track zone.site_id) {
+              <div class="mb-8">
+                <b class="mt-2 mb-2 block text-lg font-bold">
+                  {{ zone.zone }}
+                </b>
+                <div class="text-base leading-7">
+                  {{ zone.cities }}
+                </div>
+              </div>
+            }
+          }
+        </div>
+      </div>
 
       @if (vm.zoneTariffs.hasData) {
         <section class="mb-16">
@@ -79,93 +96,152 @@
             весу и размеру.
           </p>
 
-          <div #parcelsContainer class="">
+          <div class="">
             <app-content-scroller>
-              <table class="w-full min-w-[600px] border-collapse text-sm">
-                <tbody>
-                  @for (
-                    zone of vm.zoneTariffs.parcelsTable.zones;
-                    track zone.zone_id;
-                    let isFirst = $first
-                  ) {
-                    <tr>
-                      <td>
-                        <table class="w-full">
-                          @if (isFirst) {
-                            <thead class="">
-                              <tr>
-                                <th class="text-md px-2 py-3 font-semibold whitespace-nowrap">
-                                  Габариты
-                                </th>
-                                <th class="text-md px-2 py-3 font-semibold whitespace-nowrap">
-                                  Документы
-                                </th>
-                                <th class="text-md px-2 py-3 font-semibold whitespace-nowrap">
-                                  0 - 5 кг
-                                </th>
-                                <th class="text-md px-2 py-3 font-semibold whitespace-nowrap">
-                                  5 - 10 кг
-                                </th>
-                                <th class="text-md px-2 py-3 font-semibold whitespace-nowrap">
-                                  10 - 20 кг
-                                </th>
-                              </tr>
-                            </thead>
-                          }
-                          <tbody>
-                            <tr>
-                              <td
-                                colspan="5"
-                                class="rounded-sm bg-yellow-500 p-3 text-center text-sm font-semibold"
-                              >
-                                {{ zone.zone_name }}
-                              </td>
-                            </tr>
-                            @for (
-                              row of getZoneRows(vm.zoneTariffs.parcelsTable, zone.zone_id);
-                              track row.size;
-                              let isEven = $even
-                            ) {
-                              <tr [class.bg-gray-50]="$odd">
-                                <td class="w-1/5 px-2 py-3 text-center text-sm">
-                                  {{ row.size }}
-                                </td>
-                                <td class="w-1/5 px-2 py-3 text-center text-sm">
-                                  @if (row.zones[zone.zone_id]?.documents) {
-                                    <span>{{ row.zones[zone.zone_id].documents }} ₽</span>
-                                  } @else {
-                                    <span class="text-gray-400">—</span>
-                                  }
-                                </td>
-                                <td class="w-1/5 px-2 py-3 text-center text-sm">
-                                  @if (row.zones[zone.zone_id]?.weight_0_5) {
-                                    <span>{{ row.zones[zone.zone_id].weight_0_5 }} ₽</span>
-                                  } @else {
-                                    <span class="text-gray-400">—</span>
-                                  }
-                                </td>
-                                <td class="w-1/5 px-2 py-3 text-center text-sm">
-                                  @if (row.zones[zone.zone_id]?.weight_5_10) {
-                                    <span>{{ row.zones[zone.zone_id].weight_5_10 }} ₽</span>
-                                  } @else {
-                                    <span class="text-gray-400">—</span>
-                                  }
-                                </td>
-                                <td class="w-1/5 px-2 py-3 text-center text-sm">
-                                  @if (row.zones[zone.zone_id]?.weight_10_20) {
-                                    <span>{{ row.zones[zone.zone_id].weight_10_20 }} ₽</span>
-                                  } @else {
-                                    <span class="text-gray-400">—</span>
-                                  }
-                                </td>
-                              </tr>
+              <table #parcelsFirstContainer class="w-full">
+                <thead class="">
+                  <tr>
+                    <th class="px-2 py-3 text-sm font-semibold whitespace-nowrap">Габариты</th>
+                    <th class="px-2 py-3 text-sm font-semibold whitespace-nowrap">Документы</th>
+                    <th class="px-2 py-3 text-sm font-semibold whitespace-nowrap">0 - 5 кг</th>
+                    <th class="px-2 py-3 text-sm font-semibold whitespace-nowrap">5 - 10 кг</th>
+                    <th class="px-2 py-3 text-sm font-semibold whitespace-nowrap">10 - 20 кг</th>
+                  </tr>
+                </thead>
+                @for (zone of vm.zoneTariffs.parcelsTable.zones; track zone.zone_id) {
+                  @if ($index <= 3) {
+                    <tbody>
+                      <tr>
+                        <td
+                          colspan="5"
+                          class="rounded-sm bg-yellow-500/40 p-3 text-center text-sm font-semibold"
+                        >
+                          {{ zone.zone_name }}
+                        </td>
+                      </tr>
+                      @for (
+                        row of getZoneRows(vm.zoneTariffs.parcelsTable, zone.zone_id);
+                        track row.size;
+                        let isEven = $even
+                      ) {
+                        <tr [class.bg-gray-50]="$odd">
+                          <td class="w-1/5 px-2 py-3 text-center text-sm">
+                            {{ row.size }}
+                          </td>
+                          <td class="w-1/5 px-2 py-3 text-center text-sm">
+                            @if (row.zones[zone.zone_id]?.documents) {
+                              <span>{{ row.zones[zone.zone_id].documents }} ₽</span>
+                            } @else {
+                              <span class="text-gray-400">—</span>
                             }
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
+                          </td>
+                          <td class="w-1/5 px-2 py-3 text-center text-sm">
+                            @if (row.zones[zone.zone_id]?.weight_0_5) {
+                              <span>{{ row.zones[zone.zone_id].weight_0_5 }} ₽</span>
+                            } @else {
+                              <span class="text-gray-400">—</span>
+                            }
+                          </td>
+                          <td class="w-1/5 px-2 py-3 text-center text-sm">
+                            @if (row.zones[zone.zone_id]?.weight_5_10) {
+                              <span>{{ row.zones[zone.zone_id].weight_5_10 }} ₽</span>
+                            } @else {
+                              <span class="text-gray-400">—</span>
+                            }
+                          </td>
+                          <td class="w-1/5 px-2 py-3 text-center text-sm">
+                            @if (row.zones[zone.zone_id]?.weight_10_20) {
+                              <span>{{ row.zones[zone.zone_id].weight_10_20 }} ₽</span>
+                            } @else {
+                              <span class="text-gray-400">—</span>
+                            }
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
                   }
-                </tbody>
+                }
+              </table>
+              <table #parcelsSecondContainer class="w-full">
+                <thead class="t-head-print-only">
+                  <tr>
+                    <th class="px-2 py-3 text-sm font-semibold whitespace-nowrap">Габариты</th>
+                    <th class="px-2 py-3 text-sm font-semibold whitespace-nowrap">Документы</th>
+                    <th class="px-2 py-3 text-sm font-semibold whitespace-nowrap">0 - 5 кг</th>
+                    <th class="px-2 py-3 text-sm font-semibold whitespace-nowrap">5 - 10 кг</th>
+                    <th class="px-2 py-3 text-sm font-semibold whitespace-nowrap">10 - 20 кг</th>
+                  </tr>
+                </thead>
+                @for (zone of vm.zoneTariffs.parcelsTable.zones; track zone.zone_id) {
+                  @if ($index > 3) {
+                    <tbody>
+                      <tr>
+                        <td
+                          colspan="5"
+                          class="rounded-sm bg-yellow-500/40 p-3 text-center text-sm font-semibold"
+                        >
+                          {{ zone.zone_name }}
+                        </td>
+                      </tr>
+                      @for (
+                        row of getZoneRows(vm.zoneTariffs.parcelsTable, zone.zone_id);
+                        track row.size;
+                        let isEven = $even
+                      ) {
+                        <tr [class.bg-gray-50]="$odd">
+                          <td class="w-1/5 px-2 py-3 text-center text-sm">
+                            {{ row.size }}
+                          </td>
+                          <td class="w-1/5 px-2 py-3 text-center text-sm">
+                            @if (row.zones[zone.zone_id]?.documents) {
+                              <span>{{ row.zones[zone.zone_id].documents }} ₽</span>
+                            } @else {
+                              <span class="text-gray-400">—</span>
+                            }
+                          </td>
+                          <td class="w-1/5 px-2 py-3 text-center text-sm">
+                            @if (row.zones[zone.zone_id]?.weight_0_5) {
+                              <span>{{ row.zones[zone.zone_id].weight_0_5 }} ₽</span>
+                            } @else {
+                              <span class="text-gray-400">—</span>
+                            }
+                          </td>
+                          <td class="w-1/5 px-2 py-3 text-center text-sm">
+                            @if (row.zones[zone.zone_id]?.weight_5_10) {
+                              <span>{{ row.zones[zone.zone_id].weight_5_10 }} ₽</span>
+                            } @else {
+                              <span class="text-gray-400">—</span>
+                            }
+                          </td>
+                          <td class="w-1/5 px-2 py-3 text-center text-sm">
+                            @if (row.zones[zone.zone_id]?.weight_10_20) {
+                              <span>{{ row.zones[zone.zone_id].weight_10_20 }} ₽</span>
+                            } @else {
+                              <span class="text-gray-400">—</span>
+                            }
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  }
+                }
+                <tfoot class="t-foot-print-only">
+                  <tr>
+                    <td colspan="5" class="pt-3">
+                      <p class="mb-1 text-xs leading-relaxed text-gray-700">
+                        *
+                        <b class="text-gray-900">Документы</b>
+                        – формата А4 до 1 кг, толщина до 1,5 см, без каких-либо сторонних вложений.
+                      </p>
+                      <p class="mb-0 text-xs leading-relaxed text-gray-700">
+                        *
+                        <b class="text-gray-900">Посылки свыше 160 см и свыше 20 кг</b>
+                        - стоимость доставки можно рассчитать на сайте в разделе «Предварительный
+                        расчет» или у менеджера.
+                      </p>
+                    </td>
+                  </tr>
+                </tfoot>
               </table>
               <ng-container class="footer">
                 <p class="mb-1 text-xs leading-relaxed text-gray-700">
@@ -192,15 +268,15 @@
               зону отправляется деталь, и найдите стоимость в нужной колонке.
             </p>
 
-            <div #autopartsContainer class="">
+            <div class="">
               <app-content-scroller>
-                <table class="w-full text-sm whitespace-nowrap">
+                <table #autopartsContainer class="w-full text-sm">
                   <thead>
                     <tr>
                       <th class="px-3 py-3 text-left"></th>
                       @for (zone of vm.zoneTariffs.autopartsTable.zones; track zone.zone_id) {
                         <th
-                          class="bg-yellow-500 px-3 py-3 text-center text-sm"
+                          class="bg-yellow-500/40 px-3 py-3 text-center text-sm"
                           [class.rounded-l-sm]="$first"
                           [class.rounded-r-sm]="$last"
                         >
@@ -233,6 +309,19 @@
                       </tr>
                     }
                   </tbody>
+                  <tfoot class="t-foot-print-only">
+                    <tr>
+                      <td colspan="7" class="pt-3">
+                        <p class="mb-0 text-xs leading-relaxed text-gray-700">
+                          *
+                          <b class="text-gray-900">Автозапчасти</b>
+                          – стоимость указана для стандартных размеров запчастей легковых
+                          автомобилей. Для запчастей с превышением стандартных размеров расчёт
+                          производится индивидуально менеджером.
+                        </p>
+                      </td>
+                    </tr>
+                  </tfoot>
                 </table>
                 <ng-container class="footer">
                   <p class="mb-0 text-xs leading-relaxed text-gray-700">
@@ -244,7 +333,6 @@
                   </p>
                 </ng-container>
               </app-content-scroller>
-              <!--              <div class="">-->
             </div>
           </section>
         }
@@ -258,15 +346,15 @@
               <br />
               Это помогает точно рассчитать доставку.
             </p>
-            <div #otherContainer class="">
+            <div class="">
               <app-content-scroller>
-                <table class="w-full text-sm whitespace-nowrap">
+                <table #otherContainer class="w-full text-sm whitespace-nowrap">
                   <thead>
                     <tr>
                       <th class="px-3 py-3 text-left"></th>
                       @for (zone of vm.zoneTariffs.otherTable.zones; track zone.zone_id) {
                         <th
-                          class="bg-yellow-500 px-3 py-3 text-center text-sm font-semibold"
+                          class="bg-yellow-500/40 px-3 py-3 text-center text-sm font-semibold"
                           [class.rounded-l-sm]="$first"
                           [class.rounded-r-sm]="$last"
                         >
@@ -297,9 +385,6 @@
                   </tbody>
                 </table>
               </app-content-scroller>
-              <!--              <div class="rounded-lg p-4 shadow-lg">-->
-              <!--                -->
-              <!--              </div>-->
             </div>
           </section>
         }
@@ -321,28 +406,3 @@
     (download)="downloadPdf($event)"
   />
 </ng-template>
-
-<!--<ng-template #tablesMetadata>-->
-<!--  <div class="sticky top-60 block rounded-md p-2.5 text-xs shadow-md">-->
-<!--    @if (documentsInfoVisible) {-->
-<!--      <p class="mb-2 leading-relaxed text-gray-700">-->
-<!--        <b>Документы</b>-->
-<!--        – формата А4 до 1 кг, толщина до 1,5 см, без каких-либо сторонних вложений.-->
-<!--      </p>-->
-<!--      <p class="mb-2 leading-relaxed text-gray-700">-->
-<!--        <b>Посылки свыше 160 см и свыше 20 кг</b>-->
-<!--        - стоимость доставки можно рассчитать на сайте в разделе «Предварительный расчет» или у-->
-<!--        менеджера.-->
-<!--      </p>-->
-<!--    }-->
-
-<!--    <div class="mt-4">-->
-<!--      <p class="mb-2 text-sm leading-relaxed text-gray-700">-->
-<!--        *-->
-<!--        <b>Автозапчасти</b>-->
-<!--        – стоимость указана для стандартных размеров запчастей легковых автомобилей. Для запчастей с-->
-<!--        превышением стандартных размеров расчёт производится индивидуально менеджером.-->
-<!--      </p>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</ng-template>-->

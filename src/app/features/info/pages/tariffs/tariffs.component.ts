@@ -57,7 +57,10 @@ import type { QueryParams, ParcelsTableData, ParcelTableRow, TariffsViewModel } 
 })
 export class TariffsComponent implements OnInit {
   @ViewChild('zonesContainer', { static: false }) zonesContainer!: ElementRef;
-  @ViewChild('parcelsContainer', { static: false }) parcelsContainer!: ElementRef<HTMLElement>;
+  @ViewChild('parcelsFirstContainer', { static: false })
+  parcelsFirstContainer!: ElementRef<HTMLElement>;
+  @ViewChild('parcelsSecondContainer', { static: false })
+  parcelsSecondContainer!: ElementRef<HTMLElement>;
   @ViewChild('autopartsContainer', { static: false }) autopartsContainer!: ElementRef<HTMLElement>;
   @ViewChild('otherContainer', { static: false }) otherContainer!: ElementRef<HTMLElement>;
   @ViewChild('actions', { static: true }) actionsTemplate!: TemplateRef<unknown>;
@@ -109,7 +112,8 @@ export class TariffsComponent implements OnInit {
       .generateTariffs(
         {
           zones: this.zonesContainer?.nativeElement,
-          parcels: this.parcelsContainer?.nativeElement,
+          parcelsFirst: this.parcelsFirstContainer?.nativeElement,
+          parcelsSecond: this.parcelsSecondContainer?.nativeElement,
           autoparts: this.autopartsContainer?.nativeElement,
           other: this.otherContainer?.nativeElement,
         },
