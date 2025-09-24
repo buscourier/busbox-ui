@@ -30,12 +30,12 @@ export class DocumentCardComponent {
   @HostBinding('class') get hostClasses(): string {
     return cn(
       'group/card w-full max-w-[370px] cursor-pointer p-6',
-      'rounded-2xl border border-gray-100 bg-white shadow-lg',
+      'rounded-2xl border border-gray-100 bg-white',
       'focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400 focus:outline-none',
       'select-none',
       {
         'max-w-[850px] p-8': this.isCardLarge,
-        'shadow-md transition-all active:translate-y-[2px] active:shadow-none': !this.isCardLarge,
+        'shadow-sm transition-all active:translate-y-[2px] active:shadow-none': !this.isCardLarge,
       },
     );
   }
