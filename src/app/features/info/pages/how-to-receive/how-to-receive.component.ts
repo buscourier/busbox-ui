@@ -2,7 +2,12 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { NavigationService } from '@core/services';
 
-import { StepsComponent, StepDirective, StepCardComponent } from '@shared/components/steps';
+import {
+  StepsComponent,
+  StepDirective,
+  StepCardComponent,
+  type Step,
+} from '@shared/components/steps';
 import { SidebarLayoutComponent } from '@shared/layouts';
 
 @Component({
@@ -19,7 +24,7 @@ export class HowToReceiveComponent {
     return '/' + this.navigationService.findByLink('contacts')!.link;
   }
 
-  steps = [
+  steps: Step[] = [
     {
       id: 1,
       icon: '@tui.package-check',
@@ -28,6 +33,7 @@ export class HowToReceiveComponent {
         {
           text: 'Адреса филиалов',
           href: this.contactsLink,
+          type: 'route',
         },
       ],
     },

@@ -18,7 +18,21 @@
     class="mt-4 flex flex-col items-center justify-center gap-3 min-[460px]:flex-row min-[460px]:justify-start"
   >
     @for (action of actions; track $index) {
-      <button [class]="actionClass" [routerLink]="action.href">{{ action.text }}</button>
+      @switch (action.type) {
+        @case ('tel') {
+          <a [href]="action.href | contactLink: 'tel'" [class]="actionClass">
+            {{ action.text }}
+          </a>
+        }
+        @case ('email') {
+          <a [href]="action.href | contactLink: 'email'" [class]="actionClass">
+            {{ action.text }}
+          </a>
+        }
+        @default {
+          <button [class]="actionClass" [routerLink]="action.href">{{ action.text }}</button>
+        }
+      }
     }
   </div>
 }
