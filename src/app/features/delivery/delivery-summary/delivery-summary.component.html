@@ -425,15 +425,17 @@
           }
         </div>
       </button>
-
-      <button
-        [tuiSkeleton]="isLoading"
-        type="button"
-        class="w-full text-center text-red-500 hover:text-red-600 hover:underline"
-        (click)="onReset($event)"
-      >
-        {{ 'summary.actions.reset' | transloco }}
-      </button>
     }
+
+    <button
+      [tuiSkeleton]="isLoading"
+      type="button"
+      tuiButton
+      appearance="flat-destructive"
+      class="w-full text-center text-red-500 hover:text-red-600 hover:underline"
+      (click)="onReset($event, isCalculatorLayout)"
+    >
+      {{ isCalculatorLayout ? 'Cбросить расчеты' : 'Отменить доставку' }}
+    </button>
   </ng-template>
 }
