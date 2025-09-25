@@ -1,0 +1,4 @@
+.b24-widget-button-wrapper,
+.b24-widget-button-shadow {
+  @apply hidden! lg:block!;
+}
