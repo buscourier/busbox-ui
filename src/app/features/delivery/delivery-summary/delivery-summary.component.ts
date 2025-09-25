@@ -131,7 +131,7 @@ export class DeliverySummaryComponent implements OnInit {
           }
 
           if (response && !isCalculator) {
-            this.router.navigateByUrl('/delivery/booking');
+            this.router.navigateByUrl('/delivery');
           }
 
           return of(response);
