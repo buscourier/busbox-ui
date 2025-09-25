@@ -54,7 +54,7 @@ export class RouteSelectorComponent implements OnInit {
     return cn(
       'theme-yellow block flex-grow',
 
-      'lg:max-w-[375px] xl:w-full',
+      'lg:max-w-[425px] xl:w-full xl:p-4',
       'lg:before:absolute lg:before:top-[140px] lg:before:right-[-62px]',
       'lg:before:-z-10 lg:before:h-[360px] lg:before:w-[600px]',
       "lg:before:bg-[url('./assets/images/home-bus.jpg')]",
