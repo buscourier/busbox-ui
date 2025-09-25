@@ -4,7 +4,7 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/ro
 import { TuiDropdownMobile } from '@taiga-ui/addon-mobile';
 import { TuiActiveZone } from '@taiga-ui/cdk';
 import { TuiButton, TuiDropdown, TuiDropdownManual, TuiIcon, TuiPopup } from '@taiga-ui/core';
-import { TuiDrawer } from '@taiga-ui/kit';
+import { TuiDrawer, TuiLineClamp } from '@taiga-ui/kit';
 import { type Observable, startWith } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
@@ -40,6 +40,7 @@ import { NavigationComponent } from '../navigation';
     RouterLinkActive,
     ContactLinkPipe,
     TuiDropdownMobile,
+    TuiLineClamp,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
