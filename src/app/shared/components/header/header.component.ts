@@ -55,10 +55,16 @@ export class HeaderComponent {
   private readonly router = inject(Router);
   private breakpointsService = inject(BreakpointService);
 
-  isHomePage$ = this.router.events.pipe(
+  isPhoneAvailable$ = this.router.events.pipe(
     filter((event) => event instanceof NavigationEnd),
-    map(() => this.router.url === '/' || this.router.url === '/home'),
-    startWith(this.router.url === '/' || this.router.url === '/home'),
+    map(() => {
+      const url = this.router.url;
+      return url === '/' || url === '/home' || url.includes('/delivery/calculator');
+    }),
+    startWith(() => {
+      const url = this.router.url;
+      return url === '/' || url === '/home' || url.includes('/delivery/calculator');
+    }),
   );
 
   isUserMenuOpen = false;
