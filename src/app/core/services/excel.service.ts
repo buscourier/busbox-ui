@@ -29,7 +29,7 @@ export class ExcelService {
       XLSX.writeFile(workbook, fileName);
     } catch (error) {
       console.error('Error exporting to Excel:', error);
-      throw new Error('Ошибка при экспорте в Excel');
+      throw new Error('Error exporting to Excel');
     }
   }
 
@@ -41,21 +41,21 @@ export class ExcelService {
     const worksheetData: unknown[][] = [];
     let currentRow = 0;
 
-    // 1. Заголовок
+    // 1. Title
     if (options?.title) {
       worksheetData.push([options.title]);
-      worksheetData.push([]); // Пустая строка
+      worksheetData.push([]); // Empty row
       currentRow += 2;
     }
 
-    // 2. Подзаголовок
+    // 2. Subtitle
     if (options?.subtitle) {
       worksheetData.push([options.subtitle]);
       worksheetData.push([]);
       currentRow += 2;
     }
 
-    // 3. Метаинформация
+    // 3. Metadata
     const metadataRowStart = currentRow;
     if (options?.metadata) {
       Object.entries(options.metadata).forEach(([key, value]) => {
@@ -66,7 +66,7 @@ export class ExcelService {
       currentRow++;
     }
 
-    // 4. Заголовки таблицы
+    // 4. Table headers
     const tableHeaderRow = currentRow;
     if (columns) {
       const headers = columns.map((col) => col.header);
@@ -81,7 +81,7 @@ export class ExcelService {
       }
     }
 
-    // 5. Данные
+    // 5. Data rows
     const dataStartRow = currentRow;
     data.forEach((item) => {
       if (columns) {
@@ -96,14 +96,14 @@ export class ExcelService {
       currentRow++;
     });
 
-    // 6. Итоги
+    // 6. Summary
     const summaryRowStart = currentRow;
     if (options?.showSummary && data.length > 0) {
       worksheetData.push([]);
-      worksheetData.push(['Итого записей:', data.length]);
+      worksheetData.push(['Total records:', data.length]);
       currentRow += 2;
 
-      // Добавляем суммы по числовым колонкам
+      // Add sums for numeric columns
       if (columns) {
         const summaryRow: unknown[] = [];
         columns.forEach((col, index) => {
@@ -114,7 +114,7 @@ export class ExcelService {
             }, 0);
             summaryRow[index] = sum;
           } else {
-            summaryRow[index] = index === 0 ? 'Итого:' : '';
+            summaryRow[index] = index === 0 ? 'Total:' : '';
           }
         });
         worksheetData.push(summaryRow);
@@ -122,7 +122,7 @@ export class ExcelService {
       }
     }
 
-    // 7. Футер
+    // 7. Footer
     const footerRow = currentRow;
     if (options?.footerText) {
       worksheetData.push([]);
@@ -130,10 +130,10 @@ export class ExcelService {
       currentRow += 2;
     }
 
-    // 8. Создаем worksheet
+    // 8. Create worksheet
     const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
 
-    // ✅ 9. Применяем стили
+    // ✅ 9. Apply styles
     this.applyStyles(worksheet, {
       titleRow: options?.title ? 0 : -1,
       subtitleRow: options?.subtitle ? (options?.title ? 2 : 0) : -1,
@@ -148,7 +148,7 @@ export class ExcelService {
       columnCount: columns?.length || (data.length > 0 ? Object.keys(data[0] as object).length : 1),
     });
 
-    // 10. Устанавливаем ширину колонок
+    // 10. Set column widths
     if (columns) {
       worksheet['!cols'] = columns.map((col) => ({ wch: col.width || 15 }));
     }
@@ -156,7 +156,7 @@ export class ExcelService {
     return worksheet;
   }
 
-  // ✅ Применение стилей
+  // ✅ Apply styles
   private applyStyles(
     worksheet: XLSX.WorkSheet,
     ranges: {
@@ -172,7 +172,7 @@ export class ExcelService {
       columnCount: number;
     },
   ): void {
-    // Стиль заголовка
+    // Title style
     if (ranges.titleRow >= 0) {
       const titleCell = XLSX.utils.encode_cell({ r: ranges.titleRow, c: 0 });
       if (worksheet[titleCell]) {
@@ -187,12 +187,12 @@ export class ExcelService {
             vertical: 'center',
           },
           fill: {
-            fgColor: { rgb: 'E6F3FF' },
+            fgColor: { rgb: 'FFF2CC' },
           },
         };
       }
 
-      // Объединяем ячейки заголовка
+      // Merge title cells
       worksheet['!merges'] = worksheet['!merges'] || [];
       worksheet['!merges'].push({
         s: { r: ranges.titleRow, c: 0 },
@@ -200,7 +200,7 @@ export class ExcelService {
       });
     }
 
-    // Стиль подзаголовка
+    // Subtitle style
     if (ranges.subtitleRow >= 0) {
       const subtitleCell = XLSX.utils.encode_cell({ r: ranges.subtitleRow, c: 0 });
       if (worksheet[subtitleCell]) {
@@ -216,7 +216,7 @@ export class ExcelService {
         };
       }
 
-      // Объединяем ячейки подзаголовка
+      // Merge subtitle cells
       worksheet['!merges'] = worksheet['!merges'] || [];
       worksheet['!merges'].push({
         s: { r: ranges.subtitleRow, c: 0 },
@@ -224,10 +224,10 @@ export class ExcelService {
       });
     }
 
-    // Стили метаданных
+    // Metadata styles
     if (ranges.metadataStart >= 0 && ranges.metadataEnd >= 0) {
       for (let row = ranges.metadataStart; row <= ranges.metadataEnd; row++) {
-        // Ключ (левая колонка)
+        // Key (left column)
         const keyCell = XLSX.utils.encode_cell({ r: row, c: 0 });
         if (worksheet[keyCell]) {
           worksheet[keyCell].s = {
@@ -236,7 +236,7 @@ export class ExcelService {
           };
         }
 
-        // Значение (правая колонка)
+        // Value (right column)
         const valueCell = XLSX.utils.encode_cell({ r: row, c: 1 });
         if (worksheet[valueCell]) {
           worksheet[valueCell].s = {
@@ -246,7 +246,7 @@ export class ExcelService {
       }
     }
 
-    // Стили заголовков таблицы
+    // Table header styles
     if (ranges.tableHeaderRow >= 0) {
       for (let col = 0; col < ranges.columnCount; col++) {
         const headerCell = XLSX.utils.encode_cell({ r: ranges.tableHeaderRow, c: col });
@@ -258,7 +258,7 @@ export class ExcelService {
               color: { rgb: 'FFFFFF' },
             },
             fill: {
-              fgColor: { rgb: '4472C4' },
+              fgColor: { rgb: '5F6368' },
             },
             alignment: {
               horizontal: 'center',
@@ -275,7 +275,7 @@ export class ExcelService {
       }
     }
 
-    // Стили данных (чередующиеся строки)
+    // Data styles (alternating rows)
     if (ranges.dataStartRow >= 0 && ranges.dataEndRow >= 0) {
       for (let row = ranges.dataStartRow; row <= ranges.dataEndRow; row++) {
         const isEvenRow = (row - ranges.dataStartRow) % 2 === 0;
@@ -299,7 +299,7 @@ export class ExcelService {
               },
             };
 
-            // Специальное форматирование для чисел
+            // Special formatting for numbers
             if (typeof worksheet[dataCell].v === 'number') {
               worksheet[dataCell].s!.numFmt = '#,##0.00';
               worksheet[dataCell].s!.alignment!.horizontal = 'right';
@@ -309,9 +309,9 @@ export class ExcelService {
       }
     }
 
-    // Стили итогов
+    // Summary styles
     if (ranges.summaryStart >= 0) {
-      // Строка "Итого записей"
+      // "Total records" row
       const summaryLabelCell = XLSX.utils.encode_cell({ r: ranges.summaryStart + 1, c: 0 });
       if (worksheet[summaryLabelCell]) {
         worksheet[summaryLabelCell].s = {
@@ -328,7 +328,7 @@ export class ExcelService {
         };
       }
 
-      // Строка с суммами
+      // Row with sums
       if (ranges.summaryStart + 2 < Object.keys(worksheet).length) {
         for (let col = 0; col < ranges.columnCount; col++) {
           const sumCell = XLSX.utils.encode_cell({ r: ranges.summaryStart + 2, c: col });
@@ -351,7 +351,7 @@ export class ExcelService {
       }
     }
 
-    // Стиль футера
+    // Footer style
     if (ranges.footerRow >= 0) {
       const footerCell = XLSX.utils.encode_cell({ r: ranges.footerRow, c: 0 });
       if (worksheet[footerCell]) {
@@ -367,7 +367,7 @@ export class ExcelService {
         };
       }
 
-      // Объединяем ячейки футера
+      // Merge footer cells
       worksheet['!merges'] = worksheet['!merges'] || [];
       worksheet['!merges'].push({
         s: { r: ranges.footerRow, c: 0 },

@@ -18,6 +18,15 @@ export const resetEffects = {
     },
     { functional: true },
   ),
+  resetOnLogin: createEffect(
+    (actions$ = inject(Actions)) => {
+      return actions$.pipe(
+        ofType(AuthActions.login),
+        map(() => BookingActions.resetState()),
+      );
+    },
+    { functional: true },
+  ),
   resetOnLogout: createEffect(
     (actions$ = inject(Actions)) => {
       return actions$.pipe(

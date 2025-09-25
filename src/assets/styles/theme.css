@@ -53,6 +53,18 @@
   --color-yellow-800: #76670a;
   --color-yellow-900: #453c08;
 
+  /* Orange Colors  */
+  --color-orange-50: #fef9f5;
+  --color-orange-100: #fdf2e7;
+  --color-orange-200: #fbe5cf;
+  --color-orange-300: #f7d1a3;
+  --color-orange-400: #f2b067;
+  --color-orange-500: #dd8721;
+  --color-orange-600: #c6731d;
+  --color-orange-700: #9f5c17;
+  --color-orange-800: #714112;
+  --color-orange-900: #42260a;
+
   /* animations */
   --animate-wiggle: wiggle 1s ease-in-out infinite;
 

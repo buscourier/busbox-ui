@@ -1,11 +1,12 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, HostListener, inject, signal } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { TuiDropdownMobile } from '@taiga-ui/addon-mobile';
 import { TuiActiveZone } from '@taiga-ui/cdk';
 import { TuiButton, TuiDropdown, TuiDropdownManual, TuiIcon, TuiPopup } from '@taiga-ui/core';
-import { TuiDrawer } from '@taiga-ui/kit';
-import type { Observable } from 'rxjs';
+import { TuiDrawer, TuiLineClamp } from '@taiga-ui/kit';
+import { type Observable, startWith } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 import { NavigationService } from '@core/services';
 import { BreakpointService } from '@core/services/breakpoint.service';
@@ -39,6 +40,7 @@ import { NavigationComponent } from '../navigation';
     RouterLinkActive,
     ContactLinkPipe,
     TuiDropdownMobile,
+    TuiLineClamp,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
@@ -54,6 +56,18 @@ export class HeaderComponent {
   private readonly router = inject(Router);
   private breakpointsService = inject(BreakpointService);
 
+  isPhoneAvailable$ = this.router.events.pipe(
+    filter((event) => event instanceof NavigationEnd),
+    map(() => {
+      const url = this.router.url;
+      return url === '/' || url === '/home' || url.includes('/delivery/calculator');
+    }),
+    startWith(() => {
+      const url = this.router.url;
+      return url === '/' || url === '/home' || url.includes('/delivery/calculator');
+    }),
+  );
+
   isUserMenuOpen = false;
 
   protected readonly mobileMenuOpen = signal(false);
@@ -63,22 +77,6 @@ export class HeaderComponent {
     if (this.breakpointsService.isXl()) {
       this.closeMobileMenu();
     }
-  }
-
-  get isHomePage(): boolean {
-    return this.router.url === '/' || this.router.url === '/home';
-  }
-
-  get isDeliveryPage(): boolean {
-    return this.router.url.includes('delivery');
-  }
-
-  get isTrackingPage(): boolean {
-    return this.router.url.includes('tracking');
-  }
-
-  get isPhoneNumberAvailable(): boolean {
-    return this.isHomePage || this.isDeliveryPage || this.isTrackingPage;
   }
 
   get currentUser(): Observable<AuthResponse | null> {

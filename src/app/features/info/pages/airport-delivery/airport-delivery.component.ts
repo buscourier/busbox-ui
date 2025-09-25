@@ -1,7 +1,4 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { TuiNotification } from '@taiga-ui/core';
-import { TuiBadge } from '@taiga-ui/kit';
 
 import { NavigationService } from '@core/services';
 import { CONTACT_INFO } from '@core/tokens';
@@ -9,26 +6,26 @@ import { CONTACT_INFO } from '@core/tokens';
 import { type BrandCard, BrandCardComponent } from '@shared/components/brand-card';
 import { CarouselComponent } from '@shared/components/carousel';
 import { ListComponent, ListItemDirective } from '@shared/components/list';
-import { StepCardComponent, StepDirective, StepsComponent } from '@shared/components/steps';
+import {
+  type Step,
+  StepCardComponent,
+  StepDirective,
+  StepsComponent,
+} from '@shared/components/steps';
 import { DocumentsListComponent } from '@shared/features/documents';
-import { ContactLinkPipe } from '@shared/pipes';
 
 @Component({
   selector: 'app-airport-delivery',
   imports: [
     StepsComponent,
     StepDirective,
-    RouterLink,
     DocumentsListComponent,
     BrandCardComponent,
     BrandCardComponent,
     CarouselComponent,
-    ContactLinkPipe,
     StepCardComponent,
-    TuiBadge,
     ListComponent,
     ListItemDirective,
-    TuiNotification,
   ],
   templateUrl: './airport-delivery.component.html',
   styleUrl: './airport-delivery.component.css',
@@ -61,7 +58,7 @@ export class AirportDeliveryComponent {
     return '/' + this.navigationService.findByLink('delivery/booking')!.link;
   }
 
-  steps = [
+  steps: Step[] = [
     {
       id: 1,
       icon: '@tui.info',
@@ -75,10 +72,12 @@ export class AirportDeliveryComponent {
         {
           text: 'Оформить на сайте',
           href: this.deliveryLink,
+          type: 'route',
         },
         {
           text: this.contact.phone,
           href: this.contact.phone,
+          type: 'tel',
         },
       ],
     },

@@ -21,6 +21,7 @@ export interface ResetPasswordPayload {
 export interface AuthResponse {
   id: string;
   auth_key: string;
+  email: string;
   user_name: string;
   user_type: string;
 }

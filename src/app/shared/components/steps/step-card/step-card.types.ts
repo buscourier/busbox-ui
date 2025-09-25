@@ -1,6 +1,7 @@
 interface StepAction {
   text: string;
   href: string;
+  type: 'route' | 'tel' | 'email';
 }
 
 export interface Step {

@@ -1,97 +1,88 @@
-<section class="bg-white">
-  <div class="">
-    <div class="mb-32">
-      <div class="grid items-center gap-8 lg:grid-cols-2">
-        <div class="order-2 lg:order-1">
-          <div class="mb-2">
-            <span class="text-sm font-medium tracking-wide text-yellow-500 uppercase">
-              Основная услуга
-            </span>
+<app-page-layout class="pb-0!">
+  <section class="bg-white">
+    <div class="">
+      <div class="mb-16 lg:mb-32">
+        <div class="grid items-center gap-8 lg:grid-cols-2">
+          <div class="order-2 lg:order-1">
+            <div class="mb-2">
+              <span class="text-sm font-medium tracking-wide text-yellow-500 uppercase">
+                Основная услуга
+              </span>
+            </div>
+            <h2 class="mb-8 text-4xl leading-tight font-light text-gray-900 lg:text-5xl">
+              Грузоперевозки
+              <br />
+              <span class="font-normal">по Приморью</span>
+            </h2>
+            <p class="mb-8 max-w-2xl text-lg leading-relaxed font-light text-gray-600">
+              Ежедневные рейсы между городами Приморского края и Хабаровском. Надежно, быстро, с
+              полным контролем на каждом этапе.
+            </p>
+
+            <div class="mb-12 space-y-4">
+              <div class="flex items-center text-gray-700">
+                <div class="mr-4 h-2 w-2 rounded-full bg-yellow-500"></div>
+                <span class="font-light">Отслеживание в реальном времени</span>
+              </div>
+              <div class="flex items-center text-gray-700">
+                <div class="mr-4 h-2 w-2 rounded-full bg-yellow-500"></div>
+                <span class="font-light">Страхование груза</span>
+              </div>
+              <div class="flex items-center text-gray-700">
+                <div class="mr-4 h-2 w-2 rounded-full bg-yellow-500"></div>
+                <span class="font-light">Доставка от двери до двери</span>
+              </div>
+            </div>
           </div>
-          <h2 class="mb-8 text-4xl leading-tight font-light text-gray-900 lg:text-5xl">
-            Грузоперевозки
-            <br />
-            <span class="font-normal">по Приморью</span>
-          </h2>
-          <p class="mb-8 text-lg leading-relaxed font-light text-gray-600">
-            Ежедневные рейсы между городами Приморского края и Хабаровском. Надежно, быстро, с
-            полным контролем на каждом этапе.
-          </p>
 
-          <div class="mb-12 space-y-4">
-            <div class="flex items-center text-gray-700">
-              <div class="mr-4 h-2 w-2 rounded-full bg-yellow-500"></div>
-              <span class="font-light">Отслеживание в реальном времени</span>
-            </div>
-            <div class="flex items-center text-gray-700">
-              <div class="mr-4 h-2 w-2 rounded-full bg-yellow-500"></div>
-              <span class="font-light">Страхование включено</span>
-            </div>
-            <div class="flex items-center text-gray-700">
-              <div class="mr-4 h-2 w-2 rounded-full bg-yellow-500"></div>
-              <span class="font-light">Доставка от двери до двери</span>
-            </div>
+          <div *appBreakpoint="{ showOn: 'lg' }" class="order-1 lg:order-2">
+            <app-route-map />
           </div>
-
-          <button
-            class="inline-flex items-center rounded-full border border-gray-300 px-6 py-3 font-medium transition-colors duration-300 hover:border-gray-900"
-          >
-            Узнать подробнее
-            <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.5"
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              ></path>
-            </svg>
-          </button>
-        </div>
-
-        <div class="order-1 lg:order-2">
-          <app-route-map />
         </div>
       </div>
-    </div>
 
-    <div class="mb-20 text-center">
-      <h2 class="mb-6 text-4xl font-light text-gray-900 lg:text-5xl">Дополнительные услуги</h2>
-      <p class="mx-auto max-w-2xl text-lg font-light text-gray-600">
-        Полный спектр логистических решений для ваших потребностей
+      <div class="mb-20 text-center">
+        <h2 class="mb-6 text-4xl font-light text-gray-900 lg:text-5xl">Дополнительные услуги</h2>
+        <p class="mx-auto max-w-2xl text-lg font-light text-gray-600">
+          Полный спектр логистических решений для ваших потребностей
+        </p>
+
+        <section class="mt-10">
+          <app-carousel [items]="services" [itemTemplate]="slideTemplate"></app-carousel>
+        </section>
+
+        <ng-template #slideTemplate let-service>
+          <app-service-card [service]="service" />
+        </ng-template>
+      </div>
+    </div>
+  </section>
+
+  <section class="full-width-section relative bg-gray-50 py-24 text-center">
+    <div class="container mx-auto px-4">
+      <h2 class="mb-8 text-4xl leading-tight font-light text-gray-900 lg:text-5xl">
+        Начните с нами прямо сейчас
+      </h2>
+      <p class="mx-auto mb-12 max-w-2xl text-xl font-light text-gray-600">
+        Расчет стоимости займет меньше минуты, а доставка будет надежной и быстрой
       </p>
 
-      <section class="mt-10">
-        <app-carousel [items]="services" [itemTemplate]="slideTemplate"></app-carousel>
-      </section>
-
-      <ng-template #slideTemplate let-service>
-        <app-service-card [service]="service" />
-      </ng-template>
+      <div class="flex flex-col items-center justify-center gap-6 sm:flex-row">
+        <button
+          type="button"
+          class="cursor-pointer rounded-full bg-gray-900 px-10 py-4 font-medium text-white shadow-lg transition-all duration-300 hover:bg-gray-800 hover:shadow-xl"
+          [routerLink]="deliveryLink"
+        >
+          Рассчитать стоимость
+        </button>
+        <button
+          type="button"
+          class="cursor-pointer rounded-full border border-gray-300 px-10 py-4 font-medium text-gray-700 transition-all duration-300 hover:border-gray-900 hover:text-gray-900"
+          [routerLink]="feedbackLink"
+        >
+          Связаться с нами
+        </button>
+      </div>
     </div>
-  </div>
-</section>
-
-<section class="full-width-section relative top-10 -mt-10 bg-gray-50 py-24 text-center">
-  <div class="container mx-auto px-4">
-    <h2 class="mb-8 text-4xl leading-tight font-light text-gray-900 lg:text-5xl">
-      Начните с нами прямо сейчас
-    </h2>
-    <p class="mx-auto mb-12 max-w-2xl text-xl font-light text-gray-600">
-      Расчет стоимости займет меньше минуты, а доставка будет надежной и быстрой
-    </p>
-
-    <div class="flex flex-col items-center justify-center gap-6 sm:flex-row">
-      <a
-        class="rounded-full bg-gray-900 px-10 py-4 font-medium text-white shadow-lg transition-all duration-300 hover:bg-gray-800 hover:shadow-xl"
-        [routerLink]="deliveryLink"
-      >
-        Рассчитать стоимость
-      </a>
-      <button
-        class="rounded-full border border-gray-300 px-10 py-4 font-medium text-gray-700 transition-all duration-300 hover:border-gray-900 hover:text-gray-900"
-      >
-        Связаться с нами
-      </button>
-    </div>
-  </div>
-</section>
+  </section>
+</app-page-layout>

@@ -40,4 +40,6 @@ export class OrderDetailsDialogComponent implements OnInit {
   getSkeletonArray(): number[] {
     return Array(24).fill(0);
   }
+
+  protected readonly parseInt = parseInt;
 }

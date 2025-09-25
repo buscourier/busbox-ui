@@ -45,4 +45,10 @@
   select {
     font-size: 16px !important;
   }
+
+  .print-only,
+  .t-head-print-only,
+  .t-foot-print-only {
+    display: none;
+  }
 }

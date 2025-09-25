@@ -9,18 +9,17 @@ export const profileRoutes: Routes = [
   {
     path: '',
     component: ProfileComponent,
-    data: { title: 'Персональные данные' },
     children: [
       {
         path: '',
         component: ProfileViewComponent,
-        data: { title: 'Персональные данные', hideBreadcrumb: true },
+        data: { pageKey: 'profile' },
       },
       {
         path: 'edit',
         component: ProfileEditComponent,
         canDeactivate: [unsavedChangesGuard],
-        data: { title: 'Редактирование данных' },
+        data: { pageKey: 'profile' },
       },
     ],
   },

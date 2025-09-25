@@ -7,13 +7,14 @@ import { tap } from 'rxjs';
 import { type Case, CasesService } from '@core/services';
 
 import { ContactFormComponent } from '@shared/components/contact-form';
+import { PageLayoutComponent } from '@shared/layouts/page-layout';
 
 import { CaseCardComponent } from './case-card';
 import { CaseDetailsComponent } from './case-details';
 
 @Component({
   selector: 'app-complex-tasks',
-  imports: [ContactFormComponent, CaseCardComponent],
+  imports: [ContactFormComponent, CaseCardComponent, PageLayoutComponent],
   templateUrl: './complex-tasks.component.html',
   styleUrl: './complex-tasks.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

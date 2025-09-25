@@ -1,26 +1,24 @@
-import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { TuiNotification } from '@taiga-ui/core';
-import { TuiSkeleton } from '@taiga-ui/kit';
 
 import { CONTACT_INFO } from '@core/tokens';
 
 import { ContentScrollerComponent } from '@shared/components/content-scroller';
 import { ListComponent, ListItemDirective } from '@shared/components/list';
 import { SimpleTableComponent } from '@shared/components/simple-table';
+import { PageLayoutComponent } from '@shared/layouts/page-layout';
 import { ContactLinkPipe } from '@shared/pipes';
 
 @Component({
   selector: 'app-insurance',
   imports: [
-    NgOptimizedImage,
     SimpleTableComponent,
     ListComponent,
     ListItemDirective,
     ContactLinkPipe,
-    TuiSkeleton,
     ContentScrollerComponent,
     TuiNotification,
+    PageLayoutComponent,
   ],
   templateUrl: './insurance.component.html',
   styleUrl: './insurance.component.css',

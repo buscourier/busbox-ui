@@ -8,8 +8,14 @@ import { NavigationService } from '@core/services';
 import { CONTACT_INFO } from '@core/tokens';
 
 import { ListComponent, ListItemDirective } from '@shared/components/list';
-import { StepCardComponent, StepDirective, StepsComponent } from '@shared/components/steps';
+import {
+  type Step,
+  StepCardComponent,
+  StepDirective,
+  StepsComponent,
+} from '@shared/components/steps';
 import { SidebarLayoutComponent } from '@shared/layouts';
+import { PageLayoutComponent } from '@shared/layouts/page-layout';
 import type { ApiError } from '@shared/types';
 
 import { CourierService, type GroupedCities } from './courier.service';
@@ -27,6 +33,7 @@ import { CourierService, type GroupedCities } from './courier.service';
     TuiRepeatTimes,
     TuiSkeleton,
     StepCardComponent,
+    PageLayoutComponent,
   ],
   templateUrl: './courier.component.html',
   styleUrl: './courier.component.css',
@@ -49,7 +56,7 @@ export class CourierComponent implements OnInit {
     return '/' + this.navigationService.findByLink('tracking')!.link;
   }
 
-  steps = [
+  steps: Step[] = [
     {
       id: 1,
       icon: '@tui.truck-electric',
@@ -63,10 +70,12 @@ export class CourierComponent implements OnInit {
         {
           text: 'Оформить доставку',
           href: this.deliveryLink,
+          type: 'route',
         },
         {
           text: this.contact.phone,
           href: this.contact.phone,
+          type: 'tel',
         },
       ],
     },
@@ -88,10 +97,12 @@ export class CourierComponent implements OnInit {
         {
           text: 'Проверить статус на сайте',
           href: this.trackingLink,
+          type: 'route',
         },
         {
           text: this.contact.phone,
           href: this.contact.phone,
+          type: 'tel',
         },
       ],
     },

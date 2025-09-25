@@ -12,12 +12,10 @@ export const accountRoutes: Routes = [
       {
         path: '',
         component: LayoutComponent,
-        // data: { pageKey: 'account' },
       },
       {
         path: 'profile',
         loadChildren: () => import('./profile').then((m) => m.profileRoutes),
-        data: { pageKey: 'profile' },
       },
       {
         path: 'orders',

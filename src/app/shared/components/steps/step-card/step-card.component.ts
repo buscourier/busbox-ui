@@ -4,11 +4,13 @@ import { TuiIcon } from '@taiga-ui/core';
 
 import { cn } from '@core/utils';
 
+import { ContactLinkPipe } from '@shared/pipes';
+
 import type { Step } from './step-card.types';
 
 @Component({
   selector: 'app-step-card',
-  imports: [TuiIcon, RouterLink],
+  imports: [TuiIcon, RouterLink, ContactLinkPipe],
   templateUrl: './step-card.component.html',
   styleUrl: './step-card.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

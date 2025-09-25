@@ -4,15 +4,19 @@
     class="step-item relative flex translate-y-8 gap-6 opacity-0 transition-all duration-700 ease-out"
     [style.transition-delay.ms]="stepIndex * animationDelay"
   >
-    <div class="flex flex-col items-center">
+    <div
+      class="absolute -top-6 left-1/2 flex -translate-x-1/2 flex-col items-center min-[460px]:static min-[460px]:top-auto min-[460px]:left-auto min-[460px]:translate-x-0"
+    >
       <div [class]="stepPointClass">
         {{ $index + 1 }}
       </div>
       @if (!$last) {
-        <div class="mt-4 h-16 w-0.5 bg-gradient-to-b from-yellow-500/80 to-yellow-500/40"></div>
+        <div
+          class="mt-4 hidden h-16 w-0.5 bg-gradient-to-b from-yellow-500/80 to-yellow-500/40 min-[460px]:block"
+        ></div>
       }
     </div>
-    <div class="group flex-1 pb-16">
+    <div class="group flex-1 pb-16" [class.pb-0!]="$last">
       <div [class]="stepContentClass">
         <ng-container *ngTemplateOutlet="step.template"></ng-container>
       </div>

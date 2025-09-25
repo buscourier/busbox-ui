@@ -2,7 +2,12 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { NavigationService } from '@core/services';
 
-import { StepsComponent, StepDirective, StepCardComponent } from '@shared/components/steps';
+import {
+  StepsComponent,
+  StepDirective,
+  StepCardComponent,
+  type Step,
+} from '@shared/components/steps';
 import { SidebarLayoutComponent } from '@shared/layouts';
 
 @Component({
@@ -31,7 +36,7 @@ export class HowToSendComponent {
     return '/' + this.navigationService.findByLink('cargo-rules')!.link;
   }
 
-  shippingSteps = [
+  shippingSteps: Step[] = [
     {
       id: 1,
       icon: '@tui.package',
@@ -40,10 +45,12 @@ export class HowToSendComponent {
         {
           text: 'Оформить доставку',
           href: this.deliveryLink,
+          type: 'route',
         },
         {
           text: 'Адреса филиалов',
           href: this.contactsLink,
+          type: 'route',
         },
       ],
     },
@@ -65,6 +72,7 @@ export class HowToSendComponent {
         {
           text: 'Смотреть виды упаковок',
           href: this.packagingLink,
+          type: 'route',
         },
       ],
     },
@@ -76,6 +84,7 @@ export class HowToSendComponent {
         {
           text: 'Смотреть правила приемки',
           href: this.rulesLink,
+          type: 'route',
         },
       ],
     },
@@ -87,6 +96,7 @@ export class HowToSendComponent {
         {
           text: 'Смотреть запрещенные грузы',
           href: this.rulesLink,
+          type: 'route',
         },
       ],
     },

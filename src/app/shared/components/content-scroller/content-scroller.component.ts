@@ -22,7 +22,7 @@ export class ContentScrollerComponent implements AfterViewInit {
   @ViewChild('scrollProgress', { static: false }) scrollProgress!: ElementRef<HTMLElement>;
 
   @HostBinding('class') get hostClasses(): string {
-    return cn('block rounded-lg p-4 shadow-lg');
+    return cn('block rounded-lg p-4 shadow-md');
   }
 
   get scrollIndicatorClass(): string {

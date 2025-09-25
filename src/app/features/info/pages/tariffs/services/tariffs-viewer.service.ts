@@ -33,7 +33,8 @@ export class TariffsViewerService extends PdfViewerService {
   generateTariffs(
     containers: {
       zones?: HTMLElement;
-      parcels?: HTMLElement;
+      parcelsFirst?: HTMLElement;
+      parcelsSecond?: HTMLElement;
       autoparts?: HTMLElement;
       other?: HTMLElement;
     },
@@ -42,7 +43,8 @@ export class TariffsViewerService extends PdfViewerService {
   ): Observable<void> {
     const elements = [
       containers.zones,
-      containers.parcels,
+      containers.parcelsFirst,
+      containers.parcelsSecond,
       containers.autoparts,
       containers.other,
     ].filter(Boolean) as HTMLElement[];
@@ -55,7 +57,8 @@ export class TariffsViewerService extends PdfViewerService {
 
     const labels: string[] = [];
     if (containers.zones) labels.push('Зоны доставки');
-    if (containers.parcels) labels.push('Документы и грузы');
+    if (containers.parcelsFirst) labels.push('Документы и грузы');
+    if (containers.parcelsSecond) labels.push('Документы и грузы');
     if (containers.autoparts) labels.push('Автозапчасти');
     if (containers.other) labels.push('Другое');
 

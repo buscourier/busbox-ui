@@ -35,7 +35,7 @@ export class ListComponent {
   }
 
   get listClasses() {
-    return cn('flex flex-col', {
+    return cn('flex flex-col text-left', {
       'gap-y-2.5': this.spacing === 'sm',
       'gap-y-3': this.spacing === 'md',
       'gap-y-4': this.spacing === 'lg',

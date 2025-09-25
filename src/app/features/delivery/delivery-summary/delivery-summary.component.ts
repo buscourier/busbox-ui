@@ -106,7 +106,7 @@ export class DeliverySummaryComponent implements OnInit {
     this.isMobile$.next(this.checkIsMobile());
   }
 
-  protected onReset(event?: Event): void {
+  protected onReset(event?: Event, isCalculator?: boolean): void {
     if (event) {
       event.stopPropagation();
     }
@@ -128,6 +128,10 @@ export class DeliverySummaryComponent implements OnInit {
           if (response) {
             this.store.dispatch(DeliveryActions.resetDelivery());
             this.summaryOpen = false;
+          }
+
+          if (response && !isCalculator) {
+            this.router.navigateByUrl('/delivery');
           }
 
           return of(response);

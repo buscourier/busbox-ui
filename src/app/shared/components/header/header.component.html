@@ -15,7 +15,7 @@
 
       <!-- Right Section -->
       <div class="flex items-center gap-2">
-        @if (isPhoneNumberAvailable) {
+        @if (isPhoneAvailable$ | async) {
           <a
             [href]="contactPhone | contactLink: 'tel'"
             class="shadow-contact relative ml-auto flex size-11 items-center justify-center rounded-full border border-gray-200 bg-white transition-shadow hover:shadow-sm active:top-0.5 md:size-auto md:space-x-3 md:border-none md:px-5 md:py-3"
@@ -63,8 +63,11 @@
                     class="block size-10 rounded-full bg-gray-50"
                   />
                   <div class="flex flex-col">
-                    <b class="font-medium">{{ currentUser.user_name }}</b>
-                    <small>tafibuchgalter&#64;mail.ru</small>
+                    <tui-line-clamp
+                      class="max-w-[210px] font-medium"
+                      [content]="currentUser.user_name"
+                    />
+                    <small>{{ currentUser.email }}</small>
                   </div>
                 </div>
 
@@ -88,7 +91,13 @@
               </div>
             </ng-template>
           } @else {
-            <button type="button" tuiButton appearance="neutral" [routerLink]="['/auth/login']">
+            <button
+              type="button"
+              tuiButton
+              appearance="neutral"
+              [routerLink]="['/auth/login']"
+              class="ml-3"
+            >
               <span class="font-normal">Войти</span>
             </button>
           }

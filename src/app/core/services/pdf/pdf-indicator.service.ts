@@ -40,7 +40,8 @@ export class DefaultProgressIndicator implements ProgressIndicator {
     if (loader) {
       const progressText = loader.querySelector('span');
       if (progressText) {
-        progressText.textContent = `Создание PDF... ${current}/${total}`;
+        const percentage = total > 0 ? Math.round((current / total) * 100) : 0;
+        progressText.textContent = `Создание PDF... ${percentage}%`;
       }
     }
   }

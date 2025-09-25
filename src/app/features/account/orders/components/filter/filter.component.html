@@ -12,15 +12,24 @@
       </tui-textfield>
     </label>
 
-    <label tuiLabel>
+    <div tuiLabel>
       <span class="mb-1 block text-sm text-gray-700">Город отправления</span>
       <tui-textfield tuiChevron [stringify]="stringify" tuiDropdownMobile="Город отправления">
-        <input
-          tuiComboBox
-          [formControl]="pickupCity"
-          tuiHintAppearance="error"
-          [placeholder]="'Выберите город'"
-        />
+        @if (isMobile) {
+          <input
+            tuiSelect
+            [formControl]="pickupCity"
+            tuiHintAppearance="error"
+            [placeholder]="'Выберите город'"
+          />
+        } @else {
+          <input
+            tuiComboBox
+            [formControl]="pickupCity"
+            tuiHintAppearance="error"
+            [placeholder]="'Выберите город'"
+          />
+        }
 
         <tui-data-list-wrapper
           *tuiTextfieldDropdown
@@ -28,16 +37,25 @@
           [items]="pickupCities$ | async | tuiFilterByInput"
         />
       </tui-textfield>
-    </label>
-    <label tuiLabel>
+    </div>
+    <div tuiLabel>
       <span class="mb-1 block text-sm text-gray-700">Город получения</span>
       <tui-textfield tuiChevron [stringify]="stringify" tuiDropdownMobile="Город получения">
-        <input
-          tuiComboBox
-          [formControl]="deliveryCity"
-          tuiHintAppearance="error"
-          [placeholder]="'Выберите город'"
-        />
+        @if (isMobile) {
+          <input
+            tuiSelect
+            [formControl]="deliveryCity"
+            tuiHintAppearance="error"
+            [placeholder]="'Выберите город'"
+          />
+        } @else {
+          <input
+            tuiComboBox
+            [formControl]="deliveryCity"
+            tuiHintAppearance="error"
+            [placeholder]="'Выберите город'"
+          />
+        }
 
         <tui-data-list-wrapper
           *tuiTextfieldDropdown
@@ -45,7 +63,7 @@
           [items]="deliveryCities$ | async | tuiFilterByInput"
         />
       </tui-textfield>
-    </label>
+    </div>
     <div class="flex h-12 gap-4">
       <button
         tuiButton

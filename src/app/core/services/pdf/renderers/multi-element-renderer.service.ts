@@ -184,11 +184,11 @@ export class MultiElementRenderer<T> implements DocumentRenderer<MultiElementDat
       textAlign: 'center',
       fontWeight: 'bold',
       marginBottom: '4mm',
-      fontSize: '14px',
+      fontSize: '18px',
       color: '#000',
       borderBottom: '1px solid #e6e6e6',
       paddingBottom: '4mm',
-      lineHeight: '1.2',
+      lineHeight: '1.4',
       flexShrink: '0',
     });
     header.textContent = label.toUpperCase();
