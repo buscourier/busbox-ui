@@ -65,13 +65,18 @@ export class AppComponent implements OnInit {
     return this.router.url.includes('auth');
   }
 
+  get isFeedbackPage(): boolean {
+    return this.router.url.includes('feedback');
+  }
+
   get isAuthHeight(): boolean {
     return (
       this.isContactsPage ||
       this.isAccountPage ||
       this.isCalculatorPage ||
       this.isDocumentsPage ||
-      this.isAuthPage
+      this.isAuthPage ||
+      this.isFeedbackPage
     );
   }
 
