@@ -9,14 +9,12 @@
   <!--  </div>-->
 </div>
 
-<div class="text-center min-[460px]:text-left">
+<div class="text-justify min-[460px]:text-left">
   <ng-content />
 </div>
 
 @if (step.actions; as actions) {
-  <div
-    class="mt-4 flex flex-col items-center justify-center gap-3 min-[460px]:flex-row min-[460px]:justify-start"
-  >
+  <div class="mt-4 flex items-center justify-center gap-3 min-[460px]:justify-start">
     @for (action of actions; track $index) {
       @switch (action.type) {
         @case ('tel') {

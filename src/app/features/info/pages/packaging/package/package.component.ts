@@ -36,7 +36,7 @@ export class PackageComponent {
 
   get imageClasses() {
     return cn(
-      'mb-7 block rounded-sm bg-gray-50 text-gray-50',
+      'mb-4 block h-[175px] w-full rounded-sm bg-gray-50 object-cover text-gray-50 min-[460px]:max-w-[270px]',
       'md:col-start-2 md:row-span-3 md:row-start-1',
       'lg:col-start-1 lg:row-span-1 lg:row-start-3',
       'xl:col-start-2 xl:row-span-3 xl:row-start-1',
@@ -46,7 +46,7 @@ export class PackageComponent {
   get priceClasses() {
     return cn(
       'col-start-1 mt-2.5 px-7 py-3',
-      'flex items-center space-x-0.5 justify-self-start',
+      'flex items-center space-x-0.5 justify-self-center min-[460px]:justify-self-start',
       'rounded-md border-2 border-yellow-500',
     );
   }
