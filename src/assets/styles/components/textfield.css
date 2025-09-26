@@ -25,3 +25,9 @@ tui-textfield select:defined._empty {
 tui-textfield {
   @apply text-[15px]!;
 }
+
+@media (hover: none) and (pointer: coarse) {
+  tui-textfield[data-size='m'][tuiChevron][tuiIcons]:after {
+    pointer-events: none;
+  }
+}
