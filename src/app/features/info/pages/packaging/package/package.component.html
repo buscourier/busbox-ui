@@ -1,10 +1,12 @@
-<b class="col-start-1 mt-6 mb-2.5 block text-[22px] leading-7 font-medium min-[460px]:mt-2">
+<b
+  class="col-start-1 mt-6 mb-2.5 block text-center text-[22px] leading-7 font-medium min-[460px]:mt-2 min-[460px]:text-left"
+>
   {{ title }}
 </b>
-<p class="col-start-1 mb-6 text-gray-500">
+<p class="col-start-1 mb-6 text-justify text-gray-500 min-[460px]:text-left">
   <ng-content></ng-content>
 </p>
-<img [ngSrc]="image + '.jpg'" [alt]="title" width="270" height="175" [class]="imageClasses" />
+<img [ngSrc]="image + '.jpg'" [alt]="title" width="800" height="550" [class]="imageClasses" />
 @if (table) {
   <app-simple-table class="relative col-start-1" [columns]="table.columns" [data]="table.rows" />
 }

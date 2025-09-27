@@ -6,16 +6,10 @@
       {{ 'fields.quantity' | transloco }}
 
       <tui-textfield>
-        <input
-          tuiInputNumber
-          placeholder="0"
-          [formControl]="quantity"
-          (blur)="setMinQuantityOnBlur()"
-          [step]="1"
-        />
+        <input tuiInputNumber placeholder="0" [formControl]="quantity" [step]="1" />
       </tui-textfield>
     </label>
-    <button type="button" tuiButton size="m" (click)="onSubmit()">
+    <button type="button" tuiButton size="m" (click)="onSubmit()" [disabled]="quantity.invalid">
       {{ 'buttons.add' | transloco }}
     </button>
   </div>

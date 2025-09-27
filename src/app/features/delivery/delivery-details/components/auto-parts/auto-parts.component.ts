@@ -1,4 +1,4 @@
-import { type OnInit, signal } from '@angular/core';
+import { type OnInit } from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -16,6 +16,9 @@ import { debounceTime } from 'rxjs';
 import { DEBOUNCE_TIME } from '@core/constants';
 
 // eslint-disable-next-line import/no-internal-modules
+import { CargoRestrictionsService } from '@delivery/delivery-details/services';
+
+// eslint-disable-next-line import/no-internal-modules
 import { PARCEL_ITEM_DEFAULTS, parcelItemAnimation } from '../../shared/components/parcel-item';
 import { PARCEL_ITEM_LIMIT_TOKEN } from '../../tokens';
 import type { AutoPart, AutoPartPreset, AutoParts } from '../../types';
@@ -31,20 +34,8 @@ import { AutoPartComponent } from './auto-part';
   providers: [
     {
       provide: PARCEL_ITEM_LIMIT_TOKEN,
-      useValue: signal({
-        QUANTITY: {
-          MIN: 1,
-          MAX: 10,
-        },
-        WEIGHT: {
-          MIN: 1,
-          MAX: 60,
-        },
-        DIMENSIONS: {
-          MIN: 1,
-          MAX: 380,
-        },
-      }),
+      useFactory: (limits: CargoRestrictionsService) => limits.parcelItemLimits,
+      deps: [CargoRestrictionsService],
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,

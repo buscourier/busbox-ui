@@ -95,7 +95,7 @@ export class CourierComponent implements OnInit {
       title: 'Следите за доставкой онлайн',
       actions: [
         {
-          text: 'Проверить статус на сайте',
+          text: 'Проверить статус',
           href: this.trackingLink,
           type: 'route',
         },
