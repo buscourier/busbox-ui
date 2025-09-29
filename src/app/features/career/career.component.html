@@ -52,7 +52,7 @@
           width="3510"
           height="2340"
           sizes="(min-width: 1024px) 1170px, 100vw"
-          class="min-h-min min-w-[360px] rounded-3xl bg-gray-50 text-gray-50"
+          class="min-h-min min-w-[320px] rounded-3xl bg-gray-50 text-gray-50"
         />
       </div>
     </div>
@@ -71,7 +71,7 @@
     class="mt-16 md:grid md:grid-cols-2 md:grid-rows-[repeat(2,auto)] md:gap-x-7 lg:mt-20 xl:mt-28 xl:gap-x-9 xl:pl-16"
   >
     <section class="col-start-1 col-end-2 row-span-full row-start-1 mb-7.5 max-w-xl md:mb-0">
-      <h2 class="mb-6 text-3xl font-medium">Мы предлагаем:</h2>
+      <h2 class="lg:2xl mb-6 text-xl font-medium">Мы предлагаем:</h2>
       <app-list class="max-w-[520px]">
         @for (item of suggestions; track $index) {
           <span *appListItem>{{ item }}</span>
@@ -79,7 +79,7 @@
       </app-list>
     </section>
     <section class="col-start-2 col-end-3 row-start-1 row-end-2 mb-7.5 max-w-xl lg:mb-11">
-      <h2 class="mb-6 text-3xl font-medium">Тебе предстоит:</h2>
+      <h2 class="lg:2xl mb-6 text-xl font-medium">Тебе предстоит:</h2>
       <app-list class="max-w-[520px]">
         @for (task of tasks; track $index) {
           <span *appListItem>{{ task }}</span>
@@ -87,7 +87,7 @@
       </app-list>
     </section>
     <section class="col-start-2 col-end-3 row-start-2 row-end-3 mb-12 max-w-xl md:mb-0">
-      <h2 class="mb-6 text-3xl font-medium">Ты - наш человек, если:</h2>
+      <h2 class="lg:2xl mb-6 text-xl font-medium">Ты - наш человек, если:</h2>
       <app-list class="max-w-[520px]">
         @for (item of matches; track $index) {
           <span *appListItem>{{ item }}</span>
@@ -108,7 +108,7 @@
           type="button"
           tuiButton
           appearance="accent"
-          class="w-[240px]"
+          class="sm:w-[240px]"
           (click)="openResume()"
         >
           Заполнить форму
@@ -118,7 +118,7 @@
           [href]="contact.email | contactLink: 'email'"
           tuiButton
           appearance="outline"
-          class="group/email relative w-[240px]"
+          class="group/email relative sm:w-[240px]"
         >
           <span class="absolute transition-all group-hover/email:-translate-y-100">
             Отправить на почту
