@@ -12,7 +12,7 @@ import { cn } from '@core/utils';
 })
 export class CompanyStatsComponent {
   @HostBinding('class') get hostClasses(): string {
-    return cn('grid grid-cols-2 gap-8 lg:grid-cols-4');
+    return cn('grid gap-8 min-[420px]:grid-cols-2 lg:grid-cols-4');
   }
 
   stats = [
