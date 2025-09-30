@@ -118,7 +118,7 @@
         </tbody>
       </table>
     </div>
-    <div class="mt-4">
+    <div class="mt-8 flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
       <button
         tuiButton
         appearance="outline"
@@ -126,16 +126,17 @@
         [loading]="list.isExporting"
         (click)="onExport()"
         [disabled]="!list.canExport || list.isExporting"
+        class="order-2 sm:order-1"
       >
         Экспорт в Excel
       </button>
 
       @if (list.pagination.isVisible) {
         <tui-pagination
-          [style.float]="'right'"
           [length]="list.pagination.totalPages"
           [index]="list.pagination.currentPage - 1"
           (indexChange)="onPageChange($event)"
+          class="order-1 sm:order-2"
         />
       }
     </div>

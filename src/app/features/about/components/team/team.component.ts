@@ -18,7 +18,7 @@ import { ListComponent, ListItemDirective } from '@shared/components/list';
 export class TeamComponent {
   @HostBinding('class') get hostClasses(): string {
     return cn(
-      'gap grid grid-cols-1 items-center gap-7 md:grid-cols-2 md:gap-12 xl:grid-cols-[495px_1fr] xl:gap-20',
+      'gap grid grid-cols-1 items-start gap-7 md:grid-cols-2 md:gap-12 lg:items-center xl:grid-cols-[495px_1fr] xl:gap-20',
     );
   }
 

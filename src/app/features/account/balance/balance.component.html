@@ -1,11 +1,11 @@
 @let vm = vm$ | async;
 
 @if (vm) {
-  <div class="grid grid-cols-[1fr_auto] max-w-[270px]">
-    <div class="mb-1 text-md col-span-2" [tuiSkeleton]="vm.summary.isLoading">Ваш баланс:</div>
-    <b class="block h-13 text-4xl" [tuiSkeleton]="vm.summary.isLoading">
-      {{ vm.summary.data?.total || 0 }} {{ 'RUB' | tuiCurrency }}</b
-    >
+  <div class="text-md mb-1">Ваш баланс:</div>
+  <div class="flex items-center gap-2">
+    <b class="h-13 text-4xl leading-normal" [tuiSkeleton]="vm.summary.isLoading">
+      {{ vm.summary.data?.total || 0 }} {{ 'RUB' | tuiCurrency }}
+    </b>
     <button
       tuiIconButton
       type="button"
@@ -13,7 +13,6 @@
       iconStart="@tui.refresh-ccw"
       [tuiHint]="vm.summary.hasData && tooltip"
       tuiHintAppearance="dark"
-      class="ml-5"
       [class.animate-spin]="vm.summary.isLoading"
       (click)="loadSummary()"
     >
@@ -25,13 +24,13 @@
     <div class="text-xs">За период:</div>
     <b class="text-xs">{{ vm.summary.data?.period }}</b>
     <br />
-    <span class="text-xs">На счету: </span>
+    <span class="text-xs">На счету:</span>
     <b class="text-xs">{{ vm.summary.data?.debet }} {{ 'RUB' | tuiCurrency }}</b>
     <br />
-    <span class="text-xs">Заказов на: </span>
+    <span class="text-xs">Заказов на:</span>
     <b class="text-xs">{{ vm.summary.data?.orderSum }} {{ 'RUB' | tuiCurrency }}</b>
     <br />
-    <span class="text-xs">Услуг на: </span>
+    <span class="text-xs">Услуг на:</span>
     <b class="text-xs">{{ vm.summary.data?.serviceSum }} {{ 'RUB' | tuiCurrency }}</b>
   </ng-template>
 }

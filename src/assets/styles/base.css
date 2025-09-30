@@ -11,6 +11,12 @@
     scroll-behavior: smooth;
   }
 
+  @media (hover: none) and (pointer: coarse) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
   body {
     @apply font-roboto text-base;
   }
