@@ -4,6 +4,8 @@ import { RouterOutlet } from '@angular/router';
 import type { Observable } from 'rxjs';
 import { tap } from 'rxjs';
 
+import { PageLayoutComponent } from '@shared/layouts/page-layout';
+
 import { AuthFacade } from '@auth';
 
 import { ProfileFacade } from './profile.facade';
@@ -11,7 +13,7 @@ import type { ProfileViewModel } from './types';
 
 @Component({
   selector: 'app-profile',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, PageLayoutComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

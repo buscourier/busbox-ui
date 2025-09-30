@@ -2,6 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  ContentChild,
   HostBinding,
   inject,
   Input,
@@ -14,6 +15,8 @@ import { cn } from '@core/utils';
 
 import { BreadcrumbsComponent } from '@shared/components/breadcrumbs';
 
+import { PageHeaderContentDirective } from './page-header-content.directive';
+
 @Component({
   selector: 'app-page-layout',
   imports: [BreadcrumbsComponent, AsyncPipe],
@@ -25,6 +28,12 @@ export class PageLayoutComponent implements OnInit {
   @Input() showTitle!: boolean;
   @Input() showDescription!: boolean;
   @Input() showBreadcrumbs!: boolean;
+
+  @ContentChild(PageHeaderContentDirective) headerContent?: PageHeaderContentDirective;
+
+  get hasHeaderContent(): boolean {
+    return !!this.headerContent;
+  }
 
   @HostBinding('class') get hostClass(): string {
     return cn('block w-full pb-10 md:pb-16');

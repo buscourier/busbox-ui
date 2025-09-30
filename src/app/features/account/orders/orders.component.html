@@ -1,23 +1,23 @@
 @let vm = vm$ | async;
 
-<div class="flex justify-end">
-  <app-balance />
-</div>
+<app-page-layout [showBreadcrumbs]="true">
+  <div appPageHeaderContent class="mt-10 sm:mt-0"><app-balance /></div>
 
-@if (vm) {
-  <app-filter
-    [filter]="vm.filter"
-    (filterChange)="setFilter($event)"
-    (filterClear)="clearFilter()"
-  />
+  @if (vm) {
+    <app-filter
+      [filter]="vm.filter"
+      (filterChange)="setFilter($event)"
+      (filterClear)="clearFilter()"
+    />
 
-  <app-order-list
-    [list]="vm.list"
-    (pageChange)="navigateToPage($event)"
-    (pageSizeChange)="onPageSizeChange($event)"
-    (sortChange)="onSortChange($event)"
-    (export)="onExportToExcel()"
-    (orderSelect)="showOrderDetails($event)"
-    (orderPrint)="showOrderInvoice($event)"
-  />
-}
+    <app-order-list
+      [list]="vm.list"
+      (pageChange)="navigateToPage($event)"
+      (pageSizeChange)="onPageSizeChange($event)"
+      (sortChange)="onSortChange($event)"
+      (export)="onExportToExcel()"
+      (orderSelect)="showOrderDetails($event)"
+      (orderPrint)="showOrderInvoice($event)"
+    />
+  }
+</app-page-layout>
