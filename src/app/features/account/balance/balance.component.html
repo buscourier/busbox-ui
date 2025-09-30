@@ -1,24 +1,25 @@
 @let vm = vm$ | async;
 
 @if (vm) {
-  <div class="grid max-w-[270px] grid-cols-[1fr_auto]">
-    <div class="text-md col-span-2 mb-1">Ваш баланс:</div>
-    <b class="block h-13 min-w-36 text-4xl" [tuiSkeleton]="vm.summary.isLoading">
-      {{ vm.summary.data?.total || 0 }} {{ 'RUB' | tuiCurrency }}
-    </b>
-    <button
-      tuiIconButton
-      type="button"
-      appearance="icon"
-      iconStart="@tui.refresh-ccw"
-      [tuiHint]="vm.summary.hasData && tooltip"
-      tuiHintAppearance="dark"
-      class="ml-5"
-      [class.animate-spin]="vm.summary.isLoading"
-      (click)="loadSummary()"
-    >
-      &nbsp;
-    </button>
+  <div class="max-w-[270px]">
+    <div class="text-md mb-1">Ваш баланс:</div>
+    <div class="flex items-center gap-2">
+      <b class="h-13 text-4xl leading-normal" [tuiSkeleton]="vm.summary.isLoading">
+        {{ vm.summary.data?.total || 0 }} {{ 'RUB' | tuiCurrency }}
+      </b>
+      <button
+        tuiIconButton
+        type="button"
+        appearance="icon"
+        iconStart="@tui.refresh-ccw"
+        [tuiHint]="vm.summary.hasData && tooltip"
+        tuiHintAppearance="dark"
+        [class.animate-spin]="vm.summary.isLoading"
+        (click)="loadSummary()"
+      >
+        &nbsp;
+      </button>
+    </div>
   </div>
 
   <ng-template #tooltip>
