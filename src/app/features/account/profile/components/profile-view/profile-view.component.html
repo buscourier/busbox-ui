@@ -1,7 +1,7 @@
 @let vm = vm$ | async;
 
 @if (vm) {
-  <ul class="mb-8 pb-10 flex flex-col gap-3 border-b border-gray-200">
+  <ul class="mb-8 flex flex-col gap-3 border-b border-gray-200 pb-10">
     @if (vm.fields.isLoading) {
       @for (field of PERSONAL_FIELD_ALIASES; track field) {
         <div class="h-3" [tuiSkeleton]="true"></div>
@@ -19,7 +19,7 @@
   </ul>
 
   <h2
-    class="inline-block mb-6 font-heading text-xl font-bold"
+    class="font-heading mb-6 inline-block text-xl font-bold"
     [tuiSkeleton]="!vm.fields.organizationFields.length || vm.fields.isLoading"
   >
     Данные организации
@@ -51,19 +51,20 @@
     Изменить данные
   </button>
 
-  <div class="flex mt-8 mb-8 pt-6 pb-6 text-2xl border-y border-gray-200">
+  <div class="mt-8 mb-8 flex border-y border-gray-200 pt-6 pb-6 text-2xl">
     <b
       class="order-1 flex-shrink-0"
       [tuiSkeleton]="!vm.fields.organizationFields.length || vm.fields.isLoading"
-      >Скидка на сайте:
-    </b>
-    <b class="order-3 flex-shrink-0 ml-1.5" [tuiSkeleton]="vm.fields.isLoading"
-      >{{ vm.fields.discountField?.value }} {{ vm.fields.discountField ? '%' : '' }}</b
     >
+      Скидка на сайте:
+    </b>
+    <b class="order-3 ml-1.5 flex-shrink-0" [tuiSkeleton]="vm.fields.isLoading">
+      {{ vm.fields.discountField?.value }} {{ vm.fields.discountField ? '%' : '' }}
+    </b>
   </div>
 
   <h2
-    class="inline-block mb-6 font-heading text-xl font-bold"
+    class="font-heading mb-6 inline-block text-xl font-bold"
     [tuiSkeleton]="!vm.confidants.confidants.length || vm.confidants.isLoading"
   >
     Отправитель по доверенности
@@ -72,42 +73,42 @@
   @if (vm.confidants.isLoading) {
     <div class="mb-6 grid grid-cols-2 gap-4">
       <div>
-        <div class="h-2 mb-2" [tuiSkeleton]="true"></div>
+        <div class="mb-2 h-2" [tuiSkeleton]="true"></div>
         <div class="h-12" [tuiSkeleton]="true"></div>
       </div>
       <div>
-        <div class="h-2 mb-2" [tuiSkeleton]="true"></div>
+        <div class="mb-2 h-2" [tuiSkeleton]="true"></div>
         <div class="h-12" [tuiSkeleton]="true"></div>
       </div>
       <div>
-        <div class="h-2 mb-2" [tuiSkeleton]="true"></div>
+        <div class="mb-2 h-2" [tuiSkeleton]="true"></div>
         <div class="h-12" [tuiSkeleton]="true"></div>
       </div>
     </div>
   } @else {
-    <tui-carousel [duration]="4000" [(index)]="index" class="-ml-5">
+    <tui-carousel [duration]="4000" [(index)]="index" class="-ml-4!">
       @for (confidant of vm.confidants.confidants; track confidant.id) {
         <div *tuiItem class="mb-6 grid grid-cols-2 gap-4">
           <div>
-            <span class="block text-sm text-gray-700 mb-1">ФИО</span>
+            <span class="mb-1 block text-sm text-gray-700">ФИО</span>
             <div
-              class="h-12 p-2 flex items-center border border-y-1 border-gray-200 rounded-sm text-gray-400"
+              class="flex h-12 items-center rounded-sm border border-y-1 border-gray-200 p-2 text-gray-400"
             >
               {{ confidant.name }}
             </div>
           </div>
           <div>
-            <span class="block text-sm text-gray-700 mb-1">Телефон</span>
+            <span class="mb-1 block text-sm text-gray-700">Телефон</span>
             <div
-              class="h-12 p-2 flex items-center border border-y-1 border-gray-200 rounded-sm text-gray-400"
+              class="flex h-12 items-center rounded-sm border border-y-1 border-gray-200 p-2 text-gray-400"
             >
               {{ confidant.phone }}
             </div>
           </div>
           <div>
-            <span class="block text-sm text-gray-700 mb-1">Номер доверенности</span>
+            <span class="mb-1 block text-sm text-gray-700">Номер доверенности</span>
             <div
-              class="h-12 p-2 flex items-center border border-y-1 border-gray-200 rounded-sm text-gray-400"
+              class="flex h-12 items-center rounded-sm border border-y-1 border-gray-200 p-2 text-gray-400"
             >
               {{ confidant.warrant }}
             </div>
@@ -115,10 +116,13 @@
         </div>
       }
     </tui-carousel>
-    <tui-pagination
-      [(index)]="index"
-      [length]="vm.confidants.confidants.length"
-      [tuiSkeleton]="!vm.confidants.confidants.length || vm.confidants.isLoading"
-    />
+
+    @if (vm.confidants.confidants.length > 1) {
+      <tui-pagination
+        [(index)]="index"
+        [length]="vm.confidants.confidants.length"
+        [tuiSkeleton]="!vm.confidants.confidants.length || vm.confidants.isLoading"
+      />
+    }
   }
 }
