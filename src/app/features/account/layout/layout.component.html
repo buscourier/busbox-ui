@@ -34,12 +34,12 @@
       <button
         tuiButton
         type="button"
-        class="mt-7 mb-4 w-[270px]"
-        [routerLink]="['/new-order', 'checkout', '1']"
+        class="mt-7 mb-4 w-full max-w-[275px]!"
+        [routerLink]="bookingLink"
       >
         Оформить заказ
       </button>
-      <a href="#" class="space-x-1 md:text-xs lg:text-base">
+      <button type="button" tuiButton appearance="flat" class="font-normal!" (click)="logout()">
         <span>Выйти из личного кабинета</span>
         <tui-icon
           icon="logout"
@@ -47,8 +47,7 @@
           [style.background]="'var(--color-yellow-500)'"
           [style.font-size.rem]="2"
         />
-        <!--        <tui-svg src="icons::logout" class="!h-[27px] !w-[27px]"></tui-svg>-->
-      </a>
+      </button>
     </aside>
   </div>
 </app-page-layout>
