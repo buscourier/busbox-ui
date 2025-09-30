@@ -1,7 +1,9 @@
 @let vm = vm$ | async;
 
 <app-page-layout [showBreadcrumbs]="true">
-  <div appPageHeaderContent class="mt-10 sm:mt-0"><app-balance /></div>
+  <div appPageHeaderContent class="mt-10 flex justify-end sm:mt-0">
+    <app-balance />
+  </div>
 
   @if (vm) {
     <app-filter
