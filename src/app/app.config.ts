@@ -1,7 +1,7 @@
 import { provideImageKitLoader, registerLocaleData } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import localeRu from '@angular/common/locales/ru';
-import { type ApplicationConfig, inject, LOCALE_ID, signal } from '@angular/core';
+import { type ApplicationConfig } from '@angular/core';
 import { isDevMode, provideZoneChangeDetection } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withInMemoryScrolling, withViewTransitions } from '@angular/router';
@@ -10,54 +10,22 @@ import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore } from '@ngrx/router-store';
 import { provideState, provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
-import type { TuiStringHandler } from '@taiga-ui/cdk';
-import {
-  TUI_ICON_RESOLVER,
-  tuiButtonOptionsProvider,
-  tuiTextfieldOptionsProvider,
-} from '@taiga-ui/core';
-import { NG_EVENT_PLUGINS } from '@taiga-ui/event-plugins';
-import { TUI_LANGUAGE, TUI_RUSSIAN_LANGUAGE } from '@taiga-ui/i18n';
-import {
-  tuiCheckboxOptionsProvider,
-  tuiInputDateOptionsProviderNew,
-  tuiInputDateRangeOptionsProvider,
-  tuiInputNumberOptionsProvider,
-  tuiRadioOptionsProvider,
-} from '@taiga-ui/kit';
-import { TUI_TEXTFIELD_LABEL_OUTSIDE, TUI_TEXTFIELD_SIZE } from '@taiga-ui/legacy';
-import type { YConfig } from 'angular-yandex-maps-v3';
+import { provideEventPlugins } from '@taiga-ui/event-plugins';
 import { provideYConfig } from 'angular-yandex-maps-v3';
-import { of } from 'rxjs';
 
-import { DEFAULT_VALIDATION_LIMITS } from '@core/config';
-import { PreloadIconsService } from '@core/services';
-import { NavigationDirectionService } from '@core/services/navigation-direction.service';
+import { getMapConfig, getScrollConfig, getViewTransitionsConfig } from '@core/config';
 import {
-  DefaultDomProcessor,
-  DefaultProgressIndicator,
-  DualDocumentRenderer,
-  HtmlToImageConverter,
-  JsPdfBuilder,
-} from '@core/services/pdf';
-import {
-  CONTACT_INFO,
-  DOCUMENT_RENDERER,
-  DOM_PROCESSOR,
-  EMAIL,
-  IMAGE_CONVERTER,
-  PDF_BUILDER,
-  PHONE_NUMBER,
-  PROGRESS_INDICATOR,
-  TELEGRAM_ACCOUNT,
-  VALIDATION_LIMITS,
-  WHATSAPP,
-} from '@core/tokens';
-import { CustomDateRangeTransformer, CustomDateTransformer } from '@core/transformers';
+  CONTACTS_PROVIDERS,
+  DATE_PROVIDERS,
+  LANGUAGE_PROVIDERS,
+  PDF_PROVIDERS,
+  provideIconResolver,
+  provideValidationLimits,
+  UI_PROVIDERS,
+} from '@core/providers';
 
 import { DocumentsEffects, documentsFeature } from '@shared/features/documents';
 import { LocationsEffects, locationsFeature } from '@shared/store';
-import { routeSnapshotToUrl } from '@shared/utils';
 
 import { environment } from '@env/environment';
 
@@ -69,166 +37,29 @@ import { TranslocoHttpLoader } from './transloco-loader';
 
 registerLocaleData(localeRu, 'ru');
 
-const mapConfig: YConfig = {
-  apikey: environment.mapApiKey,
-  lang: 'ru_RU',
-};
-
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideHttpClient(),
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideStore(),
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+    provideRouterStore(),
     provideState(locationsFeature),
     provideState(authFeature),
     provideState(documentsFeature),
     provideState(newsFeature),
+    provideEffects(LocationsEffects, AuthEffects, DocumentsEffects, NewsEffects),
+    provideIconResolver(),
+    provideImageKitLoader(environment.imageProviderUrl),
+    provideYConfig(getMapConfig()),
+    provideEventPlugins(),
+    provideValidationLimits(),
     provideRouter(
       routes,
-      withViewTransitions({
-        skipInitialTransition: true,
-        onViewTransitionCreated: (transitionInfo) => {
-          try {
-            const navigationService = inject(NavigationDirectionService);
-
-            const fromUrl = transitionInfo.from ? routeSnapshotToUrl(transitionInfo.from) : '';
-            const toUrl = routeSnapshotToUrl(transitionInfo.to);
-
-            document.documentElement.classList.remove(
-              'router-back',
-              'vertical-nav',
-              'page-modal',
-              'no-view-transition',
-              'forward',
-            );
-
-            if (navigationService.shouldSkipAnimation(fromUrl, toUrl)) {
-              document.documentElement.classList.add('no-view-transition');
-              console.log('Animation skipped:', { from: fromUrl, to: toUrl });
-              return;
-            }
-
-            const navigationType = navigationService.getNavigationType(toUrl, fromUrl);
-
-            switch (navigationType) {
-              case 'back':
-                document.documentElement.classList.add('router-back');
-                break;
-              case 'same-level':
-                document.documentElement.classList.add('vertical-nav');
-                break;
-              case 'modal':
-                document.documentElement.classList.add('page-modal');
-                break;
-              default:
-                document.documentElement.classList.add('forward');
-            }
-
-            console.log('Navigation:', { type: navigationType, from: fromUrl, to: toUrl });
-          } catch (error) {
-            console.warn('View transition error:', error);
-            document.documentElement.classList.add('no-view-transition');
-          }
-        },
-      }),
-      withInMemoryScrolling({
-        scrollPositionRestoration: 'top',
-        anchorScrolling: 'enabled',
-      }),
+      withViewTransitions(getViewTransitionsConfig()),
+      withInMemoryScrolling(getScrollConfig()),
     ),
-    provideEffects(LocationsEffects, AuthEffects, DocumentsEffects, NewsEffects),
-    provideRouterStore(),
-    provideHttpClient(),
-    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
-    NG_EVENT_PLUGINS,
-    {
-      provide: VALIDATION_LIMITS,
-      useValue: DEFAULT_VALIDATION_LIMITS,
-    },
-    {
-      provide: TUI_TEXTFIELD_SIZE,
-      useValue: {
-        size: 'm',
-      },
-    },
-    {
-      provide: TUI_TEXTFIELD_LABEL_OUTSIDE,
-      useValue: {
-        labelOutside: true,
-      },
-    },
-    {
-      provide: PHONE_NUMBER,
-      useValue: '+7 (423) 293 78 79',
-    },
-    {
-      provide: TELEGRAM_ACCOUNT,
-      useValue: 'busbox',
-    },
-    {
-      provide: EMAIL,
-      useValue: 'inbox@busbox.guru',
-    },
-    {
-      provide: WHATSAPP,
-      useValue: '+7 (904) 623 60 90',
-    },
-    {
-      provide: DOM_PROCESSOR,
-      useClass: DefaultDomProcessor,
-    },
-    {
-      provide: IMAGE_CONVERTER,
-      useClass: HtmlToImageConverter,
-    },
-    {
-      provide: PDF_BUILDER,
-      useClass: JsPdfBuilder,
-    },
-    {
-      provide: PROGRESS_INDICATOR,
-      useClass: DefaultProgressIndicator,
-    },
-    {
-      provide: DOCUMENT_RENDERER,
-      useClass: DualDocumentRenderer,
-    },
-    // {
-    //   provide: PARCEL_ITEM_LIMIT_TOKEN,
-    //   useFactory: (limits: CargoRestrictionsService) => {
-    //     return limits.parcelItem;
-    //   },
-    //   deps: [CargoRestrictionsService],
-    // },
-    {
-      provide: CONTACT_INFO,
-      useFactory: (phone: string, telegram: string, email: string, whatsapp: string) => ({
-        phone,
-        telegram,
-        email,
-        whatsapp,
-      }),
-      deps: [PHONE_NUMBER, TELEGRAM_ACCOUNT, EMAIL, WHATSAPP],
-    },
-    tuiRadioOptionsProvider({
-      size: 'm',
-    }),
-    tuiButtonOptionsProvider({
-      size: 'm',
-    }),
-    tuiCheckboxOptionsProvider({
-      size: 'm',
-    }),
-    tuiTextfieldOptionsProvider({
-      size: signal('m'),
-      cleaner: signal(false),
-    }),
-    tuiInputNumberOptionsProvider({
-      min: 0,
-      max: 20,
-    }),
-    provideHttpClient(),
-    provideYConfig(mapConfig),
     provideTransloco({
       config: {
         availableLangs: ['ru', 'en'],
@@ -238,32 +69,11 @@ export const appConfig: ApplicationConfig = {
       },
       loader: TranslocoHttpLoader,
     }),
-    {
-      provide: TUI_ICON_RESOLVER,
-      useFactory: (preloadService: PreloadIconsService): TuiStringHandler<string> => {
-        return (name: string) => {
-          if (name.startsWith('@tui.')) {
-            return `assets/taiga-ui/icons/${name.replace('@tui.', '')}.svg`;
-          }
 
-          const cachedIcon = preloadService.getIcon(name);
-          if (cachedIcon) {
-            return `data:image/svg+xml;base64,${btoa(cachedIcon)}`;
-          }
-
-          return `/assets/icons/${name}.svg`;
-        };
-      },
-      deps: [PreloadIconsService],
-    },
-    provideImageKitLoader(environment.imageProviderUrl),
-    { provide: LOCALE_ID, useValue: 'ru' },
-    { provide: TUI_LANGUAGE, useValue: of(TUI_RUSSIAN_LANGUAGE) },
-    tuiInputDateOptionsProviderNew({
-      valueTransformer: new CustomDateTransformer(),
-    }),
-    tuiInputDateRangeOptionsProvider({
-      valueTransformer: new CustomDateRangeTransformer(),
-    }),
+    ...LANGUAGE_PROVIDERS,
+    ...DATE_PROVIDERS,
+    ...CONTACTS_PROVIDERS,
+    ...PDF_PROVIDERS,
+    ...UI_PROVIDERS,
   ],
 };
