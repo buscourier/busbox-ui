@@ -61,17 +61,8 @@ import { routeSnapshotToUrl } from '@shared/utils';
 
 import { environment } from '@env/environment';
 
-import { BalanceEffects, balanceFeature } from '@account/balance';
-import { OrdersEffects, ordersFeature } from '@account/orders';
-import { ProfileEffects, profileFeature } from '@account/profile';
 import { AuthEffects, authFeature } from '@auth';
 import { NewsEffects, newsFeature } from '@news/store';
-
-import { BookingEffects, bookingFeature } from '@delivery/booking';
-import { DeliveryDetailsEffects, deliveryDetailsFeature } from '@delivery/delivery-details';
-import { DeliveryPointEffects, deliveryPointFeature } from '@delivery/delivery-point';
-import { DeliverySummaryEffects, deliverySummaryFeature } from '@delivery/delivery-summary';
-import { PickupPointEffects, pickupPointFeature } from '@delivery/pickup-point';
 
 import { routes } from './app.routes';
 import { TranslocoHttpLoader } from './transloco-loader';
@@ -89,15 +80,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideStore(),
     provideState(locationsFeature),
-    provideState(pickupPointFeature),
-    provideState(deliveryPointFeature),
-    provideState(deliveryDetailsFeature),
-    provideState(deliverySummaryFeature),
-    provideState(bookingFeature),
     provideState(authFeature),
-    provideState(profileFeature),
-    provideState(ordersFeature),
-    provideState(balanceFeature),
     provideState(documentsFeature),
     provideState(newsFeature),
     provideRouter(
@@ -153,20 +136,7 @@ export const appConfig: ApplicationConfig = {
         anchorScrolling: 'enabled',
       }),
     ),
-    provideEffects(
-      LocationsEffects,
-      PickupPointEffects,
-      DeliveryPointEffects,
-      DeliveryDetailsEffects,
-      DeliverySummaryEffects,
-      BookingEffects,
-      AuthEffects,
-      ProfileEffects,
-      OrdersEffects,
-      BalanceEffects,
-      DocumentsEffects,
-      NewsEffects,
-    ),
+    provideEffects(LocationsEffects, AuthEffects, DocumentsEffects, NewsEffects),
     provideRouterStore(),
     provideHttpClient(),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
