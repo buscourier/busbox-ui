@@ -26,7 +26,6 @@ import {
   TuiFieldErrorPipe,
   TuiInputNumber,
 } from '@taiga-ui/kit';
-import { TuiTextfieldControllerModule } from '@taiga-ui/legacy';
 import { debounceTime } from 'rxjs';
 
 import { DEBOUNCE_TIME } from '@core/constants';
@@ -45,7 +44,6 @@ import type { ParcelItemForm } from './parcel-item.types';
     ReactiveFormsModule,
     TuiHintDirective,
     TuiFieldErrorContentPipe,
-    TuiTextfieldControllerModule,
     TuiFieldErrorPipe,
     TuiError,
     AsyncPipe,

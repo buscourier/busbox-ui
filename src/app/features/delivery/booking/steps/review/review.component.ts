@@ -5,7 +5,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { provideTranslocoScope, TranslocoPipe } from '@jsverse/transloco';
 import { TuiIcon } from '@taiga-ui/core';
 import { TuiLineClamp } from '@taiga-ui/kit';
-import { TuiTextareaModule } from '@taiga-ui/legacy';
 import type { Observable } from 'rxjs';
 
 import { BookingFacade } from '../../booking.facade';
@@ -17,7 +16,6 @@ import { ReviewConfirmationComponent } from './review-confirmation';
   selector: 'app-review',
   imports: [
     AsyncPipe,
-    TuiTextareaModule,
     ReactiveFormsModule,
     ReviewConfirmationComponent,
     TuiIcon,

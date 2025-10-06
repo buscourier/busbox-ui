@@ -18,7 +18,6 @@ import {
   TuiTextfieldDirective,
 } from '@taiga-ui/core';
 import { TUI_VALIDATION_ERRORS, TuiFieldErrorContentPipe } from '@taiga-ui/kit';
-import { TuiInputModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
 import { map } from 'rxjs/operators';
 
 import type { ValidationLimits } from '@core/config';
@@ -36,11 +35,9 @@ import type { CourierDetailsForm } from './courier-details.types';
 @Component({
   selector: 'app-courier-details',
   imports: [
-    TuiTextfieldControllerModule,
     TuiHint,
     ReactiveFormsModule,
     TuiFieldErrorContentPipe,
-    TuiInputModule,
     TuiLabel,
     TuiTextfieldComponent,
     TuiTextfieldDirective,
