@@ -4,147 +4,165 @@
   </h2>
 
   <div class="space-y-4">
-    <div class="group">
-      <label
-        class="-mx-2 flex cursor-pointer items-start rounded-md p-2 transition-all hover:bg-gray-50"
-      >
-        <div class="mt-0.5 flex-shrink-0">
-          <input tuiCheckbox type="checkbox" [formControl]="insurance.controls.enabled" size="m" />
-        </div>
-        <div class="ml-3 flex-1">
-          <div class="font-medium text-gray-800">
-            {{ 'deliveryDetails.additionalServices.types.insurance' | transloco }}
+    @if (additionalServices.insurance) {
+      <div class="group">
+        <label
+          class="-mx-2 flex cursor-pointer items-start rounded-md p-2 transition-all hover:bg-gray-50"
+        >
+          <div class="mt-0.5 flex-shrink-0">
+            <input
+              tuiCheckbox
+              type="checkbox"
+              [formControl]="insurance.controls.enabled"
+              size="m"
+            />
           </div>
-          <div class="mt-0.5 text-sm text-gray-500 group-hover:text-gray-700">
-            {{ 'deliveryDetails.additionalServices.messages.insurance' | transloco }}
-          </div>
-
-          @if (insurance.controls.enabled.value) {
-            <div class="mt-3 border-t border-gray-100 pt-3">
-              <span class="text-xs tracking-wide text-gray-500 uppercase">
-                {{ 'deliveryDetails.additionalServices.labels.insurance' | transloco }}
-              </span>
-              <tui-textfield class="mt-1 max-w-xs">
-                <input
-                  tuiInputNumber
-                  tuiHintAppearance="error"
-                  [formControl]="insurance.controls.amount"
-                  [tuiHint]="[] | tuiFieldErrorContent"
-                  [min]="INSURANCE_MIN_AMOUNT"
-                  [max]="INSURANCE_MAX_AMOUNT"
-                />
-              </tui-textfield>
+          <div class="ml-3 flex-1">
+            <div class="font-medium text-gray-800">
+              {{ 'deliveryDetails.additionalServices.types.insurance' | transloco }}
             </div>
-          }
-        </div>
-      </label>
-    </div>
-
-    <div class="group border-t border-gray-100 pt-3">
-      <label
-        class="-mx-2 flex cursor-pointer items-start rounded-md p-2 transition-all hover:bg-gray-50"
-      >
-        <div class="mt-0.5 flex-shrink-0">
-          <input
-            tuiCheckbox
-            type="checkbox"
-            [formControl]="extendedSms.controls.enabled"
-            size="m"
-          />
-        </div>
-        <div class="ml-3 flex-1">
-          <div class="font-medium text-gray-800">
-            {{ 'deliveryDetails.additionalServices.types.extendedSms' | transloco }}
-          </div>
-          <div class="mt-0.5 text-sm text-gray-500 group-hover:text-gray-700">
-            {{ 'deliveryDetails.additionalServices.messages.extendedSms' | transloco }}
-          </div>
-
-          @if (extendedSms.controls.enabled.value) {
-            <div class="mt-3 border-t border-gray-100 pt-3">
-              <span class="text-2xs mb-1 block tracking-wide text-gray-500 uppercase">
-                {{ 'deliveryDetails.additionalServices.labels.extendedSms' | transloco }}
-              </span>
-
-              <tui-textfield>
-                <input
-                  autocomplete="tel"
-                  mask="+7 ### ###-##-##"
-                  tuiInputPhone
-                  [attr.pattern]="pattern"
-                  [formControl]="extendedSms.controls.phone"
-                  tuiHintAppearance="error"
-                  [tuiHint]="[] | tuiFieldErrorContent"
-                  [placeholder]="'contacts.placeholders.phone' | transloco"
-                  class="mt-1 max-w-xs"
-                />
-              </tui-textfield>
+            <div class="mt-0.5 text-sm text-gray-500 group-hover:text-gray-700">
+              {{ 'deliveryDetails.additionalServices.messages.insurance' | transloco }}
             </div>
-          }
-        </div>
-      </label>
-    </div>
 
-    <div class="group border-t border-gray-100 pt-3">
-      <label
-        class="-mx-2 flex cursor-pointer items-start rounded-md p-2 transition-all hover:bg-gray-50"
-      >
-        <div class="mt-0.5 flex-shrink-0">
-          <input tuiCheckbox type="checkbox" [formControl]="senderSms.controls.enabled" size="m" />
-        </div>
-        <div class="ml-3 flex-1">
-          <div class="font-medium text-gray-800">
-            {{ 'deliveryDetails.additionalServices.types.senderSms' | transloco }}
+            @if (insurance.controls.enabled.value) {
+              <div class="mt-3 border-t border-gray-100 pt-3">
+                <span class="text-xs tracking-wide text-gray-500 uppercase">
+                  {{ 'deliveryDetails.additionalServices.labels.insurance' | transloco }}
+                </span>
+                <tui-textfield class="mt-1 max-w-xs">
+                  <input
+                    tuiInputNumber
+                    tuiHintAppearance="error"
+                    [formControl]="insurance.controls.amount"
+                    [tuiHint]="[] | tuiFieldErrorContent"
+                    [min]="INSURANCE_MIN_AMOUNT"
+                    [max]="INSURANCE_MAX_AMOUNT"
+                  />
+                </tui-textfield>
+              </div>
+            }
           </div>
-          <div class="mt-0.5 text-sm text-gray-500 group-hover:text-gray-700">
-            {{ 'deliveryDetails.additionalServices.messages.senderSms' | transloco }}
-          </div>
+        </label>
+      </div>
+    }
 
-          @if (senderSms.controls.enabled.value) {
-            <div class="mt-3 border-t border-gray-100 pt-3">
-              <span class="text-2xs mb-1 block tracking-wide text-gray-500 uppercase">
-                {{ 'deliveryDetails.additionalServices.labels.senderSms' | transloco }}
-              </span>
-              <tui-textfield>
-                <input
-                  autocomplete="tel"
-                  mask="+7 ### ###-##-##"
-                  tuiInputPhone
-                  [attr.pattern]="pattern"
-                  [formControl]="senderSms.controls.phone"
-                  [tuiHint]="[] | tuiFieldErrorContent"
-                  [placeholder]="'contacts.placeholders.phone' | transloco"
-                  tuiHintAppearance="error"
-                  class="mt-1 max-w-xs"
-                />
-              </tui-textfield>
+    @if (additionalServices.extendedSms) {
+      <div class="group border-t border-gray-100 pt-3">
+        <label
+          class="-mx-2 flex cursor-pointer items-start rounded-md p-2 transition-all hover:bg-gray-50"
+        >
+          <div class="mt-0.5 flex-shrink-0">
+            <input
+              tuiCheckbox
+              type="checkbox"
+              [formControl]="extendedSms.controls.enabled"
+              size="m"
+            />
+          </div>
+          <div class="ml-3 flex-1">
+            <div class="font-medium text-gray-800">
+              {{ 'deliveryDetails.additionalServices.types.extendedSms' | transloco }}
             </div>
-          }
-        </div>
-      </label>
-    </div>
+            <div class="mt-0.5 text-sm text-gray-500 group-hover:text-gray-700">
+              {{ 'deliveryDetails.additionalServices.messages.extendedSms' | transloco }}
+            </div>
 
-    <div class="group border-t border-gray-100 pt-3">
-      <label
-        class="-mx-2 flex cursor-pointer items-start rounded-md p-2 transition-all hover:bg-gray-50"
-      >
-        <div class="mt-0.5 flex-shrink-0">
-          <input
-            tuiCheckbox
-            type="checkbox"
-            [formControl]="recipientPayment.controls.enabled"
-            size="m"
-          />
-        </div>
-        <div class="ml-3 flex-1">
-          <div class="font-medium text-gray-800">
-            {{ 'deliveryDetails.additionalServices.types.recipientPayment' | transloco }}
+            @if (extendedSms.controls.enabled.value) {
+              <div class="mt-3 border-t border-gray-100 pt-3">
+                <span class="text-2xs mb-1 block tracking-wide text-gray-500 uppercase">
+                  {{ 'deliveryDetails.additionalServices.labels.extendedSms' | transloco }}
+                </span>
+
+                <tui-textfield>
+                  <input
+                    autocomplete="tel"
+                    mask="+7 ### ###-##-##"
+                    tuiInputPhone
+                    [attr.pattern]="pattern"
+                    [formControl]="extendedSms.controls.phone"
+                    tuiHintAppearance="error"
+                    [tuiHint]="[] | tuiFieldErrorContent"
+                    [placeholder]="'contacts.placeholders.phone' | transloco"
+                    class="mt-1 max-w-xs"
+                  />
+                </tui-textfield>
+              </div>
+            }
           </div>
-          <div class="mt-0.5 text-sm text-gray-500 group-hover:text-gray-700">
-            {{ 'deliveryDetails.additionalServices.messages.recipientPayment' | transloco }}
+        </label>
+      </div>
+    }
+
+    @if (additionalServices.senderSms) {
+      <div class="group border-t border-gray-100 pt-3">
+        <label
+          class="-mx-2 flex cursor-pointer items-start rounded-md p-2 transition-all hover:bg-gray-50"
+        >
+          <div class="mt-0.5 flex-shrink-0">
+            <input
+              tuiCheckbox
+              type="checkbox"
+              [formControl]="senderSms.controls.enabled"
+              size="m"
+            />
           </div>
-        </div>
-      </label>
-    </div>
+          <div class="ml-3 flex-1">
+            <div class="font-medium text-gray-800">
+              {{ 'deliveryDetails.additionalServices.types.senderSms' | transloco }}
+            </div>
+            <div class="mt-0.5 text-sm text-gray-500 group-hover:text-gray-700">
+              {{ 'deliveryDetails.additionalServices.messages.senderSms' | transloco }}
+            </div>
+
+            @if (senderSms.controls.enabled.value) {
+              <div class="mt-3 border-t border-gray-100 pt-3">
+                <span class="text-2xs mb-1 block tracking-wide text-gray-500 uppercase">
+                  {{ 'deliveryDetails.additionalServices.labels.senderSms' | transloco }}
+                </span>
+                <tui-textfield>
+                  <input
+                    autocomplete="tel"
+                    mask="+7 ### ###-##-##"
+                    tuiInputPhone
+                    [attr.pattern]="pattern"
+                    [formControl]="senderSms.controls.phone"
+                    [tuiHint]="[] | tuiFieldErrorContent"
+                    [placeholder]="'contacts.placeholders.phone' | transloco"
+                    tuiHintAppearance="error"
+                    class="mt-1 max-w-xs"
+                  />
+                </tui-textfield>
+              </div>
+            }
+          </div>
+        </label>
+      </div>
+    }
+
+    @if (additionalServices.recipientPayment) {
+      <div class="group border-t border-gray-100 pt-3">
+        <label
+          class="-mx-2 flex cursor-pointer items-start rounded-md p-2 transition-all hover:bg-gray-50"
+        >
+          <div class="mt-0.5 flex-shrink-0">
+            <input
+              tuiCheckbox
+              type="checkbox"
+              [formControl]="recipientPayment.controls.enabled"
+              size="m"
+            />
+          </div>
+          <div class="ml-3 flex-1">
+            <div class="font-medium text-gray-800">
+              {{ 'deliveryDetails.additionalServices.types.recipientPayment' | transloco }}
+            </div>
+            <div class="mt-0.5 text-sm text-gray-500 group-hover:text-gray-700">
+              {{ 'deliveryDetails.additionalServices.messages.recipientPayment' | transloco }}
+            </div>
+          </div>
+        </label>
+      </div>
+    }
   </div>
 </div>
