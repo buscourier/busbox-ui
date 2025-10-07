@@ -20,8 +20,8 @@ import {
   TuiFilterByInputPipe,
   TuiSelect,
 } from '@taiga-ui/kit';
-import type { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { distinctUntilChanged, type Observable, tap } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 import { cn } from '@core/utils';
 
@@ -103,7 +103,7 @@ export class RouteSelectorComponent implements OnInit {
   private initializeForm(): void {
     this.form = this.fb.group({
       pickupCity: this.fb.control<PickupCity | null>(null),
-      deliveryCity: this.fb.control<DeliveryCity | null>(null),
+      deliveryCity: this.fb.control<DeliveryCity | null>({ value: null, disabled: true }),
     });
   }
 
@@ -114,10 +114,24 @@ export class RouteSelectorComponent implements OnInit {
     this.pickupCity.valueChanges
       .pipe(
         filter(Boolean),
+        distinctUntilChanged((prev, curr) => prev?.id === curr?.id),
+        tap((city) => this.onPickupCityChange(city)),
         takeUntilDestroyed(this.destroyRef),
-        map((city) => this.locationsFacade.loadDeliveryCities(city?.id)),
       )
       .subscribe();
+  }
+
+  private onPickupCityChange(city: PickupCity): void {
+    this.locationsFacade.loadDeliveryCities(city.id);
+    this.resetDeliveryCity();
+  }
+
+  private resetDeliveryCity(): void {
+    this.deliveryCity.reset();
+
+    if (this.deliveryCity.disabled) {
+      this.deliveryCity.enable({ emitEvent: false });
+    }
   }
 
   onSubmit() {

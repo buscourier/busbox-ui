@@ -25,7 +25,6 @@ import {
   TuiInputDateRange,
   TuiSelectDirective,
 } from '@taiga-ui/kit';
-import { TuiInputDateRangeModule, TuiUnfinishedValidator } from '@taiga-ui/legacy';
 import { filter, type Observable } from 'rxjs';
 
 import { LocationsFacade } from '@shared/store';
@@ -43,8 +42,6 @@ import type { FilterForm } from './filter.types';
     TuiLabel,
     TuiButtonLoading,
     TuiButton,
-    TuiInputDateRangeModule,
-    TuiUnfinishedValidator,
     TuiTextfield,
     ReactiveFormsModule,
     AsyncPipe,

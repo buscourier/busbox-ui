@@ -1,4 +1,6 @@
 import type { Routes } from '@angular/router';
+import { provideEffects } from '@ngrx/effects';
+import { provideState } from '@ngrx/store';
 
 import { BookingComponent } from './booking.component';
 import { bookingResultGuard, stepGuard } from './guards';
@@ -9,11 +11,13 @@ import {
   DestinationComponent,
   ReviewComponent,
 } from './steps';
+import { BookingEffects, bookingFeature } from './store';
 
 export const bookingRoutes: Routes = [
   {
     path: '',
     component: BookingComponent,
+    providers: [provideState(bookingFeature), provideEffects(BookingEffects)],
     children: [
       {
         path: '',

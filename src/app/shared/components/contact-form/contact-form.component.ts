@@ -34,7 +34,6 @@ import {
   TuiTextarea,
   TuiTextareaLimit,
 } from '@taiga-ui/kit';
-import { TuiTextareaModule } from '@taiga-ui/legacy';
 import { BehaviorSubject, finalize } from 'rxjs';
 
 import type { ValidationLimits } from '@core/config';
@@ -62,7 +61,6 @@ import type { ContactForm } from './contact-form.types';
     TuiButtonLoading,
     AsyncPipe,
     TuiInputPhone,
-    TuiTextareaModule,
     TuiTextarea,
     TuiTextareaLimit,
   ],

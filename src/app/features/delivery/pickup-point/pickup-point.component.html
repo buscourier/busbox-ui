@@ -50,7 +50,7 @@
     </div>
 
     @if (vm.cities.selected) {
-      @if (vm.tabs.length) {
+      @if (vm.tabs.length > 1) {
         <div class="mt-1">
           <div class="grid grid-cols-2 gap-3">
             @for (tab of vm.tabs; track tab.id) {
@@ -60,7 +60,9 @@
                 [appearance]="tab === vm.activeTab ? 'primary' : 'outline'"
                 (click)="onTabChange(tab.id)"
               >
-                <span class="font-medium">{{ tab.name | transloco }}</span>
+                <span class="text-[15px] font-medium">
+                  {{ tab.name | transloco }}
+                </span>
               </button>
             }
           </div>
