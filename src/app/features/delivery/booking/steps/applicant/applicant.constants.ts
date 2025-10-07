@@ -5,10 +5,10 @@ import { ApplicantType } from '../../types';
 export const ApplicantTabs: BaseTab<ApplicantType>[] = [
   {
     id: ApplicantType.INDIVIDUAL,
-    name: 'user.types.individual',
+    name: 'Физическое лицо',
   },
   {
     id: ApplicantType.LEGAL,
-    name: 'user.types.legal',
+    name: 'Юридическое лицо',
   },
 ];
