@@ -3,7 +3,6 @@ import { provideTranslocoScope } from '@jsverse/transloco';
 import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
 
-import { BookingEffects, bookingFeature } from './booking';
 import { CalculatorComponent } from './calculator';
 import { DeliveryDetailsEffects, deliveryDetailsFeature } from './delivery-details';
 import { DeliveryPointEffects, deliveryPointFeature } from './delivery-point';
@@ -21,13 +20,12 @@ export const deliveryRoutes: Routes = [
       provideState(deliveryPointFeature),
       provideState(deliveryDetailsFeature),
       provideState(deliverySummaryFeature),
-      provideState(bookingFeature),
+
       provideEffects(
         PickupPointEffects,
         DeliveryPointEffects,
         DeliveryDetailsEffects,
         DeliverySummaryEffects,
-        BookingEffects,
       ),
     ],
     children: [
