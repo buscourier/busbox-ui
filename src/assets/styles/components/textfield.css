@@ -18,6 +18,10 @@ input[automation-id='tui-primitive-textfield__native-input'] {
   @apply text-gray-600 focus:text-gray-400;
 }
 
+.theme-yellow input[disabled]::placeholder {
+  @apply text-gray-800!;
+}
+
 tui-textfield select:defined._empty {
   @apply text-gray-300! placeholder:text-gray-400!;
 }
