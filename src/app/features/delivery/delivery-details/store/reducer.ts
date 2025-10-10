@@ -46,7 +46,7 @@ export const deliveryDetailsReducer = createReducer(
     }),
   ),
   on(DeliveryDetailsActions.resetOptions, (): DeliveryDetailsState => initialState),
-  on(DeliveryDetailsActions.restoreState, (state, { restoredState }) => {
+  on(DeliveryDetailsActions.restoreState, (state, { restoredState }): DeliveryDetailsState => {
     const orders = Object.values(restoredState.entities).filter((order): order is Order => !!order);
 
     return adapter.setAll(orders, {
