@@ -1,5 +1,5 @@
-import { AsyncPipe } from '@angular/common';
-import { HostBinding, HostListener, type OnInit, signal } from '@angular/core';
+import { AsyncPipe, DOCUMENT } from '@angular/common';
+import { afterNextRender, HostBinding, type OnInit, signal } from '@angular/core';
 import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -85,16 +85,30 @@ interface PageState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContactsComponent implements OnInit {
+  private readonly doc = inject(DOCUMENT);
+
   @HostBinding('class') get hostClasses(): string {
     return cn(`flex h-[calc(100vh-160px)] w-full`);
   }
 
-  @HostListener('window:scroll')
-  onScroll(): void {
-    this.scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-  }
-
   scrollTop = 0;
+
+  constructor() {
+    afterNextRender(() => {
+      const win = this.doc.defaultView;
+      if (!win) return;
+
+      const handleScroll = () => {
+        this.scrollTop = win.pageYOffset || this.doc.documentElement.scrollTop;
+      };
+
+      win.addEventListener('scroll', handleScroll, { passive: true });
+
+      this.destroyRef.onDestroy(() => {
+        win.removeEventListener('scroll', handleScroll);
+      });
+    });
+  }
 
   protected selectedOffice = new FormControl<Office | null>(null);
   protected readonly breakpoint = inject(BreakpointService);

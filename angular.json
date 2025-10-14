@@ -61,14 +61,15 @@
               "rgbcolor",
               "core-js"
             ],
-            "browser": "src/main.ts"
+            "browser": "src/main.ts",
+            "server": "src/main.server.ts",
+            "outputMode": "server",
+            "ssr": {
+              "entry": "src/server.ts"
+            }
           },
           "configurations": {
             "production": {
-              "ngxEnv": {
-                "prefix": "APP_",
-                "runtime": true
-              },
               "budgets": [
                 {
                   "type": "initial",
@@ -96,10 +97,6 @@
               "extractLicenses": true
             },
             "staging": {
-              "ngxEnv": {
-                "prefix": "APP_",
-                "runtime": true
-              },
               "budgets": [
                 {
                   "type": "initial",
@@ -127,10 +124,6 @@
               "extractLicenses": true
             },
             "development": {
-              "ngxEnv": {
-                "prefix": "APP_",
-                "runtime": false
-              },
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true

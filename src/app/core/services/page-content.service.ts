@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { DestroyRef, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Title, Meta } from '@angular/platform-browser';
@@ -28,6 +29,7 @@ interface RouteData {
   providedIn: 'root',
 })
 export class PageContentService {
+  private readonly document = inject(DOCUMENT);
   private readonly titleService = inject(Title);
   private readonly metaService = inject(Meta);
   private readonly router = inject(Router);
@@ -169,13 +171,15 @@ export class PageContentService {
   }
 
   private updateCanonicalLink(url: string): void {
-    const existing = document.querySelector('link[rel="canonical"]');
+    if (!this.document) return;
+
+    const existing = this.document.querySelector('link[rel="canonical"]');
     existing?.remove();
 
-    const link = document.createElement('link');
+    const link = this.document.createElement('link');
     link.setAttribute('rel', 'canonical');
     link.setAttribute('href', url);
-    document.head.appendChild(link);
+    this.document.head.appendChild(link);
   }
 
   private getFullUrl(url: string): string {

@@ -1,8 +1,9 @@
 import { provideImageKitLoader, registerLocaleData } from '@angular/common';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import localeRu from '@angular/common/locales/ru';
 import { type ApplicationConfig } from '@angular/core';
 import { isDevMode, provideZoneChangeDetection } from '@angular/core';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withInMemoryScrolling, withViewTransitions } from '@angular/router';
 import { provideTransloco } from '@jsverse/transloco';
@@ -39,7 +40,8 @@ registerLocaleData(localeRu, 'ru');
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(),
+    provideHttpClient(withFetch()),
+    provideClientHydration(withEventReplay()),
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideStore(),

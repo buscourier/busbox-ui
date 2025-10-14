@@ -1,14 +1,20 @@
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TokenService {
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
+
   private readonly ACCESS_TOKEN_KEY = 'accessToken';
   private readonly REFRESH_TOKEN_KEY = '';
 
   setTokens(accessToken: string, refreshToken?: string) {
+    if (!this.isBrowser) return;
+
     localStorage.setItem(this.ACCESS_TOKEN_KEY, accessToken);
 
     if (refreshToken) {
@@ -17,19 +23,27 @@ export class TokenService {
   }
 
   getAccessToken(): string | null {
+    if (!this.isBrowser) return null;
+
     return localStorage.getItem(this.ACCESS_TOKEN_KEY);
   }
 
   getRefreshToken(): string | null {
+    if (!this.isBrowser) return null;
+
     return localStorage.getItem(this.REFRESH_TOKEN_KEY);
   }
 
   clearTokens(): void {
+    if (!this.isBrowser) return;
+
     localStorage.removeItem(this.ACCESS_TOKEN_KEY);
     localStorage.removeItem(this.REFRESH_TOKEN_KEY);
   }
 
   isAuthenticated(): boolean {
+    if (!this.isBrowser) return false;
+
     const token = this.getAccessToken();
 
     if (!token) {
@@ -71,6 +85,8 @@ export class TokenService {
   // }
 
   getTokenExpirationTime(): number | null {
+    if (!this.isBrowser) return null;
+
     const token = this.getAccessToken();
 
     if (!token) {

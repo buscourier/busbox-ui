@@ -1,13 +1,14 @@
 import { NgTemplateOutlet } from '@angular/common';
 import {
-  type AfterViewInit,
+  afterNextRender,
   ChangeDetectionStrategy,
   Component,
   ContentChildren,
+  DestroyRef,
   type ElementRef,
   HostBinding,
+  inject,
   Input,
-  type OnDestroy,
   type QueryList,
   ViewChildren,
 } from '@angular/core';
@@ -23,12 +24,13 @@ import { StepDirective } from './step.directive';
   styleUrl: './steps.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StepsComponent implements AfterViewInit, OnDestroy {
+export class StepsComponent {
   @Input() separated = false;
   @Input() animationDelay = 150;
   @ContentChildren(StepDirective) steps!: QueryList<StepDirective>;
   @ViewChildren('stepElement') stepElements!: QueryList<ElementRef<HTMLElement>>;
 
+  private readonly destroyRef = inject(DestroyRef);
   private observer?: IntersectionObserver;
 
   @HostBinding('class') get hostClasses(): string {
@@ -64,7 +66,21 @@ export class StepsComponent implements AfterViewInit, OnDestroy {
     );
   }
 
-  ngAfterViewInit(): void {
+  constructor() {
+    afterNextRender(() => {
+      this.initIntersectionObserver();
+
+      this.stepElements.forEach((el) => {
+        this.observer?.observe(el.nativeElement);
+      });
+
+      this.destroyRef.onDestroy(() => {
+        this.observer?.disconnect();
+      });
+    });
+  }
+
+  private initIntersectionObserver(): void {
     this.observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -77,13 +93,5 @@ export class StepsComponent implements AfterViewInit, OnDestroy {
       },
       { threshold: 0.2, rootMargin: '-50px' },
     );
-
-    this.stepElements.forEach((el) => {
-      this.observer!.observe(el.nativeElement);
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.observer?.disconnect();
   }
 }
