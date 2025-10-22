@@ -9,8 +9,6 @@ import { FooterComponent } from '@shared/components/footer';
 import { HeaderComponent } from '@shared/components/header';
 import { LocationsFacade } from '@shared/store';
 
-import { environment } from '@env/environment';
-
 import { AuthFacade } from '@auth';
 
 @Component({
@@ -23,7 +21,6 @@ import { AuthFacade } from '@auth';
 export class AppComponent implements OnInit {
   configName?: string;
   environment?: string;
-  apiBaseUrl?: string;
 
   private readonly authFacade = inject(AuthFacade);
   private readonly locationsFacade = inject(LocationsFacade);
@@ -34,10 +31,6 @@ export class AppComponent implements OnInit {
   private readonly router = inject(Router);
 
   isInitialized$!: Observable<boolean>;
-
-  constructor() {
-    this.apiBaseUrl = environment.apiBaseUrl;
-  }
 
   ngOnInit(): void {
     this.isInitialized$ = this.authFacade.isInitialized();

@@ -1,10 +1,8 @@
 import type { YConfig } from 'angular-yandex-maps-v3';
 
-import { environment } from '@env/environment';
-
 export function getMapConfig(): YConfig {
   return {
-    apikey: environment.mapApiKey,
+    apikey: 'be640658-9c20-46d8-ab54-555efd7fc3ee',
     lang: 'ru_RU',
   };
 }

@@ -28,8 +28,6 @@ import {
 import { DocumentsEffects, documentsFeature } from '@shared/features/documents';
 import { LocationsEffects, locationsFeature } from '@shared/store';
 
-import { environment } from '@env/environment';
-
 import { AuthEffects, authFeature } from '@auth';
 import { NewsEffects, newsFeature } from '@news/store';
 
@@ -53,7 +51,7 @@ export const appConfig: ApplicationConfig = {
     provideState(newsFeature),
     provideEffects(LocationsEffects, AuthEffects, DocumentsEffects, NewsEffects),
     provideIconResolver(),
-    provideImageKitLoader(environment.imageProviderUrl),
+    provideImageKitLoader('https://ik.imagekit.io/buscourier'),
     provideYConfig(getMapConfig()),
     provideEventPlugins(),
     provideValidationLimits(),

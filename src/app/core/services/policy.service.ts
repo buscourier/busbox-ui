@@ -4,15 +4,13 @@ import { map } from 'rxjs/operators';
 
 import { ApiService } from '@core/services/api.service';
 
-import { environment } from '@env/environment';
-
 @Injectable({
   providedIn: 'root',
 })
 export class PolicyService extends ApiService {
   privacyPolicy$: Observable<string> | null = null;
 
-  private readonly pageUrl = `${this.baseUrl}/site/page/${environment.apiKey}`;
+  private readonly pageUrl = `${this.baseUrl}/site/page`;
 
   getPrivacyPolicy(): Observable<string> {
     if (!this.privacyPolicy$) {

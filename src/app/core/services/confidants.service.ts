@@ -6,20 +6,16 @@ import { ApiService } from '@core/services/api.service';
 
 import type { Confidant } from '@shared/types';
 
-import { environment } from '@env/environment';
-
 @Injectable({
   providedIn: 'root',
 })
 export class ConfidantsService extends ApiService {
   getConfidants(userId: string): Observable<Confidant[]> {
-    return this.http
-      .get<Confidant[]>(`${this.baseUrl}/account/contactperson/${environment.apiKey}/${userId}`)
-      .pipe(
-        map((confidants) => this.removeDuplicatesById(confidants)),
-        catchError(this.handleError.bind(this)),
-        shareReplay(1),
-      );
+    return this.http.get<Confidant[]>(`${this.baseUrl}/account/contactperson/${userId}`).pipe(
+      map((confidants) => this.removeDuplicatesById(confidants)),
+      catchError(this.handleError.bind(this)),
+      shareReplay(1),
+    );
   }
 
   private removeDuplicatesById(confidants: Confidant[]): Confidant[] {

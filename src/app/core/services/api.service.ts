@@ -9,42 +9,38 @@ import { ERROR_MESSAGES, type ErrorCode } from '@core/constants';
 
 import type { DeliveryCity, Office, PickupCity } from '@shared/types';
 
-import { environment } from '@env/environment';
-
 const EXCLUDED_CITY_ID = '249';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private readonly url = `${environment.apiBaseUrl}`;
   private cachedStartCities$: Observable<PickupCity[]> | null = null;
   private cachedOffices$: Observable<Office[]> | null = null;
 
   protected readonly http = inject(HttpClient);
-
-  protected get baseUrl(): string {
-    return this.url;
-  }
+  protected readonly baseUrl = '/api';
 
   getPickupCities({ sorted = true } = {}): Observable<PickupCity[]> {
     if (!this.cachedStartCities$) {
-      this.cachedStartCities$ = this.http.get<PickupCity[]>(`${this.url}/calc/getcitiesfrom`).pipe(
-        concatAll(),
-        filter((city) => city.id !== EXCLUDED_CITY_ID),
-        map((city) => this.cleanCityName(city)),
-        toArray(),
-        map((cities) => (sorted ? this.sortCitiesByName<PickupCity>(cities) : cities)),
-        catchError(this.handleError.bind(this)),
-        shareReplay(1),
-      );
+      this.cachedStartCities$ = this.http
+        .get<PickupCity[]>(`${this.baseUrl}/calc/getcitiesfrom`)
+        .pipe(
+          concatAll(),
+          filter((city) => city.id !== EXCLUDED_CITY_ID),
+          map((city) => this.cleanCityName(city)),
+          toArray(),
+          map((cities) => (sorted ? this.sortCitiesByName<PickupCity>(cities) : cities)),
+          catchError(this.handleError.bind(this)),
+          shareReplay(1),
+        );
     }
 
     return this.cachedStartCities$;
   }
 
   getDeliveryCities(PickupCityId: string): Observable<DeliveryCity[]> {
-    return this.http.get<DeliveryCity[]>(`${this.url}/calc/getcitiesto/${PickupCityId}/0`).pipe(
+    return this.http.get<DeliveryCity[]>(`${this.baseUrl}/calc/getcitiesto/${PickupCityId}/0`).pipe(
       map((cities) => this.sortCitiesByName<DeliveryCity>(cities)),
       catchError(this.handleError.bind(this)),
       // shareReplay(1),
@@ -53,7 +49,7 @@ export class ApiService {
 
   getOffices(): Observable<Office[]> {
     if (!this.cachedOffices$) {
-      const url = `${this.url}/calc/getoffices`;
+      const url = `${this.baseUrl}/calc/getoffices`;
 
       this.cachedOffices$ = this.http
         .get<Office[]>(url)

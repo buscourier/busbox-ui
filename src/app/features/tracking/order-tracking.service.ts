@@ -4,8 +4,6 @@ import { map } from 'rxjs/operators';
 
 import { ApiService } from '@core/services';
 
-import { environment } from '@env/environment';
-
 export enum OrderStatusCode {
   ORDER_POSTING = 'ORDER_POSTING',
   ORDER_INTRANSIT = 'ORDER_INTRANSIT',
@@ -32,7 +30,7 @@ export interface OrderStatus {
   providedIn: 'root',
 })
 export class OrderTrackingService extends ApiService {
-  private readonly trackingUrl = `${this.baseUrl}/order/gettracking/${environment.apiKey}`;
+  private readonly trackingUrl = `${this.baseUrl}/order/gettracking`;
 
   getStatusList(orderNumber: string): Observable<OrderStatus[]> {
     return this.http.get<OrderStatus[] | string>(`${this.trackingUrl}/${orderNumber}`).pipe(

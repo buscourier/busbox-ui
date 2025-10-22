@@ -3,8 +3,6 @@ import { inject, Injectable } from '@angular/core';
 import { catchError, type Observable, of, tap, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { environment } from '@env/environment';
-
 import type {
   AuthResponse,
   LoginCredentials,
@@ -20,29 +18,23 @@ import { TokenService } from './token.service';
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly tokenService = inject(TokenService);
-  private readonly apiBaseUrl = environment.apiBaseUrl;
+  private baseUrl = '/api';
 
   login(credentials: LoginCredentials): Observable<AuthResponse> {
     return this.http
-      .post<AuthResponse>(
-        `${this.apiBaseUrl}/account/login`,
-        JSON.stringify({
-          'api-key': environment.apiKey,
-          ...credentials,
-        }),
-      )
+      .post<AuthResponse>(`${this.baseUrl}/account/login`, credentials)
       .pipe(catchError((error) => this.handleError('Login Failed', error)));
   }
 
   register(userData: RegisterPayload): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiBaseUrl}/users`, userData).pipe(
+    return this.http.post<AuthResponse>(`${this.baseUrl}/users`, userData).pipe(
       tap((response) => this.handleAuthentication(response)),
       catchError((error) => this.handleError('Registration Failed', error)),
     );
   }
 
   logout(): Observable<void> {
-    return this.http.post<void>(`${this.apiBaseUrl}/account/logout`, {}).pipe(
+    return this.http.post<void>(`${this.baseUrl}/account/logout`, {}).pipe(
       tap(() => this.handleLogout()),
       catchError(() => {
         this.handleLogout();
@@ -53,13 +45,13 @@ export class AuthService {
 
   forgotPassword(email: string): Observable<{ message: string }> {
     return this.http
-      .post<{ message: string }>(`${this.apiBaseUrl}/account/forgot-password`, { email })
+      .post<{ message: string }>(`${this.baseUrl}/account/forgot-password`, { email })
       .pipe(catchError((error) => this.handleError('Forgot password request failed', error)));
   }
 
   resetPassword(payload: ResetPasswordPayload): Observable<{ message: string }> {
     return this.http
-      .post<{ message: string }>(`${this.apiBaseUrl}/reset-password`, payload)
+      .post<{ message: string }>(`${this.baseUrl}/reset-password`, payload)
       .pipe(catchError((error) => this.handleError('Password reset failed', error)));
   }
 
@@ -72,14 +64,12 @@ export class AuthService {
       return of(null);
     }
 
-    return this.http
-      .get<AuthResponse>(`${environment.apiBaseUrl}/account/auth/${accessToken}`)
-      .pipe(
-        catchError(() => {
-          this.handleLogout();
-          return of(null);
-        }),
-      );
+    return this.http.get<AuthResponse>(`${this.baseUrl}/account/auth/${accessToken}`).pipe(
+      catchError(() => {
+        this.handleLogout();
+        return of(null);
+      }),
+    );
   }
 
   refreshToken(): Observable<AuthResponse> {
@@ -90,7 +80,9 @@ export class AuthService {
     }
 
     return this.http
-      .post<AuthResponse>(`${this.apiBaseUrl}/refresh-token`, { refresh_token: refreshToken })
+      .post<AuthResponse>(`${this.baseUrl}/refresh-token`, {
+        refresh_token: refreshToken,
+      })
       .pipe(
         map((response) => {
           if ('error' in response) {

@@ -6,12 +6,20 @@ import {
   isMainModule,
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
-import express from 'express';
+import express, { json } from 'express';
+
+// eslint-disable-next-line import/no-internal-modules
+import { apiRateLimit, createApiProxy } from './server/proxy.middleware';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
+
+/**
+ * API Proxy с rate limiting
+ */
+app.use('/api', json({ limit: '1mb' }), apiRateLimit(), createApiProxy());
 
 /**
  * Example Express Rest API endpoints can be defined here.
