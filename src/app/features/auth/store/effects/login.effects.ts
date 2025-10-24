@@ -4,12 +4,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { mapResponse } from '@ngrx/operators';
 import { switchMap, tap } from 'rxjs';
 
-import { PersistenceService } from '@core/services';
-
 import type { ApiError } from '@shared/types';
-
-import { TokenService } from '@auth/services/token.service';
-import type { AuthResponse } from '@auth/types';
 
 import { AuthService } from '../../services/auth.service';
 
@@ -23,7 +18,7 @@ export const loginEffects = {
         switchMap(({ credentials }) =>
           authService.login(credentials).pipe(
             mapResponse({
-              next: (response) => AuthActions.loginSuccess({ response }),
+              next: (user) => AuthActions.loginSuccess({ user }),
               error: (error: ApiError) => AuthActions.loginFailure({ error }),
             }),
           ),
@@ -33,22 +28,22 @@ export const loginEffects = {
     { functional: true },
   ),
 
-  loginSuccess: createEffect(
-    (
-      actions$ = inject(Actions),
-      tokenService = inject(TokenService),
-      persistenceService = inject(PersistenceService),
-    ) => {
-      return actions$.pipe(
-        ofType(AuthActions.loginSuccess),
-        tap(({ response }) => {
-          tokenService.setTokens(response.auth_key);
-          persistenceService.save<'user', { user: AuthResponse }>('user', response);
-        }),
-      );
-    },
-    { functional: true, dispatch: false },
-  ),
+  // loginSuccess: createEffect(
+  //   (
+  //     actions$ = inject(Actions),
+  //     tokenService = inject(TokenService),
+  //     persistenceService = inject(PersistenceService),
+  //   ) => {
+  //     return actions$.pipe(
+  //       ofType(AuthActions.loginSuccess),
+  //       tap(({ response }) => {
+  //         tokenService.setTokens(response.auth_key);
+  //         persistenceService.save<'user', { user: AuthResponse }>('user', response);
+  //       }),
+  //     );
+  //   },
+  //   { functional: true, dispatch: false },
+  // ),
 
   redirectAfterLogin: createEffect(
     (actions$ = inject(Actions), router = inject(Router), route = inject(ActivatedRoute)) => {

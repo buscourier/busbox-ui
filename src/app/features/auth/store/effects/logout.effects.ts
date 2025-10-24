@@ -3,26 +3,14 @@ import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { map } from 'rxjs/operators';
 
-import { PersistenceService } from '@core/services';
-
-import { TokenService } from '@auth/services/token.service';
-import type { AuthResponse } from '@auth/types';
-
 import { AuthActions } from '../actions';
 
 export const logoutEffects = {
   logout: createEffect(
-    (
-      actions$ = inject(Actions),
-      tokenService = inject(TokenService),
-      persistenceService = inject(PersistenceService),
-      router = inject(Router),
-    ) => {
+    (actions$ = inject(Actions), router = inject(Router)) => {
       return actions$.pipe(
         ofType(AuthActions.logout),
         map(() => {
-          tokenService.clearTokens();
-          persistenceService.remove<'user', { user: AuthResponse }>('user');
           router.navigate(['/auth/login']);
         }),
       );

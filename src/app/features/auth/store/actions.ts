@@ -17,7 +17,7 @@ export const AuthActions = createActionGroup({
     InitializeFailure: emptyProps(),
 
     Login: props<{ credentials: LoginCredentials }>(),
-    'Login Success': props<{ response: AuthResponse }>(),
+    'Login Success': props<{ user: AuthResponse }>(),
     'Login Failure': props<{ error: ApiError }>(),
 
     Register: props<{ userData: RegisterPayload }>(),

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { catchError, type Observable, of, tap, throwError } from 'rxjs';
+import { catchError, type Observable, of, switchMap, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import type {
@@ -10,36 +10,45 @@ import type {
   ResetPasswordPayload,
 } from '../types';
 
-import { TokenService } from './token.service';
+interface SessionPayload {
+  access_token: string;
+  refresh_token?: string;
+  access_expires_in?: number;
+  refresh_expires_in?: number;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly tokenService = inject(TokenService);
   private baseUrl = '/api';
 
   login(credentials: LoginCredentials): Observable<AuthResponse> {
-    return this.http
-      .post<AuthResponse>(`${this.baseUrl}/account/login`, credentials)
-      .pipe(catchError((error) => this.handleError('Login Failed', error)));
+    return this.http.post<AuthResponse>(`${this.baseUrl}/account/login`, credentials).pipe(
+      switchMap((resp) => {
+        const payload: SessionPayload = { access_token: resp.auth_key };
+
+        if (resp.refresh_token) payload.refresh_token = resp.refresh_token;
+        if (resp.access_expires_in) payload.access_expires_in = resp.access_expires_in;
+        if (resp.refresh_expires_in) payload.refresh_expires_in = resp.refresh_expires_in;
+
+        return this.http.post('/auth/session', payload).pipe(map(() => resp));
+      }),
+      catchError((error) => this.handleError('Login Failed', error)),
+    );
   }
 
   register(userData: RegisterPayload): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.baseUrl}/users`, userData).pipe(
-      tap((response) => this.handleAuthentication(response)),
-      catchError((error) => this.handleError('Registration Failed', error)),
-    );
+    return this.http
+      .post<AuthResponse>(`${this.baseUrl}/users`, userData)
+      .pipe(catchError((error) => this.handleError('Registration Failed', error)));
   }
 
   logout(): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/account/logout`, {}).pipe(
-      tap(() => this.handleLogout()),
-      catchError(() => {
-        this.handleLogout();
-        return of(void 0);
-      }),
+      catchError(() => of(void 0)),
+      switchMap(() => this.http.post<void>('/auth/logout', {}).pipe(catchError(() => of(void 0)))),
     );
   }
 
@@ -55,58 +64,15 @@ export class AuthService {
       .pipe(catchError((error) => this.handleError('Password reset failed', error)));
   }
 
-  isAuthenticated(): boolean {
-    return this.tokenService.isAuthenticated();
-  }
+  // getCurrentUser(): Observable<AuthResponse | null> {
+  //   return this.http.get<AuthResponse | { user: AuthResponse }>(`/auth/me`).pipe(
+  //     map((resp: any) => (resp?.user ?? resp) as AuthResponse),
+  //     catchError(() => of(null)),
+  //   );
+  // }
 
-  getCurrentUser(accessToken: string): Observable<AuthResponse | null> {
-    if (!this.isAuthenticated()) {
-      return of(null);
-    }
-
-    return this.http.get<AuthResponse>(`${this.baseUrl}/account/auth/${accessToken}`).pipe(
-      catchError(() => {
-        this.handleLogout();
-        return of(null);
-      }),
-    );
-  }
-
-  refreshToken(): Observable<AuthResponse> {
-    const refreshToken = this.tokenService.getRefreshToken();
-
-    if (!refreshToken) {
-      return throwError(() => new Error('No refresh token available'));
-    }
-
-    return this.http
-      .post<AuthResponse>(`${this.baseUrl}/refresh-token`, {
-        refresh_token: refreshToken,
-      })
-      .pipe(
-        map((response) => {
-          if ('error' in response) {
-            const errorMessage =
-              typeof response.error === 'string' ? response.error : 'Unknown error';
-
-            throw new Error(errorMessage);
-          }
-          return response as AuthResponse;
-        }),
-        tap((response) => this.handleAuthentication(response)),
-        catchError((error) => {
-          this.handleLogout();
-          return this.handleError('Token refresh failed', error);
-        }),
-      );
-  }
-
-  private handleAuthentication(response: AuthResponse): void {
-    this.tokenService.setTokens(response.auth_key);
-  }
-
-  private handleLogout(): void {
-    this.tokenService.clearTokens();
+  getCurrentUser(): Observable<AuthResponse | null> {
+    return this.http.get<AuthResponse>(`/auth/me`).pipe(catchError(() => of(null)));
   }
 
   private handleError(message: string, error: string): Observable<never> {
