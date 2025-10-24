@@ -46,10 +46,7 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/account/logout`, {}).pipe(
-      catchError(() => of(void 0)),
-      switchMap(() => this.http.post<void>('/auth/logout', {}).pipe(catchError(() => of(void 0)))),
-    );
+    return this.http.post<void>(`/auth/logout`, {}).pipe(catchError(() => of(void 0)));
   }
 
   forgotPassword(email: string): Observable<{ message: string }> {

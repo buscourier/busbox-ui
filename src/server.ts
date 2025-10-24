@@ -1,3 +1,4 @@
+import { randomBytes, timingSafeEqual } from 'node:crypto';
 import { join } from 'node:path';
 
 import {
@@ -23,6 +24,70 @@ app.use(cookieParser());
 const isProd = process.env['NODE_ENV'] === 'production';
 const cookieBase = { httpOnly: true, sameSite: 'lax' as const, secure: isProd, path: '/' };
 
+// ─── CSRF Token Setup (double-submit cookie) ─────────────
+app.use((req, res, next) => {
+  const token = req.cookies?.['XSRF-TOKEN'];
+  if (!token) {
+    const newToken = randomBytes(32).toString('hex');
+    res.cookie('XSRF-TOKEN', newToken, {
+      secure: isProd,
+      sameSite: 'lax',
+      httpOnly: false, // Must be readable by Angular
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      path: '/',
+    });
+  }
+  next();
+});
+
+// ─── CSRF Validation ─────────────────────────────────────
+const CSRF_EXEMPT_PATHS = ['/auth/', '/api/calc/', '/api/site/'];
+
+app.use((req, res, next) => {
+  const method = req.method;
+
+  // Skip safe HTTP methods
+  if (['GET', 'HEAD', 'OPTIONS'].includes(method)) return next();
+
+  // Skip explicitly exempted paths
+  if (CSRF_EXEMPT_PATHS.some((p) => req.path.startsWith(p))) return next();
+
+  // Origin/Referer check for same-origin requests
+  const host = req.get('host') || '';
+  const origin = req.get('origin') || '';
+  const referer = req.get('referer') || '';
+
+  if (origin && !origin.includes(host)) {
+    return res.status(403).json({ error: 'invalid origin' });
+  }
+
+  if (!origin && referer && !referer.includes(host)) {
+    return res.status(403).json({ error: 'invalid referer' });
+  }
+
+  // CSRF token validation with timing-safe comparison
+  const csrfCookie = req.cookies?.['XSRF-TOKEN'];
+  const csrfHeader = req.header('X-XSRF-TOKEN');
+
+  if (!csrfCookie || !csrfHeader) {
+    return res.status(403).json({ error: 'CSRF token missing' });
+  }
+
+  try {
+    const cookieBuf = Buffer.from(csrfCookie);
+    const headerBuf = Buffer.from(csrfHeader);
+
+    if (cookieBuf.length !== headerBuf.length || !timingSafeEqual(cookieBuf, headerBuf)) {
+      return res.status(403).json({ error: 'CSRF token mismatch' });
+    }
+  } catch {
+    return res.status(403).json({ error: 'invalid CSRF token format' });
+  }
+
+  next();
+});
+
+// ─── Auth Endpoints ──────────────────────────────────────
 app.post('/auth/session', json(), (req, res) => {
   const { access_token, refresh_token, access_expires_in, refresh_expires_in } = req.body ?? {};
 
@@ -47,8 +112,9 @@ app.post('/auth/refresh', async (req, res) => {
   const refresh = req.cookies?.['bb_refresh'];
   if (!refresh) return res.status(401).end();
 
-  if (!process.env['API_REFRESH_URL'])
+  if (!process.env['API_REFRESH_URL']) {
     return res.status(501).json({ error: 'refresh not supported' });
+  }
 
   try {
     const r = await fetch(process.env['API_REFRESH_URL'], {
@@ -68,7 +134,9 @@ app.post('/auth/refresh', async (req, res) => {
       })
       .status(204)
       .end();
-  } catch {
+  } catch (err) {
+    if (!isProd) console.error('[Auth Refresh Error]', err);
+
     return res
       .clearCookie('bb_access', cookieBase)
       .clearCookie('bb_refresh', cookieBase)
@@ -97,19 +165,34 @@ app.get('/auth/me', async (req, res) => {
     });
 
     const data = await response.json().catch(() => null);
-    if (!response.ok) return res.status(response.status).json(data ?? { error: 'no data found' });
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        res.clearCookie('bb_access', cookieBase);
+        res.clearCookie('bb_refresh', cookieBase);
+      }
+      return res.status(response.status).json(data ?? { error: 'authentication failed' });
+    }
+
     return res.json(data);
-  } catch {
+  } catch (err) {
+    if (!isProd) console.error('[Auth Me Error]', err);
     return res.status(502).json({ error: 'upstream fetch failed' });
   }
 });
 
-/**
- * API Proxy с rate limiting
- */
+// ─── Health Check ────────────────────────────────────────
+app.get('/health', (_req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
+});
+
+// ─── API Proxy ───────────────────────────────────────────
 app.use(
   '/api',
-  //add Authorization from HttpOnly-cookies
   (req, _res, next) => {
     const token = req.cookies?.['bb_access'];
     if (token && !req.headers['authorization']) {
@@ -122,21 +205,7 @@ app.use(
   createApiProxy(),
 );
 
-/**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/{*splat}', (req, res) => {
- *   // Handle API request
- * });
- * ```
- */
-
-/**
- * Serve static files from /browser
- */
+// ─── Static Files ────────────────────────────────────────
 app.use(
   express.static(browserDistFolder, {
     maxAge: '1y',
@@ -145,34 +214,49 @@ app.use(
   }),
 );
 
-/**
- * Handle all other requests by rendering the Angular application.
- */
+// ─── Angular SSR ─────────────────────────────────────────
 app.use((req, res, next) => {
   angularApp
     .handle(req)
     .then((response) => (response ? writeResponseToNodeResponse(response, res) : next()))
-    .catch(next);
+    .catch((err) => {
+      if (!isProd) console.error('[SSR Error]', err);
+      res.status(500).send('Internal Server Error');
+    });
 });
 
-/**
- * Start the server if this module is the main entry point, or it is ran via PM2.
- * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
- */
+// ─── Start Server ────────────────────────────────────────
 if (isMainModule(import.meta.url) || process.env['pm_id']) {
-  const port = process.env['PORT'] || 4000;
-  console.log('POOORT', port);
-  app.listen(port, (error) => {
-    if (error) {
-      throw error;
+  // ─── Environment Validation (runtime) ───────────────────
+  const requiredEnvVars = ['APP_API_BASE_URL', ...(isProd ? ['APP_API_KEY'] : [])];
+  for (const varName of requiredEnvVars) {
+    if (!process.env[varName]) {
+      console.error(`❌ Missing required environment variable: ${varName}`);
+      process.exit(1);
     }
+  }
+  const port = process.env['PORT'] || 4000;
 
-    console.log(`Node Express server listening on http://localhost:${port}`);
+  const server = app.listen(port, () => {
+    console.log(`🚀 Server ready at http://localhost:${port}`);
+    console.log(`📦 Environment: ${isProd ? 'production' : 'development'}`);
   });
+
+  const shutdown = (signal: string) => {
+    console.log(`\n${signal} received, closing server gracefully...`);
+    server.close(() => {
+      console.log('✅ Server closed');
+      process.exit(0);
+    });
+
+    setTimeout(() => {
+      console.error('❌ Forcing shutdown after timeout');
+      process.exit(1);
+    }, 10_000);
+  };
+
+  process.on('SIGTERM', () => shutdown('SIGTERM'));
+  process.on('SIGINT', () => shutdown('SIGINT'));
 }
 
-/**
- * Request handler used by the Angular CLI (for dev-server and during build)
- * or Firebase Cloud Functions.
- */
 export const reqHandler = createNodeRequestHandler(app);

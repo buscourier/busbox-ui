@@ -1,18 +1,25 @@
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { map } from 'rxjs/operators';
+import { tap } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+
+import { AuthService } from '@auth/services/auth.service';
 
 import { AuthActions } from '../actions';
 
 export const logoutEffects = {
   logout: createEffect(
-    (actions$ = inject(Actions), router = inject(Router)) => {
+    (actions$ = inject(Actions), router = inject(Router), authService = inject(AuthService)) => {
       return actions$.pipe(
         ofType(AuthActions.logout),
-        map(() => {
-          router.navigate(['/auth/login']);
-        }),
+        switchMap(() =>
+          authService.logout().pipe(
+            tap(() => {
+              router.navigate(['/auth/login']);
+            }),
+          ),
+        ),
       );
     },
     { functional: true, dispatch: false },

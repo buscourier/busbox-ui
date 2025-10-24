@@ -40,10 +40,6 @@ export const AuthActions = createActionGroup({
     'Get Current User Success': props<{ user: AuthResponse }>(),
     'Get Current User Failure': props<{ error: ApiError }>(),
 
-    'Refresh Token': emptyProps(),
-    'Refresh Token Success': props<{ response: AuthResponse }>(),
-    'Refresh Token Failure': props<{ error: ApiError }>(),
-
     'Clear Error': emptyProps(),
   },
 });

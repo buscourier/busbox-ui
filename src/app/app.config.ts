@@ -15,7 +15,7 @@ import { provideEventPlugins } from '@taiga-ui/event-plugins';
 import { provideYConfig } from 'angular-yandex-maps-v3';
 
 import { getMapConfig, getScrollConfig, getViewTransitionsConfig } from '@core/config';
-import { authRefreshInterceptor } from '@core/http';
+import { authRefreshInterceptor, csrfInterceptor } from '@core/http';
 import {
   CONTACTS_PROVIDERS,
   DATE_PROVIDERS,
@@ -41,7 +41,7 @@ registerLocaleData(localeRu, 'ru');
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(withFetch(), withInterceptors([authRefreshInterceptor])),
+    provideHttpClient(withFetch(), withInterceptors([authRefreshInterceptor, csrfInterceptor])),
     provideClientHydration(withEventReplay()),
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),

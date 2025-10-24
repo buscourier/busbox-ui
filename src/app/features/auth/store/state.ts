@@ -7,7 +7,6 @@ export interface AuthState {
   isAuthenticated: boolean;
   isInitialized: boolean;
   isLoading: boolean;
-  isRefreshingToken: boolean;
   error: ApiError | null;
 }
 
@@ -16,6 +15,5 @@ export const initialState: AuthState = {
   isAuthenticated: false,
   isInitialized: false,
   isLoading: false,
-  isRefreshingToken: false,
   error: null,
 };
