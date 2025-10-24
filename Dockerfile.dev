@@ -1,21 +1,11 @@
-# Stage 1: Install dependencies
-FROM node:20 AS deps
-
-WORKDIR /app
-
-# Copy package.json and package-lock.json files
-COPY package*.json ./
-
-# Install all dependencies, including devDependencies
-RUN npm ci
-
-# Stage 2: Development
+# Development Dockerfile with SSR support
 FROM node:20
 
+# Set to development
 ARG NODE_ENV=development
 ENV NODE_ENV=$NODE_ENV
 
-# Add environment variables as in the previous file
+# Set environment variables
 ARG APP_API_BASE_URL
 ENV APP_API_BASE_URL=${APP_API_BASE_URL}
 
@@ -28,19 +18,30 @@ ENV APP_MAP_KEY=${APP_MAP_KEY}
 ARG APP_IMAGE_PROVIDER_URL
 ENV APP_IMAGE_PROVIDER_URL=${APP_IMAGE_PROVIDER_URL}
 
+#ARG API_REFRESH_URL
+#ENV API_REFRESH_URL=${API_REFRESH_URL}
+
 ARG DOPPLER_CONFIG
 ENV DOPPLER_CONFIG=${DOPPLER_CONFIG}
 
+# Set PORT for SSR server
+ENV PORT=4000
+
 WORKDIR /app
 
-# Copy installed dependencies
-COPY --from=deps /app/node_modules ./node_modules
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including devDependencies for development)
+RUN npm ci --legacy-peer-deps
 
 # Copy source code
 COPY . .
 
-# Expose port
-EXPOSE 4200
+# Expose SSR development server port
+EXPOSE 4000
 
-# Run the application in development mode
-CMD ["npm", "run", "start", "--", "--host", "0.0.0.0"]
+# Build and run SSR server in development mode
+# Note: For true hot-reload in development, you might want to use volumes
+# and run ng serve with SSR. For now, we build and run the SSR server.
+CMD ["sh", "-c", "npm run build -- --configuration=development && npm run serve:ssr:busbox-ui"]

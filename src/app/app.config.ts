@@ -3,7 +3,11 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import localeRu from '@angular/common/locales/ru';
 import { type ApplicationConfig } from '@angular/core';
 import { isDevMode, provideZoneChangeDetection } from '@angular/core';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import {
+  provideClientHydration,
+  withEventReplay,
+  withHttpTransferCacheOptions,
+} from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withInMemoryScrolling, withViewTransitions } from '@angular/router';
 import { provideTransloco } from '@jsverse/transloco';
@@ -15,7 +19,7 @@ import { provideEventPlugins } from '@taiga-ui/event-plugins';
 import { provideYConfig } from 'angular-yandex-maps-v3';
 
 import { getMapConfig, getScrollConfig, getViewTransitionsConfig } from '@core/config';
-import { authRefreshInterceptor, csrfInterceptor } from '@core/http';
+import { authRefreshInterceptor, csrfInterceptor, ssrAbsoluteUrlInterceptor } from '@core/http';
 import {
   CONTACTS_PROVIDERS,
   DATE_PROVIDERS,
@@ -41,8 +45,16 @@ registerLocaleData(localeRu, 'ru');
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(withFetch(), withInterceptors([authRefreshInterceptor, csrfInterceptor])),
-    provideClientHydration(withEventReplay()),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([ssrAbsoluteUrlInterceptor, authRefreshInterceptor, csrfInterceptor]),
+    ),
+    provideClientHydration(
+      withEventReplay(),
+      withHttpTransferCacheOptions({
+        includePostRequests: false,
+      }),
+    ),
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideStore(),

@@ -34,7 +34,7 @@ main() {
   # Initialize variables with default values
   NODE_ENV="development"
   DOCKERFILE="Dockerfile.dev"
-  PORT="4200:4200"
+  PORT="4200:4000"
   CONFIG_NAME="dev"
 
   # Check if env parameter is provided
@@ -42,13 +42,13 @@ main() {
   stage)
     NODE_ENV="staging"
     DOCKERFILE="Dockerfile"
-    PORT="4200:80"
+    PORT="4200:4000"
     CONFIG_NAME="stage_docker"
     ;;
   prod)
     NODE_ENV="production"
     DOCKERFILE="Dockerfile"
-    PORT="4200:80"
+    PORT="4200:4000"
     CONFIG_NAME="prod_docker"
     ;;
   *)
@@ -96,6 +96,7 @@ main() {
     -e APP_MAP_KEY="$APP_MAP_KEY" \
     -e APP_IMAGE_PROVIDER_URL="$APP_IMAGE_PROVIDER_URL" \
     -e NODE_ENV="$NODE_ENV" \
+    -e PORT="4000" \
     --rm --name "$CONTAINER_NAME" \
     "$IMAGE_NAME"; then
     log "ERROR" "Failed to start Docker container"
