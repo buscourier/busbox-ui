@@ -1,0 +1,21 @@
+{
+  "/api": {
+    "target": "https://your-api-url.com",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "info",
+    "pathRewrite": {
+      "^/api": ""
+    },
+    "headers": {
+      "X-API-Key": "your-api-key-from-doppler"
+    }
+  },
+  "/auth": {
+    "target": "https://your-domain.com",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "info"
+  }
+}
+

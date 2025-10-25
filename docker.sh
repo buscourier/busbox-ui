@@ -34,7 +34,7 @@ main() {
   # Initialize variables with default values
   NODE_ENV="development"
   DOCKERFILE="Dockerfile.dev"
-  PORT="4200:4000"
+  PORT="4200:4200"
   CONFIG_NAME="dev"
 
   # Check if env parameter is provided
@@ -67,19 +67,16 @@ main() {
   fi
 
   # Build Docker image
-  CONTAINER_NAME="$(doppler secrets get DOPPLER_PROJECT --plain --config "$1")-$NODE_ENV"
-  IMAGE_NAME="$(doppler secrets get DOCKER_USERNAME --plain --config "$1")/$CONTAINER_NAME:latest"
+  CONTAINER_NAME="$(doppler secrets get DOPPLER_PROJECT --plain --config "$CONFIG_NAME")-$NODE_ENV"
+  IMAGE_NAME="$(doppler secrets get DOCKER_USERNAME --plain --config "$CONFIG_NAME")/$CONTAINER_NAME:latest"
 
   if docker image inspect "$IMAGE_NAME" >/dev/null 2>&1; then
     log "INFO" "Docker image $IMAGE_NAME already exists. Skipping build."
   else
     log "INFO" "Building Docker image"
+    # Only pass non-secret build args (NODE_ENV)
+    # Secrets will be injected at runtime via -e flags
     if ! docker build -t "$IMAGE_NAME" \
-      --build-arg DOPPLER_CONFIG="$DOPPLER_CONFIG" \
-      --build-arg APP_API_BASE_URL="$APP_API_BASE_URL" \
-      --build-arg APP_API_KEY="$APP_API_KEY" \
-      --build-arg APP_MAP_KEY="$APP_MAP_KEY" \
-      --build-arg APP_IMAGE_PROVIDER_URL="$APP_IMAGE_PROVIDER_URL" \
       --build-arg NODE_ENV="$NODE_ENV" \
       -f "$DOCKERFILE" .; then
       log "ERROR" "Docker build failed"
@@ -87,8 +84,9 @@ main() {
     fi
   fi
 
-  # Run Docker container in background
+  # Run Docker container in background with runtime secrets injection
   log "INFO" "Running Docker container in background"
+  # ⚠️ Secrets are injected at runtime (not in build), so they're never stored in image layers
   if ! docker run -d -p "$PORT" \
     -e DOPPLER_CONFIG="$DOPPLER_CONFIG" \
     -e APP_API_BASE_URL="$APP_API_BASE_URL" \

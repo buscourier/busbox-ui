@@ -20,26 +20,12 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copy source code
 COPY . .
 
-# Set build-time environment variables
+# Set build-time environment variables (only non-secret vars)
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
-ARG APP_API_BASE_URL
-ENV APP_API_BASE_URL=${APP_API_BASE_URL}
-
-ARG APP_API_KEY
-ENV APP_API_KEY=${APP_API_KEY}
-
-ARG APP_MAP_KEY
-ENV APP_MAP_KEY=${APP_MAP_KEY}
-
-ARG APP_IMAGE_PROVIDER_URL
-ENV APP_IMAGE_PROVIDER_URL=${APP_IMAGE_PROVIDER_URL}
-
-ARG DOPPLER_CONFIG
-ENV DOPPLER_CONFIG=${DOPPLER_CONFIG}
-
 # Build the application with SSR
+# Note: Angular build doesn't need API keys - they're only used in runtime!
 RUN npm run build -- --configuration=${NODE_ENV}
 
 # Stage 3: Production dependencies only
@@ -70,30 +56,17 @@ COPY --from=builder /app/dist/busbox-ui ./dist/busbox-ui
 # Copy package.json for potential runtime needs
 COPY package*.json ./
 
-# Set runtime environment variables
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
-
-ARG APP_API_BASE_URL
-ENV APP_API_BASE_URL=${APP_API_BASE_URL}
-
-ARG APP_API_KEY
-ENV APP_API_KEY=${APP_API_KEY}
-
-ARG APP_MAP_KEY
-ENV APP_MAP_KEY=${APP_MAP_KEY}
-
-ARG APP_IMAGE_PROVIDER_URL
-ENV APP_IMAGE_PROVIDER_URL=${APP_IMAGE_PROVIDER_URL}
-
-#ARG API_REFRESH_URL
-#ENV API_REFRESH_URL=${API_REFRESH_URL}
-
-ARG DOPPLER_CONFIG
-ENV DOPPLER_CONFIG=${DOPPLER_CONFIG}
-
-# Set PORT
+# Set runtime environment variables (non-secret only)
+ENV NODE_ENV=production
 ENV PORT=4000
+
+# Set SSR_BASE_URL for Angular SSR to make requests to itself
+ENV SSR_BASE_URL=http://localhost:4000
+
+# ⚠️ Secrets should be injected at runtime via:
+# docker run -e APP_API_BASE_URL=... -e APP_API_KEY=... -e APP_MAP_KEY=...
+# or Kubernetes secrets / docker-compose env_file
+# DO NOT use ARG for secrets as they will be stored in image layers!
 
 # Create non-root user for security
 RUN addgroup -g 1001 -S nodejs && \
@@ -109,7 +82,7 @@ USER nodejs
 EXPOSE 4000
 
 # Configure healthcheck
-HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
   CMD curl -f http://localhost:4000/health || exit 1
 
 # Start the SSR server

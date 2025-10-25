@@ -46,3 +46,6 @@ Thumbs.db
 deploy.log
 .secrets
 diff.txt
+
+# Proxy configuration (contains API keys)
+proxy.conf.json

@@ -1,47 +1,34 @@
-# Development Dockerfile with SSR support
-FROM node:20
-
-# Set to development
-ARG NODE_ENV=development
-ENV NODE_ENV=$NODE_ENV
-
-# Set environment variables
-ARG APP_API_BASE_URL
-ENV APP_API_BASE_URL=${APP_API_BASE_URL}
-
-ARG APP_API_KEY
-ENV APP_API_KEY=${APP_API_KEY}
-
-ARG APP_MAP_KEY
-ENV APP_MAP_KEY=${APP_MAP_KEY}
-
-ARG APP_IMAGE_PROVIDER_URL
-ENV APP_IMAGE_PROVIDER_URL=${APP_IMAGE_PROVIDER_URL}
-
-#ARG API_REFRESH_URL
-#ENV API_REFRESH_URL=${API_REFRESH_URL}
-
-ARG DOPPLER_CONFIG
-ENV DOPPLER_CONFIG=${DOPPLER_CONFIG}
-
-# Set PORT for SSR server
-ENV PORT=4000
+# Stage 1: Install dependencies
+FROM node:20-alpine AS deps
 
 WORKDIR /app
 
-# Copy package files
+# Copy package.json and package-lock.json files
 COPY package*.json ./
 
-# Install all dependencies (including devDependencies for development)
+# Install all dependencies, including devDependencies
 RUN npm ci --legacy-peer-deps
+
+# Stage 2: Development
+FROM node:20-alpine
+
+ARG NODE_ENV=development
+ENV NODE_ENV=$NODE_ENV
+
+# Remove API secrets from build args - they should be runtime secrets
+# Add SSR_BASE_URL for consistency (though not used in ng serve)
+ENV SSR_BASE_URL=http://localhost:4200
+
+WORKDIR /app
+
+# Copy installed dependencies
+COPY --from=deps /app/node_modules ./node_modules
 
 # Copy source code
 COPY . .
 
-# Expose SSR development server port
-EXPOSE 4000
+# Expose dev server port
+EXPOSE 4200
 
-# Build and run SSR server in development mode
-# Note: For true hot-reload in development, you might want to use volumes
-# and run ng serve with SSR. For now, we build and run the SSR server.
-CMD ["sh", "-c", "npm run build -- --configuration=development && npm run serve:ssr:busbox-ui"]
+# Run the application in development mode with ng serve
+CMD ["npm", "run", "start", "--", "--host", "0.0.0.0"]
