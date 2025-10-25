@@ -4,8 +4,6 @@ import { map } from 'rxjs/operators';
 
 import { ApiService } from '@core/services';
 
-import { environment } from '@env/environment';
-
 import type {
   CancelOrderPayload,
   CancelOrderResponse,
@@ -61,29 +59,21 @@ export class OrdersService extends ApiService {
   // }
 
   getOrderList(payload: OrderListPayload): Observable<OrderListResponse> {
-    return this.http
-      .post<OrderListResponse>(
-        `${this.baseUrl}/order/getorders/`,
-        JSON.stringify({
-          'api-key': environment.apiKey,
-          ...payload,
-        }),
-      )
-      .pipe(
-        map((response) => {
-          if (!response || !Array.isArray(response.orders)) {
-            return {
-              rows: '0',
-              orders: [],
-            };
-          }
+    return this.http.post<OrderListResponse>(`${this.baseUrl}/order/getorders/`, payload).pipe(
+      map((response) => {
+        if (!response || !Array.isArray(response.orders)) {
+          return {
+            rows: '0',
+            orders: [],
+          };
+        }
 
-          return response;
-        }),
-        catchError((error) => {
-          return this.handleError(error);
-        }),
-      );
+        return response;
+      }),
+      catchError((error) => {
+        return this.handleError(error);
+      }),
+    );
   }
 
   clearCache(): void {
@@ -91,30 +81,20 @@ export class OrdersService extends ApiService {
   }
 
   getOrder(orderId: string): Observable<OrderDetails> {
-    return this.http
-      .get<OrderDetails>(`${this.baseUrl}/order/getdetails/${environment.apiKey}/${orderId}`)
-      .pipe(
-        // tap((response) => {
-        //   if (!response || !response.order) {
-        //     throw new Error('Детали заказа не найдены');
-        //   }
-        // }),
-        catchError(this.handleError.bind(this)),
-      );
+    return this.http.get<OrderDetails>(`${this.baseUrl}/order/getdetails/${orderId}`).pipe(
+      // tap((response) => {
+      //   if (!response || !response.order) {
+      //     throw new Error('Детали заказа не найдены');
+      //   }
+      // }),
+      catchError(this.handleError.bind(this)),
+    );
   }
 
   cancelOrder(payload: CancelOrderPayload): Observable<CancelOrderResponse> {
-    return this.http
-      .post<CancelOrderResponse>(
-        `${this.baseUrl}/order/ordercancel`,
-        JSON.stringify({
-          'api-key': environment.apiKey,
-          ...payload,
-        }),
-      )
-      .pipe(
-        tap(() => this.clearCache()),
-        catchError(this.handleError.bind(this)),
-      );
+    return this.http.post<CancelOrderResponse>(`${this.baseUrl}/order/ordercancel`, payload).pipe(
+      tap(() => this.clearCache()),
+      catchError(this.handleError.bind(this)),
+    );
   }
 }

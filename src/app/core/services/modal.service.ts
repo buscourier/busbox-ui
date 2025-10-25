@@ -1,4 +1,5 @@
-import { DestroyRef, inject, Injectable } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { afterNextRender, DestroyRef, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize, type Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -17,6 +18,8 @@ export interface ModalUrlOptions {
   providedIn: 'root',
 })
 export class ModalService {
+  private readonly document = inject(DOCUMENT);
+  private readonly window = this.document.defaultView;
   private readonly destroyDialog$ = new Subject<void>();
   private readonly activeModals = new Map<string, boolean>();
   private readonly destroyRef = inject(DestroyRef);
@@ -24,7 +27,9 @@ export class ModalService {
   private readonly MODAL_PARAMS = ['orderId', 'invoiceId'] as const;
 
   constructor() {
-    this.initPopstateListener();
+    afterNextRender(() => {
+      this.initPopstateListener();
+    });
   }
 
   showModalWithUrl(
@@ -33,6 +38,8 @@ export class ModalService {
     paramName: string,
     options: ModalUrlOptions = {},
   ): void {
+    if (!this.window) return;
+
     const { clearOtherModals = true, replaceHistory = false } = options;
 
     // Prevent duplicate
@@ -40,7 +47,7 @@ export class ModalService {
       return;
     }
 
-    const url = new URL(window.location.href);
+    const url = new URL(this.window.location.href);
 
     if (clearOtherModals) {
       this.clearAllModalParams(url);
@@ -49,9 +56,9 @@ export class ModalService {
     url.searchParams.set(paramName, id);
 
     if (replaceHistory) {
-      window.history.replaceState({}, '', url.toString());
+      this.window.history.replaceState({}, '', url.toString());
     } else {
-      window.history.pushState({}, '', url.toString());
+      this.window.history.pushState({}, '', url.toString());
     }
 
     this.activeModals.set(paramName, true);
@@ -71,9 +78,11 @@ export class ModalService {
    * Close modal and remove url params
    */
   closeModal(paramName: string): void {
-    const url = new URL(window.location.href);
+    if (!this.window) return;
+
+    const url = new URL(this.window.location.href);
     url.searchParams.delete(paramName);
-    window.history.replaceState({}, '', url.toString());
+    this.window.history.replaceState({}, '', url.toString());
 
     this.activeModals.set(paramName, false);
   }
@@ -87,16 +96,18 @@ export class ModalService {
     return this.activeModals.get(paramName) || false;
   }
 
-  getActiveModalId(paramName: string): string | null {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(paramName);
-  }
+  // getActiveModalId(paramName: string): string | null {
+  //   const urlParams = new URLSearchParams(this.window.location.search);
+  //   return urlParams.get(paramName);
+  // }
 
   /**
    * Sync modal state with URL
    */
   syncWithUrl(modalConfigs: Record<string, ModalConfig>): void {
-    const urlParams = new URLSearchParams(window.location.search);
+    if (!this.window) return;
+
+    const urlParams = new URLSearchParams(this.window.location.search);
 
     Object.entries(modalConfigs).forEach(([paramName, config]) => {
       const id = urlParams.get(paramName);
@@ -107,7 +118,9 @@ export class ModalService {
   }
 
   getModalParamsFromUrl(): Record<string, string> {
-    const urlParams = new URLSearchParams(window.location.search);
+    if (!this.window) return {};
+
+    const urlParams = new URLSearchParams(this.window.location.search);
     const modalParams: Record<string, string> = {};
 
     this.MODAL_PARAMS.forEach((param) => {
@@ -121,22 +134,23 @@ export class ModalService {
   }
 
   private initPopstateListener(): void {
-    window.addEventListener('popstate', this.handlePopState.bind(this));
+    if (!this.window) return;
+
+    const handlePopState = () => {
+      const urlParams = new URLSearchParams(this.window!.location.search);
+      const hasAnyModalParam = this.MODAL_PARAMS.some((param) => urlParams.has(param));
+
+      if (!hasAnyModalParam) {
+        this.closeAllModals();
+      }
+    };
+
+    this.window!.addEventListener('popstate', handlePopState);
 
     this.destroyRef.onDestroy(() => {
-      window.removeEventListener('popstate', this.handlePopState.bind(this));
+      this.window!.removeEventListener('popstate', handlePopState);
       this.destroyDialog$.complete();
     });
-  }
-
-  private handlePopState(): void {
-    const urlParams = new URLSearchParams(window.location.search);
-
-    const hasAnyModalParam = this.MODAL_PARAMS.some((param) => urlParams.has(param));
-
-    if (!hasAnyModalParam) {
-      this.closeAllModals();
-    }
   }
 
   private clearAllModalParams(url: URL): void {

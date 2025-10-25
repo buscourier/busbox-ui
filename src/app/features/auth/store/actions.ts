@@ -17,7 +17,7 @@ export const AuthActions = createActionGroup({
     InitializeFailure: emptyProps(),
 
     Login: props<{ credentials: LoginCredentials }>(),
-    'Login Success': props<{ response: AuthResponse }>(),
+    'Login Success': props<{ user: AuthResponse }>(),
     'Login Failure': props<{ error: ApiError }>(),
 
     Register: props<{ userData: RegisterPayload }>(),
@@ -39,10 +39,6 @@ export const AuthActions = createActionGroup({
     'Get Current User': emptyProps(),
     'Get Current User Success': props<{ user: AuthResponse }>(),
     'Get Current User Failure': props<{ error: ApiError }>(),
-
-    'Refresh Token': emptyProps(),
-    'Refresh Token Success': props<{ response: AuthResponse }>(),
-    'Refresh Token Failure': props<{ error: ApiError }>(),
 
     'Clear Error': emptyProps(),
   },

@@ -5,8 +5,6 @@ import { catchError, switchMap, map } from 'rxjs/operators';
 
 import { ApiService } from '@core/services';
 
-import { environment } from '@env/environment';
-
 import type { ContactFormPayload } from './contact-form.types';
 
 type MailerResponse = boolean;
@@ -36,7 +34,7 @@ interface ContactFormResult {
   providedIn: 'root',
 })
 export class ContactFormService extends ApiService {
-  private readonly mailerUrl = `${this.baseUrl}/site/maile`;
+  private readonly mailerUrl = `${this.baseUrl}/site/mailer`;
   private readonly bitrixUrl = `https://bitrix.busbox.guru/rest/1/xk0350plspumy30m/crm.lead.add`;
 
   submitContactForm(formData: ContactFormPayload): Observable<ContactFormResult> {
@@ -92,7 +90,6 @@ export class ContactFormService extends ApiService {
 
   private sendForm(formData: ContactFormPayload): Observable<MailerResponse> {
     const requestPayload = {
-      'api-key': environment.apiKey,
       ...formData,
     };
 
@@ -127,9 +124,9 @@ export class ContactFormService extends ApiService {
 
   getStatusMessage(result: ContactFormResult): string {
     if (result.mailerSuccess && result.bitrixSuccess) {
-      return 'Заявка успешно отправлена!';
+      return 'Информация успешно отправлена!';
     } else if (result.mailerSuccess && !result.bitrixSuccess) {
-      return 'Заявка отправлена, но возникла проблема с сохранением в CRM';
+      return 'Информация отправлена, но возникла проблема с сохранением в CRM';
     } else {
       return result.error || 'Ошибка отправки заявки. Попробуйте позже.';
     }

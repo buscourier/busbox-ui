@@ -1,4 +1,5 @@
 import { inject, Injectable } from '@angular/core';
+import { WA_WINDOW } from '@ng-web-apis/common';
 
 import {
   DOCUMENT_RENDERER,
@@ -29,16 +30,20 @@ export interface DocumentRenderer<T> {
 
 @Injectable({ providedIn: 'root' })
 export class DocumentToPdfService<T = unknown> {
-  private readonly defaultProcessingOptions: Required<DocumentProcessingOptions> = {
-    scale: 2.5,
-    quality: 0.95,
-    pixelRatio: window.devicePixelRatio || 1,
-    skipFonts: true,
-    includeQueryParams: false,
-    imageLoadTimeout: 5000,
-    renderWaitTime: 200,
-    imageFormat: ImageFormat.PNG,
-  };
+  private readonly window = inject(WA_WINDOW);
+
+  private get defaultProcessingOptions(): Required<DocumentProcessingOptions> {
+    return {
+      scale: 2.5,
+      quality: 0.95,
+      pixelRatio: this.window.devicePixelRatio || 1,
+      skipFonts: true,
+      includeQueryParams: false,
+      imageLoadTimeout: 5000,
+      renderWaitTime: 200,
+      imageFormat: ImageFormat.PNG,
+    };
+  }
 
   private readonly defaultGenerationOptions: Required<PdfGenerationOptions> = {
     filename: 'document.pdf',

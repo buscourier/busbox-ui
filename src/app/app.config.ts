@@ -1,8 +1,13 @@
 import { provideImageKitLoader, registerLocaleData } from '@angular/common';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import localeRu from '@angular/common/locales/ru';
 import { type ApplicationConfig } from '@angular/core';
 import { isDevMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  provideClientHydration,
+  withEventReplay,
+  withHttpTransferCacheOptions,
+} from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withInMemoryScrolling, withViewTransitions } from '@angular/router';
 import { provideTransloco } from '@jsverse/transloco';
@@ -14,6 +19,7 @@ import { provideEventPlugins } from '@taiga-ui/event-plugins';
 import { provideYConfig } from 'angular-yandex-maps-v3';
 
 import { getMapConfig, getScrollConfig, getViewTransitionsConfig } from '@core/config';
+import { authRefreshInterceptor, csrfInterceptor, ssrAbsoluteUrlInterceptor } from '@core/http';
 import {
   CONTACTS_PROVIDERS,
   DATE_PROVIDERS,
@@ -27,9 +33,9 @@ import {
 import { DocumentsEffects, documentsFeature } from '@shared/features/documents';
 import { LocationsEffects, locationsFeature } from '@shared/store';
 
-import { environment } from '@env/environment';
-
 import { AuthEffects, authFeature } from '@auth';
+import { AUTH_BROWSER_PROVIDERS } from '@auth/auth-browser';
+import { AUTH_SSR_PROVIDERS } from '@auth/auth-ssr';
 import { NewsEffects, newsFeature } from '@news/store';
 
 import { routes } from './app.routes';
@@ -39,7 +45,16 @@ registerLocaleData(localeRu, 'ru');
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([ssrAbsoluteUrlInterceptor, authRefreshInterceptor, csrfInterceptor]),
+    ),
+    provideClientHydration(
+      withEventReplay(),
+      withHttpTransferCacheOptions({
+        includePostRequests: false,
+      }),
+    ),
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideStore(),
@@ -51,7 +66,7 @@ export const appConfig: ApplicationConfig = {
     provideState(newsFeature),
     provideEffects(LocationsEffects, AuthEffects, DocumentsEffects, NewsEffects),
     provideIconResolver(),
-    provideImageKitLoader(environment.imageProviderUrl),
+    provideImageKitLoader('https://ik.imagekit.io/buscourier'),
     provideYConfig(getMapConfig()),
     provideEventPlugins(),
     provideValidationLimits(),
@@ -75,5 +90,7 @@ export const appConfig: ApplicationConfig = {
     ...CONTACTS_PROVIDERS,
     ...PDF_PROVIDERS,
     ...UI_PROVIDERS,
+    AUTH_SSR_PROVIDERS,
+    AUTH_BROWSER_PROVIDERS,
   ],
 };

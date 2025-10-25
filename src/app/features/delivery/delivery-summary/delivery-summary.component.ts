@@ -1,9 +1,9 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { DestroyRef, type OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component, inject, HostListener } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { provideTranslocoScope, TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { TuiCurrencyPipe } from '@taiga-ui/addon-commerce';
@@ -12,7 +12,7 @@ import {
   TuiSheetDialog,
   type TuiSheetDialogOptions,
 } from '@taiga-ui/addon-mobile';
-import { TuiButton, TuiIcon, TuiNotification } from '@taiga-ui/core';
+import { TuiButton, TuiIcon } from '@taiga-ui/core';
 import { TUI_CONFIRM, type TuiConfirmData, TuiSkeleton } from '@taiga-ui/kit';
 import { BehaviorSubject, type Observable, of, switchMap } from 'rxjs';
 
@@ -29,7 +29,6 @@ import type { DeliverySummaryViewModel } from './types';
   selector: 'app-delivery-summary',
   imports: [
     AsyncPipe,
-    RouterLink,
     TuiButton,
     TuiSkeleton,
     TuiIcon,
@@ -37,7 +36,6 @@ import type { DeliverySummaryViewModel } from './types';
     TranslocoPipe,
     TuiSheetDialog,
     NgTemplateOutlet,
-    TuiNotification,
   ],
   templateUrl: './delivery-summary.component.html',
   styleUrl: './delivery-summary.component.css',
@@ -80,6 +78,8 @@ export class DeliverySummaryComponent implements OnInit {
   isCalculatorLayout$!: Observable<boolean>;
   isMobile$ = new BehaviorSubject<boolean>(this.checkIsMobile());
 
+  private readonly document = inject(DOCUMENT);
+  private readonly window = this.document.defaultView;
   readonly pickupPoint = inject(PickupPointFacade);
   readonly deliveryPoint = inject(DeliveryPointFacade);
   readonly deliveryDetails = inject(DeliveryDetailsFacade);
@@ -142,7 +142,9 @@ export class DeliverySummaryComponent implements OnInit {
   }
 
   private checkIsMobile(): boolean {
-    return window.innerWidth < 1024;
+    if (!this.window) return false;
+
+    return this.window.innerWidth < 1024;
   }
 
   goToBooking(): void {

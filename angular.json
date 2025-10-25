@@ -15,12 +15,8 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@ngx-env/builder:application",
+          "builder": "@angular/build:application",
           "options": {
-            "ngxEnv": {
-              "prefix": "APP_",
-              "runtime": false
-            },
             "outputPath": {
               "base": "dist/busbox-ui"
             },
@@ -61,14 +57,15 @@
               "rgbcolor",
               "core-js"
             ],
-            "browser": "src/main.ts"
+            "browser": "src/main.ts",
+            "server": "src/main.server.ts",
+            "outputMode": "server",
+            "ssr": {
+              "entry": "src/server.ts"
+            }
           },
           "configurations": {
             "production": {
-              "ngxEnv": {
-                "prefix": "APP_",
-                "runtime": true
-              },
               "budgets": [
                 {
                   "type": "initial",
@@ -96,10 +93,6 @@
               "extractLicenses": true
             },
             "staging": {
-              "ngxEnv": {
-                "prefix": "APP_",
-                "runtime": true
-              },
               "budgets": [
                 {
                   "type": "initial",
@@ -127,10 +120,6 @@
               "extractLicenses": true
             },
             "development": {
-              "ngxEnv": {
-                "prefix": "APP_",
-                "runtime": false
-              },
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
@@ -139,9 +128,10 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@ngx-env/builder:dev-server",
+          "builder": "@angular/build:dev-server",
           "options": {
-            "buildTarget": "busbox-ui:build"
+            "buildTarget": "busbox-ui:build",
+            "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "production": {

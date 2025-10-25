@@ -1,4 +1,5 @@
-import { inject } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { inject, PLATFORM_ID } from '@angular/core';
 import { type CanActivateFn, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
@@ -32,6 +33,12 @@ import { selectAuthState } from '../store';
 export const authGuard: CanActivateFn = (route, state) => {
   const store = inject(Store);
   const router = inject(Router);
+  const platformId = inject(PLATFORM_ID);
+
+  // На сервере не выполняем редирект, чтобы избежать мигания страницы авторизации при SSR
+  if (isPlatformServer(platformId)) {
+    return true;
+  }
 
   return store.select(selectAuthState).pipe(
     filter((authState) => authState.isInitialized),

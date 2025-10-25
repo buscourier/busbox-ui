@@ -4,8 +4,6 @@ import { map } from 'rxjs/operators';
 
 import { ApiService } from '@core/services';
 
-import { environment } from '@env/environment';
-
 import type { BalanceApiResponse, BalanceSummary } from '../types';
 
 @Injectable({
@@ -13,12 +11,10 @@ import type { BalanceApiResponse, BalanceSummary } from '../types';
 })
 export class BalanceService extends ApiService {
   getBalanceSummary(userId: string): Observable<BalanceSummary> {
-    return this.http
-      .get<BalanceApiResponse>(`${this.baseUrl}/account/balance/${environment.apiKey}/${userId}`)
-      .pipe(
-        map((response) => this.mapApiResponseToBalanceSummary(response)),
-        catchError(this.handleError.bind(this)),
-      );
+    return this.http.get<BalanceApiResponse>(`${this.baseUrl}/account/balance/${userId}`).pipe(
+      map((response) => this.mapApiResponseToBalanceSummary(response)),
+      catchError(this.handleError.bind(this)),
+    );
   }
 
   private mapApiResponseToBalanceSummary(response: BalanceApiResponse): BalanceSummary {

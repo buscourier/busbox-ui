@@ -98,7 +98,7 @@ jobs:
             docker rm ${{ secrets.DOPPLER_PROJECT }} || true
             docker run -d \
               --name ${{ secrets.DOPPLER_PROJECT }} \
-              -p ${{ secrets.SSH_PORT }}:80 \
+              -p ${{ secrets.SSH_PORT }}:4000 \
               --restart unless-stopped \
               -e NODE_ENV=${{ env.NODE_ENV }} \
               -e DOPPLER_CONFIG=${{ secrets.DOPPLER_CONFIG }} \

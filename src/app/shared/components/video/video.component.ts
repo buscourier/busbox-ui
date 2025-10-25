@@ -1,17 +1,18 @@
 import {
-  type AfterViewInit,
+  afterNextRender,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  DestroyRef,
   type ElementRef,
   inject,
   Input,
-  type OnDestroy,
   ViewChild,
 } from '@angular/core';
 import { DomSanitizer, type SafeResourceUrl } from '@angular/platform-browser';
 import { TuiLoader } from '@taiga-ui/core';
-import Plyr from 'plyr';
+type PlyrType = typeof import('plyr').default;
+type PlyrInstance = import('plyr').default;
 
 @Component({
   selector: 'app-video',
@@ -23,55 +24,82 @@ import Plyr from 'plyr';
     class: `block`,
   },
 })
-export class VideoComponent implements AfterViewInit, OnDestroy {
+export class VideoComponent {
   @ViewChild('videoPlayer') videoElement!: ElementRef<HTMLDivElement>;
   @Input() src!: string;
   @Input() poster?: string;
+  @Input() options?: import('plyr').Options;
 
   isLoading = true;
 
   private readonly sanitizer = inject(DomSanitizer);
   private readonly cdr = inject(ChangeDetectorRef);
-  private player?: Plyr;
+  private readonly destroyRef = inject(DestroyRef);
+  private player?: PlyrInstance;
+  private initializing = false;
 
   get trustedUrl(): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(this.src);
   }
 
-  // controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
-  ngAfterViewInit(): void {
-    this.initializePlayer();
+  constructor() {
+    afterNextRender(async () => {
+      await this.initializePlayer();
+
+      this.destroyRef.onDestroy(() => {
+        this.player?.destroy();
+      });
+    });
   }
 
-  private initializePlayer(): void {
-    this.player = new Plyr(this.videoElement.nativeElement, {
-      controls: ['play-large', 'progress'],
-      autoplay: false,
-      hideControls: true,
+  private isYouTube(url: string): boolean {
+    return /(?:youtube\.com|youtu\.be)/i.test(url);
+  }
+
+  private async initializePlayer(): Promise<void> {
+    if (this.player || this.initializing) return;
+
+    this.initializing = true;
+
+    const Plyr: PlyrType = (await import('plyr')).default;
+
+    const baseOptions: import('plyr').Options = {
+      controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
       loadSprite: true,
-      youtube: {
-        noCookie: false,
-        rel: 0,
-        modestbranding: 1,
-        controls: 0,
-        disablekb: 1,
-        playsinline: 1,
-      },
+      clickToPlay: true,
+      autopause: true,
+    };
+
+    this.player = new Plyr(this.videoElement.nativeElement, {
+      ...baseOptions,
+      ...(this.options ?? {}),
     });
 
-    this.player.on('ready', () => {
-      this.hideLoader();
+    this.setSource(this.src);
+
+    this.player.once('ready', () => {
+      this.isLoading = false;
+      this.cdr.detectChanges();
     });
+
+    this.initializing = false;
   }
 
-  private hideLoader(): void {
-    this.isLoading = false;
-    this.cdr.detectChanges();
-  }
+  setSource(url: string): void {
+    if (!this.player) return;
 
-  ngOnDestroy(): void {
-    this.player?.destroy();
+    if (this.isYouTube(url)) {
+      this.player.source = {
+        type: 'video',
+        sources: [{ src: url, provider: 'youtube' }],
+        poster: this.poster,
+      };
+    } else {
+      this.player.source = {
+        type: 'video',
+        sources: [{ src: url, type: 'video/mp4' }],
+        poster: this.poster,
+      };
+    }
   }
-
-  protected readonly onabort = onabort;
 }

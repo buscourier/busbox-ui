@@ -24,6 +24,9 @@ export interface AuthResponse {
   email: string;
   user_name: string;
   user_type: string;
+  refresh_token?: string;
+  access_expires_in?: number;
+  refresh_expires_in?: number;
 }
 
 // export interface UserProfile {
