@@ -1,0 +1,4 @@
+ol > li:before {
+  content: attr(data-count) '.';
+  font-weight: 500;
+}

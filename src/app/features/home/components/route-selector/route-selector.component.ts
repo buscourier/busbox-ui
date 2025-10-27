@@ -8,7 +8,13 @@ import {
   type OnInit,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, type FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  type FormControl,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { TuiDropdownMobile } from '@taiga-ui/addon-mobile';
 import { TUI_IS_MOBILE, type TuiStringHandler } from '@taiga-ui/cdk';
@@ -102,8 +108,10 @@ export class RouteSelectorComponent implements OnInit {
 
   private initializeForm(): void {
     this.form = this.fb.group({
-      pickupCity: this.fb.control<PickupCity | null>(null),
-      deliveryCity: this.fb.control<DeliveryCity | null>({ value: null, disabled: true }),
+      pickupCity: this.fb.control<PickupCity | null>(null, [Validators.required]),
+      deliveryCity: this.fb.control<DeliveryCity | null>({ value: null, disabled: true }, [
+        Validators.required,
+      ]),
     });
   }
 

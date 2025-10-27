@@ -44,6 +44,10 @@
     @apply text-gray-800;
   }
 
+  ol li {
+    @apply mb-3 leading-6;
+  }
+
   b {
     @apply font-medium;
   }
