@@ -1,4 +1,4 @@
-<form [class]="getFormClasses()" (ngSubmit)="onSubmit()">
+<form [class]="getFormClasses()" [formGroup]="form" (ngSubmit)="onSubmit()">
   <b class="mb-6 block text-2xl leading-7 font-bold lg:text-2xl">Рассчитайте стоимость</b>
   <div tuiLabel class="mb-4">
     <span class="mb-1 block text-sm text-gray-700">Город отправления</span>
@@ -53,5 +53,7 @@
     </tui-textfield>
   </div>
 
-  <button type="submit" tuiButton appearance="accent" class="w-full">Рассчитать</button>
+  <button type="submit" tuiButton appearance="accent" class="w-full" [disabled]="form.invalid">
+    Рассчитать
+  </button>
 </form>
