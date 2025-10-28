@@ -9,6 +9,7 @@ import {
 } from '@angular/ssr/node';
 import cookieParser from 'cookie-parser';
 import express, { json } from 'express';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 
 // eslint-disable-next-line import/no-internal-modules
 import { apiRateLimit, createApiProxy } from 'src/proxy/proxy.middleware';
@@ -220,18 +221,19 @@ app.use(
 );
 
 // ─── IMG Proxy ────────────────────────────────────────────
-// app.use(
-//   '/img',
-//   createProxyMiddleware({
-//     target: process.env['APP_IMGPROXY_BASE_URL'] || 'http://localhost:8080',
-//     changeOrigin: true,
-//     xfwd: true,
-//     pathRewrite(path) {
-//       // /img/unsafe/w:.../plain/<absolute>@webp → /unsafe/w:.../plain/<absolute>@webp
-//       return path.replace(/^\/img(?=\/)/, '');
-//     },
-//   }),
-// );
+app.use(
+  '/img',
+  createProxyMiddleware({
+    target: process.env['APP_IMGPROXY_BASE_URL'] || 'http://localhost:8080',
+    changeOrigin: true,
+    xfwd: true,
+    pathRewrite(path) {
+      if (!isProd) console.log('[IMG Proxy]', path);
+      // /img/unsafe/w:.../plain/<relative-path>@webp → /unsafe/w:.../plain/<relative-path>@webp
+      return path.replace(/^\/img(?=\/)/, '');
+    },
+  }),
+);
 
 // ─── Static Files ────────────────────────────────────────
 app.use(
