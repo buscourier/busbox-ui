@@ -65,7 +65,7 @@ export const serverRoutes: ServerRoute[] = [
   },
   {
     path: 'privacy-policy',
-    renderMode: RenderMode.Prerender,
+    renderMode: RenderMode.Server,
   },
   {
     path: 'feedback',
