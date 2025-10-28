@@ -1,4 +1,4 @@
-import { provideImageKitLoader, registerLocaleData } from '@angular/common';
+import { registerLocaleData } from '@angular/common';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import localeRu from '@angular/common/locales/ru';
 import { type ApplicationConfig } from '@angular/core';
@@ -18,7 +18,12 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideEventPlugins } from '@taiga-ui/event-plugins';
 import { provideYConfig } from 'angular-yandex-maps-v3';
 
-import { getMapConfig, getScrollConfig, getViewTransitionsConfig } from '@core/config';
+import {
+  getMapConfig,
+  getScrollConfig,
+  getViewTransitionsConfig,
+  provideRuntimeConfig,
+} from '@core/config';
 import { authRefreshInterceptor, csrfInterceptor, ssrAbsoluteUrlInterceptor } from '@core/http';
 import {
   CONTACTS_PROVIDERS,
@@ -28,6 +33,7 @@ import {
   provideIconResolver,
   provideValidationLimits,
   UI_PROVIDERS,
+  provideImageLoader,
 } from '@core/providers';
 
 import { DocumentsEffects, documentsFeature } from '@shared/features/documents';
@@ -66,7 +72,8 @@ export const appConfig: ApplicationConfig = {
     provideState(newsFeature),
     provideEffects(LocationsEffects, AuthEffects, DocumentsEffects, NewsEffects),
     provideIconResolver(),
-    provideImageKitLoader('https://ik.imagekit.io/buscourier'),
+    ...provideRuntimeConfig(),
+    provideImageLoader(),
     provideYConfig(getMapConfig()),
     provideEventPlugins(),
     provideValidationLimits(),

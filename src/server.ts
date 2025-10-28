@@ -11,7 +11,7 @@ import cookieParser from 'cookie-parser';
 import express, { json } from 'express';
 
 // eslint-disable-next-line import/no-internal-modules
-import { apiRateLimit, createApiProxy } from './server/proxy.middleware';
+import { apiRateLimit, createApiProxy } from 'src/proxy/proxy.middleware';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -23,6 +23,8 @@ app.use(cookieParser());
 
 const isProd = process.env['NODE_ENV'] === 'production';
 const cookieBase = { httpOnly: true, sameSite: 'lax' as const, secure: isProd, path: '/' };
+
+//
 
 // ─── CSRF Token Setup (double-submit cookie) ─────────────
 app.use((req, res, next) => {
@@ -149,6 +151,18 @@ app.post('/auth/logout', (_req, res) => {
   res.clearCookie('bb_access', cookieBase).clearCookie('bb_refresh', cookieBase).status(204).end();
 });
 
+// ─── Runtime Config ───────────────────────────────────────
+app.get('/runtime-config.json', (_req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Cache-Control', 'no-store');
+  res.end(
+    JSON.stringify({
+      APP_MEDIA_BASE_URL: process.env['APP_MEDIA_BASE_URL'] ?? '',
+      APP_IMGPROXY_BASE_URL: process.env['APP_IMGPROXY_BASE_URL'] ?? '',
+    }),
+  );
+});
+
 app.get('/auth/me', async (req, res) => {
   const token = req.cookies?.['bb_access'];
   if (!token) return res.status(401).json({ error: 'unauthenticated' });
@@ -204,6 +218,20 @@ app.use(
   apiRateLimit(),
   createApiProxy(),
 );
+
+// ─── IMG Proxy ────────────────────────────────────────────
+// app.use(
+//   '/img',
+//   createProxyMiddleware({
+//     target: process.env['APP_IMGPROXY_BASE_URL'] || 'http://localhost:8080',
+//     changeOrigin: true,
+//     xfwd: true,
+//     pathRewrite(path) {
+//       // /img/unsafe/w:.../plain/<absolute>@webp → /unsafe/w:.../plain/<absolute>@webp
+//       return path.replace(/^\/img(?=\/)/, '');
+//     },
+//   }),
+// );
 
 // ─── Static Files ────────────────────────────────────────
 app.use(

@@ -3,6 +3,7 @@ export const environment = {
   // apiBaseUrl: process.env['APP_API_BASE_URL'],
   // apiKey: process.env['APP_API_KEY'],
   // mapApiKey: process.env['APP_MAP_KEY'],
-  // imageProviderUrl: process.env['APP_IMAGE_PROVIDER_URL'] || 'https://ik.imagekit.io/example',
+  // Timeweb CDN/S3 public base URL for images. Example: 'https://s3.twcstorage.ru/<bucket-name>/' or your CDN domain
+  imageProviderUrl: 'https://s3.twcstorage.ru/01f43f86-caaca9cc-f7b8-4fa5-8417-400a8cf4bf27/',
   // dopplerConfig: '',
 };
