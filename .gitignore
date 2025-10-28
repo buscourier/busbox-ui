@@ -49,3 +49,4 @@ diff.txt
 
 # Proxy configuration (contains API keys)
 proxy.conf.json
+.env
