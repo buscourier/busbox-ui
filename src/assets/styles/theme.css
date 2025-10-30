@@ -196,10 +196,12 @@
 
 :root {
   /* Taiga UI fonts - using custom fonts */
-  --tui-heading-font: 'Kelson Sans', Arial, -apple-system, 'BlinkMacSystemFont', system-ui,
-    'Roboto', 'Segoe UI', 'Helvetica Neue', sans-serif;
-  --tui-text-font: 'Roboto', -apple-system, 'BlinkMacSystemFont', system-ui, 'Segoe UI',
+  --tui-heading-font:
+    'Kelson Sans', Arial, -apple-system, 'BlinkMacSystemFont', system-ui, 'Roboto', 'Segoe UI',
     'Helvetica Neue', sans-serif;
+  --tui-text-font:
+    'Roboto', -apple-system, 'BlinkMacSystemFont', system-ui, 'Segoe UI', 'Helvetica Neue',
+    sans-serif;
 
   /* Main Taiga UI fonts */
   --tui-font-heading: var(--tui-heading-font);
@@ -259,6 +261,9 @@
   --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(240 5% 98%));
   --shadow-card: 0 4px 6px -1px hsl(240 5% 65% / 0.1), 0 2px 4px -1px hsl(240 5% 65% / 0.06);
   --shadow-elevated: 0 10px 15px -3px hsl(240 5% 65% / 0.1), 0 4px 6px -2px hsl(240 5% 65% / 0.05);
+
+  /*Utils*/
+  --tui-status-warning: var(--color-yellow-500);
 }
 
 .bg-gradient-primary {

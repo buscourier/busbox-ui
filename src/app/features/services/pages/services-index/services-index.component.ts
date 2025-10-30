@@ -1,26 +1,16 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { BreakpointDirective } from '@core/directives';
 import { NavigationService } from '@core/services/navigation.service';
 import { CAROUSEL_BREAKPOINTS } from '@core/tokens';
 
-import { CarouselComponent } from '@shared/components/carousel';
 import { PageLayoutComponent } from '@shared/layouts/page-layout';
 
-import { RouteMapComponent } from './route-map';
 import { type ServiceCard, ServiceCardComponent } from './service-card';
 
 @Component({
   selector: 'app-services-index',
-  imports: [
-    RouterLink,
-    RouteMapComponent,
-    ServiceCardComponent,
-    CarouselComponent,
-    BreakpointDirective,
-    PageLayoutComponent,
-  ],
+  imports: [RouterLink, ServiceCardComponent, PageLayoutComponent],
   templateUrl: './services-index.component.html',
   styleUrl: './services-index.component.css',
   providers: [
@@ -55,18 +45,25 @@ export class ServicesIndexComponent {
       link: '/' + this.navigationService.findByLink('insurance')?.link,
     },
     {
-      id: 'tasks',
-      title: 'Сложные задачи',
-      description: 'Индивидуальные решения для нестандартных логистических задач любой сложности.',
-      type: 'task',
-      link: '/' + this.navigationService.findByLink('complex-tasks')?.link,
-    },
-    {
       id: 'courier',
       title: 'Курьерская доставка',
       description: 'Забор груза от двери и доставка до получателя. Экономьте время и силы.',
       type: 'courier',
       link: '/' + this.navigationService.findByLink('courier')?.link,
+    },
+    {
+      id: 'packaging',
+      title: 'Упаковка',
+      description: 'Какой текст??',
+      type: 'task',
+      link: '/' + this.navigationService.findByLink('packaging')?.link,
+    },
+    {
+      id: 'airport',
+      title: 'Доставка из aэропорта',
+      description: 'Какой текст??',
+      type: 'task',
+      link: '/' + this.navigationService.findByLink('airport-delivery')?.link,
     },
   ];
 }

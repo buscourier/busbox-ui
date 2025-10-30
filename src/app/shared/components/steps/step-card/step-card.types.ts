@@ -7,6 +7,6 @@ interface StepAction {
 export interface Step {
   id: number;
   icon: string;
-  title: string;
+  title?: string;
   actions?: StepAction[];
 }

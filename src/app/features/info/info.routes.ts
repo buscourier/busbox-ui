@@ -6,13 +6,11 @@ import { NavigationService } from '@core/services/navigation.service';
 
 import { InfoComponent } from './info.component';
 import {
-  AirportDeliveryComponent,
   CargoRulesComponent,
   DocumentsComponent,
   HowToReceiveComponent,
   HowToSendComponent,
   InfoIndexComponent,
-  PackagingComponent,
   StorageComponent,
   TariffsComponent,
   TariffsEffects,
@@ -24,9 +22,7 @@ const COMPONENT_MAP = {
   'how-to-receive': HowToReceiveComponent,
   'cargo-rules': CargoRulesComponent,
   tariffs: TariffsComponent,
-  packaging: PackagingComponent,
   storage: StorageComponent,
-  'airport-delivery': AirportDeliveryComponent,
   documents: DocumentsComponent,
 };
 

@@ -1,13 +1,8 @@
 @let vm = vm$ | async;
 
 <app-sidebar-layout [actions]="pageActions" [documentTypes]="['rules']">
-  <tui-notification appearance="warning" class="mb-6 max-w-2xl">
-    Тарифы указаны только для филиалов
-    <b>«Баскурьер».</b>
-    Если нужно узнать стоимость отправки из других населённых пунктов — свяжитесь с оператором.
-  </tui-notification>
-
   @if (vm) {
+    <p>Выберите нужный город — и ниже появятся зоны доставки и актуальные цены.</p>
     <section class="group/actions mb-10 flex flex-wrap gap-3 border-y border-gray-100 pt-5 pb-5">
       @for (city of cities$ | async; track city.id) {
         <label
@@ -19,7 +14,7 @@
         >
           {{ city.name }}
           <input
-            appearance="outline"
+            appearance="warning"
             name="radio"
             tuiChip
             type="radio"
@@ -33,22 +28,26 @@
       }
     </section>
 
+    <tui-notification appearance="neutral" class="mb-16 max-w-2xl">
+      Тарифы указаны только для филиалов
+      <b>«Баскурьер».</b>
+      Если нужно узнать стоимость отправки из других населённых пунктов — свяжитесь с оператором.
+    </tui-notification>
+
     <div>
       <section class="mb-20">
         @if (vm.zones.hasData) {
           <h2 class="font-heading mb-4 text-3xl font-bold text-gray-900">Зоны доставки</h2>
 
           <p class="mb-6">
-            Чтобы узнать стоимость доставки, сначала посмотрите, к какой зоне относится ваш город.
-            <br />
-            Выберите зону — и сможете сразу определить нужный тариф.
+            Чтобы узнать стоимость доставки посмотрите к какой зоне относится город получения
           </p>
           @for (zone of vm.zones.data; track zone.site_id) {
             <div
-              class="group/zone from-border mb-10 rounded-lg border-4 border-yellow-500/80 bg-yellow-500/10 bg-gradient-to-tl p-6 pt-0 transition-all hover:border-yellow-500"
+              class="group/zone from-border mb-10 rounded-lg border-4 border-gray-100 bg-gray-100/10 bg-gradient-to-tl p-6 pt-0 transition-all hover:border-gray-100"
             >
               <b
-                class="mb-6 inline-block rounded-b-lg bg-yellow-500/80 p-2 text-sm leading-tight font-medium text-yellow-900 shadow-2xs group-hover/zone:bg-yellow-500"
+                class="mb-6 inline-block rounded-b-lg bg-gray-100 p-2 text-sm leading-tight font-medium text-gray-900 shadow-2xs group-hover/zone:bg-gray-100"
               >
                 {{ zone.zone }}
               </b>
@@ -91,9 +90,9 @@
         <section class="mb-16">
           <h2 class="font-heading mb-4 text-3xl font-bold text-gray-900">Документы и грузы</h2>
           <p class="mb-6">
-            В таблице представлены цены на доставку документов и грузов. Определите, в какой зоне
-            находится населенный пункт в который вы отправляете с груз, и посмотрите стоимость по
-            весу и размеру.
+            В таблице представлены цены на доставку документов и грузов. Выберете зону города
+            получения и посмотрите стоимость исходя из габаритов (сумма трех сторон) и веса вашего
+            груза.
           </p>
 
           <div class="">
@@ -114,7 +113,7 @@
                       <tr>
                         <td
                           colspan="5"
-                          class="rounded-sm bg-yellow-500/40 p-3 text-center text-sm font-semibold"
+                          class="bg-yellow-500/20 p-3 text-center text-sm font-semibold uppercase"
                         >
                           {{ zone.zone_name }}
                         </td>
@@ -178,7 +177,7 @@
                       <tr>
                         <td
                           colspan="5"
-                          class="rounded-sm bg-yellow-500/40 p-3 text-center text-sm font-semibold"
+                          class="bg-yellow-500/20 p-3 text-center text-sm font-semibold uppercase"
                         >
                           {{ zone.zone_name }}
                         </td>
@@ -276,7 +275,7 @@
                       <th class="px-3 py-3 text-left"></th>
                       @for (zone of vm.zoneTariffs.autopartsTable.zones; track zone.zone_id) {
                         <th
-                          class="bg-yellow-500/40 px-3 py-3 text-center text-sm whitespace-nowrap"
+                          class="bg-yellow-500/20 px-3 py-3 text-center text-sm whitespace-nowrap"
                           [class.rounded-l-sm]="$first"
                           [class.rounded-r-sm]="$last"
                         >
@@ -354,7 +353,7 @@
                       <th class="px-3 py-3 text-left"></th>
                       @for (zone of vm.zoneTariffs.otherTable.zones; track zone.zone_id) {
                         <th
-                          class="bg-yellow-500/40 px-3 py-3 text-center text-sm font-semibold"
+                          class="bg-yellow-500/20 px-3 py-3 text-center text-sm font-semibold"
                           [class.rounded-l-sm]="$first"
                           [class.rounded-r-sm]="$last"
                         >

@@ -9,7 +9,6 @@ import { PageLayoutComponent } from '@shared/layouts/page-layout';
 import { ContactLinkPipe } from '@shared/pipes';
 
 import { ResumeComponent } from './resume';
-import { StatsComponent } from './stats';
 
 @Component({
   selector: 'app-career',
@@ -18,7 +17,6 @@ import { StatsComponent } from './stats';
     ListItemDirective,
     ListComponent,
     TuiButton,
-    StatsComponent,
     ContactLinkPipe,
     PageLayoutComponent,
   ],

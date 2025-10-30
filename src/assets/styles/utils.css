@@ -1,11 +1,13 @@
 /* link */
 @utility link-* {
   position: relative;
-  color: --value(--color- *, [color]);
-  border-bottom: 1px dashed --value(--color- *, [color]);
+  color: --value(--color-*, [color]);
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-underline-offset: 4px;
   cursor: pointer;
 
   &:hover {
-    border-bottom: none;
+    text-decoration: none;
   }
 }

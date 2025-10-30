@@ -13,6 +13,7 @@ import {
   StepsComponent,
 } from '@shared/components/steps';
 import { DocumentsListComponent } from '@shared/features/documents';
+import { PageLayoutComponent } from '@shared/layouts/page-layout';
 
 @Component({
   selector: 'app-airport-delivery',
@@ -26,6 +27,7 @@ import { DocumentsListComponent } from '@shared/features/documents';
     StepCardComponent,
     ListComponent,
     ListItemDirective,
+    PageLayoutComponent,
   ],
   templateUrl: './airport-delivery.component.html',
   styleUrl: './airport-delivery.component.css',

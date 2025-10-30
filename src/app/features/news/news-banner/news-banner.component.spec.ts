@@ -1,18 +1,18 @@
 // import { ComponentFixture, TestBed } from '@angular/core/testing';
 //
-// import { CaseCardComponent } from './case-card.component';
+// import { NewsBannerComponent } from './news-banner.component';
 //
-// describe('CaseCardComponent', () => {
-//   let component: CaseCardComponent;
-//   let fixture: ComponentFixture<CaseCardComponent>;
+// describe('NewsBannerComponent', () => {
+//   let component: NewsBannerComponent;
+//   let fixture: ComponentFixture<NewsBannerComponent>;
 //
 //   beforeEach(async () => {
 //     await TestBed.configureTestingModule({
-//       imports: [CaseCardComponent]
+//       imports: [NewsBannerComponent]
 //     })
 //     .compileComponents();
 //
-//     fixture = TestBed.createComponent(CaseCardComponent);
+//     fixture = TestBed.createComponent(NewsBannerComponent);
 //     component = fixture.componentInstance;
 //     fixture.detectChanges();
 //   });

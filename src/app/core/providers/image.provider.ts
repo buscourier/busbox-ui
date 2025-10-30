@@ -18,7 +18,7 @@ export function provideImageLoader(): Provider {
 
         const opts = ops.length ? `/${ops.join('/')}` : '';
 
-        return `/img${opts}/plain/${encodeURIComponent(src)}@webp`;
+        return `/img/unsafe${opts}/plain/${encodeURIComponent(src)}@webp`;
       };
     },
   };

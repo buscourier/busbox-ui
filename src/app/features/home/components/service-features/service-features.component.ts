@@ -40,7 +40,7 @@ export class ServiceFeaturesComponent {
       },
       {
         name: `Складское хранение грузов`,
-        description: `Бесплатное хранение вашего груза в течение суток.`,
+        description: `Бесплатное хранение вашего груза в течение двух суток.`,
         link: this.navigationService.findByLink(`storage`),
         icon: `to-box`,
       },
@@ -55,6 +55,18 @@ export class ServiceFeaturesComponent {
         name: `Страхование груза`,
         description: `Страховая защита груза и максимально быстрое возмещение ущерба.`,
         link: this.navigationService.findByLink('insurance'),
+        icon: `disk`,
+      },
+      {
+        name: `Оплата получателем`,
+        description: `Стоимость услуги 100₽`,
+        link: null,
+        icon: `disk`,
+      },
+      {
+        name: `Оплата доставки`,
+        description: `Осуществляется во время получения груза в офисе`,
+        link: null,
         icon: `disk`,
       },
     ];

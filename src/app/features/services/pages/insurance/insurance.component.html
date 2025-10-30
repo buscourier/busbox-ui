@@ -60,19 +60,17 @@
       </dd>
       <dt class="mb-2 font-bold">2. При получении на автостанции</dt>
       <dd class="mb-4 ml-4">
-        Если груз доставлен автобусом и упаковка повреждена, сделайте фото/видео и оставьте отметку
-        в журнале водителя об обнаружении повреждения.
+        Если груз доставлен автобусом и упаковка повреждена, сделайте фото/видео, по возможности
+        оставьте посылку водителю автобуса и свяжитесь с нами.
       </dd>
       <dt class="mb-2 font-bold">3. Свяжитесь с нами</dt>
       <dd class="mb-4 ml-4">
         Позвоните по номеру
-        <a [href]="contact.phone | contactLink: 'tel'" class="link-blue-500">
+        <a [href]="contact.phone | contactLink: 'tel'" class="link-black">
           {{ contact.phone }}
         </a>
         или напишите на
-        <a [href]="contact.email | contactLink: 'email'" class="link-blue-500">
-          {{ contact.email }}.
-        </a>
+        <a [href]="contact.email | contactLink: 'email'" class="link-black">{{ contact.email }}.</a>
         — мы объясним, что делать дальше и как оформить выплату.
       </dd>
     </dl>

@@ -1,57 +1,44 @@
 <div class="max-w-[600px]">
   <p>
-    Мы всегда уведомляем получателя о прибытии груза:
-    <b>отправляем SMS и звоним</b>
-    по номеру, указанному в накладной.
+    Мы обязательно информируем получателя о прибытии груза по смс и звонком по указанным
+    отправителем в накладной контактным данным.
   </p>
   <p class="mb-6">
-    При оформлении можно подключить дополнительные сервисы — например,
-    <b>«SMS‑оповещение отправителя»</b>
-    или
-    <b>«расширенное SMS»</b>
-    .
+    При оформлении груза вы можете воспользоваться услугой «смс оповещение отправителя».
   </p>
   <p class="text-lg">
     <b>Вы всегда можете узнать, где находится ваш груз:</b>
   </p>
   <app-list class="mb-6">
     <span *appListItem>
-      позвонив по телефону единой справочной
-      <a [href]="contact.phone | contactLink: 'tel'" class="link-blue-500 border-0">
+      по телефону единой справочной
+      <a [href]="contact.phone | contactLink: 'tel'" class="link-black">
         {{ contact.phone }}
       </a>
     </span>
     <span *appListItem>
-      или уточнив информацию в любом нашем
-      <a [routerLink]="contactsLink" class="link-blue-500 border-0">филиале.</a>
+      В
+      <a [routerLink]="contactsLink" class="link-black">филиале</a>
+      получения груза.
     </span>
   </app-list>
 
   <p class="text-lg"><b>Сколько хранится груз:</b></p>
   <app-list class="mb-6">
-    <span *appListItem>
-      <b>Бесплатно</b>
-      — первые 24 часа после прибытия в пункт выдачи.
-    </span>
-    <span *appListItem>
-      После этого —
-      <b>100 рублей за каждые сутки хранения.</b>
-    </span>
+    <span *appListItem>Бесплатное хранение два дня с момента доставки в пункт выдачи</span>
+    <span *appListItem>Далее – 100 рублей за каждые сутки хранения</span>
   </app-list>
 
   <p class="text-lg"><b>Что будет, если груз не забрали:</b></p>
   <app-list class="mb-8">
-    <span *appListItem>
-      Мы храним невостребованные отправления
-      <b>в течение месяца.</b>
-    </span>
+    <span *appListItem>Мы храним невостребованные отправления в течение месяца.</span>
     <span *appListItem>
       Потом груз списывается и подлежит утилизации
-      <a [routerLink]="rulesLink" class="link-blue-500">подробности</a>
+      <a [routerLink]="rulesLink" class="link-black">подробности</a>
     </span>
   </app-list>
 
   <tui-notification appearance="warning">
-    Забирайте свои посылки вовремя — так вы сэкономите и получите груз без лишних хлопот.
+    Старайтесь забирать свои посылки вовремя!
   </tui-notification>
 </div>

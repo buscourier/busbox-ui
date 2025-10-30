@@ -1,3 +1,5 @@
+<app-news />
+
 <app-page-layout class="pb-0!">
   <section
     class="relative mb-16 flex flex-col md:mt-6 md:mb-22 md:flex-row md:gap-x-8 lg:mt-10 lg:mb-32 xl:mb-22"
@@ -12,11 +14,13 @@
         <br class="hidden sm:block" />
         и в Хабаровск
       </h1>
-      <p class="mb-6 md:mb-9 lg:text-lg xl:mb-20 xl:text-[26px]">
+      <p class="mb-8 text-lg leading-9 sm:text-xl md:mb-10 xl:mb-18 xl:text-[26px]">
         <b class="inline-block rounded-sm bg-yellow-500 px-2 py-1 font-bold xl:text-[27px]">
           от 2 до 24 часов
         </b>
         рейсовыми автобусами
+        <br class="hidden sm:block" />
+        и собственным автотранспортом
       </p>
       <img
         ngSrc="index-bus.jpg"
@@ -60,50 +64,76 @@
     <app-service-features class="mt-10" />
   </app-page-section>
 
+  <section class="full-width-section relative z-10 bg-gradient-to-br from-yellow-500 to-yellow-400">
+    <div class="container mx-auto px-4">
+      <app-stats />
+    </div>
+  </section>
+  <div
+    class="relative -top-10 mx-auto flex h-[650px] max-w-[1170px] justify-center bg-[url('src/assets/images/career-map.svg')] bg-[length:460px_650px] bg-center bg-no-repeat px-4"
+  >
+    <div class="flex h-full w-[480px] flex-col">
+      <div
+        class="before:font-heading relative mt-28 flex items-center before:h-[82px] before:text-[82px] before:leading-tight before:content-['1'] lg:-left-5"
+      >
+        <p class="ml-5 text-lg">
+          филиал
+          <br />
+          в Хабаровске
+        </p>
+      </div>
+      <div
+        class="before:font-heading relative bottom-10 mt-auto ml-auto flex before:h-[82px] before:text-[82px] before:leading-tight before:content-['6'] sm:-right-20 md:-right-28 lg:-right-44"
+      >
+        <div class="ml-5 text-lg">
+          <b class="mb-2 block">
+            Филиалов
+            <br />
+            в Приморском крае
+          </b>
+          <p>
+            Владивосток (2 филиала),
+            <br />
+            Артем,
+            <br />
+            Находка,
+            <br />
+            Уссурийск
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <app-page-section>
-    <ng-container class="title">
-      Решаем нестандартные
-      <br />
-      логистические задачи
-    </ng-container>
+    <ng-container class="title">Помогаем бизнесу</ng-container>
     <ng-container class="subtitle">
-      Нужно организовать доставку нестандартного груза в очень сжатые сроки?
+      Вы - логистическая или транспортная компания?
       <br class="hidden lg:block" />
-      Трудно найти исполнителя? Мы предложим индивидуальное решение вашей задачи!
+      У вас интернет-магазин, и вы хотите укрепить позиции в Приморском крае?
+      <br />
+      Давайте сотрудничать!
     </ng-container>
 
     <div
       class="flex flex-col space-y-14 md:flex-row md:space-y-0 md:space-x-4 lg:space-x-8 xl:space-x-16"
     >
-      <app-contact-form formType="custom-tasks" />
-      <app-case-examples />
+      <app-contact-form formType="custom-tasks" class="shrink-0" />
+      <app-page-section>
+        <ng-container class="title">Наши партнеры</ng-container>
+        <ng-container class="subtitle">
+          С нами работает более 500 компаний, которые регулярно отправляют грузы по Приморскому краю
+          и в Хабаровск.
+        </ng-container>
+        <app-carousel [items]="brands" [itemTemplate]="slideTemplate" />
+        <ng-template #slideTemplate let-brand></ng-template>
+
+        <div class="flex flex-wrap gap-4">
+          @for (brand of brands; track brand.name) {
+            <app-brand-card [brand]="brand" class="flex-grow" />
+          }
+        </div>
+      </app-page-section>
     </div>
   </app-page-section>
-
-  <app-page-section>
-    <ng-container class="title">Помогаем бизнесу</ng-container>
-    <ng-container class="subtitle">
-      С нами работает более 500 компаний, которые регулярно отправляют грузы
-      <br />
-      по Приморскому краю и в Хабаровск.
-    </ng-container>
-    <app-carousel [items]="brands" [itemTemplate]="slideTemplate" />
-    <ng-template #slideTemplate let-brand>
-      <app-brand-card [brand]="brand" />
-    </ng-template>
-  </app-page-section>
-
-  <section class="full-width-section mt-20 mb-0 bg-yellow-500 py-16 sm:px-4 md:mb-0 xl:mb-0">
-    <div class="container mx-auto px-4">
-      <div class="mb-12">
-        <h2 class="md:4xl mb-4 max-w-md text-3xl font-bold sm:max-w-lg sm:text-3xl lg:text-[42px]">
-          Последние новости
-        </h2>
-        <p class="max-w-3xl text-lg text-black/80 lg:text-lg">
-          Следите за обновлениями компании, новыми услугами и специальными предложениями
-        </p>
-      </div>
-      <app-news />
-    </div>
-  </section>
 </app-page-layout>

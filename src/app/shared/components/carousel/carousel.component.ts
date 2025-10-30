@@ -11,8 +11,8 @@ import {
   type TemplateRef,
 } from '@angular/core';
 import { TuiItem } from '@taiga-ui/cdk';
-import { TuiButton } from '@taiga-ui/core';
-import { TuiCarouselComponent, TuiPagination } from '@taiga-ui/kit';
+import { TuiButton, TuiIcon } from '@taiga-ui/core';
+import { TuiCarousel, TuiCarouselComponent, TuiPagination } from '@taiga-ui/kit';
 
 import { BreakpointService } from '@core/services/breakpoint.service';
 import { CAROUSEL_BREAKPOINTS } from '@core/tokens';
@@ -22,7 +22,15 @@ import type { CarouselBreakpoints } from './carousel.types';
 
 @Component({
   selector: 'app-carousel',
-  imports: [NgTemplateOutlet, TuiButton, TuiCarouselComponent, TuiPagination, TuiItem],
+  imports: [
+    NgTemplateOutlet,
+    TuiButton,
+    TuiCarouselComponent,
+    TuiPagination,
+    TuiItem,
+    TuiCarousel,
+    TuiIcon,
+  ],
   templateUrl: './carousel.component.html',
   styleUrl: './carousel.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

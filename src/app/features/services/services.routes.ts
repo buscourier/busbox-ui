@@ -4,16 +4,18 @@ import { NavigationService } from '@core/services/navigation.service';
 
 import {
   CourierComponent,
-  ComplexTasksComponent,
   InsuranceComponent,
   ServicesIndexComponent,
+  PackagingComponent,
+  AirportDeliveryComponent,
 } from './pages';
 import { ServicesComponent } from './services.component';
 
 const COMPONENT_MAP = {
   courier: CourierComponent,
-  'complex-tasks': ComplexTasksComponent,
   insurance: InsuranceComponent,
+  packaging: PackagingComponent,
+  'airport-delivery': AirportDeliveryComponent,
 };
 
 export function generateServicesRoutes(): Routes {

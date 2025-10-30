@@ -15,29 +15,28 @@
               <span class="font-normal">по Приморью</span>
             </h2>
             <p class="mb-8 max-w-2xl text-lg leading-relaxed font-light text-gray-600">
-              Ежедневные рейсы между городами Приморского края и Хабаровском. Надежно, быстро, с
-              полным контролем на каждом этапе.
+              Мы осуществляем доставку из офисов Баскурьер по Приморскому краю и в Хабаровск.
             </p>
 
-            <div class="mb-12 space-y-4">
-              <div class="flex items-center text-gray-700">
-                <div class="mr-4 h-2 w-2 rounded-full bg-yellow-500"></div>
-                <span class="font-light">Отслеживание в реальном времени</span>
-              </div>
-              <div class="flex items-center text-gray-700">
-                <div class="mr-4 h-2 w-2 rounded-full bg-yellow-500"></div>
-                <span class="font-light">Страхование груза</span>
-              </div>
-              <div class="flex items-center text-gray-700">
-                <div class="mr-4 h-2 w-2 rounded-full bg-yellow-500"></div>
-                <span class="font-light">Доставка от двери до двери</span>
-              </div>
-            </div>
+            <!--            <div class="mb-12 space-y-4">-->
+            <!--              <div class="flex items-center text-gray-700">-->
+            <!--                <div class="mr-4 h-2 w-2 rounded-full bg-yellow-500"></div>-->
+            <!--                <span class="font-light">Отслеживание в реальном времени</span>-->
+            <!--              </div>-->
+            <!--              <div class="flex items-center text-gray-700">-->
+            <!--                <div class="mr-4 h-2 w-2 rounded-full bg-yellow-500"></div>-->
+            <!--                <span class="font-light">Страхование груза</span>-->
+            <!--              </div>-->
+            <!--              <div class="flex items-center text-gray-700">-->
+            <!--                <div class="mr-4 h-2 w-2 rounded-full bg-yellow-500"></div>-->
+            <!--                <span class="font-light">Доставка от двери до двери</span>-->
+            <!--              </div>-->
+            <!--            </div>-->
           </div>
 
-          <div *appBreakpoint="{ showOn: 'lg' }" class="order-1 lg:order-2">
-            <app-route-map />
-          </div>
+          <!--          <div *appBreakpoint="{ showOn: 'lg' }" class="order-1 lg:order-2">-->
+          <!--            <app-route-map />-->
+          <!--          </div>-->
         </div>
       </div>
 
@@ -47,13 +46,16 @@
           Полный спектр логистических решений для ваших потребностей
         </p>
 
-        <section class="mt-10">
-          <app-carousel [items]="services" [itemTemplate]="slideTemplate"></app-carousel>
+        <section class="mt-10 grid grid-cols-3 gap-10">
+          <!--          <app-carousel [items]="services" [itemTemplate]="slideTemplate"></app-carousel>-->
+          @for (service of services; track service.id) {
+            <app-service-card [service]="service" />
+          }
         </section>
 
-        <ng-template #slideTemplate let-service>
-          <app-service-card [service]="service" />
-        </ng-template>
+        <!--        <ng-template #slideTemplate let-service>-->
+        <!--          <app-service-card [service]="service" />-->
+        <!--        </ng-template>-->
       </div>
     </div>
   </section>

@@ -3,7 +3,5 @@ export * from './how-to-send';
 export * from './how-to-receive';
 export * from './cargo-rules';
 export * from './tariffs';
-export * from './packaging';
 export * from './storage';
-export * from './airport-delivery';
 export * from './documents';

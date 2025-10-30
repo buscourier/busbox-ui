@@ -1,5 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { TuiRepeatTimes } from '@taiga-ui/cdk';
 import { TuiSkeleton } from '@taiga-ui/kit';
 import { catchError, EMPTY, type Observable } from 'rxjs';
@@ -16,6 +17,7 @@ import {
 } from '@shared/components/steps';
 import { SidebarLayoutComponent } from '@shared/layouts';
 import { PageLayoutComponent } from '@shared/layouts/page-layout';
+import { ContactLinkPipe } from '@shared/pipes';
 import type { ApiError } from '@shared/types';
 
 import { CourierService, type GroupedCities } from './courier.service';
@@ -34,6 +36,8 @@ import { CourierService, type GroupedCities } from './courier.service';
     TuiSkeleton,
     StepCardComponent,
     PageLayoutComponent,
+    ContactLinkPipe,
+    RouterLink,
   ],
   templateUrl: './courier.component.html',
   styleUrl: './courier.component.css',
@@ -73,8 +77,8 @@ export class CourierComponent implements OnInit {
           type: 'route',
         },
         {
-          text: this.contact.phone,
-          href: this.contact.phone,
+          text: this.contact.mobile,
+          href: this.contact.mobile,
           type: 'tel',
         },
       ],
@@ -92,19 +96,19 @@ export class CourierComponent implements OnInit {
     {
       id: 5,
       icon: '@tui.map-pinned',
-      title: 'Следите за доставкой онлайн',
-      actions: [
-        {
-          text: 'Проверить статус',
-          href: this.trackingLink,
-          type: 'route',
-        },
-        {
-          text: this.contact.phone,
-          href: this.contact.phone,
-          type: 'tel',
-        },
-      ],
+      title: 'Отслеживайте доставку онлайн',
+      // actions: [
+      //   {
+      //     text: 'Проверить статус',
+      //     href: this.trackingLink,
+      //     type: 'route',
+      //   },
+      //   {
+      //     text: this.contact.phone,
+      //     href: this.contact.phone,
+      //     type: 'tel',
+      //   },
+      // ],
     },
   ];
 

@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { filter, type Observable, take } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { NewsActions, newsFeature } from './store';
 import type { NewsItem, NewsViewModel } from './types';
@@ -17,8 +16,8 @@ export class NewsFacade {
   }
 
   getLatestNews(): Observable<NewsItem[]> {
-    // eslint-disable-next-line @ngrx/avoid-mapping-selectors
-    return this.store.select(newsFeature.selectNewsList).pipe(map((news) => news.slice(0, 3)));
+    // return this.store.select(newsFeature.selectNewsList).pipe(map((news) => news.slice(0, 3)));
+    return this.store.select(newsFeature.selectNewsList);
   }
 
   loadNews(): void {
