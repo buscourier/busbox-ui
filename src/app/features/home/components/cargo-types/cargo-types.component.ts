@@ -8,7 +8,7 @@ import { TuiIcon } from '@taiga-ui/core';
   styleUrl: './cargo-types.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'flex gap-6',
+    class: 'flex gap-6 flex-wrap',
   },
 })
 export class CargoTypesComponent {
@@ -22,7 +22,7 @@ export class CargoTypesComponent {
       icon: this.getIcon('docs'),
     },
     {
-      name: 'Грузы',
+      name: 'Автозапчасти',
       icon: this.getIcon('box'),
     },
   ];

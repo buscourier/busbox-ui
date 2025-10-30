@@ -66,12 +66,12 @@ export class HowToSendComponent {
     },
     {
       id: 4,
-      icon: '@tui.package-open',
-      title: 'Упакуйте посылку надёжно',
+      icon: '@tui.triangle-alert',
+      title: 'Проверьте ограничения',
       actions: [
         {
-          text: 'Смотреть виды упаковок',
-          href: this.packagingLink,
+          text: 'Смотреть запрещенные грузы',
+          href: this.rulesLink,
           type: 'route',
         },
       ],
@@ -90,12 +90,12 @@ export class HowToSendComponent {
     },
     {
       id: 6,
-      icon: '@tui.triangle-alert',
-      title: 'Проверьте ограничения',
+      icon: '@tui.package-open',
+      title: 'Упакуйте посылку надёжно',
       actions: [
         {
-          text: 'Смотреть запрещенные грузы',
-          href: this.rulesLink,
+          text: 'Смотреть виды упаковок',
+          href: this.packagingLink,
           type: 'route',
         },
       ],

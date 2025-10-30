@@ -8,12 +8,19 @@ import { CAROUSEL_BREAKPOINTS } from '@core/tokens';
 
 import { CarouselComponent } from '@shared/components/carousel';
 
-import { NewsCardComponent, NewsFacade } from '@news';
+import { NewsBannerComponent, NewsCardComponent, NewsFacade } from '@news';
 import type { NewsItem } from '@news/types';
 
 @Component({
   selector: 'app-news',
-  imports: [AsyncPipe, TuiButton, RouterLink, NewsCardComponent, CarouselComponent],
+  imports: [
+    AsyncPipe,
+    TuiButton,
+    RouterLink,
+    NewsCardComponent,
+    CarouselComponent,
+    NewsBannerComponent,
+  ],
   templateUrl: './news.component.html',
   styleUrl: './news.component.css',
   providers: [
@@ -21,12 +28,17 @@ import type { NewsItem } from '@news/types';
       provide: CAROUSEL_BREAKPOINTS,
       useValue: {
         default: 1,
-        md: 2,
-        lg: 3,
+        sm: 1,
+        md: 3,
+        lg: 4,
+        xl: 5,
       },
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'group block',
+  },
 })
 export class NewsComponent implements OnInit {
   lastNews$!: Observable<NewsItem[]>;

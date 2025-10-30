@@ -1,68 +1,72 @@
-@if (Math.ceil(items.length / itemsCount) > 1 && pagination === 'top') {
-  <div [class]="topPaginationClasses">
-    <tui-pagination
-      size="s"
-      [attr.data-custom-pagination]="true"
-      [length]="Math.ceil(items.length / itemsCount)"
-      [(index)]="currentIndex"
-      (indexChange)="onIndexChange($event)"
-    />
-  </div>
-}
+<div tuiCarouselButtons>
+  @if (Math.ceil(items.length / itemsCount) > 1 && pagination === 'top') {
+    <!--    <div [class]="topPaginationClasses">-->
+    <!--      <tui-pagination-->
+    <!--        size="s"-->
+    <!--        [attr.data-custom-pagination]="true"-->
+    <!--        [length]="Math.ceil(items.length / itemsCount)"-->
+    <!--        [(index)]="currentIndex"-->
+    <!--        (indexChange)="onIndexChange($event)"-->
+    <!--      />-->
+    <!--    </div>-->
+  }
 
-<div class="relative flex items-center">
-  <!--  @if (Math.ceil(items.length / itemsCount) > 1) {-->
-  <!--    <button-->
-  <!--      tuiIconButton-->
-  <!--      icon="tuiIconChevronLeftLarge"-->
-  <!--      title="Previous"-->
-  <!--      class="!absolute top-20 -left-6 z-10 !hidden lg:!block"-->
-  <!--      [class.cursor-not-allowed]="currentIndex === 0"-->
-  <!--      [disabled]="currentIndex === 0"-->
-  <!--      (click)="carousel.prev()"-->
-  <!--    ></button>-->
-  <!--  }-->
-
-  <tui-carousel
-    #carousel
-    [(index)]="currentIndex"
-    (indexChange)="onIndexChange($event)"
-    [itemsCount]="itemsCount"
-    [draggable]="true"
-    class="items-shadow w-full"
-  >
-    @for (item of items; track $index) {
-      <div *tuiItem>
-        <ng-container
-          *ngTemplateOutlet="itemTemplate; context: { $implicit: item, index: $index }"
-        ></ng-container>
-      </div>
+  <div class="relative flex items-center">
+    @if (Math.ceil(items.length / itemsCount) > 1) {
+      <button
+        tuiIconButton
+        class="!absolute -left-12 z-10 !hidden group-hover:!block"
+        [class.cursor-not-allowed]="currentIndex === 0"
+        [disabled]="currentIndex === 0"
+        (click)="carousel.prev()"
+      >
+        <tui-icon icon="@tui.chevron-left" />
+      </button>
     }
-  </tui-carousel>
 
-  <!--  @if (Math.ceil(items.length / itemsCount) > 1) {-->
-  <!--    <button-->
-  <!--      tuiIconButton-->
-  <!--      icon="tuiIconChevronRightLarge"-->
-  <!--      title="Next"-->
-  <!--      class="!absolute top-20 -right-6 !hidden lg:!block"-->
-  <!--      [class.cursor-not-allowed]="currentIndex >= Math.ceil(items.length / itemsCount) - 1"-->
-  <!--      [disabled]="currentIndex >= Math.ceil(items.length / itemsCount) - 1"-->
-  <!--      (click)="carousel.next()"-->
-  <!--    ></button>-->
-  <!--  }-->
-</div>
-
-@if (Math.ceil(items.length / itemsCount) > 1 && pagination === 'bottom') {
-  <div [class]="bottomPaginationClasses">
-    <tui-pagination
-      size="s"
-      [attr.data-custom-pagination]="true"
-      [length]="Math.ceil(items.length / itemsCount)"
+    <tui-carousel
+      #carousel
       [(index)]="currentIndex"
       (indexChange)="onIndexChange($event)"
-    />
-  </div>
-}
+      [itemsCount]="itemsCount"
+      [draggable]="true"
+      [duration]="5000"
+      [style.--tui-carousel-padding]="'0 10px'"
+      class="items-shadow w-full"
+    >
+      @for (item of items; track $index) {
+        <div *tuiItem>
+          <ng-container
+            *ngTemplateOutlet="itemTemplate; context: { $implicit: item, index: $index }"
+          ></ng-container>
+        </div>
+      }
+    </tui-carousel>
 
-<ng-content></ng-content>
+    @if (Math.ceil(items.length / itemsCount) > 1) {
+      <button
+        tuiIconButton
+        class="!absolute -right-12 !hidden group-hover:!block"
+        [class.cursor-not-allowed]="currentIndex >= Math.ceil(items.length / itemsCount) - 1"
+        [disabled]="currentIndex >= Math.ceil(items.length / itemsCount) - 1"
+        (click)="carousel.next()"
+      >
+        <tui-icon icon="@tui.chevron-right" />
+      </button>
+    }
+  </div>
+
+  @if (Math.ceil(items.length / itemsCount) > 1 && pagination === 'bottom') {
+    <div [class]="bottomPaginationClasses">
+      <tui-pagination
+        size="s"
+        [attr.data-custom-pagination]="true"
+        [length]="Math.ceil(items.length / itemsCount)"
+        [(index)]="currentIndex"
+        (indexChange)="onIndexChange($event)"
+      />
+    </div>
+  }
+
+  <ng-content></ng-content>
+</div>

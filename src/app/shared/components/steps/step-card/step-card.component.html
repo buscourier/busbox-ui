@@ -1,13 +1,15 @@
-<div class="mb-4 flex items-start justify-between">
-  <h3
-    class="mt-6 flex-1 pr-4 text-center text-xl font-semibold text-gray-900 min-[460px]:mt-0 min-[460px]:text-left"
-  >
-    {{ step.title }}
-  </h3>
-  <!--  <div class="text-primary/60 hidden h-8 w-8 flex-shrink-0 min-[460px]:block">-->
-  <!--    <tui-icon [icon]="step.icon" class="text-yellow-500" [style.font-size.rem]="2" />-->
-  <!--  </div>-->
-</div>
+@if (step.title) {
+  <div class="mb-4 flex items-start justify-between">
+    <h3
+      class="mt-6 flex-1 pr-4 text-center text-xl font-semibold text-gray-900 min-[460px]:mt-0 min-[460px]:text-left"
+    >
+      {{ step.title }}
+    </h3>
+    <!--  <div class="text-primary/60 hidden h-8 w-8 flex-shrink-0 min-[460px]:block">-->
+    <!--    <tui-icon [icon]="step.icon" class="text-yellow-500" [style.font-size.rem]="2" />-->
+    <!--  </div>-->
+  </div>
+}
 
 <div class="text-justify min-[460px]:text-left">
   <ng-content />

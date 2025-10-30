@@ -5,7 +5,10 @@
 
   <aside class="max-w-[370px]">
     <div class="sticky top-24">
-      <app-documents-list [documentTypes]="documentTypes"></app-documents-list>
+      @if (documentTypes) {
+        <app-documents-list [documentTypes]="documentTypes"></app-documents-list>
+      }
+
       @if (customSidebarContent) {
         <ng-container [ngTemplateOutlet]="customSidebarContent"></ng-container>
       }
@@ -14,7 +17,7 @@
         <button
           type="button"
           tuiButton
-          appearance="secondary-grayscale"
+          appearance="primary"
           [disabled]="action.disabled"
           (click)="action.handler()"
           size="l"

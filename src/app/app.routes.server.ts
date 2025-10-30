@@ -11,10 +11,10 @@ export const serverRoutes: ServerRoute[] = [
     path: 'home',
     renderMode: RenderMode.Prerender,
   },
-  {
-    path: 'about',
-    renderMode: RenderMode.Prerender,
-  },
+  // {
+  //   path: 'about',
+  //   renderMode: RenderMode.Prerender,
+  // },
   {
     path: 'services',
     renderMode: RenderMode.Prerender,
@@ -40,15 +40,7 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Prerender,
   },
   {
-    path: 'info/packaging',
-    renderMode: RenderMode.Prerender,
-  },
-  {
     path: 'info/storage',
-    renderMode: RenderMode.Prerender,
-  },
-  {
-    path: 'info/airport-delivery',
     renderMode: RenderMode.Prerender,
   },
   {

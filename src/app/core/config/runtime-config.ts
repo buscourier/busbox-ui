@@ -32,7 +32,6 @@ export function provideRuntimeConfig(): Provider[] {
       multi: true,
       useFactory: () =>
         loadRuntimeConfig((cfg) => {
-          console.log('cfggggg', cfg);
           mediaBaseUrl = (cfg.APP_MEDIA_BASE_URL ?? '').replace(/\/+$/, '');
           imgproxyBaseUrl = (cfg.APP_IMGPROXY_BASE_URL ?? '').replace(/\/+$/, '');
         }),

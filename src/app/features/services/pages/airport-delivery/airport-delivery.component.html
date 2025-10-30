@@ -1,0 +1,45 @@
+<app-page-layout>
+  <app-steps class="max-w-[680px]">
+    @for (step of steps; track step.id) {
+      <app-step-card [step]="step" *appStep>
+        @switch (step.id) {
+          @case (1) {
+            <p class="mb-0">Услуга предоставляется как юридическим, так и физическим лицам.</p>
+          }
+          @case (2) {
+            <p class="mb-0">
+              Вы можете оформить доставку груза из аэропорта по номеру телефона или на сайте с
+              пометкой "аэропорт".
+            </p>
+          }
+          @case (3) {
+            <p class="mb-0">
+              Наш менеджер свяжется с вами и проинформирует о стоимости и сроках доставки.
+            </p>
+          }
+          @case (4) {
+            <p>Вам потребуется заполнить рекомендуемую форму доверенности.</p>
+            <app-documents-list [documentTypes]="['warrant_fiz', 'warrant_ur']" />
+          }
+          @case (5) {
+            <p class="mb-0">
+              Получить груз можно по адресу получателя, в одном из наших филиалов или в населенном
+              пункте, где нет нашего филиала, встретить автобус на автостанции и забрать груз у
+              водителя.
+            </p>
+          }
+        }
+      </app-step-card>
+    }
+  </app-steps>
+
+  <!--  <section class="full-width-section mt-16 mb-10! border-t border-gray-200 pt-16">-->
+  <!--    <div class="container mx-auto px-4">-->
+  <!--      <app-carousel [items]="items" [itemTemplate]="slideTemplate"></app-carousel>-->
+  <!--    </div>-->
+  <!--  </section>-->
+</app-page-layout>
+
+<!--<ng-template #slideTemplate let-brand>-->
+<!--  <app-brand-card [brand]="brand" />-->
+<!--</ng-template>-->

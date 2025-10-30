@@ -5,6 +5,7 @@ import { AlertComponent } from '@shared/components/alert';
 import { StepDirective, StepsComponent } from '@shared/components/steps';
 import { DocumentsListComponent } from '@shared/features/documents';
 import { SidebarLayoutComponent } from '@shared/layouts';
+import { PageLayoutComponent } from '@shared/layouts/page-layout';
 
 import { PackageComponent } from './package';
 
@@ -18,6 +19,7 @@ import { PackageComponent } from './package';
     TuiIcon,
     AlertComponent,
     DocumentsListComponent,
+    PageLayoutComponent,
   ],
   templateUrl: './packaging.component.html',
   styleUrl: './packaging.component.css',

@@ -16,6 +16,7 @@ import {
   RouteSelectorComponent,
   ServiceFeaturesComponent,
   StatsSummaryComponent,
+  StatsComponent,
 } from '@home/components';
 
 @Component({
@@ -33,6 +34,7 @@ import {
     BrandCardComponent,
     CarouselComponent,
     PageLayoutComponent,
+    StatsComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
@@ -43,13 +45,13 @@ export class HomeComponent {
 
   readonly brands = [
     {
-      name: 'sber',
-      link: 'https://sber.ru/',
+      name: 'transgaz',
+      link: 'https://transgas.ltd/',
     },
-    {
-      name: 'aeroflot',
-      link: 'https://www.aeroflot.ru/ru-ru',
-    },
+    // {
+    //   name: 'aeroflot',
+    //   link: 'https://www.aeroflot.ru/ru-ru',
+    // },
     {
       name: 'hyperauto',
       link: 'https://hyperauto.ru/',

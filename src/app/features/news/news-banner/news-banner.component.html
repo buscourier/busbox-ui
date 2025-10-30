@@ -1,0 +1,35 @@
+<div
+  class="relative cursor-pointer"
+  [routerLink]="['/news']"
+  [queryParams]="{ id: article.news_id }"
+>
+  <img
+    [src]="article.image"
+    [alt]="article.title"
+    [tuiSkeleton]="!imageLoaded"
+    (load)="onImageLoad()"
+    (error)="onImageError()"
+    class="h-32 w-full object-cover"
+  />
+</div>
+<!--<div class="p-6">-->
+<!--  <h3 class="mb-3 line-clamp-1 text-xl font-bold text-gray-900" [tuiSkeleton]="!imageLoaded">-->
+<!--    <tui-line-clamp [content]="article.title" />-->
+<!--  </h3>-->
+<!--  <p class="mb-4 line-clamp-3 text-sm text-gray-600" [tuiSkeleton]="!imageLoaded">-->
+<!--    {{-->
+<!--      article.short ||-->
+<!--        'На этом месте должно быть краткое описание новости, но к сожалению оно пока недоступно!  На этом месте должно быть краткое описание новости, но к сожалению оно пока недоступно!'-->
+<!--    }}-->
+<!--  </p>-->
+
+<!--  <a-->
+<!--    [routerLink]="['/news']"-->
+<!--    [queryParams]="{ id: article.news_id }"-->
+<!--    class="inline-flex items-center text-sm font-medium text-black transition-colors hover:text-yellow-500"-->
+<!--    [tuiSkeleton]="!imageLoaded"-->
+<!--  >-->
+<!--    Читать далее-->
+<!--    <tui-icon icon="@tui.chevron-right" [style.font-size.rem]="0.8" class="ml-0.5" />-->
+<!--  </a>-->
+<!--</div>-->
