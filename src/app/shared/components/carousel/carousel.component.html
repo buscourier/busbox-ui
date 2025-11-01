@@ -16,9 +16,7 @@
       <button
         tuiIconButton
         class="!absolute -left-12 z-10 !hidden group-hover:!block"
-        [class.cursor-not-allowed]="currentIndex === 0"
-        [disabled]="currentIndex === 0"
-        (click)="carousel.prev()"
+        (click)="onPrevClick()"
       >
         <tui-icon icon="@tui.chevron-left" />
       </button>
@@ -47,9 +45,7 @@
       <button
         tuiIconButton
         class="!absolute -right-12 !hidden group-hover:!block"
-        [class.cursor-not-allowed]="currentIndex >= Math.ceil(items.length / itemsCount) - 1"
-        [disabled]="currentIndex >= Math.ceil(items.length / itemsCount) - 1"
-        (click)="carousel.next()"
+        (click)="onNextClick()"
       >
         <tui-icon icon="@tui.chevron-right" />
       </button>

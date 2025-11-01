@@ -18,7 +18,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { TuiAlertService, TuiButton, TuiError, TuiIcon } from '@taiga-ui/core';
+import { TuiAlertService, TuiButton, TuiError, TuiIcon, TuiNotification } from '@taiga-ui/core';
 import { TUI_VALIDATION_ERRORS, TuiFieldErrorPipe } from '@taiga-ui/kit';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { debounceTime } from 'rxjs';
@@ -27,6 +27,8 @@ import { DEBOUNCE_TIME } from '@core/constants';
 import { isObjectsEqual } from '@core/utils';
 
 import { CargoRestrictionsService } from '../../services';
+// eslint-disable-next-line import/no-internal-modules
+import { LimitsAlertComponent } from '../../shared/components/limits-alert';
 import {
   PARCEL_ITEM_DEFAULTS,
   parcelItemAnimation,
@@ -36,7 +38,6 @@ import {
 import { PARCEL_ITEM_LIMIT_TOKEN, PARCELS_LIMIT_TOKEN } from '../../tokens';
 import type { ParcelItem, ParcelItemLimits, Parcels, ParcelsLimits } from '../../types';
 
-import { LimitsAlertComponent } from './limits-alert';
 import { parcelsValidationErrors } from './parcels.constants';
 import type { ParcelsErrors } from './parcels.types';
 import { parcelsValidator } from './parcels.validator';
@@ -52,6 +53,7 @@ import { parcelsValidator } from './parcels.validator';
     TuiIcon,
     TranslocoPipe,
     TuiButton,
+    TuiNotification,
   ],
   templateUrl: './parcels.component.html',
   styleUrl: './parcels.component.css',

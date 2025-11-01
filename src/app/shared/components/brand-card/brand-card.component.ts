@@ -17,7 +17,7 @@ export class BrandCardComponent {
 
   @HostBinding('class') get hostClasses(): string {
     return cn(
-      'flex h-36 items-center justify-center',
+      'flex h-36 min-w-60 items-center justify-center',
       'rounded-sm border border-transparent',
       'bg-white shadow-xl',
       'hover:border-yellow-500 hover:shadow-none',

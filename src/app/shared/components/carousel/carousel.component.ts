@@ -93,8 +93,57 @@ export class CarouselComponent<T> {
     }
   }
 
+  get maxIndex(): number {
+    const visible = this.itemsCount;
+    const max = this.items.length - visible;
+    return Math.max(0, isFinite(max) ? max : 0);
+  }
+
   onIndexChange(index: number): void {
-    this.currentIndex = index;
-    this.slideChange.emit(index);
+    const maxIndex = this.maxIndex;
+
+    if (this.items.length === 0) {
+      this.currentIndex = 0;
+      this.slideChange.emit(0);
+      return;
+    }
+
+    if (index > maxIndex) {
+      this.currentIndex = 0;
+    } else if (index < 0) {
+      this.currentIndex = maxIndex;
+    } else {
+      this.currentIndex = index;
+    }
+
+    this.slideChange.emit(this.currentIndex);
+  }
+
+  onPrevClick(): void {
+    const maxIndex = this.maxIndex;
+    if (this.items.length === 0) {
+      return;
+    }
+
+    if (this.currentIndex === 0) {
+      this.currentIndex = maxIndex;
+    } else {
+      this.currentIndex = this.currentIndex - 1;
+    }
+    this.slideChange.emit(this.currentIndex);
+  }
+
+  onNextClick(): void {
+    const maxIndex = this.maxIndex;
+    if (this.items.length === 0) {
+      return;
+    }
+
+    if (this.currentIndex >= maxIndex) {
+      this.currentIndex = 0;
+    } else {
+      this.currentIndex = this.currentIndex + 1;
+    }
+    this.slideChange.emit(this.currentIndex);
   }
 }

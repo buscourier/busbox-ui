@@ -1,4 +1,4 @@
-import { type OnInit } from '@angular/core';
+import { effect, type OnInit, type Signal } from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,18 +10,22 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { TuiButton, TuiIcon } from '@taiga-ui/core';
+import { TuiAlertService, TuiButton, TuiIcon } from '@taiga-ui/core';
+import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { debounceTime } from 'rxjs';
 
 import { DEBOUNCE_TIME } from '@core/constants';
 
-// eslint-disable-next-line import/no-internal-modules
+// eslint-disable-next-line import/no-internal-modules,import/order
 import { CargoRestrictionsService } from '@delivery/delivery-details/services';
+
+// eslint-disable-next-line import/no-internal-modules
+import { LimitsAlertComponent } from '@delivery/delivery-details/shared/components/limits-alert';
 
 // eslint-disable-next-line import/no-internal-modules
 import { PARCEL_ITEM_DEFAULTS, parcelItemAnimation } from '../../shared/components/parcel-item';
 import { PARCEL_ITEM_LIMIT_TOKEN } from '../../tokens';
-import type { AutoPart, AutoPartPreset, AutoParts } from '../../types';
+import type { AutoPart, AutoPartPreset, AutoParts, ParcelItemLimits } from '../../types';
 
 import { AutoPartComponent } from './auto-part';
 
@@ -46,8 +50,15 @@ export class AutoPartsComponent implements OnInit {
   @Output() dataChange = new EventEmitter<AutoParts>();
   @Output() validationChange = new EventEmitter<boolean>();
 
+  private readonly alert = inject(TuiAlertService);
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly destroyRef = inject(DestroyRef);
+
+  public parcelItemLimits: Signal<ParcelItemLimits> = inject(PARCEL_ITEM_LIMIT_TOKEN);
+
+  private readonly limitsEffect = effect(() => {
+    this.showNotification(this.parcelItemLimits());
+  });
 
   protected canAddItem = true;
 
@@ -106,5 +117,17 @@ export class AutoPartsComponent implements OnInit {
 
       this.validationChange.emit(!this.items.invalid);
     });
+  }
+
+  protected showNotification(limits: ParcelItemLimits): void {
+    this.alert
+      .open<number>(new PolymorpheusComponent(LimitsAlertComponent), {
+        label: 'Ограничение автозапчасти',
+        data: limits,
+        appearance: 'warning',
+        autoClose: 0,
+      })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe();
   }
 }

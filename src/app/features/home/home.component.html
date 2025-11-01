@@ -1,12 +1,10 @@
 <app-news />
 
 <app-page-layout class="pb-0!">
-  <section
-    class="relative mb-16 flex flex-col md:mt-6 md:mb-22 md:flex-row md:gap-x-8 lg:mt-10 lg:mb-32 xl:mb-22"
-  >
+  <section class="relative flex flex-col md:mt-6 md:flex-row md:gap-x-8 lg:mt-10">
     <div class="md:text-left">
       <h1
-        class="font-heading mb-6 max-w-md text-3xl leading-10 font-bold sm:text-4xl sm:leading-12 md:max-w-full lg:text-[57px] lg:leading-16"
+        class="font-heading mt-6 mb-6 max-w-md text-4xl leading-11 font-bold md:mt-0 md:max-w-full lg:text-[57px] lg:leading-16"
       >
         Срочная доставка
         <br />
@@ -14,35 +12,35 @@
         <br class="hidden sm:block" />
         и в Хабаровск
       </h1>
-      <p class="mb-8 text-lg leading-9 sm:text-xl md:mb-10 xl:mb-18 xl:text-[26px]">
+      <p class="mb-8 text-lg leading-9 sm:text-xl md:mb-10 xl:text-[26px]">
         <b class="inline-block rounded-sm bg-yellow-500 px-2 py-1 font-bold xl:text-[27px]">
           от 2 до 24 часов
         </b>
         рейсовыми автобусами
-        <br class="hidden sm:block" />
+        <br class="hidden sm:block md:hidden lg:block" />
         и собственным автотранспортом
       </p>
-      <img
-        ngSrc="index-bus.jpg"
-        alt="Срочная доставка"
-        width="1350"
-        height="667"
-        ngSrcset="450w, 900w, 1350w"
-        sizes="450px"
-        priority
-        class="hidden w-full max-w-[450px] bg-gray-50 text-gray-50 md:mb-8 md:block lg:hidden"
-      />
 
       <app-cargo-types class="mb-18 inline-flex md:mb-0 xl:mb-28" />
     </div>
     <app-route-selector />
   </section>
 
+  <div
+    class="relative -z-10 mt-16 w-full lg:mb-5 xl:-left-[70px] xl:-mt-36 xl:mb-24 xl:w-[calc(100%+175px)]"
+  >
+    <img
+      src="/assets/images/home-banner.jpg"
+      alt=""
+      class="max-w-[250px] sm:max-w-[400px] lg:max-w-[600px] xl:max-w-full"
+    />
+  </div>
+
   <app-page-section
     [class]="
       cn(
         'relative',
-        'xl:mb-40 xl:before:absolute xl:before:top-[-290px] xl:before:left-[-215px] xl:before:z-[-1]',
+        'xl:mb-32 xl:before:absolute xl:before:top-[-290px] xl:before:left-[-215px] xl:before:z-[-1]',
         'xl:before:h-[3472px] xl:before:w-[1560px] xl:before:bg-no-repeat',
         'xl:before:bg-[url(./assets/images/home-curve.svg)]'
       )
@@ -64,71 +62,44 @@
     <app-service-features class="mt-10" />
   </app-page-section>
 
-  <section class="full-width-section relative z-10 bg-gradient-to-br from-yellow-500 to-yellow-400">
+  <section
+    class="full-width-section relative z-10 mb-28 bg-gradient-to-br from-yellow-500 to-yellow-400"
+  >
     <div class="container mx-auto px-4">
       <app-stats />
     </div>
   </section>
-  <div
-    class="relative -top-10 mx-auto flex h-[650px] max-w-[1170px] justify-center bg-[url('src/assets/images/career-map.svg')] bg-[length:460px_650px] bg-center bg-no-repeat px-4"
-  >
-    <div class="flex h-full w-[480px] flex-col">
-      <div
-        class="before:font-heading relative mt-28 flex items-center before:h-[82px] before:text-[82px] before:leading-tight before:content-['1'] lg:-left-5"
-      >
-        <p class="ml-5 text-lg">
-          филиал
-          <br />
-          в Хабаровске
-        </p>
-      </div>
-      <div
-        class="before:font-heading relative bottom-10 mt-auto ml-auto flex before:h-[82px] before:text-[82px] before:leading-tight before:content-['6'] sm:-right-20 md:-right-28 lg:-right-44"
-      >
-        <div class="ml-5 text-lg">
-          <b class="mb-2 block">
-            Филиалов
-            <br />
-            в Приморском крае
-          </b>
-          <p>
-            Владивосток (2 филиала),
-            <br />
-            Артем,
-            <br />
-            Находка,
-            <br />
-            Уссурийск
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <app-page-section>
     <ng-container class="title">Помогаем бизнесу</ng-container>
     <ng-container class="subtitle">
       Вы - логистическая или транспортная компания?
-      <br class="hidden lg:block" />
+      <br class="hidden md:block" />
       У вас интернет-магазин, и вы хотите укрепить позиции в Приморском крае?
-      <br />
-      Давайте сотрудничать!
+      <br class="hidden md:block" />
+      Свяжитесь с нами по номеру
+      <a [href]="contacts.mobileSecondary | contactLink: 'tel'" class="link-black">
+        {{ contacts.mobileSecondary }}
+      </a>
+      или заполните форму обратной связи,
+      <br class="hidden md:block" />
+      и мы свяжемся с вами.
     </ng-container>
 
-    <div
-      class="flex flex-col space-y-14 md:flex-row md:space-y-0 md:space-x-4 lg:space-x-8 xl:space-x-16"
-    >
-      <app-contact-form formType="custom-tasks" class="shrink-0" />
-      <app-page-section>
+    <div class="flex flex-col gap-20 lg:flex-row lg:items-start lg:gap-10 xl:gap-16">
+      <app-contact-form
+        formType="custom-tasks"
+        class="max-w-full shrink-0 lg:max-w-[480px] xl:max-w-[670px]"
+      />
+      <app-page-section class="mb-10!">
         <ng-container class="title">Наши партнеры</ng-container>
         <ng-container class="subtitle">
-          С нами работает более 500 компаний, которые регулярно отправляют грузы по Приморскому краю
-          и в Хабаровск.
+          С нами работает более 500 компаний, которые регулярно отправляют грузы
+          <br class="hidden md:block lg:hidden" />
+          по Приморскому краю и в Хабаровск.
         </ng-container>
-        <app-carousel [items]="brands" [itemTemplate]="slideTemplate" />
-        <ng-template #slideTemplate let-brand></ng-template>
 
-        <div class="flex flex-wrap gap-4">
+        <div class="flex w-full flex-wrap gap-4">
           @for (brand of brands; track brand.name) {
             <app-brand-card [brand]="brand" class="flex-grow" />
           }

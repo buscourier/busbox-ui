@@ -40,28 +40,29 @@ export class ServicesIndexComponent {
     {
       id: 'insurance',
       title: 'Страхование груза',
-      description: 'Полная защита от любых непредвиденных ситуаций во время транспортировки.',
+      description: 'Страховая защита груза и максимально быстрое возмещение ущерба.',
       type: 'guard',
       link: '/' + this.navigationService.findByLink('insurance')?.link,
     },
     {
       id: 'courier',
       title: 'Курьерская доставка',
-      description: 'Забор груза от двери и доставка до получателя. Экономьте время и силы.',
+      description: 'Забор и доставка груза — + от адреса к адресу.',
       type: 'courier',
       link: '/' + this.navigationService.findByLink('courier')?.link,
     },
     {
       id: 'packaging',
       title: 'Упаковка',
-      description: 'Какой текст??',
+      description: 'Подберем оптимальную упаковку для вашего груза и бережно запакуем его.',
       type: 'task',
       link: '/' + this.navigationService.findByLink('packaging')?.link,
     },
     {
       id: 'airport',
       title: 'Доставка из aэропорта',
-      description: 'Какой текст??',
+      description:
+        'Забор груза из Аэропорта и Карго-Владивосток, прохождение необходимых процедур.',
       type: 'task',
       link: '/' + this.navigationService.findByLink('airport-delivery')?.link,
     },

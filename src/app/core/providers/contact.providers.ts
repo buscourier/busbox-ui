@@ -4,6 +4,7 @@ import {
   CONTACT_INFO,
   EMAIL,
   MOBILE_NUMBER,
+  MOBILE_SECONDARY_NUMBER,
   PHONE_NUMBER,
   TELEGRAM_ACCOUNT,
   WHATSAPP,
@@ -17,6 +18,10 @@ export const CONTACTS_PROVIDERS: Provider[] = [
   {
     provide: MOBILE_NUMBER,
     useValue: '+7 (953) 21 96 746',
+  },
+  {
+    provide: MOBILE_SECONDARY_NUMBER,
+    useValue: '+7 (953) 219 58 48',
   },
   {
     provide: TELEGRAM_ACCOUNT,
@@ -35,16 +40,18 @@ export const CONTACTS_PROVIDERS: Provider[] = [
     useFactory: (
       phone: string,
       mobile: string,
+      mobileSecondary: string,
       telegram: string,
       email: string,
       whatsapp: string,
     ) => ({
       phone,
       mobile,
+      mobileSecondary,
       telegram,
       email,
       whatsapp,
     }),
-    deps: [PHONE_NUMBER, MOBILE_NUMBER, TELEGRAM_ACCOUNT, EMAIL, WHATSAPP],
+    deps: [PHONE_NUMBER, MOBILE_NUMBER, MOBILE_SECONDARY_NUMBER, TELEGRAM_ACCOUNT, EMAIL, WHATSAPP],
   },
 ];
