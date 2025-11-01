@@ -234,7 +234,7 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
         }));
 
       // 3. Size categories
-      const sizeCategories = ['до 50 см', 'до 100 см', 'до 130 см', 'до 160 см'];
+      const sizeCategories = ['до 50 см', 'до 80 см', 'до 100 см', 'до 130 см'];
 
       // 4. Build table rows
       const rows: ParcelTableRow[] = sizeCategories.map((sizeCategory, sizeIndex) => {

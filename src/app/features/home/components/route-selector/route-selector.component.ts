@@ -58,17 +58,9 @@ import type { RouteSelectorForm } from './route-selector.types';
 export class RouteSelectorComponent implements OnInit {
   @HostBinding('class') get hostClasses(): string {
     return cn(
-      'theme-yellow block flex-grow',
-
-      'lg:max-w-[425px] xl:w-full xl:p-4',
-      'lg:before:absolute lg:before:top-[140px] lg:before:right-[-62px]',
-      'lg:before:-z-10 lg:before:h-[360px] lg:before:w-[600px]',
-      "lg:before:bg-[url('./assets/images/home-bus.jpg')]",
-      'lg:before:bg-size-[600px_360px] lg:before:bg-no-repeat',
-
-      'xl:absolute xl:top-0 xl:right-0 xl:h-[1190px]',
-
-      'xl:before:top-[142px] xl:before:right-[-155px] xl:before:w-[810px] xl:before:bg-size-[810px_380px]',
+      'theme-yellow block shrink-0 flex-grow',
+      'lg:max-w-[480px] xl:w-full xl:p-4',
+      'lg:absolute lg:top-0 lg:right-0 lg:h-[670px] xl:h-[1610px]',
     );
   }
 
@@ -100,9 +92,9 @@ export class RouteSelectorComponent implements OnInit {
 
   getFormClasses(): string {
     return cn(
-      'class="min-w-[360px] rounded-md bg-yellow-500 p-8 pb-10 md:p-6 md:pb-8 lg:p-8 lg:pb-12',
+      'class="min-w-[360px] rounded-md bg-yellow-500 p-8 pb-10 md:p-6 md:pb-8 lg:p-8 lg:pb-12 xl:p-12',
       'md:mx-0 md:max-w-full md:basis-1/2',
-      'xl:sticky xl:top-22 xl:left-0 xl:z-10',
+      'lg:sticky lg:top-22 lg:left-0 lg:z-10',
     );
   }
 

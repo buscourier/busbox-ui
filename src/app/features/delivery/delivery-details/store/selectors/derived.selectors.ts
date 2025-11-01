@@ -80,7 +80,7 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
   const selectCargoTypes = createSelector(baseSelectors.selectOptions, (options) => {
     const cargos = Array.isArray(options?.cargos) ? options.cargos : [];
 
-    return cargos.filter((cargo) => cargo.parent_id === CargoTypeId.ROOT);
+    return cargos.filter((cargo) => cargo.parent_id === CargoTypeId.ROOT && cargo.id !== '21');
   });
 
   // const selectAutoPartsOptions = createSelector(baseSelectors.selectOptions, (options) => {

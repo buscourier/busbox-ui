@@ -180,7 +180,8 @@ export class CargoPickerComponent implements OnInit, OnChanges {
   }
 
   private isRestrictedType(type: CargoType | null): boolean {
-    return type === CargoType.AUTO_PARTS || type === CargoType.OTHER;
+    // return type === CargoType.AUTO_PARTS || type === CargoType.OTHER;
+    return type === CargoType.OTHER;
   }
 
   private mapCargoTypes(types: Cargo[]): MappedCargoType[] {

@@ -28,10 +28,10 @@ import type { NewsItem } from '@news/types';
       provide: CAROUSEL_BREAKPOINTS,
       useValue: {
         default: 1,
-        sm: 1,
+        sm: 2,
         md: 3,
         lg: 4,
-        xl: 5,
+        xl: 6,
       },
     },
   ],

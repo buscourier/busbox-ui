@@ -116,28 +116,28 @@ export class ContactFormComponent implements OnInit {
   get layoutClass(): string {
     return cn('mb-3 grid gap-4', {
       'sm:grid-cols-2 md:grid-cols-3': this.isSupport,
-      'sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2': this.isCustomTasks,
+      'sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2': this.isCustomTasks,
     });
   }
 
   get emailFieldClass(): string {
     return cn({
       'sm:col-span-2 md:col-span-1': this.isSupport,
-      'sm:col-span-2 md:col-span-1 lg:col-span-2': this.isCustomTasks,
+      'sm:col-span-2 lg:col-span-1 xl:col-span-2': this.isCustomTasks,
     });
   }
 
   get commentFieldClass(): string {
     return cn({
       'sm:col-span-2 md:col-span-3': this.isSupport,
-      'sm:col-span-2 md:col-span-1 lg:col-span-2': this.isCustomTasks,
+      'sm:col-span-2 lg:col-span-1 xl:col-span-2': this.isCustomTasks,
     });
   }
 
   get processingFieldClass(): string {
     return cn('mt-2 flex items-start gap-2', {
       'sm:col-span-2 md:col-span-3': this.isSupport,
-      'sm:col-span-2 md:col-span-1 lg:col-span-2': this.isCustomTasks,
+      'sm:col-span-2 lg:col-span-1 xl:col-span-2': this.isCustomTasks,
     });
   }
 

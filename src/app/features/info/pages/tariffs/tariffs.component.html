@@ -87,7 +87,7 @@
       </div>
 
       @if (vm.zoneTariffs.hasData) {
-        <section class="mb-16">
+        <section>
           <h2 class="font-heading mb-4 text-3xl font-bold text-gray-900">Документы и грузы</h2>
           <p class="mb-6">
             В таблице представлены цены на доставку документов и грузов. Выберете зону города
@@ -234,7 +234,7 @@
                       </p>
                       <p class="mb-0 text-xs leading-relaxed text-gray-700">
                         *
-                        <b class="text-gray-900">Посылки свыше 160 см и свыше 20 кг</b>
+                        <b class="text-gray-900">Посылки свыше 130 см и свыше 20 кг</b>
                         - стоимость доставки можно рассчитать на сайте в разделе «Предварительный
                         расчет» или у менеджера.
                       </p>
@@ -250,7 +250,7 @@
                 </p>
                 <p class="mb-0 text-xs leading-relaxed text-gray-700">
                   *
-                  <b class="text-gray-900">Посылки свыше 160 см и свыше 20 кг</b>
+                  <b class="text-gray-900">Посылки свыше 130 см и свыше 20 кг</b>
                   - стоимость доставки можно рассчитать на сайте в разделе «Предварительный расчет»
                   или у менеджера.
                 </p>
@@ -259,134 +259,134 @@
           </div>
         </section>
 
-        @if (vm.zoneTariffs.autopartsTable.rows.length) {
-          <section class="mb-16">
-            <h2 class="font-heading mb-4 text-3xl font-bold text-gray-900">Автозапчасти</h2>
-            <p class="mb-6">
-              В таблице представлены цены на доставку популярных автозапчастей. Определите, в какую
-              зону отправляется деталь, и найдите стоимость в нужной колонке.
-            </p>
+        <!--        @if (vm.zoneTariffs.autopartsTable.rows.length) {-->
+        <!--          <section class="mb-16">-->
+        <!--            <h2 class="font-heading mb-4 text-3xl font-bold text-gray-900">Автозапчасти</h2>-->
+        <!--            <p class="mb-6">-->
+        <!--              В таблице представлены цены на доставку популярных автозапчастей. Определите, в какую-->
+        <!--              зону отправляется деталь, и найдите стоимость в нужной колонке.-->
+        <!--            </p>-->
 
-            <div class="">
-              <app-content-scroller>
-                <table #autopartsContainer class="w-full min-w-[600px] text-sm">
-                  <thead>
-                    <tr>
-                      <th class="px-3 py-3 text-left"></th>
-                      @for (zone of vm.zoneTariffs.autopartsTable.zones; track zone.zone_id) {
-                        <th
-                          class="bg-yellow-500/20 px-3 py-3 text-center text-sm whitespace-nowrap"
-                          [class.rounded-l-sm]="$first"
-                          [class.rounded-r-sm]="$last"
-                        >
-                          {{ zone.zone_name }}
-                        </th>
-                      }
-                    </tr>
-                  </thead>
+        <!--            <div class="">-->
+        <!--              <app-content-scroller>-->
+        <!--                <table #autopartsContainer class="w-full min-w-[600px] text-sm">-->
+        <!--                  <thead>-->
+        <!--                    <tr>-->
+        <!--                      <th class="px-3 py-3 text-left"></th>-->
+        <!--                      @for (zone of vm.zoneTariffs.autopartsTable.zones; track zone.zone_id) {-->
+        <!--                        <th-->
+        <!--                          class="bg-yellow-500/20 px-3 py-3 text-center text-sm whitespace-nowrap"-->
+        <!--                          [class.rounded-l-sm]="$first"-->
+        <!--                          [class.rounded-r-sm]="$last"-->
+        <!--                        >-->
+        <!--                          {{ zone.zone_name }}-->
+        <!--                        </th>-->
+        <!--                      }-->
+        <!--                    </tr>-->
+        <!--                  </thead>-->
 
-                  <tbody>
-                    @for (
-                      row of vm.zoneTariffs.autopartsTable.rows;
-                      track row.type;
-                      let isOdd = $odd
-                    ) {
-                      <tr [class.bg-gray-50]="isOdd">
-                        <td class="px-3 py-3 text-sm font-semibold">
-                          {{ row.type }}
-                        </td>
+        <!--                  <tbody>-->
+        <!--                    @for (-->
+        <!--                      row of vm.zoneTariffs.autopartsTable.rows;-->
+        <!--                      track row.type;-->
+        <!--                      let isOdd = $odd-->
+        <!--                    ) {-->
+        <!--                      <tr [class.bg-gray-50]="isOdd">-->
+        <!--                        <td class="px-3 py-3 text-sm font-semibold">-->
+        <!--                          {{ row.type }}-->
+        <!--                        </td>-->
 
-                        @for (zone of vm.zoneTariffs.autopartsTable.zones; track zone.zone_id) {
-                          <td class="px-3 py-3 text-center text-sm whitespace-nowrap">
-                            @if (row.zones[zone.zone_id]) {
-                              <span>{{ row.zones[zone.zone_id] }} ₽</span>
-                            } @else {
-                              <span class="text-gray-400">—</span>
-                            }
-                          </td>
-                        }
-                      </tr>
-                    }
-                  </tbody>
-                  <tfoot class="t-foot-print-only">
-                    <tr>
-                      <td colspan="7" class="pt-3">
-                        <p class="mb-0 text-xs leading-relaxed text-gray-700">
-                          *
-                          <b class="text-gray-900">Автозапчасти</b>
-                          – стоимость указана для стандартных размеров запчастей легковых
-                          автомобилей. Для запчастей с превышением стандартных размеров расчёт
-                          производится индивидуально менеджером.
-                        </p>
-                      </td>
-                    </tr>
-                  </tfoot>
-                </table>
-                <ng-container class="footer">
-                  <p class="mb-0 text-xs leading-relaxed text-gray-700">
-                    *
-                    <b class="text-gray-900">Автозапчасти</b>
-                    – стоимость указана для стандартных размеров запчастей легковых автомобилей. Для
-                    запчастей с превышением стандартных размеров расчёт производится индивидуально
-                    менеджером.
-                  </p>
-                </ng-container>
-              </app-content-scroller>
-            </div>
-          </section>
-        }
+        <!--                        @for (zone of vm.zoneTariffs.autopartsTable.zones; track zone.zone_id) {-->
+        <!--                          <td class="px-3 py-3 text-center text-sm whitespace-nowrap">-->
+        <!--                            @if (row.zones[zone.zone_id]) {-->
+        <!--                              <span>{{ row.zones[zone.zone_id] }} ₽</span>-->
+        <!--                            } @else {-->
+        <!--                              <span class="text-gray-400">—</span>-->
+        <!--                            }-->
+        <!--                          </td>-->
+        <!--                        }-->
+        <!--                      </tr>-->
+        <!--                    }-->
+        <!--                  </tbody>-->
+        <!--                  <tfoot class="t-foot-print-only">-->
+        <!--                    <tr>-->
+        <!--                      <td colspan="7" class="pt-3">-->
+        <!--                        <p class="mb-0 text-xs leading-relaxed text-gray-700">-->
+        <!--                          *-->
+        <!--                          <b class="text-gray-900">Автозапчасти</b>-->
+        <!--                          – стоимость указана для стандартных размеров запчастей легковых-->
+        <!--                          автомобилей. Для запчастей с превышением стандартных размеров расчёт-->
+        <!--                          производится индивидуально менеджером.-->
+        <!--                        </p>-->
+        <!--                      </td>-->
+        <!--                    </tr>-->
+        <!--                  </tfoot>-->
+        <!--                </table>-->
+        <!--                <ng-container class="footer">-->
+        <!--                  <p class="mb-0 text-xs leading-relaxed text-gray-700">-->
+        <!--                    *-->
+        <!--                    <b class="text-gray-900">Автозапчасти</b>-->
+        <!--                    – стоимость указана для стандартных размеров запчастей легковых автомобилей. Для-->
+        <!--                    запчастей с превышением стандартных размеров расчёт производится индивидуально-->
+        <!--                    менеджером.-->
+        <!--                  </p>-->
+        <!--                </ng-container>-->
+        <!--              </app-content-scroller>-->
+        <!--            </div>-->
+        <!--          </section>-->
+        <!--        }-->
 
-        @if (vm.zoneTariffs.otherTable.rows.length) {
-          <section class="">
-            <h2 class="font-heading mb-4 text-3xl font-bold text-gray-900">Другое</h2>
-            <p class="mb-6">
-              Мы предусмотрели отдельные тарифы для нестандартных отправлений — например, для
-              цветов.
-              <br />
-              Это помогает точно рассчитать доставку.
-            </p>
-            <div class="">
-              <app-content-scroller>
-                <table #otherContainer class="w-full text-sm whitespace-nowrap">
-                  <thead>
-                    <tr>
-                      <th class="px-3 py-3 text-left"></th>
-                      @for (zone of vm.zoneTariffs.otherTable.zones; track zone.zone_id) {
-                        <th
-                          class="bg-yellow-500/20 px-3 py-3 text-center text-sm font-semibold"
-                          [class.rounded-l-sm]="$first"
-                          [class.rounded-r-sm]="$last"
-                        >
-                          {{ zone.zone_name }}
-                        </th>
-                      }
-                    </tr>
-                  </thead>
+        <!--        @if (vm.zoneTariffs.otherTable.rows.length) {-->
+        <!--          <section class="">-->
+        <!--            <h2 class="font-heading mb-4 text-3xl font-bold text-gray-900">Другое</h2>-->
+        <!--            <p class="mb-6">-->
+        <!--              Мы предусмотрели отдельные тарифы для нестандартных отправлений — например, для-->
+        <!--              цветов.-->
+        <!--              <br />-->
+        <!--              Это помогает точно рассчитать доставку.-->
+        <!--            </p>-->
+        <!--            <div class="">-->
+        <!--              <app-content-scroller>-->
+        <!--                <table #otherContainer class="w-full text-sm whitespace-nowrap">-->
+        <!--                  <thead>-->
+        <!--                    <tr>-->
+        <!--                      <th class="px-3 py-3 text-left"></th>-->
+        <!--                      @for (zone of vm.zoneTariffs.otherTable.zones; track zone.zone_id) {-->
+        <!--                        <th-->
+        <!--                          class="bg-yellow-500/20 px-3 py-3 text-center text-sm font-semibold"-->
+        <!--                          [class.rounded-l-sm]="$first"-->
+        <!--                          [class.rounded-r-sm]="$last"-->
+        <!--                        >-->
+        <!--                          {{ zone.zone_name }}-->
+        <!--                        </th>-->
+        <!--                      }-->
+        <!--                    </tr>-->
+        <!--                  </thead>-->
 
-                  <tbody>
-                    @for (row of vm.zoneTariffs.otherTable.rows; track row.type; let isOdd = $odd) {
-                      <tr [class.bg-gray-50]="isOdd">
-                        <td class="px-3 py-3 text-sm font-semibold">
-                          {{ row.type }}
-                        </td>
+        <!--                  <tbody>-->
+        <!--                    @for (row of vm.zoneTariffs.otherTable.rows; track row.type; let isOdd = $odd) {-->
+        <!--                      <tr [class.bg-gray-50]="isOdd">-->
+        <!--                        <td class="px-3 py-3 text-sm font-semibold">-->
+        <!--                          {{ row.type }}-->
+        <!--                        </td>-->
 
-                        @for (zone of vm.zoneTariffs.otherTable.zones; track zone.zone_id) {
-                          <td class="px-3 py-3 text-center text-sm font-medium">
-                            @if (row.zones[zone.zone_id]) {
-                              <span>{{ row.zones[zone.zone_id] }} ₽</span>
-                            } @else {
-                              <span class="text-gray-400">—</span>
-                            }
-                          </td>
-                        }
-                      </tr>
-                    }
-                  </tbody>
-                </table>
-              </app-content-scroller>
-            </div>
-          </section>
-        }
+        <!--                        @for (zone of vm.zoneTariffs.otherTable.zones; track zone.zone_id) {-->
+        <!--                          <td class="px-3 py-3 text-center text-sm font-medium">-->
+        <!--                            @if (row.zones[zone.zone_id]) {-->
+        <!--                              <span>{{ row.zones[zone.zone_id] }} ₽</span>-->
+        <!--                            } @else {-->
+        <!--                              <span class="text-gray-400">—</span>-->
+        <!--                            }-->
+        <!--                          </td>-->
+        <!--                        }-->
+        <!--                      </tr>-->
+        <!--                    }-->
+        <!--                  </tbody>-->
+        <!--                </table>-->
+        <!--              </app-content-scroller>-->
+        <!--            </div>-->
+        <!--          </section>-->
+        <!--        }-->
       } @else {
         <div
           *tuiRepeatTimes="let i of SKELETON_COUNT"

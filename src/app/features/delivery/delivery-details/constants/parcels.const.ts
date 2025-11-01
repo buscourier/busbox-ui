@@ -39,7 +39,7 @@ const PARCEL_ITEM_DEFAULT_LIMITS: ParcelItemLimits = {
   },
   WEIGHT: {
     MIN: 0.5,
-    MAX: 100,
+    MAX: 40,
   },
   DIMENSIONS: {
     MIN: 1,
