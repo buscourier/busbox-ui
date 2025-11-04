@@ -15,12 +15,11 @@ import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { debounceTime } from 'rxjs';
 
 import { DEBOUNCE_TIME } from '@core/constants';
+import { AudioService } from '@core/services/audio.service';
 
-// eslint-disable-next-line import/no-internal-modules,import/order
-import { CargoRestrictionsService } from '@delivery/delivery-details/services';
-
-// eslint-disable-next-line import/no-internal-modules
-import { LimitsAlertComponent } from '@delivery/delivery-details/shared/components/limits-alert';
+import { CargoRestrictionsService } from '../../services';
+// eslint-disable-next-line import/order,import/no-internal-modules
+import { LimitsAlertComponent } from '../../shared/components/limits-alert';
 
 // eslint-disable-next-line import/no-internal-modules
 import { PARCEL_ITEM_DEFAULTS, parcelItemAnimation } from '../../shared/components/parcel-item';
@@ -51,6 +50,7 @@ export class AutoPartsComponent implements OnInit {
   @Output() validationChange = new EventEmitter<boolean>();
 
   private readonly alert = inject(TuiAlertService);
+  private readonly audio = inject(AudioService);
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -120,6 +120,8 @@ export class AutoPartsComponent implements OnInit {
   }
 
   protected showNotification(limits: ParcelItemLimits): void {
+    this.audio.playAlertSound();
+
     this.alert
       .open<number>(new PolymorpheusComponent(LimitsAlertComponent), {
         label: 'Ограничение автозапчасти',
