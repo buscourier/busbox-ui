@@ -21,7 +21,9 @@ import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { TuiAlertService, TuiButton, TuiError, TuiIcon } from '@taiga-ui/core';
 import { TUI_VALIDATION_ERRORS, TuiFieldErrorPipe } from '@taiga-ui/kit';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
+import type { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 import { DEBOUNCE_TIME } from '@core/constants';
 import { AudioService } from '@core/services/audio.service';
@@ -81,13 +83,7 @@ export class ParcelsComponent implements OnChanges, OnInit {
 
   public parcelItemLimits: Signal<ParcelItemLimits> = inject(PARCEL_ITEM_LIMIT_TOKEN);
 
-  private readonly limitsEffect = effect(() => {
-    this.showNotification(this.parcelItemLimits());
-
-    if (!this.parcels) return;
-
-    this.updateValidator();
-  });
+  private previousLimits?: ParcelItemLimits;
 
   /** Protected properties */
   protected canAddParcelItem = true;
@@ -96,10 +92,25 @@ export class ParcelsComponent implements OnChanges, OnInit {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly destroyRef = inject(DestroyRef);
   private transloco = inject(TranslocoService);
+  private alertSub?: Subscription;
 
   /** Public properties */
   parcels = this.fb.array<ParcelItem>([]);
   parcelsError = new FormControl(null);
+
+  private readonly limitsEffect = effect(() => {
+    const limits = this.parcelItemLimits();
+
+    // Show alert only when limits actually change
+    if (!this.previousLimits || !isObjectsEqual(this.previousLimits, limits) || !this.alertSub) {
+      this.previousLimits = limits;
+      this.showNotification(limits);
+    }
+
+    if (!this.parcels) return;
+
+    this.updateValidator();
+  });
 
   /** Getters */
   get errors(): ParcelsErrors {
@@ -184,14 +195,24 @@ export class ParcelsComponent implements OnChanges, OnInit {
 
   protected showNotification(limits: ParcelItemLimits): void {
     this.audio.playAlertSound();
-    this.alert
+    if (this.alertSub) {
+      this.alertSub.unsubscribe();
+      this.alertSub = undefined;
+    }
+
+    this.alertSub = this.alert
       .open<number>(new PolymorpheusComponent(LimitsAlertComponent), {
         label: this.transloco.translate('deliveryDetails.parcel.messages.limits'),
         data: limits,
         appearance: 'warning',
         autoClose: 0,
       })
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          this.alertSub = undefined;
+        }),
+      )
       .subscribe();
   }
 }
