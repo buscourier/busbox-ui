@@ -35,7 +35,7 @@ const PARCELS_BASE_LIMITS: ParcelsLimits = {
 const PARCEL_ITEM_DEFAULT_LIMITS: ParcelItemLimits = {
   QUANTITY: {
     MIN: 1,
-    MAX: 8,
+    MAX: 20,
   },
   WEIGHT: {
     MIN: 0.5,
@@ -54,7 +54,7 @@ const PARCEL_ITEM_DEFAULT_LIMITS: ParcelItemLimits = {
 const PARCEL_ITEM_BASE_LIMITS: ParcelItemLimits = {
   QUANTITY: {
     MIN: 1,
-    MAX: 5,
+    MAX: 20,
   },
   WEIGHT: {
     MIN: 0.5,
