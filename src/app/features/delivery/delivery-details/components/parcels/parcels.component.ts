@@ -24,6 +24,7 @@ import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { debounceTime } from 'rxjs';
 
 import { DEBOUNCE_TIME } from '@core/constants';
+import { AudioService } from '@core/services/audio.service';
 import { isObjectsEqual } from '@core/utils';
 
 import { CargoRestrictionsService } from '../../services';
@@ -76,6 +77,7 @@ export class ParcelsComponent implements OnChanges, OnInit {
   @Output() validationChange = new EventEmitter<boolean>();
 
   private readonly alert = inject(TuiAlertService);
+  private readonly audio = inject(AudioService);
 
   public parcelItemLimits: Signal<ParcelItemLimits> = inject(PARCEL_ITEM_LIMIT_TOKEN);
 
@@ -181,6 +183,7 @@ export class ParcelsComponent implements OnChanges, OnInit {
   }
 
   protected showNotification(limits: ParcelItemLimits): void {
+    this.audio.playAlertSound();
     this.alert
       .open<number>(new PolymorpheusComponent(LimitsAlertComponent), {
         label: this.transloco.translate('deliveryDetails.parcel.messages.limits'),
