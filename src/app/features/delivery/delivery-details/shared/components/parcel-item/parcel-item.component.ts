@@ -1,4 +1,4 @@
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, JsonPipe } from '@angular/common';
 import { ChangeDetectorRef, effect, type OnInit, type Signal } from '@angular/core';
 import {
   ChangeDetectionStrategy,
@@ -19,7 +19,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { TuiError, TuiHintDirective, TuiTextfieldComponent } from '@taiga-ui/core';
+import { TuiAnimated } from '@taiga-ui/cdk';
+import { TuiError, TuiHintDirective, TuiNotification, TuiTextfieldComponent } from '@taiga-ui/core';
 import {
   TUI_VALIDATION_ERRORS,
   TuiFieldErrorContentPipe,
@@ -50,6 +51,9 @@ import type { ParcelItemForm } from './parcel-item.types';
     TuiTextfieldComponent,
     TuiInputNumber,
     TranslocoPipe,
+    TuiNotification,
+    JsonPipe,
+    TuiAnimated,
   ],
   templateUrl: './parcel-item.component.html',
   styleUrl: './parcel-item.component.css',
@@ -140,7 +144,7 @@ export class ParcelItemComponent implements OnInit {
     const { width, height, length } = this.dimensions.getRawValue();
     const currentSum = width + height + length;
 
-    return Math.max(0, this.limits().DIMENSIONS.MAX - currentSum);
+    return this.limits().DIMENSIONS.MAX - currentSum;
   }
 
   getAvailableQuantity(): number {
@@ -153,6 +157,22 @@ export class ParcelItemComponent implements OnInit {
     const { weight } = this.form.getRawValue();
 
     return this.limits().WEIGHT.MAX - weight;
+  }
+
+  getQuantityLimitStyle(): string {
+    return this.getLimitStyle(this.getAvailableQuantity());
+  }
+
+  getWeightLimitStyle(): string {
+    return this.getLimitStyle(this.getAvailableWeight());
+  }
+
+  getDimensionsLimitStyle(): string {
+    return this.getLimitStyle(this.getAvailableDimension());
+  }
+
+  getLimitStyle(value: number): string {
+    return value > 0 ? 'text-yellow-500' : value < 0 ? 'text-red-500' : 'text-gray-300';
   }
 
   setMinDimensionOnBlur(controlValue: number, controlName: keyof ParcelItemDimensions): void {

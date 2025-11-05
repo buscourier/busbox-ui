@@ -6,7 +6,7 @@
       </span>
       @if (quantityInput.focused()) {
         <span class="text-xs">
-          <span class="text-red-500">{{ getAvailableQuantity() }}</span>
+          <span [class]="getQuantityLimitStyle()">{{ getAvailableQuantity() }}</span>
           /
           <b>{{ this.limits().QUANTITY.MAX }}</b>
         </span>
@@ -18,7 +18,7 @@
         tuiInputNumber
         [formControl]="quantity"
         [min]="limits().QUANTITY.MIN"
-        [max]="limits().QUANTITY.MAX"
+        [max]="20"
         [tuiHint]="[] | tuiFieldErrorContent"
         [invalid]="quantity.invalid || totalQuantityMaxError"
         (blur)="setMinValueOnBlur(quantity.value, 'quantity')"
@@ -33,9 +33,9 @@
       <span class="flex items-center text-sm text-gray-600">
         {{ 'deliveryDetails.parcel.labels.weight' | transloco }}
       </span>
-      @if (weightInput.focused()) {
+      @if (weightInput.focused() || weight.invalid) {
         <span class="text-xs">
-          <span class="text-red-500">{{ getAvailableWeight() }} кг</span>
+          <span [class]="getWeightLimitStyle()">{{ getAvailableWeight() }} кг</span>
           /
           <b>{{ this.limits().WEIGHT.MAX }} кг</b>
         </span>
@@ -48,7 +48,7 @@
         tuiHintAppearance="error"
         [formControl]="weight"
         [min]="limits().WEIGHT.MIN"
-        [max]="limits().WEIGHT.MAX"
+        [max]="1000"
         [tuiHint]="[] | tuiFieldErrorContent"
         [invalid]="weight.invalid || totalWeightMaxError"
         (blur)="setMinValueOnBlur(weight.value, 'weight')"
@@ -68,10 +68,12 @@
         <!--        />-->
         {{ 'deliveryDetails.parcel.labels.dimensions' | transloco }}
       </span>
-      @if (widthInput.focused() || heightInput.focused() || lengthInput.focused()) {
+      @if (
+        widthInput.focused() || heightInput.focused() || lengthInput.focused() || dimensions.invalid
+      ) {
         <small [tuiHint]="'hint.messages.available' | transloco">
           <b>
-            <span class="text-red-500">{{ getAvailableDimension() }} см</span>
+            <span [class]="getDimensionsLimitStyle()">{{ getAvailableDimension() }} см</span>
             / {{ limits().DIMENSIONS.MAX }} cм
           </b>
         </small>
@@ -96,7 +98,7 @@
               tuiHintAppearance="error"
               [formControl]="width"
               [min]="limits().DIMENSIONS.MIN"
-              [max]="getMaxDimension(width)"
+              [max]="10000"
               [tuiHint]="[] | tuiFieldErrorContent"
               [invalid]="dimensions.invalid || totalDimensionsMaxError"
               (blur)="setMinDimensionOnBlur(width.value, 'width')"
@@ -115,7 +117,7 @@
               tuiHintAppearance="error"
               [formControl]="height"
               [min]="limits().DIMENSIONS.MIN"
-              [max]="getMaxDimension(height)"
+              [max]="10000"
               [tuiHint]="[] | tuiFieldErrorContent"
               [invalid]="dimensions.invalid || totalDimensionsMaxError"
               (blur)="setMinDimensionOnBlur(height.value, 'height')"
@@ -134,7 +136,7 @@
               tuiHintAppearance="error"
               [formControl]="length"
               [min]="limits().DIMENSIONS.MIN"
-              [max]="getMaxDimension(length)"
+              [max]="10000"
               [tuiHint]="[] | tuiFieldErrorContent"
               [invalid]="dimensions.invalid || totalDimensionsMaxError"
               (blur)="setMinDimensionOnBlur(length.value, 'length')"
@@ -144,6 +146,13 @@
         </div>
       </div>
     </div>
-    <tui-error [formControl]="dimensionsError" [error]="[] | tuiFieldError | async" />
+    <!--    <tui-error [formControl]="dimensionsError" [error]="[] | tuiFieldError | async" />-->
+    {{ dimensionsError.value }}
+    @if (dimensionsError.invalid || quantity.invalid || weight.invalid) {
+      <tui-notification appearance="warning" class="mt-4" tuiAnimated>
+        Доставка нестандартных и крупногабаритных отправлений доступна по индивидуальному
+        согласованию.
+      </tui-notification>
+    }
   </div>
 </div>

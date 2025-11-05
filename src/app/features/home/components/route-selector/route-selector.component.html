@@ -1,5 +1,7 @@
 <form [class]="getFormClasses()" [formGroup]="form" (ngSubmit)="onSubmit()">
-  <b class="mb-6 block text-2xl leading-7 font-bold lg:text-2xl">Рассчитайте стоимость</b>
+  <b class="font-kelson mb-6 block text-2xl font-bold lg:text-3xl xl:mb-8 xl:text-4xl xl:leading-9">
+    Рассчитать доставку
+  </b>
   <div tuiLabel class="mb-6">
     <span class="mb-1 block text-sm text-gray-700">Город отправления</span>
     <tui-textfield tuiChevron [stringify]="stringify" tuiDropdownMobile="Город отправления">

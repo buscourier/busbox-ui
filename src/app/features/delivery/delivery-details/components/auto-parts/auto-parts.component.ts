@@ -12,15 +12,14 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { TuiAlertService, TuiButton, TuiIcon } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
-import { debounceTime } from 'rxjs';
+import { debounceTime, finalize, type Subscription } from 'rxjs';
 
 import { DEBOUNCE_TIME } from '@core/constants';
+import { isObjectsEqual } from '@core/utils';
 
-// eslint-disable-next-line import/no-internal-modules,import/order
-import { CargoRestrictionsService } from '@delivery/delivery-details/services';
-
-// eslint-disable-next-line import/no-internal-modules
-import { LimitsAlertComponent } from '@delivery/delivery-details/shared/components/limits-alert';
+import { CargoRestrictionsService } from '../../services';
+// eslint-disable-next-line import/order,import/no-internal-modules
+import { LimitsAlertComponent } from '../../shared/components/limits-alert';
 
 // eslint-disable-next-line import/no-internal-modules
 import { PARCEL_ITEM_DEFAULTS, parcelItemAnimation } from '../../shared/components/parcel-item';
@@ -53,11 +52,20 @@ export class AutoPartsComponent implements OnInit {
   private readonly alert = inject(TuiAlertService);
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly destroyRef = inject(DestroyRef);
+  private alertSub?: Subscription;
 
   public parcelItemLimits: Signal<ParcelItemLimits> = inject(PARCEL_ITEM_LIMIT_TOKEN);
 
+  private previousLimits?: ParcelItemLimits;
+
   private readonly limitsEffect = effect(() => {
-    this.showNotification(this.parcelItemLimits());
+    const limits = this.parcelItemLimits();
+
+    // Show alert only when limits actually change
+    if (!this.previousLimits || !isObjectsEqual(this.previousLimits, limits) || !this.alertSub) {
+      this.previousLimits = limits;
+      this.showNotification(limits);
+    }
   });
 
   protected canAddItem = true;
@@ -120,14 +128,24 @@ export class AutoPartsComponent implements OnInit {
   }
 
   protected showNotification(limits: ParcelItemLimits): void {
-    this.alert
+    if (this.alertSub) {
+      this.alertSub.unsubscribe();
+      this.alertSub = undefined;
+    }
+
+    this.alertSub = this.alert
       .open<number>(new PolymorpheusComponent(LimitsAlertComponent), {
         label: 'Ограничение автозапчасти',
         data: limits,
         appearance: 'warning',
         autoClose: 0,
       })
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          this.alertSub = undefined;
+        }),
+      )
       .subscribe();
   }
 }

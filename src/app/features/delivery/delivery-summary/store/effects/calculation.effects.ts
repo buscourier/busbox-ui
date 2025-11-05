@@ -32,7 +32,6 @@ export const calculationEffects = {
       return combineLatest([
         pickupPointFacade.isComplete(),
         deliveryPointFacade.isComplete(),
-        deliveryDetailsFacade.isAllOrdersValid(),
         deliveryDetailsFacade.getOrders(),
         pickupPointFacade.getSelectedCity(),
         deliveryPointFacade.getSelectedCity(),
@@ -51,7 +50,6 @@ export const calculationEffects = {
           ([
             isPickupPointComplete,
             isDeliveryPointComplete,
-            isAllOrdersValid,
             orders,
             pickupCity,
             deliveryCity,
@@ -59,10 +57,7 @@ export const calculationEffects = {
             deliveryCourier,
           ]) => {
             const canCalculate =
-              isPickupPointComplete &&
-              isDeliveryPointComplete &&
-              orders.length > 0 &&
-              isAllOrdersValid;
+              isPickupPointComplete && isDeliveryPointComplete && orders.length > 0;
 
             if (!canCalculate) return DeliverySummaryActions.clearCalculation();
 

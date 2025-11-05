@@ -18,10 +18,12 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { TuiAlertService, TuiButton, TuiError, TuiIcon, TuiNotification } from '@taiga-ui/core';
+import { TuiAlertService, TuiButton, TuiError, TuiIcon } from '@taiga-ui/core';
 import { TUI_VALIDATION_ERRORS, TuiFieldErrorPipe } from '@taiga-ui/kit';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
+import type { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 import { DEBOUNCE_TIME } from '@core/constants';
 import { isObjectsEqual } from '@core/utils';
@@ -35,12 +37,11 @@ import {
   ParcelItemComponent,
   // eslint-disable-next-line import/no-internal-modules
 } from '../../shared/components/parcel-item';
-import { PARCEL_ITEM_LIMIT_TOKEN, PARCELS_LIMIT_TOKEN } from '../../tokens';
-import type { ParcelItem, ParcelItemLimits, Parcels, ParcelsLimits } from '../../types';
+import { PARCEL_ITEM_LIMIT_TOKEN } from '../../tokens';
+import type { ParcelItem, ParcelItemLimits, Parcels } from '../../types';
 
 import { parcelsValidationErrors } from './parcels.constants';
 import type { ParcelsErrors } from './parcels.types';
-import { parcelsValidator } from './parcels.validator';
 
 @Component({
   selector: 'app-parcels',
@@ -53,16 +54,10 @@ import { parcelsValidator } from './parcels.validator';
     TuiIcon,
     TranslocoPipe,
     TuiButton,
-    TuiNotification,
   ],
   templateUrl: './parcels.component.html',
   styleUrl: './parcels.component.css',
   providers: [
-    {
-      provide: PARCELS_LIMIT_TOKEN,
-      useFactory: (limits: CargoRestrictionsService) => limits.parcelsLimits,
-      deps: [CargoRestrictionsService],
-    },
     {
       provide: PARCEL_ITEM_LIMIT_TOKEN,
       useFactory: (limits: CargoRestrictionsService) => limits.parcelItemLimits,
@@ -84,16 +79,9 @@ export class ParcelsComponent implements OnChanges, OnInit {
 
   private readonly alert = inject(TuiAlertService);
 
-  public parcelsLimits: Signal<ParcelsLimits> = inject(PARCELS_LIMIT_TOKEN);
   public parcelItemLimits: Signal<ParcelItemLimits> = inject(PARCEL_ITEM_LIMIT_TOKEN);
 
-  private readonly limitsEffect = effect(() => {
-    this.showNotification(this.parcelItemLimits());
-
-    if (!this.parcels) return;
-
-    this.updateValidator();
-  });
+  private previousLimits?: ParcelItemLimits;
 
   /** Protected properties */
   protected canAddParcelItem = true;
@@ -102,10 +90,25 @@ export class ParcelsComponent implements OnChanges, OnInit {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly destroyRef = inject(DestroyRef);
   private transloco = inject(TranslocoService);
+  private alertSub?: Subscription;
 
   /** Public properties */
   parcels = this.fb.array<ParcelItem>([]);
   parcelsError = new FormControl(null);
+
+  private readonly limitsEffect = effect(() => {
+    const limits = this.parcelItemLimits();
+
+    // Show alert only when limits actually change
+    if (!this.previousLimits || !isObjectsEqual(this.previousLimits, limits) || !this.alertSub) {
+      this.previousLimits = limits;
+      this.showNotification(limits);
+    }
+
+    if (!this.parcels) return;
+
+    this.updateValidator();
+  });
 
   /** Getters */
   get errors(): ParcelsErrors {
@@ -163,7 +166,6 @@ export class ParcelsComponent implements OnChanges, OnInit {
   }
 
   private updateValidator(): void {
-    this.parcels.setValidators(parcelsValidator(this.parcelsLimits()));
     this.parcels.updateValueAndValidity();
   }
 
@@ -185,21 +187,29 @@ export class ParcelsComponent implements OnChanges, OnInit {
     this.parcels.statusChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.parcelsError.setErrors(this.parcels.errors);
       this.parcelsError.markAsTouched();
-      this.canAddParcelItem =
-        !this.parcels.invalid && this.parcels.length < (this.parcelsLimits()?.MAX_PARCELS || 0);
       this.validationChange.emit(!this.parcels.invalid);
     });
   }
 
   protected showNotification(limits: ParcelItemLimits): void {
-    this.alert
+    if (this.alertSub) {
+      this.alertSub.unsubscribe();
+      this.alertSub = undefined;
+    }
+
+    this.alertSub = this.alert
       .open<number>(new PolymorpheusComponent(LimitsAlertComponent), {
         label: this.transloco.translate('deliveryDetails.parcel.messages.limits'),
         data: limits,
         appearance: 'warning',
         autoClose: 0,
       })
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          this.alertSub = undefined;
+        }),
+      )
       .subscribe();
   }
 }

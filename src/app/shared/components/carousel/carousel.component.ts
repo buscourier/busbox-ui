@@ -78,6 +78,7 @@ export class CarouselComponent<T> {
 
     switch (breakpoint) {
       case 'xs':
+        return config.default;
       case 'sm':
         return config.sm || config.default;
       case 'md':
