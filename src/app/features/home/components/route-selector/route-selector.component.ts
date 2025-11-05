@@ -92,7 +92,7 @@ export class RouteSelectorComponent implements OnInit {
 
   getFormClasses(): string {
     return cn(
-      'class="min-w-[360px] rounded-md bg-yellow-500 p-8 pb-10 md:p-6 md:pb-8 lg:p-8 lg:pb-12 xl:p-12',
+      'class="w-full rounded-lg bg-yellow-500 p-8 pb-10 md:w-[360px] md:p-6 md:pb-8 lg:p-8 lg:pb-12 xl:w-full xl:p-12',
       'md:mx-0 md:max-w-full md:basis-1/2',
       'lg:sticky lg:top-22 lg:left-0 lg:z-10',
     );
