@@ -1,13 +1,15 @@
 @let lastNews = lastNews$ | async;
 
-<div class="bg-gray-50 p-4 px-7 transition-all group-hover:px-20">
+<div class="bg-gray-50 p-4 transition-all min-[420px]:px-20 sm:px-7 sm:group-hover:px-20">
   @if (lastNews && lastNews.length > 0) {
-    <app-carousel
-      appearance="secondary"
-      pagination="top"
-      [items]="lastNews"
-      [itemTemplate]="slideTemplate"
-    />
+    <div class="mx-auto max-w-[280px] sm:max-w-full">
+      <app-carousel
+        appearance="secondary"
+        pagination="top"
+        [items]="lastNews"
+        [itemTemplate]="slideTemplate"
+      />
+    </div>
   }
 </div>
 
