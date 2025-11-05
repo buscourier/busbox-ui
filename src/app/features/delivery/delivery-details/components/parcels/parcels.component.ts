@@ -26,7 +26,6 @@ import { debounceTime } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
 import { DEBOUNCE_TIME } from '@core/constants';
-import { AudioService } from '@core/services/audio.service';
 import { isObjectsEqual } from '@core/utils';
 
 import { CargoRestrictionsService } from '../../services';
@@ -79,7 +78,6 @@ export class ParcelsComponent implements OnChanges, OnInit {
   @Output() validationChange = new EventEmitter<boolean>();
 
   private readonly alert = inject(TuiAlertService);
-  private readonly audio = inject(AudioService);
 
   public parcelItemLimits: Signal<ParcelItemLimits> = inject(PARCEL_ITEM_LIMIT_TOKEN);
 
@@ -194,7 +192,6 @@ export class ParcelsComponent implements OnChanges, OnInit {
   }
 
   protected showNotification(limits: ParcelItemLimits): void {
-    this.audio.playAlertSound();
     if (this.alertSub) {
       this.alertSub.unsubscribe();
       this.alertSub = undefined;

@@ -15,7 +15,6 @@ import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { debounceTime, finalize, type Subscription } from 'rxjs';
 
 import { DEBOUNCE_TIME } from '@core/constants';
-import { AudioService } from '@core/services/audio.service';
 import { isObjectsEqual } from '@core/utils';
 
 import { CargoRestrictionsService } from '../../services';
@@ -51,7 +50,6 @@ export class AutoPartsComponent implements OnInit {
   @Output() validationChange = new EventEmitter<boolean>();
 
   private readonly alert = inject(TuiAlertService);
-  private readonly audio = inject(AudioService);
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly destroyRef = inject(DestroyRef);
   private alertSub?: Subscription;
@@ -130,8 +128,6 @@ export class AutoPartsComponent implements OnInit {
   }
 
   protected showNotification(limits: ParcelItemLimits): void {
-    this.audio.playAlertSound();
-
     if (this.alertSub) {
       this.alertSub.unsubscribe();
       this.alertSub = undefined;
