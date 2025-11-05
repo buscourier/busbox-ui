@@ -52,9 +52,9 @@ export class DeliveryService extends ApiService {
         presets.map((preset) => ({
           ...preset,
           width: parseInt(preset.width, 10),
-          height: parseInt(preset.width, 10),
-          length: parseInt(preset.width, 10),
-          weight: parseInt(preset.width, 10),
+          height: parseInt(preset.height, 10),
+          length: parseInt(preset.length, 10),
+          weight: parseInt(preset.weight, 10),
         })),
       ),
       retry(MAX_RETRIES),
