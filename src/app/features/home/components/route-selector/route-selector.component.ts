@@ -59,8 +59,8 @@ export class RouteSelectorComponent implements OnInit {
   @HostBinding('class') get hostClasses(): string {
     return cn(
       'theme-yellow block shrink-0 flex-grow',
-      'lg:max-w-[480px] xl:w-full xl:p-4',
-      'lg:absolute lg:top-0 lg:right-0 lg:h-[670px] xl:h-[1610px]',
+      'lg:max-w-[460px] xl:w-full',
+      'lg:absolute lg:top-0 lg:right-0 lg:h-[670px] xl:h-[1600px]',
     );
   }
 
@@ -92,7 +92,7 @@ export class RouteSelectorComponent implements OnInit {
 
   getFormClasses(): string {
     return cn(
-      'class="w-full rounded-lg bg-yellow-500 p-8 pb-10 md:w-[360px] md:p-6 md:pb-8 lg:p-8 lg:pb-12 xl:w-full xl:p-12',
+      'w-full rounded-lg bg-yellow-500 p-8 pb-10 md:w-[360px] md:p-6 md:pb-8 lg:p-8 lg:pb-12 xl:w-full xl:p-12',
       'md:mx-0 md:max-w-full md:basis-1/2',
       'lg:sticky lg:top-22 lg:left-0 lg:z-10',
     );
