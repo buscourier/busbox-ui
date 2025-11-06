@@ -31,7 +31,7 @@ import type { NewsItem } from '@news/types';
         sm: 2,
         md: 3,
         lg: 4,
-        xl: 6,
+        xl: 5,
       },
     },
   ],
