@@ -16,6 +16,9 @@ import { TuiButton, TuiIcon } from '@taiga-ui/core';
 import { TUI_CONFIRM, type TuiConfirmData, TuiSkeleton } from '@taiga-ui/kit';
 import { BehaviorSubject, type Observable, of, switchMap } from 'rxjs';
 
+import { AuthFacade } from '@auth';
+import type { AuthResponse } from '@auth/types';
+
 import { DeliveryDetailsFacade } from '@delivery/delivery-details';
 import { DeliveryPointFacade } from '@delivery/delivery-point';
 import { PickupPointFacade } from '@delivery/pickup-point';
@@ -77,6 +80,8 @@ export class DeliverySummaryComponent implements OnInit {
   vm$!: Observable<DeliverySummaryViewModel>;
   isCalculatorLayout$!: Observable<boolean>;
   isMobile$ = new BehaviorSubject<boolean>(this.checkIsMobile());
+
+  auth = inject(AuthFacade);
 
   private readonly document = inject(DOCUMENT);
   private readonly window = this.document.defaultView;
@@ -150,5 +155,11 @@ export class DeliverySummaryComponent implements OnInit {
   goToBooking(): void {
     this.router.navigateByUrl('/delivery/booking');
     this.summaryOpen = false;
+  }
+
+  getTotalTotalWithDiscount(totalAmount: number, currentUser: AuthResponse | null) {
+    if (!currentUser) return totalAmount;
+
+    return totalAmount * (1 - +currentUser.user_discount / 100);
   }
 }
