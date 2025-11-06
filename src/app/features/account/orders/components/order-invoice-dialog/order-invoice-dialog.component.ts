@@ -71,7 +71,7 @@ export class OrderInvoiceDialogComponent implements OnInit {
                 filename: `invoice_${this.orderId}.pdf`,
                 showProgress: true,
                 format: PageFormat.A4,
-                orientation: PageOrientation.PORTRAIT,
+                orientation: PageOrientation.LANDSCAPE,
               },
               copies: {
                 copyLabels: ['Оригинал', 'Оригинал', 'Оригинал', 'Оригинал'],

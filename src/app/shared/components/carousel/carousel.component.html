@@ -15,7 +15,7 @@
     @if (Math.ceil(items.length / itemsCount) > 1) {
       <button
         tuiIconButton
-        class="!absolute -left-12 z-10 !hidden min-[420px]:!block sm:!hidden sm:group-hover:!block"
+        class="!absolute -left-12 z-10 !hidden lg:group-hover:!block"
         (click)="onPrevClick()"
       >
         <tui-icon icon="@tui.chevron-left" />
@@ -44,7 +44,7 @@
     @if (Math.ceil(items.length / itemsCount) > 1) {
       <button
         tuiIconButton
-        class="!absolute -right-12 !hidden min-[420px]:!block sm:!hidden sm:group-hover:!block"
+        class="!absolute -right-12 !hidden lg:group-hover:!block"
         (click)="onNextClick()"
       >
         <tui-icon icon="@tui.chevron-right" />

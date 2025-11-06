@@ -1,59 +1,45 @@
 <app-page-layout class="pb-0!">
   <section class="bg-white">
-    <div class="">
-      <div class="mb-16 lg:mb-32">
-        <div class="grid items-center gap-8 lg:grid-cols-2">
-          <div class="order-2 lg:order-1">
-            <div class="mb-2">
-              <span class="text-sm font-medium tracking-wide text-yellow-500 uppercase">
-                Основная услуга
-              </span>
-            </div>
-            <h2 class="mb-8 text-4xl leading-tight font-light text-gray-900 lg:text-5xl">
-              Грузоперевозки
-              <br />
-              <span class="font-normal">по Приморью</span>
-            </h2>
-            <p class="mb-8 max-w-2xl text-lg leading-relaxed font-light text-gray-600">
-              Мы осуществляем доставку из офисов Баскурьер по Приморскому краю и в Хабаровск.
-            </p>
-
-            <!--            <div class="mb-12 space-y-4">-->
-            <!--              <div class="flex items-center text-gray-700">-->
-            <!--                <div class="mr-4 h-2 w-2 rounded-full bg-yellow-500"></div>-->
-            <!--                <span class="font-light">Отслеживание в реальном времени</span>-->
-            <!--              </div>-->
-            <!--              <div class="flex items-center text-gray-700">-->
-            <!--                <div class="mr-4 h-2 w-2 rounded-full bg-yellow-500"></div>-->
-            <!--                <span class="font-light">Страхование груза</span>-->
-            <!--              </div>-->
-            <!--              <div class="flex items-center text-gray-700">-->
-            <!--                <div class="mr-4 h-2 w-2 rounded-full bg-yellow-500"></div>-->
-            <!--                <span class="font-light">Доставка от двери до двери</span>-->
-            <!--              </div>-->
-            <!--            </div>-->
-          </div>
-
-          <!--          <div *appBreakpoint="{ showOn: 'lg' }" class="order-1 lg:order-2">-->
-          <!--            <app-route-map />-->
-          <!--          </div>-->
+    <div class="mb-24 flex flex-col gap-10 lg:mb-32 lg:flex-row lg:items-center lg:gap-0">
+      <div class="w-full max-w-[500px] rounded-xl">
+        <div class="mb-2">
+          <span class="text-sm font-medium tracking-wide text-yellow-500 uppercase">
+            Основная услуга
+          </span>
         </div>
+        <h2 class="mb-4 text-4xl font-bold md:text-5xl">
+          Грузоперевозки
+          <br />
+          <span>по Приморью</span>
+        </h2>
+        <p class="mb-0 max-w-2xl text-lg leading-relaxed font-light text-gray-600">
+          Мы осуществляем доставку из офисов Баскурьер по Приморскому краю и в Хабаровск.
+        </p>
       </div>
-
-      <div class="mb-20 text-center">
-        <h2 class="mb-6 text-4xl font-light text-gray-900 lg:text-5xl">Дополнительные услуги</h2>
-
-        <section class="mt-10 grid grid-cols-3 gap-10">
-          <!--          <app-carousel [items]="services" [itemTemplate]="slideTemplate"></app-carousel>-->
-          @for (service of services; track service.id) {
-            <app-service-card [service]="service" />
-          }
-        </section>
-
-        <!--        <ng-template #slideTemplate let-service>-->
-        <!--          <app-service-card [service]="service" />-->
-        <!--        </ng-template>-->
+      <div class="relative grow">
+        <div
+          class="absolute inset-0 -rotate-3 transform rounded-3xl bg-yellow-500/20 bg-gradient-to-br from-yellow-500 to-yellow-400 opacity-60"
+        ></div>
+        <img
+          ngSrc="services-banner.jpg"
+          ngSrcset="420w, 500w, 690w, 840w, 1035w, 1380w, 1500w, 2070w"
+          sizes="(min-width: 1280px) 495px, 100vw"
+          alt="Грузоперевозки по Приморью"
+          width="1000"
+          height="1000"
+          class="relative h-[250px] w-full transform rounded-2xl object-cover shadow-2xl transition-transform duration-500 lg:h-[350px]"
+        />
       </div>
+    </div>
+
+    <div class="mb-20 min-[450px]:text-center">
+      <h2 class="mb-4 text-4xl font-semibold text-gray-900">Дополнительные услуги</h2>
+      <p class="mb-12 text-lg">Заботимся о вашем грузе — от упаковки до вручения.</p>
+      <section class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        @for (service of services; track service.id) {
+          <app-service-card [service]="service" />
+        }
+      </section>
     </div>
   </section>
 </app-page-layout>

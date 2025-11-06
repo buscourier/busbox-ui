@@ -8,26 +8,20 @@
     class="rounded-t-sm object-cover"
   />
 </div>
-<div class="absolute top-0 left-0 mx-4 mt-2 mb-2 flex items-center">
-  <div [class]="iconBoxClass">
-    <tui-icon [icon]="icon" [style.font-size.rem]="1" [class]="iconClass" />
-  </div>
-  <span [class]="iconLabelClass">{{ iconLabel }}</span>
-</div>
 <div class="px-4 py-6">
-  <h3 class="mb-3 line-clamp-2 text-xl font-semibold text-gray-900">
+  <h3 class="mb-3 line-clamp-2 text-lg font-semibold text-gray-900">
     {{ service.title }}
   </h3>
-  <p class="mb-4 line-clamp-3 leading-relaxed font-light text-gray-600">
+  <p class="mb-4 line-clamp-3 text-[15px] leading-relaxed font-light text-gray-600">
     {{ service.description }}
   </p>
 
-  <a [routerLink]="service.link" [class]="linkClass">
-    <span>{{ link }}</span>
+  <span [class]="linkClass">
+    <span>Подробнее</span>
     <tui-icon
       icon="@tui.chevron-right"
       [style.font-size.rem]="0.8"
       class="ml-2 h-4 w-4 transform transition-transform group-hover:translate-x-1"
     />
-  </a>
+  </span>
 </div>

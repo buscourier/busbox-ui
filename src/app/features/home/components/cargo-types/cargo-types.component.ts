@@ -23,7 +23,7 @@ export class CargoTypesComponent {
     },
     {
       name: 'Автозапчасти',
-      icon: this.getIcon('box'),
+      icon: this.getIcon('gear'),
     },
   ];
 

@@ -1,5 +1,12 @@
-import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  HostListener,
+  inject,
+  Input,
+} from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { TuiIcon } from '@taiga-ui/core';
 import { TuiLineClamp, TuiSkeleton } from '@taiga-ui/kit';
 
@@ -17,12 +24,20 @@ import type { NewsItem } from '../types';
 export class NewsCardComponent {
   @Input() article!: NewsItem;
 
+  private readonly router = inject(Router);
+
   @HostBinding('class') get hostClasses(): string {
     return cn(
-      'block overflow-hidden rounded-xl bg-white transition-all duration-300',
+      'group block overflow-hidden rounded-xl bg-white transition-all duration-300',
       'shadow-lg hover:-translate-y-1 hover:shadow-xl',
-      'border-8 border-white',
+      'cursor-pointer border-8 border-white',
     );
+  }
+
+  @HostListener('click') onClick(): void {
+    this.router.navigate(['/news'], {
+      queryParams: { id: this.article.news_id },
+    });
   }
 
   imageLoaded = false;

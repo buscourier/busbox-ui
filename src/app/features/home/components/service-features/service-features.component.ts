@@ -29,7 +29,7 @@ export class ServiceFeaturesComponent {
         name: `Курьерская доставка`,
         description: `Забор и доставка груза — <br />от адреса к адресу.`,
         link: null,
-        icon: `sms`,
+        icon: `courier`,
       },
       {
         name: `Упаковка грузов`,
@@ -41,7 +41,7 @@ export class ServiceFeaturesComponent {
         name: `Складское хранение грузов`,
         description: `Бесплатное хранение вашего груза в течение двух суток.`,
         link: this.navigationService.findByLink(`storage`),
-        icon: `to-box`,
+        icon: `storage`,
       },
       {
         name: `Доставка из аэропорта`,
@@ -61,7 +61,7 @@ export class ServiceFeaturesComponent {
         description: `Стоимость услуги 100₽.
          Оплата доставки осуществляется во время получения груза в офисе.`,
         link: null,
-        icon: `disk`,
+        icon: `afterpay`,
       },
     ];
   }

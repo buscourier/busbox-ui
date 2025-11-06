@@ -17,20 +17,21 @@
   <h3 class="mb-3 line-clamp-1 text-xl font-bold text-gray-900" [tuiSkeleton]="!imageLoaded">
     <tui-line-clamp [content]="article.title" />
   </h3>
-  <p class="mb-4 line-clamp-3 text-sm text-gray-600" [tuiSkeleton]="!imageLoaded">
-    {{
-      article.short ||
-        'На этом месте должно быть краткое описание новости, но к сожалению оно пока недоступно!  На этом месте должно быть краткое описание новости, но к сожалению оно пока недоступно!'
-    }}
-  </p>
+  <p
+    class="mb-4 line-clamp-3 text-sm text-gray-600"
+    [tuiSkeleton]="!imageLoaded"
+    [innerHTML]="article.short"
+  ></p>
 
-  <a
-    [routerLink]="['/news']"
-    [queryParams]="{ id: article.news_id }"
-    class="inline-flex items-center text-sm font-medium text-black transition-colors hover:text-yellow-500"
+  <span
+    class="inline-flex items-center text-sm font-medium text-black transition-colors group-hover:text-yellow-500"
     [tuiSkeleton]="!imageLoaded"
   >
     Читать далее
-    <tui-icon icon="@tui.chevron-right" [style.font-size.rem]="0.8" class="ml-0.5" />
-  </a>
+    <tui-icon
+      icon="@tui.chevron-right"
+      [style.font-size.rem]="0.8"
+      class="ml-0.5 transform transition-transform group-hover:translate-x-1"
+    />
+  </span>
 </div>
