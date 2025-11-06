@@ -1,8 +1,8 @@
 @let lastNews = lastNews$ | async;
 
-<div class="bg-gray-50 p-4 transition-all min-[420px]:px-20 sm:px-7 sm:group-hover:px-20">
+<div class="h-56 bg-gray-50 p-4 transition-all lg:px-7 lg:group-hover:px-20">
   @if (lastNews && lastNews.length > 0) {
-    <div class="mx-auto max-w-[280px] sm:max-w-full">
+    <div class="mx-auto">
       <app-carousel
         appearance="secondary"
         pagination="top"

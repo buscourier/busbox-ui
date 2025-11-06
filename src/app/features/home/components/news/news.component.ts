@@ -29,9 +29,8 @@ import type { NewsItem } from '@news/types';
       useValue: {
         default: 1,
         sm: 2,
-        md: 3,
-        lg: 4,
-        xl: 5,
+        lg: 3,
+        xl: 4,
       },
     },
   ],
