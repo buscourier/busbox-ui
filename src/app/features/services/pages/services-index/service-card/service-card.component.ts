@@ -68,11 +68,9 @@ export class ServiceCardComponent {
   }
 
   get linkClass() {
-    return cn('flex items-center font-medium transition-colors', {
-      'text-red-500 group-hover:text-red-400': this.service.type === 'guard',
-      'text-yellow-500 group-hover:text-yellow-400': this.service.type === 'task',
-      'text-orange-600 group-hover:text-orange-500': this.service.type === 'courier',
-    });
+    return cn(
+      'flex items-center font-medium text-yellow-500 transition-colors group-hover:text-yellow-400',
+    );
   }
 
   get icon(): string {
