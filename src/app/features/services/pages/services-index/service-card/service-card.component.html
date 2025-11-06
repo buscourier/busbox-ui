@@ -16,12 +16,12 @@
     {{ service.description }}
   </p>
 
-  <a [routerLink]="service.link" [class]="linkClass">
+  <span [class]="linkClass">
     <span>Подробнее</span>
     <tui-icon
       icon="@tui.chevron-right"
       [style.font-size.rem]="0.8"
       class="ml-2 h-4 w-4 transform transition-transform group-hover:translate-x-1"
     />
-  </a>
+  </span>
 </div>

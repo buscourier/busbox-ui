@@ -1,5 +1,5 @@
+import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
 
 import { NavigationService } from '@core/services/navigation.service';
 import { CAROUSEL_BREAKPOINTS } from '@core/tokens';
@@ -10,7 +10,7 @@ import { type ServiceCard, ServiceCardComponent } from './service-card';
 
 @Component({
   selector: 'app-services-index',
-  imports: [RouterLink, ServiceCardComponent, PageLayoutComponent],
+  imports: [ServiceCardComponent, PageLayoutComponent, NgOptimizedImage],
   templateUrl: './services-index.component.html',
   styleUrl: './services-index.component.css',
   providers: [

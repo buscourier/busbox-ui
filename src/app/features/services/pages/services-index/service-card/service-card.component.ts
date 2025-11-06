@@ -1,6 +1,13 @@
 import { JsonPipe, NgOptimizedImage } from '@angular/common';
-import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  HostListener,
+  inject,
+  Input,
+} from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { TuiIcon } from '@taiga-ui/core';
 
 import { cn } from '@core/utils';
@@ -35,12 +42,18 @@ const linkMap: Record<ServiceType, string> = {
 export class ServiceCardComponent {
   @Input() service!: ServiceCard;
 
+  private readonly router = inject(Router);
+
   @HostBinding('class') get hostClasses(): string {
     return cn(
       'group relative block overflow-hidden pb-2',
       'rounded-xl bg-white transition-all duration-300',
-      'text-left shadow-lg hover:-translate-y-1 hover:shadow-xl',
+      'cursor-pointer text-left shadow-lg hover:-translate-y-1 hover:shadow-xl',
     );
+  }
+
+  @HostListener('click') onClick(): void {
+    this.router.navigateByUrl(`/services/${this.service.id}`);
   }
 
   get iconBoxClass() {
@@ -69,7 +82,7 @@ export class ServiceCardComponent {
 
   get linkClass() {
     return cn(
-      'flex items-center font-medium text-yellow-500 transition-colors group-hover:text-yellow-400',
+      'flex items-center font-medium text-black transition-colors group-hover:text-yellow-500',
     );
   }
 
