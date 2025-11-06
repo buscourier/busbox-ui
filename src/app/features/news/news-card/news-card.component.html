@@ -23,13 +23,15 @@
     [innerHTML]="article.short"
   ></p>
 
-  <a
-    [routerLink]="['/news']"
-    [queryParams]="{ id: article.news_id }"
-    class="inline-flex items-center text-sm font-medium text-black transition-colors hover:text-yellow-500"
+  <span
+    class="inline-flex items-center text-sm font-medium text-black transition-colors group-hover:text-yellow-500"
     [tuiSkeleton]="!imageLoaded"
   >
     Читать далее
-    <tui-icon icon="@tui.chevron-right" [style.font-size.rem]="0.8" class="ml-0.5" />
-  </a>
+    <tui-icon
+      icon="@tui.chevron-right"
+      [style.font-size.rem]="0.8"
+      class="ml-0.5 transform transition-transform group-hover:translate-x-1"
+    />
+  </span>
 </div>
