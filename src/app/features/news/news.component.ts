@@ -25,7 +25,7 @@ export class NewsComponent implements OnInit {
   newsDetailsDialog = tuiDialog(NewsDetailsComponent, {
     closeable: true,
     dismissible: true,
-    size: 'l',
+    size: 'm',
   });
 
   private readonly newsFacade = inject(NewsFacade);
