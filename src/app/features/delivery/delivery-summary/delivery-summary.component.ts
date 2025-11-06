@@ -15,9 +15,10 @@ import {
 import { TuiButton, TuiIcon } from '@taiga-ui/core';
 import { TUI_CONFIRM, type TuiConfirmData, TuiSkeleton } from '@taiga-ui/kit';
 import { BehaviorSubject, type Observable, of, switchMap } from 'rxjs';
+import { combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { AuthFacade } from '@auth';
-import type { AuthResponse } from '@auth/types';
 
 import { DeliveryDetailsFacade } from '@delivery/delivery-details';
 import { DeliveryPointFacade } from '@delivery/delivery-point';
@@ -80,6 +81,7 @@ export class DeliverySummaryComponent implements OnInit {
   vm$!: Observable<DeliverySummaryViewModel>;
   isCalculatorLayout$!: Observable<boolean>;
   isMobile$ = new BehaviorSubject<boolean>(this.checkIsMobile());
+  totalWithDiscount$!: Observable<number>;
 
   auth = inject(AuthFacade);
 
@@ -104,6 +106,22 @@ export class DeliverySummaryComponent implements OnInit {
   ngOnInit(): void {
     this.vm$ = this.deliverySummary.getViewModel();
     this.isCalculatorLayout$ = this.deliveryLayout.getIsCalculatorLayout();
+
+    this.totalWithDiscount$ = combineLatest([
+      this.vm$,
+      this.auth.isAuthenticated(),
+      this.auth.getCurrentUser(),
+    ]).pipe(
+      map(([vm, isAuthenticated, currentUser]) => {
+        const discountRaw = currentUser?.user_discount ?? '0';
+        const discount = Number.parseFloat(discountRaw);
+        const safeDiscount = Number.isNaN(discount) ? 0 : Math.min(Math.max(discount, 0), 100);
+
+        return isAuthenticated && currentUser
+          ? vm.totalAmount * (1 - safeDiscount / 100)
+          : vm.totalAmount;
+      }),
+    );
   }
 
   @HostListener('window:resize')
@@ -155,11 +173,5 @@ export class DeliverySummaryComponent implements OnInit {
   goToBooking(): void {
     this.router.navigateByUrl('/delivery/booking');
     this.summaryOpen = false;
-  }
-
-  getTotalTotalWithDiscount(totalAmount: number, currentUser: AuthResponse | null) {
-    if (!currentUser) return totalAmount;
-
-    return totalAmount * (1 - +currentUser.user_discount / 100);
   }
 }
