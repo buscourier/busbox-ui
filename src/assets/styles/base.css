@@ -21,11 +21,11 @@
     @apply font-roboto text-base;
   }
 
-  h1 {
-    @apply font-kelson;
+  h1,
+  h2 {
+    @apply font-kelson font-bold;
   }
 
-  h2,
   h3,
   h4,
   h5,

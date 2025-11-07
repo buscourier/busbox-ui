@@ -84,7 +84,7 @@ export class BookingService extends DeliveryBaseService {
         },
       ],
       note,
-      server: 'test',
+      // server: 'test',
     };
   }
 
