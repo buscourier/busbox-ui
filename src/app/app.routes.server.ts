@@ -7,10 +7,6 @@ export const serverRoutes: ServerRoute[] = [
     path: '',
     renderMode: RenderMode.Prerender,
   },
-  {
-    path: 'home',
-    renderMode: RenderMode.Prerender,
-  },
   // {
   //   path: 'about',
   //   renderMode: RenderMode.Prerender,

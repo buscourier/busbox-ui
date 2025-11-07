@@ -8,16 +8,11 @@ import { authGuard } from '@auth/guards/auth.guard';
 export const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
-    redirectTo: 'home',
+    loadChildren: () => import('./features/home').then((m) => m.homeRoutes),
   },
   {
     path: 'auth',
     loadChildren: () => import('./features/auth').then((m) => m.authRoutes),
-  },
-  {
-    path: 'home',
-    loadChildren: () => import('./features/home').then((m) => m.homeRoutes),
   },
   {
     path: 'delivery',
