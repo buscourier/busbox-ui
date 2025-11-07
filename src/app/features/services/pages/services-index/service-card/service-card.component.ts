@@ -82,7 +82,7 @@ export class ServiceCardComponent {
 
   get linkClass() {
     return cn(
-      'flex items-center font-medium text-black transition-colors group-hover:text-yellow-500',
+      'flex items-center text-[15px] font-medium text-black transition-colors group-hover:text-yellow-500',
     );
   }
 
