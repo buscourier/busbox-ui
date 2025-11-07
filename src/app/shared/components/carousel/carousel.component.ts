@@ -1,4 +1,4 @@
-import { NgTemplateOutlet } from '@angular/common';
+import { isPlatformBrowser, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,6 +8,7 @@ import {
   inject,
   Input,
   Output,
+  PLATFORM_ID,
   type TemplateRef,
 } from '@angular/core';
 import { TuiItem } from '@taiga-ui/cdk';
@@ -61,6 +62,7 @@ export class CarouselComponent<T> {
 
   private readonly breakPoints = inject(BreakpointService);
   private readonly defaultBreakpoints = inject(CAROUSEL_BREAKPOINTS);
+  private readonly platformId = inject(PLATFORM_ID);
 
   get topPaginationClasses(): string {
     return cn('relative z-10 mb-4 flex justify-end', {
@@ -73,6 +75,8 @@ export class CarouselComponent<T> {
   }
 
   get itemsCount(): number {
+    if (!isPlatformBrowser(this.platformId)) return 1;
+
     const breakpoint = this.breakPoints.getCurrentBreakpoint();
     const config = this.breakpoints || this.defaultBreakpoints;
 
