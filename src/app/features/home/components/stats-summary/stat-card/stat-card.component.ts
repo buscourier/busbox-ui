@@ -28,7 +28,7 @@ export class StatCardComponent {
 
   @HostBinding('class') get hostClasses(): string {
     return cn(
-      'mb-7 flex items-center gap-5',
+      'mb-7 flex items-center gap-4',
       'md:flex-col md:items-start md:gap-x-0',
       'lg:mb-0 xl:mb-12 xl:flex-row xl:items-center xl:gap-8',
     );
