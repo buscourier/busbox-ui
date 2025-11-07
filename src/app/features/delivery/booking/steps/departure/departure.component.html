@@ -10,7 +10,7 @@
       (validationChange)="onSenderValidationChange($event)"
     />
   } @else {
-    <div class="mt-16 mb-20">
+    <div class="mb-20">
       <app-sender
         [data]="departure?.sender || null"
         (dataChange)="updateSender($event)"
