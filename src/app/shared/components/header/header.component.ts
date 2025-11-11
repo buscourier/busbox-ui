@@ -122,7 +122,7 @@ export class HeaderComponent {
 
   login() {
     this.router.navigate(['/auth/login'], {
-      queryParams: { returnUrl: '/account' },
+      queryParams: { returnUrl: this.router.url },
     });
   }
 }
