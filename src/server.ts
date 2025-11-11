@@ -101,7 +101,7 @@ app.post('/auth/session', json(), (req, res) => {
   return res
     .cookie('bb_access', access_token, {
       ...cookieBase,
-      maxAge: Number(access_expires_in ?? 3600) * 1000,
+      maxAge: Number(access_expires_in ?? 31536000) * 1000,
     })
     .cookie('bb_refresh', refresh_token ?? '', {
       ...cookieBase,
@@ -129,7 +129,7 @@ app.post('/auth/refresh', async (req, res) => {
     return res
       .cookie('bb_access', r.access_token, {
         ...cookieBase,
-        maxAge: Number(r.access_expires_in ?? 3600) * 1000,
+        maxAge: Number(r.access_expires_in ?? 31536000) * 1000,
       })
       .cookie('bb_refresh', r.refresh_token ?? refresh, {
         ...cookieBase,
