@@ -122,9 +122,6 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
           return row;
         });
 
-      console.log('zones', zones);
-      console.log('rows', rows);
-
       return {
         zones,
         rows,

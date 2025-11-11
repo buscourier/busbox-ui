@@ -97,7 +97,7 @@ export class FilterComponent implements OnInit, OnChanges {
       const currentParams = changes['filter'].currentValue?.params;
 
       if (currentParams && !this.isFormAlreadyInSync(currentParams)) {
-        console.log('Updating form with new filter params');
+        // console.log('Updating form with new filter params');
         this.form.patchValue(currentParams, { emitEvent: false });
       }
     }

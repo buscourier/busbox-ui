@@ -118,6 +118,6 @@ export class DefaultDomProcessor implements DomProcessor {
     });
 
     await Promise.all(imagePromises);
-    console.log(`Loaded ${images.length} images`);
+    // console.log(`Loaded ${images.length} images`);
   }
 }

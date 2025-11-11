@@ -115,7 +115,7 @@ export class PdfViewerService {
   }
 
   cleanup(): void {
-    console.log(`Cleaning up ${this.activeBlobUrls.size} blob URLs`);
+    // console.log(`Cleaning up ${this.activeBlobUrls.size} blob URLs`);
     this.activeBlobUrls.forEach((url) => this.revokeBlobUrl(url));
     this.activeBlobUrls.clear();
   }
@@ -155,7 +155,7 @@ export class PdfViewerService {
     if (this.activeBlobUrls.has(url)) {
       this.revokeBlobUrl(url);
       this.activeBlobUrls.delete(url);
-      console.log('Blob URL cleaned up:', url.substring(0, 50) + '...');
+      // console.log('Blob URL cleaned up:', url.substring(0, 50) + '...');
     }
   }
 

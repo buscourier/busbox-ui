@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { catchError, type Observable, tap } from 'rxjs';
+import { catchError, type Observable } from 'rxjs';
 
 import { ApiService } from '@core/services';
 
@@ -10,14 +10,9 @@ import type { ShippingZone, ShippingZoneTariff } from '../types';
 })
 export class TariffsService extends ApiService {
   getZones(cityId: string): Observable<ShippingZone[]> {
-    console.log('cityId', cityId);
-
-    return this.http.get<ShippingZone[]>(`${this.baseUrl}/site/zones/${cityId}`).pipe(
-      tap((data) => {
-        console.log('data', data);
-      }),
-      catchError(this.handleError.bind(this)),
-    );
+    return this.http
+      .get<ShippingZone[]>(`${this.baseUrl}/site/zones/${cityId}`)
+      .pipe(catchError(this.handleError.bind(this)));
   }
 
   getZoneTariffs(cityId: string): Observable<ShippingZoneTariff[]> {

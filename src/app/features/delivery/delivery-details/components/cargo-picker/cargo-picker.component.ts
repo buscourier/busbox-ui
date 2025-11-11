@@ -136,7 +136,6 @@ export class CargoPickerComponent implements OnInit, OnChanges {
   }
 
   private handleTypesChange(changes: SimpleChanges): void {
-    console.log("changes['types'] ", changes['types']);
     if (changes['types'] && changes['types'].firstChange) {
       this.mappedTypes = this.mapCargoTypes(this.types);
     }

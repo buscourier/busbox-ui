@@ -128,8 +128,6 @@ export class SenderComponent implements OnInit {
     this.document.valueChanges
       .pipe(startWith(this.data?.document || defaultDocument), takeUntilDestroyed(this.destroyRef))
       .subscribe((doc) => {
-        console.log('doc.value', doc.value);
-
         const validatorType =
           doc.value === SenderDocument.DRIVER_LICENSE
             ? 'driverLicense'
