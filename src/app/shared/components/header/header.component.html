@@ -92,13 +92,7 @@
               </div>
             </ng-template>
           } @else {
-            <button
-              type="button"
-              tuiButton
-              appearance="neutral"
-              [routerLink]="['/auth/login']"
-              class="ml-3"
-            >
+            <button type="button" tuiButton appearance="neutral" (click)="login()" class="ml-3">
               <span class="font-normal">Войти</span>
             </button>
           }
