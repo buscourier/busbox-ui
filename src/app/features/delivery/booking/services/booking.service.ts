@@ -4,6 +4,8 @@ import { map } from 'rxjs/operators';
 
 import type { DeliveryCity, PickupCity } from '@shared/types';
 
+import type { AuthResponse } from '@auth/types';
+
 import type { Order, Parcels } from '@delivery/delivery-details/types';
 import { CargoType, CargoTypeId } from '@delivery/delivery-details/types';
 import { DeliveryBaseService } from '@delivery/services';
@@ -21,6 +23,7 @@ interface Booking {
   destination: Destination | null;
   order: Order;
   note: string;
+  currentUser: AuthResponse | null;
 }
 
 interface ParcelDimensions {
@@ -33,6 +36,15 @@ interface ParcelDimensions {
 
 interface OrderResponse {
   order_id: number;
+}
+
+interface SenderFields {
+  sender_name: string;
+  sender_phone: string;
+  sender_passport: string;
+  sender_id?: string;
+  sender_company?: string;
+  sender_type?: string;
 }
 
 @Injectable({
@@ -60,18 +72,32 @@ export class BookingService extends DeliveryBaseService {
       note,
       pickupCourier,
       deliveryCourier,
+      currentUser,
     } = data;
 
     const { sender } = departure!;
     const { recipient } = destination!;
 
+    let senderFields: SenderFields = {
+      sender_name: sender!.fullName,
+      sender_phone: sender!.phone,
+      sender_passport: sender!.documentNumber,
+    };
+
+    if (currentUser) {
+      senderFields = {
+        ...senderFields,
+        sender_id: currentUser.id,
+        sender_company: currentUser.user_name,
+        sender_type: currentUser.user_type,
+      };
+    }
+
     return {
       start_city: pickupCity!.id,
       end_city: deliveryCity!.id,
       sending_date: departureDate,
-      sender_name: sender!.fullName,
-      sender_phone: sender!.phone,
-      sender_passport: sender!.documentNumber,
+      ...senderFields,
       recipient_name: recipient!.fullName,
       recipient_phone: recipient!.phone,
       orders: [
