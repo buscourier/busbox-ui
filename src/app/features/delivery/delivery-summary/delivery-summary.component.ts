@@ -122,6 +122,8 @@ export class DeliverySummaryComponent implements OnInit {
           : vm.totalAmount;
       }),
     );
+
+    this.isMobile$.next(this.checkIsMobile());
   }
 
   @HostListener('window:resize')
