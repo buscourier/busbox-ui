@@ -91,6 +91,8 @@ export class PickupPointComponent implements OnInit {
   protected stringifyCity: TuiStringHandler<PickupCity> = (x) => `${x.name}`;
   protected stringifyOffice: TuiStringHandler<Office> = (x) => `${x.address}`;
   protected readonly isMobile = inject(TUI_IS_MOBILE);
+  protected readonly today = TuiDay.currentLocal();
+  protected readonly min = new TuiDay(this.today.year, this.today.month, this.today.day);
 
   private readonly alerts = inject(TuiAlertService);
   private readonly fb = inject(FormBuilder);

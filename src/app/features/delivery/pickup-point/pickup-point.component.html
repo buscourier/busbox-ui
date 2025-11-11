@@ -148,7 +148,7 @@
           <span>{{ 'pickupPoint.labels.departureDate' | transloco }}</span>
         </div>
         <tui-textfield tuiDropdownMobile="Выберите дату">
-          <input formControlName="departureDate" tuiInputDate />
+          <input formControlName="departureDate" tuiInputDate [min]="min" />
           <tui-calendar *tuiTextfieldDropdown />
         </tui-textfield>
       </div>
