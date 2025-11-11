@@ -37,11 +37,12 @@
     </button>
     @if (vm.isLastStep) {
       <button
-        class="ml-auto"
         type="button"
         tuiButton
         size="xl"
-        iconEnd="@tui.handshake"
+        class="ml-auto"
+        [class.cursor-not-allowed!]="!vm.stepsValid"
+        [appearance]="vm.stepsValid ? 'primary' : 'secondary-destructive'"
         [disabled]="!vm.stepsValid"
         [loading]="vm.isBooking"
         (click)="submitOrder()"
@@ -50,11 +51,13 @@
       </button>
     } @else {
       <button
-        class="ml-auto"
         type="button"
         tuiButton
         size="xl"
         iconEnd="@tui.chevron-right"
+        class="ml-auto"
+        [class.cursor-not-allowed!]="!vm.nextStep"
+        [appearance]="vm.nextStep ? 'primary' : 'secondary-destructive'"
         [disabled]="!vm.nextStep"
         (click)="goNextStep(vm.nextStep)"
       >

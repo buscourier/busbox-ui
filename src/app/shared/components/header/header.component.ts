@@ -119,4 +119,10 @@ export class HeaderComponent {
   public closeMobileMenu(): void {
     this.mobileMenuOpen.set(false);
   }
+
+  login() {
+    this.router.navigate(['/auth/login'], {
+      queryParams: { returnUrl: '/account' },
+    });
+  }
 }

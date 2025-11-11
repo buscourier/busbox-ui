@@ -16,7 +16,9 @@ export const logoutEffects = {
         switchMap(() =>
           authService.logout().pipe(
             tap(() => {
-              router.navigate(['/auth/login']);
+              router.navigate(['/auth/login'], {
+                queryParams: { returnUrl: '/account' },
+              });
             }),
           ),
         ),

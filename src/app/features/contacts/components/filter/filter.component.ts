@@ -103,8 +103,6 @@ export class FilterComponent implements OnChanges {
       officeType: this.fb.control<OfficeType>(OfficeType.ANY),
     });
 
-    console.log('this.initialCity', this.initialCity);
-
     if (this.initialCity) {
       this.form.patchValue({
         city: this.initialCity,

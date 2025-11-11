@@ -25,7 +25,7 @@ export function getViewTransitionsConfig(): ViewTransitionsFeatureOptions {
 
         if (navigationService.shouldSkipAnimation(fromUrl, toUrl)) {
           document.documentElement.classList.add('no-view-transition');
-          console.log('Animation skipped:', { from: fromUrl, to: toUrl });
+          // console.log('Animation skipped:', { from: fromUrl, to: toUrl });
           return;
         }
 
@@ -45,7 +45,7 @@ export function getViewTransitionsConfig(): ViewTransitionsFeatureOptions {
             document.documentElement.classList.add('forward');
         }
 
-        console.log('Navigation:', { type: navigationType, from: fromUrl, to: toUrl });
+        // console.log('Navigation:', { type: navigationType, from: fromUrl, to: toUrl });
       } catch (error) {
         console.warn('View transition error:', error);
         document.documentElement.classList.add('no-view-transition');
