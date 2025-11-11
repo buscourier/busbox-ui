@@ -24,6 +24,7 @@ import {
   TuiFilterByInputPipe,
   TuiInputDateRange,
   TuiSelectDirective,
+  TuiSkeleton,
 } from '@taiga-ui/kit';
 import { filter, type Observable } from 'rxjs';
 
@@ -50,6 +51,7 @@ import type { FilterForm } from './filter.types';
     TuiFilterByInputPipe,
     TuiInputDateRange,
     TuiSelectDirective,
+    TuiSkeleton,
   ],
   templateUrl: './filter.component.html',
   styleUrl: './filter.component.css',
