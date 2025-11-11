@@ -35,7 +35,7 @@ export class AuthService {
 
         return this.http.post('/auth/session', payload).pipe(map(() => resp));
       }),
-      catchError((error) => this.handleError('Login Failed', error)),
+      catchError((error) => this.handleError('Неверный логин или пароль', error)),
     );
   }
 
@@ -74,7 +74,6 @@ export class AuthService {
 
   private handleError(message: string, error: string): Observable<never> {
     console.error(`${message}:`, error);
-    const errorMessage = error || message;
-    return throwError(() => new Error(errorMessage));
+    return throwError(() => new Error(message));
   }
 }
