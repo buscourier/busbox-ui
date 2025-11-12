@@ -61,6 +61,7 @@ export class DocumentToPdfService<T = unknown> {
     orientation: PageOrientation.PORTRAIT,
     imageFormat: ImageFormat.JPEG,
     showProgress: true,
+    autoDownload: true,
     onProgress: (current, total) => {
       console.log(`Processing page ${current} of ${total}`);
     },
@@ -100,7 +101,9 @@ export class DocumentToPdfService<T = unknown> {
       try {
         const blob = await this.convertPagesToPdf(pageElements, procConfig, genConfig);
 
-        this.downloadBlob(blob, genConfig.filename);
+        if (genConfig.autoDownload) {
+          this.downloadBlob(blob, genConfig.filename);
+        }
 
         return {
           success: true,

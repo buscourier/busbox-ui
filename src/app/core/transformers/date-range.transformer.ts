@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import type { TuiValueTransformer } from '@taiga-ui/cdk';
 import { TuiDay, TuiDayRange } from '@taiga-ui/cdk';
 
+import { formatDateToString } from '../utils';
+
 @Injectable()
 export class CustomDateRangeTransformer
   implements TuiValueTransformer<TuiDayRange | null, string | null>
@@ -54,9 +56,9 @@ export class CustomDateRangeTransformer
       const fromDate = dayRange.from.toLocalNativeDate();
       const toDate = dayRange.to.toLocalNativeDate();
 
-      // Форматируем в строку "YYYY-MM-DD,YYYY-MM-DD"
-      const fromStr = fromDate.toISOString().split('T')[0];
-      const toStr = toDate.toISOString().split('T')[0];
+      // Форматируем в строку "YYYY-MM-DD,YYYY-MM-DD" без timezone сдвига
+      const fromStr = formatDateToString(fromDate);
+      const toStr = formatDateToString(toDate);
 
       return `${fromStr},${toStr}`;
     } catch (error) {

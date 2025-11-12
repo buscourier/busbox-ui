@@ -34,6 +34,7 @@ export interface PdfGenerationOptions {
   imageFormat?: ImageFormat;
   showProgress?: boolean;
   onProgress?: (current: number, total: number) => void;
+  autoDownload?: boolean;
 }
 
 export interface DocumentCopyOptions {

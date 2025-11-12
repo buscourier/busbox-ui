@@ -5,6 +5,8 @@ import { type TuiPdfViewerOptions, TuiPdfViewerService } from '@taiga-ui/kit';
 import type { PolymorpheusContent } from '@taiga-ui/polymorpheus';
 import { Observable } from 'rxjs';
 
+import { formatDateToString } from '@core/utils';
+
 export interface PdfViewerOptions extends Partial<TuiPdfViewerOptions> {
   autoDownload?: boolean;
   downloadLabel?: string;
@@ -160,7 +162,7 @@ export class PdfViewerService {
   }
 
   protected getDefaultFilename(): string {
-    const timestamp = new Date().toISOString().split('T')[0];
+    const timestamp = formatDateToString(new Date());
     return `document_${timestamp}.pdf`;
   }
 }
