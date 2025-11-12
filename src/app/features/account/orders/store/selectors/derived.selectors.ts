@@ -53,7 +53,7 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
 
   const selectIsListLoading = createSelector(
     baseSelectors.selectListStatus,
-    (status) => status === AsyncStatus.LOADING,
+    (status) => status === AsyncStatus.LOADING || status === AsyncStatus.IDLE,
   );
 
   const selectIsListLoaded = createSelector(

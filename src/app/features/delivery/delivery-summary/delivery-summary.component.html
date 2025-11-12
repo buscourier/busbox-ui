@@ -62,7 +62,8 @@
               {{ 'summary.labels.total' | transloco }}
             </div>
             <div [tuiSkeleton]="vm.isLoading" class="text-xl font-bold">
-              {{ vm.totalAmount }} руб.
+              {{ totalWithDiscount$ | async }}
+              {{ 'RUB' | tuiCurrency }}
             </div>
           </div>
           <button

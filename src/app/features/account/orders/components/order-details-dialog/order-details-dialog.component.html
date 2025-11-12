@@ -29,7 +29,8 @@
           </p>
           <b class="text-sm">Тип груза:</b>
           <p class="mb-3 text-sm">
-            {{ details.order.cargo_type }} (мест: {{ details.order.cargo_count }})
+            {{ details.order.cargo_type_ext || details.order.cargo_type }}
+            (мест: {{ details.order.cargo_count }})
           </p>
 
           @if (details.order.dimensions_raw.length) {

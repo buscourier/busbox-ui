@@ -8,8 +8,8 @@ import type { ParcelItemLimits, ParcelsLimits } from '../types';
 const CITY_GROUPS = {
   VANINO: ['1675', '1885', '414', '1756', '1615', '1775', '1932'],
   SOVGAVAN: ['1676', '1888', '1759', '1824', '1933'],
-  DALNEGORSK: ['754', '192', '4', '12', '1783', '101'],
-  OLGA: ['1627', '207', '30', '235', '119', '1808', '180'],
+  // DALNEGORSK: ['754', '192', '4', '12', '1783', '101'],
+  // OLGA: ['1627', '207', '30', '235', '119', '1808', '180'],
 };
 
 /** Limits for group of parcels without special conditions */
@@ -86,8 +86,8 @@ function createCityParcelsLimits(): ReadonlyMap<readonly string[], ParcelsLimits
   return new Map([
     [CITY_GROUPS.VANINO, { ...createParcelsLimits() }],
     [CITY_GROUPS.SOVGAVAN, { ...createParcelsLimits() }],
-    [CITY_GROUPS.DALNEGORSK, { ...createParcelsLimits() }],
-    [CITY_GROUPS.OLGA, { ...createParcelsLimits() }],
+    // [CITY_GROUPS.DALNEGORSK, { ...createParcelsLimits() }],
+    // [CITY_GROUPS.OLGA, { ...createParcelsLimits() }],
   ]);
 }
 
@@ -100,8 +100,8 @@ function createParcelLimitsByCity(): ReadonlyMap<readonly string[], ParcelItemLi
   return new Map([
     [CITY_GROUPS.VANINO, { ...createParcelLimits() }],
     [CITY_GROUPS.SOVGAVAN, { ...createParcelLimits() }],
-    [CITY_GROUPS.DALNEGORSK, { ...createParcelLimits({ WEIGHT: { MIN: 0.5, MAX: 40 } }) }],
-    [CITY_GROUPS.OLGA, { ...createParcelLimits({ WEIGHT: { MIN: 0.5, MAX: 50 } }) }],
+    // [CITY_GROUPS.DALNEGORSK, { ...createParcelLimits({ WEIGHT: { MIN: 0.5, MAX: 40 } }) }],
+    // [CITY_GROUPS.OLGA, { ...createParcelLimits({ WEIGHT: { MIN: 0.5, MAX: 50 } }) }],
   ]);
 }
 

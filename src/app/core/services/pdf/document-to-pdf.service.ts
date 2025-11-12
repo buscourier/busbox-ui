@@ -34,7 +34,7 @@ export class DocumentToPdfService<T = unknown> {
 
   private get defaultProcessingOptions(): Required<DocumentProcessingOptions> {
     return {
-      scale: 2.5,
+      scale: 1,
       quality: 0.95,
       pixelRatio: this.window.devicePixelRatio || 1,
       skipFonts: true,
@@ -49,7 +49,7 @@ export class DocumentToPdfService<T = unknown> {
     filename: 'document.pdf',
     format: PageFormat.A4,
     orientation: PageOrientation.PORTRAIT,
-    imageFormat: ImageFormat.PNG,
+    imageFormat: ImageFormat.JPEG,
     showProgress: true,
     onProgress: (current, total) => {
       console.log(`Processing page ${current} of ${total}`);

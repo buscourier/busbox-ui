@@ -37,7 +37,7 @@ export const noAuthGuard: CanActivateFn = (route) => {
     map((authState) => {
       if (authState.isAuthenticated) {
         const returnUrl = route.queryParams['returnUrl'] || '/';
-        router.navigate([returnUrl]);
+        router.navigateByUrl(returnUrl);
         return false;
       }
       return true;

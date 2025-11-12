@@ -146,9 +146,7 @@
         </div>
       </div>
     </div>
-    <!--    <tui-error [formControl]="dimensionsError" [error]="[] | tuiFieldError | async" />-->
-    {{ dimensionsError.value }}
-    @if (dimensionsError.invalid || quantity.invalid || weight.invalid) {
+    @if (dimensions.invalid || quantity.invalid || weight.invalid) {
       <tui-notification appearance="warning" class="mt-4" tuiAnimated>
         Доставка нестандартных и крупногабаритных отправлений доступна по индивидуальному
         согласованию.

@@ -10,6 +10,8 @@ import { DEBOUNCE_TIME } from '@core/constants';
 
 import type { ApiError } from '@shared/types';
 
+import { AuthFacade } from '@auth';
+
 import { DeliveryDetailsFacade } from '@delivery/delivery-details';
 import { DeliveryPointFacade } from '@delivery/delivery-point';
 import { PickupPointFacade } from '@delivery/pickup-point';
@@ -28,6 +30,7 @@ export const bookingEffects = {
       pickupPointFacade = inject(PickupPointFacade),
       deliveryPointFacade = inject(DeliveryPointFacade),
       deliveryDetailsFacade = inject(DeliveryDetailsFacade),
+      authFacade = inject(AuthFacade),
       bookingService = inject(BookingService),
     ) => {
       return actions$.pipe(
@@ -46,6 +49,7 @@ export const bookingEffects = {
           store.select(bookingFeature.selectDestination),
           store.select(bookingFeature.selectReview),
           deliveryDetailsFacade.getOrders(),
+          authFacade.getCurrentUser(),
         ),
         switchMap(
           ([
@@ -62,6 +66,7 @@ export const bookingEffects = {
             destination,
             review,
             orders,
+            currentUser,
           ]) => {
             const order = orders[0];
 
@@ -88,6 +93,7 @@ export const bookingEffects = {
                 destination,
                 order,
                 note,
+                currentUser,
               })
               .pipe(
                 mapResponse({

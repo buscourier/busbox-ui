@@ -51,7 +51,7 @@ export const loginEffects = {
         ofType(AuthActions.loginSuccess),
         tap(() => {
           const returnUrl = route.snapshot.queryParams['returnUrl'] || '/';
-          router.navigate([returnUrl]);
+          router.navigateByUrl(returnUrl);
         }),
       );
     },

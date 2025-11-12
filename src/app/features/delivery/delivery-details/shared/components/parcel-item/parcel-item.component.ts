@@ -1,4 +1,3 @@
-import { AsyncPipe, JsonPipe } from '@angular/common';
 import { ChangeDetectorRef, effect, type OnInit, type Signal } from '@angular/core';
 import {
   ChangeDetectionStrategy,
@@ -9,9 +8,8 @@ import {
   Input,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import type { AbstractControl, FormGroup, ValidationErrors } from '@angular/forms';
+import type { AbstractControl, FormGroup, ValidationErrors, FormControl } from '@angular/forms';
 import {
-  FormControl,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   NonNullableFormBuilder,
@@ -20,13 +18,8 @@ import {
 } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { TuiAnimated } from '@taiga-ui/cdk';
-import { TuiError, TuiHintDirective, TuiNotification, TuiTextfieldComponent } from '@taiga-ui/core';
-import {
-  TUI_VALIDATION_ERRORS,
-  TuiFieldErrorContentPipe,
-  TuiFieldErrorPipe,
-  TuiInputNumber,
-} from '@taiga-ui/kit';
+import { TuiHintDirective, TuiNotification, TuiTextfieldComponent } from '@taiga-ui/core';
+import { TUI_VALIDATION_ERRORS, TuiFieldErrorContentPipe, TuiInputNumber } from '@taiga-ui/kit';
 import { debounceTime } from 'rxjs';
 
 import { DEBOUNCE_TIME } from '@core/constants';
@@ -45,14 +38,10 @@ import type { ParcelItemForm } from './parcel-item.types';
     ReactiveFormsModule,
     TuiHintDirective,
     TuiFieldErrorContentPipe,
-    TuiFieldErrorPipe,
-    TuiError,
-    AsyncPipe,
     TuiTextfieldComponent,
     TuiInputNumber,
     TranslocoPipe,
     TuiNotification,
-    JsonPipe,
     TuiAnimated,
   ],
   templateUrl: './parcel-item.component.html',
@@ -83,7 +72,6 @@ export class ParcelItemComponent implements OnInit {
   @Input() totalDimensionsMaxError = false;
 
   form!: ParcelItemForm;
-  dimensionsError = new FormControl(null);
 
   public limits: Signal<ParcelItemLimits> = inject(PARCEL_ITEM_LIMIT_TOKEN);
   private readonly cdr = inject(ChangeDetectorRef);
@@ -249,11 +237,6 @@ export class ParcelItemComponent implements OnInit {
           this.onTouched();
         }
       });
-
-    this.dimensions.statusChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.dimensionsError.setErrors(this.dimensions.errors);
-      this.dimensionsError.markAsTouched();
-    });
 
     this.updateValidators();
   }

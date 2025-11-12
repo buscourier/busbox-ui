@@ -6,7 +6,7 @@
   >
     <label tuiLabel>
       <span class="mb-1 block text-sm text-gray-700">Период</span>
-      <tui-textfield tuiDropdownMobile="Выберите период">
+      <tui-textfield tuiDropdownMobile="Выберите период" [tuiSkeleton]="filter.isListLoading">
         <input formControlName="range" tuiInputDateRange placeholder="дд.мм.гггг - дд.мм.гггг" />
         <tui-calendar-range *tuiTextfieldDropdown />
       </tui-textfield>
@@ -14,7 +14,12 @@
 
     <div tuiLabel>
       <span class="mb-1 block text-sm text-gray-700">Город отправления</span>
-      <tui-textfield tuiChevron [stringify]="stringify" tuiDropdownMobile="Город отправления">
+      <tui-textfield
+        tuiChevron
+        [stringify]="stringify"
+        tuiDropdownMobile="Город отправления"
+        [tuiSkeleton]="filter.isListLoading"
+      >
         @if (isMobile) {
           <input
             tuiSelect
@@ -40,7 +45,12 @@
     </div>
     <div tuiLabel>
       <span class="mb-1 block text-sm text-gray-700">Город получения</span>
-      <tui-textfield tuiChevron [stringify]="stringify" tuiDropdownMobile="Город получения">
+      <tui-textfield
+        tuiChevron
+        [stringify]="stringify"
+        tuiDropdownMobile="Город получения"
+        [tuiSkeleton]="filter.isListLoading"
+      >
         @if (isMobile) {
           <input
             tuiSelect
@@ -81,6 +91,8 @@
           type="button"
           appearance="outline-destructive"
           iconStart="@tui.funnel-x"
+          class="mt-2 grow sm:mt-0"
+          [disabled]="filter.isListLoading"
           (click)="onClearFilter()"
         >
           &nbsp;
