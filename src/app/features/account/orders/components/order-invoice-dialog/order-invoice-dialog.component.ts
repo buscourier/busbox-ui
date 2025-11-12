@@ -76,7 +76,6 @@ export class OrderInvoiceDialogComponent implements OnInit {
                 addSeparators: true,
               },
             },
-            autoDownload: true,
             customActions: this.actionsTemplate,
           },
         )

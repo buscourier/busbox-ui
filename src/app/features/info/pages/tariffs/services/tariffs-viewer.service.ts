@@ -79,21 +79,33 @@ export class TariffsViewerService extends PdfViewerService {
         ? { scale: 1.5, quality: 0.8, renderWaitTime: 500 } // More time for table rendering
         : { scale: 2.0, quality: 0.9, renderWaitTime: 300 };
 
+      // Download PDF on mobile devices, show viewer on desktop
+      const shouldAutoDownload = options.autoDownload ?? this.isMobile;
+
       this.documentToPdfService
         .generatePdf(
           null,
           multiData,
           options.generationOptions?.processing || defaultProcessing,
-          options.generationOptions?.generation || {
+          {
+            ...(options.generationOptions?.generation || {}),
             filename: options.generationOptions?.filename || `tariffs_${city?.name || 'city'}.pdf`,
             format: PageFormat.A4,
             showProgress: options.generationOptions?.showProgress ?? true,
+            autoDownload: shouldAutoDownload,
           },
           {},
         )
         .then((result) => {
           if (!result.success || !result.blob) {
             subscriber.error(new Error(result.error || 'PDF generation failed'));
+            return;
+          }
+
+          // Don's show viewer on mobile devices
+          if (this.isMobile) {
+            subscriber.next();
+            subscriber.complete();
             return;
           }
 

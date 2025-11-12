@@ -41,12 +41,15 @@ export class InvoiceViewerService extends PdfViewerService {
         ? { scale: 1.5, quality: 0.8 }
         : { scale: 2.0, quality: 0.9 };
 
+      // Download PDF on mobile devices, show viewer on desktop
+      const shouldAutoDownload = options.autoDownload ?? this.isMobile;
+
       this.documentToPdfService
         .generatePdf(
           sourceElement,
           data,
           { ...defaultProcessing, ...generationOptions.processing },
-          generationOptions.generation,
+          { ...generationOptions.generation, autoDownload: shouldAutoDownload },
           generationOptions.copies,
         )
         .then((result) => {
@@ -55,9 +58,11 @@ export class InvoiceViewerService extends PdfViewerService {
             return;
           }
 
-          if (options.autoDownload !== false) {
-            const filename = result.filename || this.getDefaultFilename();
-            this.downloadPdfFromBlob(result.blob, filename);
+          // Don's show viewer on mobile devices
+          if (this.isMobile) {
+            subscriber.next();
+            subscriber.complete();
+            return;
           }
 
           this.showPdfFromBlob(result.blob, label, {
