@@ -33,8 +33,9 @@ export const orderListEffects = {
             withLatestFrom(
               store.select(ordersFeature.selectFilter),
               store.select(ordersFeature.selectPagination),
+              store.select(ordersFeature.selectSort),
             ),
-            map(([user, filter, pagination]) => {
+            map(([user, filter, pagination, sort]) => {
               const { currentPage, pageSize } = pagination;
 
               const payload: OrderListPayload = {
@@ -47,6 +48,11 @@ export const orderListEffects = {
                 }),
                 ...(filter.pickupCity && { 'start-city': filter.pickupCity.id }),
                 ...(filter.deliveryCity && { 'end-city': filter.deliveryCity.id }),
+                ...(sort.field &&
+                  sort.direction !== 0 && {
+                    'sort-field': sort.field,
+                    'sort-direction': sort.direction === 1 ? 'asc' : 'desc',
+                  }),
               };
 
               return OrdersActions.loadList({ payload });

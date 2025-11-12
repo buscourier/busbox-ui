@@ -18,6 +18,8 @@ export interface OrderListPayload {
   'end-city'?: string;
   'elements-on-page'?: string;
   'page-num'?: string;
+  'sort-field'?: string;
+  'sort-direction'?: string;
 }
 
 export interface OrderListResponse {

@@ -148,6 +148,8 @@ export class OrdersComponent implements OnInit {
     const defaultParams: Partial<QueryParams> = {
       page: DEFAULT_PAGE,
       size: DEFAULT_PAGE_SIZE,
+      sortField: 'date',
+      sortDirection: 'desc',
     };
 
     this.router.navigate([], {

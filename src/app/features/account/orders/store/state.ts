@@ -79,8 +79,8 @@ export const initialState: OrdersFeatureState = {
       pageSize: DEFAULT_PAGE_SIZE,
     },
     sort: {
-      field: null,
-      direction: SortDirectionEnum.NONE,
+      field: 'date',
+      direction: SortDirectionEnum.DESC,
     },
   },
 };
