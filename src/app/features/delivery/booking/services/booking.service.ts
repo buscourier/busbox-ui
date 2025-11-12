@@ -36,6 +36,9 @@ interface ParcelDimensions {
 
 interface OrderResponse {
   order_id: number;
+  sending_date: number;
+  start_city: string;
+  end_city: string;
 }
 
 interface SenderFields {
@@ -59,6 +62,9 @@ export class BookingService extends DeliveryBaseService {
     return this.http.post<OrderResponse>(`${this.baseUrl}/order/`, requestData).pipe(
       map((response) => ({
         orderId: response.order_id,
+        sendingDate: response.sending_date,
+        startCity: response.start_city,
+        endCity: response.end_city,
       })),
     );
   }

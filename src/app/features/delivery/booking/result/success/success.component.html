@@ -1,4 +1,5 @@
 @let bookingResult = bookingResult$ | async;
+@let isAuth = auth.isAuthenticated() | async;
 
 <div class="flex justify-center px-4">
   <div
@@ -20,7 +21,7 @@
     <h1 class="font-roboto mb-8 text-center text-3xl font-bold">Заказ успешно оформлен!</h1>
 
     <div
-      class="mb-8 w-full max-w-md rounded-2xl bg-gradient-to-r from-yellow-500 to-yellow-500/70 p-6 text-center"
+      class="mb-8 w-full max-w-md rounded-2xl bg-gradient-to-r from-yellow-200 to-yellow-100 p-6 text-center"
     >
       <p class="mb-2 text-sm font-bold tracking-wide text-black uppercase">Номер заказа</p>
       <div class="font-mono text-3xl font-bold tracking-wider text-white md:text-4xl">
@@ -55,17 +56,44 @@
     </div>
 
     <div class="mb-8 flex flex-col justify-center gap-4 sm:flex-row">
-      <button
-        type="button"
-        tuiButton
-        [routerLink]="['/tracking']"
-        [queryParams]="{ orderNumber: bookingResult?.orderId }"
-        appearance="primary"
-        iconStart="@tui.package"
-      >
-        Отследить заказ
+      @if (isAuth) {
+        <button
+          type="button"
+          tuiButton
+          [routerLink]="['/account/orders']"
+          [queryParams]="{
+            invoiceId: bookingResult?.orderId,
+            from: bookingResult?.startCity,
+            to: bookingResult?.endCity,
+            range: bookingResult?.sendingDate
+              ? getStartDate(bookingResult!.sendingDate) +
+                ',' +
+                getEndDate(bookingResult!.sendingDate)
+              : null,
+            sortField: 'date',
+            sortDirection: 'desc',
+          }"
+          appearance="primary"
+          iconStart="@tui.notepad-text-dashed"
+        >
+          Открыть накладную
+        </button>
+      } @else {
+        <button
+          type="button"
+          tuiButton
+          [routerLink]="['/tracking']"
+          [queryParams]="{ orderNumber: bookingResult?.orderId }"
+          appearance="outline"
+          iconStart="@tui.package"
+        >
+          Посмотреть статус заказа
+        </button>
+      }
+
+      <button type="button" tuiButton [routerLink]="['/delivery']" appearance="outline">
+        Оформить новый заказ
       </button>
-      <button type="button" tuiButton [routerLink]="['/']" appearance="outline">На главную</button>
     </div>
 
     <div class="w-full border-t border-gray-200 pt-4 text-center text-sm text-gray-600">

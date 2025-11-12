@@ -8,8 +8,11 @@ import type { Observable } from 'rxjs';
 
 import { NavigationService } from '@core/services';
 import { CONTACT_INFO } from '@core/tokens';
+import { formatDateToString } from '@core/utils';
 
 import { ContactLinkPipe } from '@shared/pipes';
+
+import { AuthFacade } from '@auth';
 
 import { BookingFacade } from '../../booking.facade';
 import type { BookingResult } from '../../types';
@@ -27,12 +30,19 @@ export class SuccessComponent implements OnInit {
   private readonly bookingFacade = inject(BookingFacade);
   private readonly navigationService = inject(NavigationService);
   protected readonly contact = inject(CONTACT_INFO);
-
-  get trackingLink(): string {
-    return '/' + this.navigationService.findByLink('tracking')!.link;
-  }
+  protected readonly auth = inject(AuthFacade);
 
   ngOnInit(): void {
     this.bookingResult$ = this.bookingFacade.getBookingResult();
+  }
+
+  getStartDate(timestamp: number): string {
+    return formatDateToString(new Date(timestamp * 1000));
+  }
+
+  getEndDate(timestamp: number): string {
+    const date = new Date(timestamp * 1000);
+    date.setDate(date.getDate() + 1);
+    return formatDateToString(date);
   }
 }
