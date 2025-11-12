@@ -27,7 +27,7 @@ export interface QrCodeTheme {
 })
 export class QrCodeService {
   private readonly defaultOptions: Required<QrCodeOptions> = {
-    baseUrl: 'https://баскурьер.рф/find-order?id=',
+    baseUrl: 'https://баскурьер.рф/tracking?orderNumber=',
     size: 128,
     color: {
       dark: '#000000',

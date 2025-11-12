@@ -17,7 +17,29 @@ export class DefaultDomProcessor implements DomProcessor {
     this.cleanupInteractiveElements(copy);
     this.replaceInputsWithValues(copy);
     this.handlePrintVisibility(copy);
+    this.ensureTablesVisible(copy);
     return copy;
+  }
+
+  private ensureTablesVisible(element: HTMLElement): void {
+    // Make sure the tables are visible and have the correct sizes
+    const tables = element.querySelectorAll('table');
+    tables.forEach((table) => {
+      const htmlTable = table as HTMLElement;
+      // Force the table to be displayed
+      htmlTable.style.display = 'table';
+      htmlTable.style.visibility = 'visible';
+      htmlTable.style.opacity = '1';
+      htmlTable.style.maxWidth = '100%';
+
+      // Make sure all cells are visible
+      const cells = table.querySelectorAll('td, th');
+      cells.forEach((cell) => {
+        const htmlCell = cell as HTMLElement;
+        htmlCell.style.visibility = 'visible';
+        htmlCell.style.opacity = '1';
+      });
+    });
   }
 
   private handlePrintVisibility(element: HTMLElement): void {
@@ -73,13 +95,31 @@ export class DefaultDomProcessor implements DomProcessor {
       const span = document.createElement('span');
 
       if (inputEl.type === 'checkbox') {
-        span.textContent = inputEl.checked ? '☑' : '☐';
-        span.style.fontSize = '24px';
+        const checkboxContainer = document.createElement('span');
+
+        Object.assign(checkboxContainer.style, {
+          display: 'inline-block',
+          width: '14px',
+          height: '14px',
+          border: '2px solid #000',
+          borderRadius: '2px',
+          textAlign: 'center',
+          lineHeight: '12px',
+          fontSize: '12px',
+          fontWeight: 'bold',
+          backgroundColor: '#fff',
+          verticalAlign: 'middle',
+        });
+
+        if (inputEl.checked) {
+          checkboxContainer.textContent = '✓';
+        }
+
+        inputEl.parentNode?.replaceChild(checkboxContainer, inputEl);
       } else {
         span.textContent = inputEl.value || '';
+        inputEl.parentNode?.replaceChild(span, inputEl);
       }
-
-      inputEl.parentNode?.replaceChild(span, inputEl);
     });
   }
 

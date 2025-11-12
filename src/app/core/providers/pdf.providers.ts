@@ -3,9 +3,9 @@ import type { Provider } from '@angular/core';
 import {
   DefaultDomProcessor,
   DefaultProgressIndicator,
-  GridDocumentRendererService,
   HtmlToImageConverter,
   JsPdfBuilder,
+  TripleDocumentRenderer,
 } from '@core/services/pdf';
 import {
   DOCUMENT_RENDERER,
@@ -34,6 +34,6 @@ export const PDF_PROVIDERS: Provider[] = [
   },
   {
     provide: DOCUMENT_RENDERER,
-    useClass: GridDocumentRendererService,
+    useClass: TripleDocumentRenderer,
   },
 ];

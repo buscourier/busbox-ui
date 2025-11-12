@@ -58,7 +58,8 @@ export class MultiElementRenderer<T> implements DocumentRenderer<MultiElementDat
       pageElements.push(container);
     }
 
-    await this.waitForRender(300);
+    // Increased timeout for stable table rendering
+    await this.waitForRender(500);
     return pageElements;
   }
 

@@ -39,6 +39,13 @@ export class HtmlToImageConverter implements ImageConverter {
       return dataUrl;
     } catch (error) {
       console.error('Image conversion error:', error);
+
+      // Check if the error is related to memory
+      const errorMessage = error instanceof Error ? error.message : '';
+      if (errorMessage.includes('memory') || errorMessage.includes('canvas')) {
+        throw new Error('Not enough memory to generate the image.');
+      }
+
       return this.fallbackConversion(element, options);
     }
   }

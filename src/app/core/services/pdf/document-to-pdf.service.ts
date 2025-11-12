@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { WA_WINDOW } from '@ng-web-apis/common';
+import { TUI_IS_MOBILE } from '@taiga-ui/cdk';
 
 import {
   DOCUMENT_RENDERER,
@@ -31,17 +32,26 @@ export interface DocumentRenderer<T> {
 @Injectable({ providedIn: 'root' })
 export class DocumentToPdfService<T = unknown> {
   private readonly window = inject(WA_WINDOW);
+  private readonly isMobile = inject(TUI_IS_MOBILE);
 
   private get defaultProcessingOptions(): Required<DocumentProcessingOptions> {
+    const devicePixelRatio = this.window.devicePixelRatio || 1;
+
+    // Limit parameters for mobile devices to avoid memory issues
+    const isMobile = this.isMobile;
+    const maxPixelRatio = isMobile ? 1.5 : 2;
+    const defaultScale = isMobile ? 1 : 1;
+    const defaultQuality = isMobile ? 0.85 : 0.95;
+
     return {
-      scale: 1,
-      quality: 0.95,
-      pixelRatio: this.window.devicePixelRatio || 1,
+      scale: defaultScale,
+      quality: defaultQuality,
+      pixelRatio: Math.min(devicePixelRatio, maxPixelRatio),
       skipFonts: true,
       includeQueryParams: false,
-      imageLoadTimeout: 5000,
-      renderWaitTime: 200,
-      imageFormat: ImageFormat.PNG,
+      imageLoadTimeout: isMobile ? 10000 : 5000, // Больше времени на мобильных
+      renderWaitTime: isMobile ? 300 : 200,
+      imageFormat: ImageFormat.JPEG, // JPEG легче чем PNG
     };
   }
 
@@ -104,9 +114,22 @@ export class DocumentToPdfService<T = unknown> {
       }
     } catch (error) {
       console.error('PDF generation error:', error);
+
+      // Special handling of memory errors on mobile devices
+      let errorMessage = error instanceof Error ? error.message : 'Unknown error';
+
+      if (
+        this.isMobile &&
+        (errorMessage.includes('memory') ||
+          errorMessage.includes('canvas') ||
+          errorMessage.includes('allocation'))
+      ) {
+        errorMessage = 'Not enough memory to generate the image on mobile device';
+      }
+
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: errorMessage,
       };
     } finally {
       if (genConfig.showProgress) {

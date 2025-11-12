@@ -1,6 +1,7 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, type TemplateRef } from '@angular/core';
 import { TuiButton, TuiIcon } from '@taiga-ui/core';
+import { TuiSkeleton } from '@taiga-ui/kit';
 
 import { DocumentsListComponent } from '@shared/features/documents';
 import type { DocumentCategory } from '@shared/features/documents/types';
@@ -14,7 +15,7 @@ export interface SidebarLayoutAction {
 
 @Component({
   selector: 'app-sidebar-layout',
-  imports: [NgTemplateOutlet, TuiButton, TuiIcon, DocumentsListComponent],
+  imports: [NgTemplateOutlet, TuiButton, TuiIcon, TuiSkeleton, DocumentsListComponent],
   templateUrl: './sidebar-layout.component.html',
   styleUrl: './sidebar-layout.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,5 +23,6 @@ export interface SidebarLayoutAction {
 export class SidebarLayoutComponent {
   @Input() documentTypes?: DocumentCategory[];
   @Input() actions: SidebarLayoutAction[] = [];
+  @Input() actionsLoading = false;
   @Input() customSidebarContent?: TemplateRef<unknown>;
 }
