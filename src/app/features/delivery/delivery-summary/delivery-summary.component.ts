@@ -1,5 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { AsyncPipe, DOCUMENT, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, DecimalPipe, DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { DestroyRef, type OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component, inject, HostListener } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -40,6 +40,7 @@ import type { DeliverySummaryViewModel } from './types';
     TranslocoPipe,
     TuiSheetDialog,
     NgTemplateOutlet,
+    DecimalPipe,
   ],
   templateUrl: './delivery-summary.component.html',
   styleUrl: './delivery-summary.component.css',
