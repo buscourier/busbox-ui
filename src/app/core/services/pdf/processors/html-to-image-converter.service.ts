@@ -58,7 +58,7 @@ export class HtmlToImageConverter implements ImageConverter {
     element: HTMLElement,
     options: DocumentProcessingOptions,
   ): Options {
-    const scale = options.scale || 2.5;
+    const scale = options.scale || 1;
 
     return {
       width: element.scrollWidth * scale,
