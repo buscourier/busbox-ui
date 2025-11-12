@@ -74,11 +74,16 @@ export class TariffsViewerService extends PdfViewerService {
         },
       };
 
+      // Adaptive settings for mobile devices
+      const defaultProcessing = this.isMobile
+        ? { scale: 1.5, quality: 0.8, renderWaitTime: 500 } // More time for table rendering
+        : { scale: 2.0, quality: 0.9, renderWaitTime: 300 };
+
       this.documentToPdfService
         .generatePdf(
           null,
           multiData,
-          options.generationOptions?.processing || { scale: 2.0, quality: 0.9 },
+          options.generationOptions?.processing || defaultProcessing,
           options.generationOptions?.generation || {
             filename: options.generationOptions?.filename || `tariffs_${city?.name || 'city'}.pdf`,
             format: PageFormat.A4,

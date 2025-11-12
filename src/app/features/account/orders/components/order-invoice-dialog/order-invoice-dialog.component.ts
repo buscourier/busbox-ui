@@ -45,7 +45,7 @@ export class OrderInvoiceDialogComponent implements OnInit {
   private readonly ordersFacade = inject(OrdersFacade);
   private readonly invoiceViewer = inject(InvoiceViewerService);
   private readonly qrCodeService = inject(QrCodeService);
-  private barcodeService = inject(BarcodeService);
+  private readonly barcodeService = inject(BarcodeService);
 
   async handlePrint(orderData: OrderInfo): Promise<void> {
     if (!this.invoiceContainer?.nativeElement) {
@@ -56,6 +56,8 @@ export class OrderInvoiceDialogComponent implements OnInit {
     this.isGenerating = true;
 
     try {
+      const copyLabels = ['Оригинал', 'Оригинал', 'Оригинал'];
+
       this.invoiceViewer
         .generateAndShowPdf(
           this.invoiceContainer.nativeElement,
@@ -63,18 +65,14 @@ export class OrderInvoiceDialogComponent implements OnInit {
           `Накладная №${this.orderId}`,
           {
             generationOptions: {
-              processing: {
-                scale: 2.0,
-                quality: 0.9,
-              },
               generation: {
                 filename: `invoice_${this.orderId}.pdf`,
                 showProgress: true,
                 format: PageFormat.A4,
-                orientation: PageOrientation.LANDSCAPE,
+                orientation: PageOrientation.PORTRAIT,
               },
               copies: {
-                copyLabels: ['Оригинал', 'Оригинал', 'Оригинал', 'Оригинал'],
+                copyLabels,
                 addSeparators: true,
               },
             },

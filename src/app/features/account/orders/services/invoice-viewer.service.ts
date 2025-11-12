@@ -36,11 +36,16 @@ export class InvoiceViewerService extends PdfViewerService {
     return new Observable<void>((subscriber) => {
       const generationOptions = options.generationOptions || {};
 
+      // Adaptive settings for mobile devices
+      const defaultProcessing = this.isMobile
+        ? { scale: 1.5, quality: 0.8 }
+        : { scale: 2.0, quality: 0.9 };
+
       this.documentToPdfService
         .generatePdf(
           sourceElement,
           data,
-          generationOptions.processing,
+          { ...defaultProcessing, ...generationOptions.processing },
           generationOptions.generation,
           generationOptions.copies,
         )

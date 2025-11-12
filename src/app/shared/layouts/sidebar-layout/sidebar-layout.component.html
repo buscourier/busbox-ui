@@ -20,6 +20,7 @@
           appearance="primary"
           [disabled]="action.disabled"
           (click)="action.handler()"
+          [tuiSkeleton]="actionsLoading"
           size="l"
           class="mt-10 mb-2 w-full shadow-xs transition-all active:translate-y-[2px] active:shadow-none"
         >

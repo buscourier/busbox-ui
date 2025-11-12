@@ -1,6 +1,10 @@
 @let vm = vm$ | async;
 
-<app-sidebar-layout [actions]="pageActions" [documentTypes]="['rules']">
+<app-sidebar-layout
+  [actions]="pageActions"
+  [actionsLoading]="!vm || !vm.zones.hasData || !vm.zoneTariffs.hasData"
+  [documentTypes]="['rules']"
+>
   @if (vm) {
     <p>Выберите нужный город — и ниже появятся зоны доставки и актуальные цены.</p>
     <section class="group/actions mb-10 flex flex-wrap gap-3 border-y border-gray-100 pt-5 pb-5">
