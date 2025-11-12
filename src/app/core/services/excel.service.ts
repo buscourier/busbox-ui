@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as XLSX from 'xlsx-js-style';
 
+import { formatDateToString } from '@core/utils';
+
 export interface ExportOptions {
   title?: string;
   subtitle?: string;
@@ -384,6 +386,6 @@ export class ExcelService {
   }
 
   private getDateStamp(): string {
-    return new Date().toISOString().split('T')[0];
+    return formatDateToString(new Date());
   }
 }
