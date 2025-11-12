@@ -72,7 +72,7 @@ export interface OrderInfo {
   sending_date: string; // ISO datetime string
   order_note_raw: string;
   manager: string;
-  dimensions_raw: Dimension[];
+  dimensions_raw?: Dimension[] | null;
   dimensions: Dimension;
   order_note: string;
 }

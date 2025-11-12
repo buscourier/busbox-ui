@@ -33,7 +33,7 @@
             (мест: {{ details.order.cargo_count }})
           </p>
 
-          @if (details.order.dimensions_raw.length) {
+          @if (details.order.dimensions_raw && details.order.dimensions_raw.length) {
             <tui-scrollbar class="scroll-yellow max-h-[142px]">
               @for (dim of details.order.dimensions_raw; let i = $index; track i) {
                 <div class="mb-4 flex items-end text-sm">
