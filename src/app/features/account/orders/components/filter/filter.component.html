@@ -6,7 +6,7 @@
   >
     <label tuiLabel>
       <span class="mb-1 block text-sm text-gray-700">Период</span>
-      <tui-textfield tuiDropdownMobile="Выберите период" [tuiSkeleton]="filter.isListLoading">
+      <tui-textfield tuiDropdownMobile="Выберите период" [class.opacity-50]="filter.isListLoading">
         <input formControlName="range" tuiInputDateRange placeholder="дд.мм.гггг - дд.мм.гггг" />
         <tui-calendar-range *tuiTextfieldDropdown />
       </tui-textfield>
@@ -17,8 +17,8 @@
       <tui-textfield
         tuiChevron
         [stringify]="stringify"
+        [class.opacity-50]="filter.isListLoading"
         tuiDropdownMobile="Город отправления"
-        [tuiSkeleton]="filter.isListLoading"
       >
         @if (isMobile) {
           <input
@@ -26,6 +26,7 @@
             [formControl]="pickupCity"
             tuiHintAppearance="error"
             [placeholder]="'Выберите город'"
+            [readOnly]="filter.isListLoading"
           />
         } @else {
           <input
@@ -33,6 +34,7 @@
             [formControl]="pickupCity"
             tuiHintAppearance="error"
             [placeholder]="'Выберите город'"
+            [readOnly]="filter.isListLoading"
           />
         }
 
@@ -49,7 +51,7 @@
         tuiChevron
         [stringify]="stringify"
         tuiDropdownMobile="Город получения"
-        [tuiSkeleton]="filter.isListLoading"
+        [class.opacity-50]="filter.isListLoading"
       >
         @if (isMobile) {
           <input
@@ -57,6 +59,7 @@
             [formControl]="deliveryCity"
             tuiHintAppearance="error"
             [placeholder]="'Выберите город'"
+            [readOnly]="filter.isListLoading"
           />
         } @else {
           <input
@@ -64,6 +67,7 @@
             [formControl]="deliveryCity"
             tuiHintAppearance="error"
             [placeholder]="'Выберите город'"
+            [readOnly]="filter.isListLoading"
           />
         }
 
@@ -79,7 +83,7 @@
         tuiButton
         type="submit"
         appearance="primary"
-        [disabled]="filter.isListLoading"
+        [class.opacity-50]="filter.isListLoading"
         [loading]="filter.isListLoading"
         class="mt-2 grow sm:mt-0"
       >
