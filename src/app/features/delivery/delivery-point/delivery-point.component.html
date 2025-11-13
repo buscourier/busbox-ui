@@ -1,9 +1,9 @@
 @let vm = vm$ | async;
 
 @if (vm && form) {
-  <div>
-    <ng-content select="b"></ng-content>
-  </div>
+  <b class="mb-3 flex items-center justify-between border-b border-gray-100 pb-3 text-xl">
+    <ng-content select="span"></ng-content>
+  </b>
 
   <form [formGroup]="form" class="flex flex-col gap-5">
     <div class="relative">

@@ -1,5 +1,5 @@
 <div
-  class="relative cursor-pointer"
+  class="relative cursor-pointer hover:brightness-105"
   [routerLink]="['/news']"
   [queryParams]="{ id: article.news_id }"
 >
@@ -9,7 +9,7 @@
     [tuiSkeleton]="!imageLoaded"
     (load)="onImageLoad()"
     (error)="onImageError()"
-    class="h-44 w-full object-cover"
+    class="h-44 w-full object-cover xl:h-52"
   />
 </div>
 <!--<div class="p-6">-->

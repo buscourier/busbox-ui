@@ -58,6 +58,14 @@ export class AppComponent implements OnInit {
     return this.router.url.includes('auth');
   }
 
+  get isSuccessPage(): boolean {
+    return this.router.url.includes('success');
+  }
+
+  get isFailurePage(): boolean {
+    return this.router.url.includes('failure');
+  }
+
   get isFeedbackPage(): boolean {
     return this.router.url.includes('feedback');
   }
@@ -69,7 +77,9 @@ export class AppComponent implements OnInit {
       this.isCalculatorPage ||
       this.isDocumentsPage ||
       this.isAuthPage ||
-      this.isFeedbackPage
+      this.isFeedbackPage ||
+      this.isSuccessPage ||
+      this.isFailurePage
     );
   }
 

@@ -30,7 +30,7 @@ import type { NewsItem } from '@news/types';
         default: 1,
         sm: 2,
         lg: 3,
-        xl: 4,
+        xl: 3,
       },
     },
   ],

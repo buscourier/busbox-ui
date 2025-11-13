@@ -48,7 +48,7 @@ export class CarouselComponent<T> {
   @HostBinding('class') get hostClasses(): string {
     return cn('relative block w-full', {
       'carousel-secondary': this.appearance === 'secondary',
-      'slides-shadow': this.slidesShadow,
+      'w-[calc(100%+40px)] sm:-ml-5': this.slidesShadow,
     });
   }
 

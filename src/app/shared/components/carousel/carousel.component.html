@@ -15,7 +15,7 @@
     @if (Math.ceil(items.length / itemsCount) > 1) {
       <button
         tuiIconButton
-        class="!absolute -left-12 z-10 !hidden lg:group-hover:!block"
+        class="!absolute -left-16 z-10 !hidden xl:!block"
         (click)="onPrevClick()"
       >
         <tui-icon icon="@tui.chevron-left" />
@@ -42,11 +42,7 @@
     </tui-carousel>
 
     @if (Math.ceil(items.length / itemsCount) > 1) {
-      <button
-        tuiIconButton
-        class="!absolute -right-12 !hidden lg:group-hover:!block"
-        (click)="onNextClick()"
-      >
+      <button tuiIconButton class="!absolute -right-16 !hidden xl:!block" (click)="onNextClick()">
         <tui-icon icon="@tui.chevron-right" />
       </button>
     }
