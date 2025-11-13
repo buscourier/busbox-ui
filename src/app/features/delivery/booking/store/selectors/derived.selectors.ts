@@ -101,11 +101,18 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
           title: 'booking.departure.sender.title',
           fields: [
             { label: 'user.labels.fullName', value: sender?.fullName || 'text.noData' },
-            { label: 'document.labels.document', value: sender?.document.label || 'text.noData' },
-            {
-              label: 'document.labels.documentNumber',
-              value: sender?.documentNumber || 'text.noData',
-            },
+            ...(sender?.documentNumber
+              ? [
+                  {
+                    label: 'document.labels.document',
+                    value: sender?.document?.label || 'text.noData',
+                  },
+                  {
+                    label: 'document.labels.documentNumber',
+                    value: sender?.documentNumber || 'text.noData',
+                  },
+                ]
+              : []),
             { label: 'contacts.labels.phone', value: sender?.phone || 'text.noData' },
           ],
         };
