@@ -1,13 +1,14 @@
 @let lastNews = lastNews$ | async;
 
-<div class="h-56 bg-gray-50 p-4 transition-all lg:px-7 lg:group-hover:px-20">
+<div class="h-56 bg-gray-50 py-4 xl:h-64">
   @if (lastNews && lastNews.length > 0) {
-    <div class="mx-auto">
+    <div class="container mx-auto flex justify-center px-6 sm:block">
       <app-carousel
         appearance="secondary"
         pagination="top"
         [items]="lastNews"
         [itemTemplate]="slideTemplate"
+        class="max-w-[400px] sm:max-w-none"
       />
     </div>
   }
