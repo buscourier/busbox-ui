@@ -132,7 +132,10 @@ export const createDerivedSelectors = (baseSelectors: BaseSelectors): DerivedSel
         title: 'pickupPoint.title.booking',
         fields: [
           { label: 'pickupPoint.labels.city', value: city?.name || 'text.noData' },
-          { label: 'pickupPoint.labels.departureDate', value: date || 'text.noData' },
+          {
+            label: 'pickupPoint.labels.departureDate',
+            value: date?.split('T')[0] || 'text.noData',
+          },
           getDeliveryMethod(office, courier),
         ],
       };
