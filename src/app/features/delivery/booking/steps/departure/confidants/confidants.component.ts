@@ -118,6 +118,8 @@ export class ConfidantsComponent implements OnInit {
           confidant: firstConfidant,
           phone: firstConfidant.phone,
         });
+
+        this.form.updateValueAndValidity();
       });
   }
 
