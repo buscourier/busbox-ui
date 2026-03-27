@@ -2,6 +2,9 @@ import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { mapResponse } from '@ngrx/operators';
 import { switchMap } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { NotificationsActions } from '@core/notifications';
 
 import type { ApiError } from '@shared/types';
 
@@ -28,6 +31,19 @@ export const optionsEffects = {
             }),
           ),
         ),
+      );
+    },
+    { functional: true },
+  ),
+  onLoadOptionsFailure: createEffect(
+    (actions$ = inject(Actions)) => {
+      return actions$.pipe(
+        ofType(DeliveryDetailsActions.loadOptionsFailure),
+        map(() => {
+          return NotificationsActions.showError({
+            message: 'Параметры заказа не загружены',
+          });
+        }),
       );
     },
     { functional: true },

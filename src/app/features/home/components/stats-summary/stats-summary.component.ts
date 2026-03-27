@@ -12,8 +12,9 @@ import { tuiDialog } from '@taiga-ui/core';
 
 import { cn } from '@core/utils';
 
-import { LocationsFacade } from '@shared/store';
 import type { DeliveryCity, PickupCity } from '@shared/types';
+
+import { LocationsFacade } from '@store';
 
 import { CitiesDialogComponent } from './cities-dialog';
 import { StatCardComponent } from './stat-card';

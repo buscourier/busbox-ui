@@ -7,7 +7,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideTranslocoScope, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { TuiDropdownMobile, TuiResponsiveDialogService } from '@taiga-ui/addon-mobile';
 import { TUI_IS_MOBILE, TuiDay, type TuiStringHandler } from '@taiga-ui/cdk';
-import { TuiAlertService, TuiButton, TuiHint, TuiIcon, TuiTextfield } from '@taiga-ui/core';
+import { TuiButton, TuiHint, TuiIcon, TuiTextfield } from '@taiga-ui/core';
 import {
   TuiChevron,
   TuiComboBox,
@@ -94,7 +94,6 @@ export class PickupPointComponent implements OnInit {
   protected readonly today = TuiDay.currentLocal();
   protected readonly min = new TuiDay(this.today.year, this.today.month, this.today.day);
 
-  private readonly alerts = inject(TuiAlertService);
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
   private readonly dialogs = inject(TuiResponsiveDialogService);
@@ -131,7 +130,6 @@ export class PickupPointComponent implements OnInit {
     this.setupStoreSync();
     this.setupFormState();
     this.syncFormWithStore();
-    this.setupErrorHandling();
   }
 
   onTabChange(activeTabId: PickupPointTabType): void {
@@ -161,21 +159,6 @@ export class PickupPointComponent implements OnInit {
       .subscribe();
 
     this.setupTabChangeReset();
-  }
-
-  private setupErrorHandling(): void {
-    this.vm$
-      .pipe(
-        map((vm) => vm.error),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((error) => {
-        if (error.hasAnyError) {
-          this.showErrorNotification(
-            this.transloco.translate('features.delivery.pickupPoint.errors.loading'),
-          );
-        }
-      });
   }
 
   private setupTabChangeReset(): void {
@@ -372,17 +355,6 @@ export class PickupPointComponent implements OnInit {
           `${this.transloco.translate('features.delivery.pickupPoint.errors.tabType')}: ${tabId}`,
         );
     }
-  }
-
-  private showErrorNotification(message: string): void {
-    this.alerts
-      .open(message, {
-        label: this.transloco.translate('common.alert.labels.error'),
-        autoClose: 0,
-        appearance: 'error',
-      })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe();
   }
 
   private confirmNewCity(): Observable<boolean> {

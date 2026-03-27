@@ -4,6 +4,8 @@ import { mapResponse } from '@ngrx/operators';
 import { filter, switchMap } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { NotificationsActions } from '@core/notifications';
+
 import type { ApiError, DeliveryCity } from '@shared/types';
 
 import { restorePickupPointState, selectPickupPointCity } from '@delivery/pickup-point';
@@ -45,6 +47,19 @@ export const citiesEffects = {
             }),
           ),
         ),
+      );
+    },
+    { functional: true },
+  ),
+  onLoadCitiesFailure: createEffect(
+    (actions$ = inject(Actions)) => {
+      return actions$.pipe(
+        ofType(DeliveryPointActions.loadCitiesFailure),
+        map(() => {
+          return NotificationsActions.showError({
+            message: 'Не удалось загрузить города получения',
+          });
+        }),
       );
     },
     { functional: true },

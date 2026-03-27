@@ -5,9 +5,10 @@ import type { Action } from '@ngrx/store';
 import { concatMap, EMPTY, filter, of, switchMap, take } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { LocationsFacade } from '@shared/store';
+import { LocationsFacade } from '@store';
+
 // eslint-disable-next-line import/no-internal-modules
-import { LocationsActions } from '@shared/store/locations/actions';
+import { LocationsActions } from '@store/locations/actions';
 
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '../../constants';
 import { type Filter, type Order, type SortConfig, stringToSortDirection } from '../../types';

@@ -25,6 +25,7 @@ import {
   provideRuntimeConfig,
 } from '@core/config';
 import { authRefreshInterceptor, csrfInterceptor, ssrAbsoluteUrlInterceptor } from '@core/http';
+import { NotificationsEffects } from '@core/notifications';
 import {
   CONTACTS_PROVIDERS,
   DATE_PROVIDERS,
@@ -37,11 +38,14 @@ import {
 } from '@core/providers';
 
 import { DocumentsEffects, documentsFeature } from '@shared/features/documents';
-import { LocationsEffects, locationsFeature } from '@shared/store';
+
+import { LocationsEffects, locationsFeature } from '@store';
 
 import { AuthEffects, authFeature } from '@auth';
+
 import { AUTH_BROWSER_PROVIDERS } from '@auth/auth-browser';
 import { AUTH_SSR_PROVIDERS } from '@auth/auth-ssr';
+
 import { NewsEffects, newsFeature } from '@news/store';
 
 import { routes } from './app.routes';
@@ -70,7 +74,13 @@ export const appConfig: ApplicationConfig = {
     provideState(authFeature),
     provideState(documentsFeature),
     provideState(newsFeature),
-    provideEffects(LocationsEffects, AuthEffects, DocumentsEffects, NewsEffects),
+    provideEffects(
+      LocationsEffects,
+      AuthEffects,
+      DocumentsEffects,
+      NewsEffects,
+      NotificationsEffects,
+    ),
     provideIconResolver(),
     ...provideRuntimeConfig(),
     provideImageLoader(),

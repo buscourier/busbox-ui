@@ -1,12 +1,9 @@
 import { AsyncPipe } from '@angular/common';
 import type { OnInit } from '@angular/core';
-import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
-import { TuiAlertService } from '@taiga-ui/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { provideTranslocoScope } from '@jsverse/transloco';
 import { TuiSkeleton } from '@taiga-ui/kit';
 import type { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import {
   AdditionalServicesComponent,
@@ -58,14 +55,10 @@ export class DeliveryDetailsComponent implements OnInit {
   protected readonly MAX_ORDERS = 1;
   protected readonly CargoType = CargoType;
 
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly alerts = inject(TuiAlertService);
   private readonly deliveryDetailsFacade = inject(DeliveryDetailsFacade);
-  private transloco = inject(TranslocoService);
 
   ngOnInit(): void {
     this.vm$ = this.deliveryDetailsFacade.getViewModel();
-    this.setupErrorHandling();
   }
 
   addOrder(): void {
@@ -90,31 +83,5 @@ export class DeliveryDetailsComponent implements OnInit {
 
   updateOrderValidation(orderId: string, type: keyof OrderValidationState, isValid: boolean) {
     this.deliveryDetailsFacade.updateOrderValidation(orderId, type, isValid);
-  }
-
-  private setupErrorHandling(): void {
-    this.vm$
-      .pipe(
-        map((vm) => vm.options.error),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((error) => {
-        if (error) {
-          this.showErrorNotification(
-            this.transloco.translate('features.delivery.dd.errors.loading'),
-          );
-        }
-      });
-  }
-
-  private showErrorNotification(message: string): void {
-    this.alerts
-      .open(message, {
-        label: this.transloco.translate('common.alert.labels.error'),
-        autoClose: 0,
-        appearance: 'error',
-      })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe();
   }
 }

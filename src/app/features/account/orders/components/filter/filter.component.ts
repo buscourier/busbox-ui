@@ -28,8 +28,9 @@ import {
 } from '@taiga-ui/kit';
 import { filter, type Observable } from 'rxjs';
 
-import { LocationsFacade } from '@shared/store';
 import type { DeliveryCity, PickupCity } from '@shared/types';
+
+import { LocationsFacade } from '@store';
 
 import type { Filter, FilterViewModel } from '../../types';
 

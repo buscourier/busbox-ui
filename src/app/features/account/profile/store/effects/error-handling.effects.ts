@@ -1,25 +1,21 @@
 import { inject } from '@angular/core';
-import { TranslocoService } from '@jsverse/transloco';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { TuiAlertService } from '@taiga-ui/core';
-import { switchMap } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { NotificationsActions } from '@core/notifications';
 
 import { ProfileActions } from '../../store';
 
 export const errorHandlingEffects = {
   errorHandling: createEffect(
-    (
-      actions$ = inject(Actions),
-      alert = inject(TuiAlertService),
-      transloco = inject(TranslocoService),
-    ) => {
+    (actions$ = inject(Actions)) => {
       return actions$.pipe(
         ofType(
           ProfileActions.loadFieldsFailure,
           ProfileActions.loadConfidantsFailure,
           ProfileActions.updateFieldsFailure,
         ),
-        switchMap((action) => {
+        map((action) => {
           let message = '';
 
           switch (action.type) {
@@ -36,14 +32,12 @@ export const errorHandlingEffects = {
               break;
           }
 
-          return alert.open(message, {
-            label: transloco.translate('alert.labels.error'),
-            autoClose: 0,
-            appearance: 'error',
+          return NotificationsActions.showError({
+            message,
           });
         }),
       );
     },
-    { functional: true, dispatch: false },
+    { functional: true },
   ),
 };

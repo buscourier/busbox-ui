@@ -24,8 +24,9 @@ import { cn } from '@core/utils';
 
 import { MapComponent } from '@shared/components/map';
 import { PageLayoutComponent } from '@shared/layouts/page-layout';
-import { LocationsFacade } from '@shared/store';
 import type { Office } from '@shared/types';
+
+import { LocationsFacade } from '@store';
 
 import { OfficeType } from '@contacts/types';
 

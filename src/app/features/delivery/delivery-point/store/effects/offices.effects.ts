@@ -5,6 +5,8 @@ import { Store } from '@ngrx/store';
 import { filter, switchMap } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { NotificationsActions } from '@core/notifications';
+
 import type { ApiError, Office } from '@shared/types';
 
 import { DeliveryService } from '@delivery/services';
@@ -56,6 +58,19 @@ export const officesEffects = {
           return isOfficeTab && hasOffices && noSelectedOffice;
         }),
         map(([, offices]) => DeliveryPointActions.selectOffice({ office: offices[0] })),
+      );
+    },
+    { functional: true },
+  ),
+  onLoadOfficesFailure: createEffect(
+    (actions$ = inject(Actions)) => {
+      return actions$.pipe(
+        ofType(DeliveryPointActions.loadOfficesFailure),
+        map(() => {
+          return NotificationsActions.showError({
+            message: 'Не удалось загрузить офисы пункта доставки',
+          });
+        }),
       );
     },
     { functional: true },
