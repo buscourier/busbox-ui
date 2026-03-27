@@ -2,7 +2,9 @@ import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { mapResponse } from '@ngrx/operators';
 import { switchMap } from 'rxjs';
+import { map } from 'rxjs/operators';
 
+import { NotificationsActions } from '@core/notifications';
 import { ApiService } from '@core/services';
 
 import type { ApiError } from '@shared/types';
@@ -58,4 +60,32 @@ export const LocationsEffects = {
     },
     { functional: true },
   ),
+  onLoadFailure: createEffect(
+    (actions$ = inject(Actions)) => {
+      return actions$.pipe(
+        ofType(
+          LocationsActions.loadPickupCitiesFailure,
+          LocationsActions.loadDeliveryCitiesFailure,
+          LocationsActions.loadOfficesFailure,
+        ),
+        map((action) => {
+          const message = getDefaultErrorMessage(action.type);
+          return NotificationsActions.showError({
+            message,
+          });
+        }),
+      );
+    },
+    { functional: true },
+  ),
 };
+
+function getDefaultErrorMessage(actionType: string): string {
+  const messages: Record<string, string> = {
+    [LocationsActions.loadPickupCitiesFailure.type]: 'Не удалось загрузить города отправления',
+    [LocationsActions.loadDeliveryCitiesFailure.type]: 'Не удалось загрузить города получения',
+    [LocationsActions.loadOfficesFailure.type]: 'Не удалось загрузить офисы',
+  };
+
+  return messages[actionType] || 'Произошла ошибка при загрузке данных';
+}
