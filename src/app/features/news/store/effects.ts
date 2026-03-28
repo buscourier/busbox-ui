@@ -1,10 +1,10 @@
 import { inject } from '@angular/core';
-import { TranslocoService } from '@jsverse/transloco';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { mapResponse } from '@ngrx/operators';
-import { TuiAlertService } from '@taiga-ui/core';
 import { switchMap } from 'rxjs';
+import { map } from 'rxjs/operators';
 
+import { NotificationsActions } from '@core/notifications';
 import { ModalService } from '@core/services/modal.service';
 
 import type { ApiError } from '@shared/types';
@@ -48,16 +48,11 @@ export const NewsEffects = {
     { functional: true },
   ),
 
-  errorHandling: createEffect(
-    (
-      actions$ = inject(Actions),
-      modalService = inject(ModalService),
-      alert = inject(TuiAlertService),
-      transloco = inject(TranslocoService),
-    ) => {
+  onLoadFailure: createEffect(
+    (actions$ = inject(Actions), modalService = inject(ModalService)) => {
       return actions$.pipe(
         ofType(NewsActions.loadNewsFailure, NewsActions.loadNewsDetailsFailure),
-        switchMap((action) => {
+        map((action) => {
           let message = '';
 
           switch (action.type) {
@@ -71,14 +66,12 @@ export const NewsEffects = {
               break;
           }
 
-          return alert.open(message, {
-            label: transloco.translate('alert.labels.error'),
-            autoClose: 0,
-            appearance: 'error',
+          return NotificationsActions.showError({
+            message,
           });
         }),
       );
     },
-    { functional: true, dispatch: false },
+    { functional: true },
   ),
 };

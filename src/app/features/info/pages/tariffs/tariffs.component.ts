@@ -23,8 +23,9 @@ import { cn } from '@core/utils';
 import { ContentScrollerComponent } from '@shared/components/content-scroller';
 import { PdfActionsComponent } from '@shared/components/pdf-actions';
 import { type SidebarLayoutAction, SidebarLayoutComponent } from '@shared/layouts';
-import { LocationsFacade } from '@shared/store';
 import type { PickupCity } from '@shared/types';
+
+import { LocationsFacade } from '@store';
 
 import { TariffsViewerService } from './services';
 import { TariffsFacade } from './tariffs.facade';

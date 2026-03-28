@@ -31,8 +31,9 @@ import { filter } from 'rxjs/operators';
 
 import { cn } from '@core/utils';
 
-import { LocationsFacade } from '@shared/store';
 import type { DeliveryCity, PickupCity } from '@shared/types';
+
+import { LocationsFacade } from '@store';
 
 import type { RouteSelectorForm } from './route-selector.types';
 

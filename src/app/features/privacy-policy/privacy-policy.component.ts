@@ -1,12 +1,10 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { TranslocoService } from '@jsverse/transloco';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { TuiRepeatTimes } from '@taiga-ui/cdk';
-import { TuiAlertService } from '@taiga-ui/core';
 import { TuiSkeleton } from '@taiga-ui/kit';
 import { catchError, EMPTY, finalize, type Observable } from 'rxjs';
 
+import { NotificationsAdapter } from '@core/notifications';
 import { PolicyService } from '@core/services/policy.service';
 
 import { PageLayoutComponent } from '@shared/layouts/page-layout';
@@ -21,31 +19,18 @@ import { PageLayoutComponent } from '@shared/layouts/page-layout';
 export class PrivacyPolicyComponent {
   isLoading = false;
 
+  private readonly notifications = inject(NotificationsAdapter);
   private readonly policyService = inject(PolicyService);
-  private readonly alerts = inject(TuiAlertService);
-  private transloco = inject(TranslocoService);
-  private readonly destroyRef = inject(DestroyRef);
 
   getPageContent(): Observable<string> {
     this.isLoading = true;
 
     return this.policyService.getPrivacyPolicy().pipe(
       finalize(() => (this.isLoading = false)),
-      catchError((err) => {
-        this.showErrorNotification(err);
+      catchError(() => {
+        this.notifications.error('Не удалось загрузить политику конфиденциальности');
         return EMPTY;
       }),
     );
-  }
-
-  private showErrorNotification(message: string): void {
-    this.alerts
-      .open(message, {
-        label: this.transloco.translate('alert.labels.error'),
-        autoClose: 0,
-        appearance: 'error',
-      })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe();
   }
 }

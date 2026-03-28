@@ -1,9 +1,10 @@
 import { inject } from '@angular/core';
-import { TranslocoService } from '@jsverse/transloco';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { mapResponse } from '@ngrx/operators';
-import { TuiAlertService } from '@taiga-ui/core';
 import { filter, first, switchMap } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { NotificationsActions } from '@core/notifications';
 
 import type { ApiError } from '@shared/types';
 
@@ -40,23 +41,17 @@ export const summaryEffects = {
     },
     { functional: true },
   ),
-  loadSummaryFailure: createEffect(
-    (
-      actions$ = inject(Actions),
-      alert = inject(TuiAlertService),
-      transloco = inject(TranslocoService),
-    ) => {
+  onLoadFailure: createEffect(
+    (actions$ = inject(Actions)) => {
       return actions$.pipe(
         ofType(BalanceActions.loadSummaryFailure),
-        switchMap(() => {
-          return alert.open('Не удалось загрузить данные', {
-            label: transloco.translate('alert.labels.error'),
-            autoClose: 0,
-            appearance: 'error',
-          });
-        }),
+        map(() =>
+          NotificationsActions.showError({
+            message: 'Не удалось загрузить данные',
+          }),
+        ),
       );
     },
-    { functional: true, dispatch: false },
+    { functional: true },
   ),
 };

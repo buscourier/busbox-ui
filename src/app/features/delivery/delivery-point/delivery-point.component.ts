@@ -8,7 +8,6 @@ import { provideTranslocoScope, TranslocoPipe, TranslocoService } from '@jsverse
 import { TuiDropdownMobile, TuiResponsiveDialogService } from '@taiga-ui/addon-mobile';
 import { TUI_IS_MOBILE, type TuiStringHandler } from '@taiga-ui/cdk';
 import {
-  TuiAlertService,
   TuiButton,
   TuiError,
   TuiHint,
@@ -111,7 +110,6 @@ export class DeliveryPointComponent implements OnInit {
   protected stringifyOffice: TuiStringHandler<Office> = (x) => `${x.address}`;
   protected readonly isMobile = inject(TUI_IS_MOBILE);
 
-  private readonly alerts = inject(TuiAlertService);
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
   private readonly dialogs = inject(TuiResponsiveDialogService);
@@ -143,7 +141,6 @@ export class DeliveryPointComponent implements OnInit {
     this.setupStoreSync();
     this.setupFormState();
     this.syncFormWithStore();
-    this.setupErrorHandling();
   }
 
   onTabChange(activeTabId: DeliveryPointTabType): void {
@@ -176,19 +173,6 @@ export class DeliveryPointComponent implements OnInit {
       .subscribe();
 
     this.setupTabChangeReset();
-  }
-
-  private setupErrorHandling(): void {
-    this.vm$
-      .pipe(
-        map((vm) => vm.error),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((error) => {
-        if (error.hasAnyError) {
-          this.showErrorNotification('deliveryPoint.errors.loading');
-        }
-      });
   }
 
   private setupTabChangeReset(): void {
@@ -400,17 +384,6 @@ export class DeliveryPointComponent implements OnInit {
       default:
         throw new Error(`${this.transloco.translate('deliveryPoint.errors.tabType')}: ${tabId}`);
     }
-  }
-
-  private showErrorNotification(message: string): void {
-    this.alerts
-      .open(message, {
-        label: this.transloco.translate('alert.labels.error'),
-        autoClose: 0,
-        appearance: 'error',
-      })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe();
   }
 
   private confirmNewCity(): Observable<boolean> {

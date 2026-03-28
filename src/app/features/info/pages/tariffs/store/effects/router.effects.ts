@@ -4,7 +4,7 @@ import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { catchError, EMPTY, filter, switchMap } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { LocationsFacade } from '@shared/store';
+import { LocationsFacade } from '@store';
 
 import { TariffsActions } from '../actions';
 
