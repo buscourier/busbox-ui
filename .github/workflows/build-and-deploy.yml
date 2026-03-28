@@ -14,11 +14,32 @@ env:
   DOCKER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOPPLER_PROJECT }}
 
 jobs:
-  build-and-push:
+  determine-environment:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref == 'refs/heads/develop' && 'staging' || 'production' }}
+    outputs:
+      env_name: ${{ steps.set-env.outputs.env_name }}
+    steps:
+      - name: Set environment
+        id: set-env
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            if [[ "${{ github.base_ref }}" == "main" ]]; then
+              echo "env_name=production" >> $GITHUB_OUTPUT
+            else
+              echo "env_name=staging" >> $GITHUB_OUTPUT
+            fi
+          elif [[ "${{ github.ref }}" == "refs/tags/"* ]]; then
+            echo "env_name=production" >> $GITHUB_OUTPUT
+          else
+            echo "env_name=staging" >> $GITHUB_OUTPUT
+          fi
+
+  build-and-push:
+    needs: determine-environment
+    runs-on: ubuntu-latest
+    environment: ${{ needs.determine-environment.outputs.env_name }}
     env:
-      NODE_ENV: ${{ github.ref == 'refs/heads/develop' && 'staging' || 'production' }}
+      NODE_ENV: ${{ needs.determine-environment.outputs.env_name }}
     outputs:
       version: ${{ steps.get_version.outputs.VERSION }}
     steps:
