@@ -9,7 +9,7 @@ import { take, withLatestFrom, combineLatest } from 'rxjs';
 import type { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
-import { AuthFacade } from '@auth';
+import { AuthFacade } from '@core/auth';
 
 import { PickupPointComponent, PickupPointFacade } from '@delivery/pickup-point';
 

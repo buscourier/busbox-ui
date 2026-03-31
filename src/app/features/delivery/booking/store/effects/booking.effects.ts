@@ -6,11 +6,10 @@ import { Store } from '@ngrx/store';
 import { debounceTime, delay, switchMap, tap, withLatestFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { AuthFacade } from '@core/auth';
 import { DEBOUNCE_TIME } from '@core/constants';
 
 import type { ApiError } from '@shared/types';
-
-import { AuthFacade } from '@auth';
 
 import { DeliveryDetailsFacade } from '@delivery/delivery-details';
 import { DeliveryPointFacade } from '@delivery/delivery-point';
@@ -30,7 +29,7 @@ export const bookingEffects = {
       pickupPointFacade = inject(PickupPointFacade),
       deliveryPointFacade = inject(DeliveryPointFacade),
       deliveryDetailsFacade = inject(DeliveryDetailsFacade),
-      authFacade = inject(AuthFacade),
+      auth = inject(AuthFacade),
       bookingService = inject(BookingService),
     ) => {
       return actions$.pipe(
@@ -49,7 +48,7 @@ export const bookingEffects = {
           store.select(bookingFeature.selectDestination),
           store.select(bookingFeature.selectReview),
           deliveryDetailsFacade.getOrders(),
-          authFacade.getCurrentUser(),
+          auth.currentUser$,
         ),
         switchMap(
           ([

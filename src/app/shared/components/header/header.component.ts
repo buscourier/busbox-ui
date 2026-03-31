@@ -5,9 +5,10 @@ import { TuiDropdownMobile } from '@taiga-ui/addon-mobile';
 import { TuiActiveZone } from '@taiga-ui/cdk';
 import { TuiButton, TuiDropdown, TuiDropdownManual, TuiIcon, TuiPopup } from '@taiga-ui/core';
 import { TuiDrawer, TuiLineClamp } from '@taiga-ui/kit';
-import { type Observable, startWith } from 'rxjs';
+import { startWith } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
+import { AuthFacade } from '@core/auth';
 import { NavigationService } from '@core/services';
 import { BreakpointService } from '@core/services/breakpoint.service';
 import { CONTACT_INFO } from '@core/tokens';
@@ -15,18 +16,12 @@ import { CONTACT_INFO } from '@core/tokens';
 import { MobileMenuComponent } from '@shared/components/mobile-menu';
 import { ContactLinkPipe } from '@shared/pipes';
 
-// eslint-disable-next-line import/no-restricted-paths
-import { AuthFacade } from '@auth';
-// eslint-disable-next-line import/no-restricted-paths
-import type { AuthResponse } from '@auth/types';
-
 import { NavigationComponent } from '../navigation';
 
 @Component({
   selector: 'app-header',
   imports: [
     RouterLink,
-    NavigationComponent,
     NavigationComponent,
     MobileMenuComponent,
     TuiButton,
@@ -50,9 +45,10 @@ import { NavigationComponent } from '../navigation';
   },
 })
 export class HeaderComponent {
+  readonly auth = inject(AuthFacade);
+
   private readonly contacts = inject(CONTACT_INFO);
   private readonly navigationService = inject(NavigationService);
-  private readonly authFacade = inject(AuthFacade);
   private readonly router = inject(Router);
   private breakpointsService = inject(BreakpointService);
 
@@ -77,10 +73,6 @@ export class HeaderComponent {
     if (this.breakpointsService.isXl()) {
       this.closeMobileMenu();
     }
-  }
-
-  get currentUser(): Observable<AuthResponse | null> {
-    return this.authFacade.getCurrentUser();
   }
 
   goToCalculatorPage(isMobileNav = false) {
@@ -108,7 +100,7 @@ export class HeaderComponent {
   }
 
   logout(): void {
-    this.authFacade.logout();
+    this.auth.logout();
     this.closeUserMenu();
   }
 

@@ -1,7 +1,7 @@
 @let vm = vm$ | async;
 @let isMainLayout = isMainLayout$ | async;
 @let currentStep = currentStep$ | async;
-@let isAuth = auth.isAuthenticated() | async;
+@let isAuth = auth.isAuthenticated$ | async;
 @let isLegal = bookingFacade.isLegalEntity() | async;
 
 @if (!isSuccessPage && !isFailurePage) {

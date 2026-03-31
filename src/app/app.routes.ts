@@ -1,9 +1,8 @@
 import type { Routes } from '@angular/router';
 
-import { NotFoundComponent } from '@shared/components/not-found';
+import { authGuard } from '@core/auth';
 
-// eslint-disable-next-line import/no-internal-modules
-import { authGuard } from '@auth/guards/auth.guard';
+import { NotFoundComponent } from '@shared/components/not-found';
 
 export const routes: Routes = [
   {

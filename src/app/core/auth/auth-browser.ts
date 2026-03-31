@@ -1,18 +1,17 @@
 import { isPlatformBrowser } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { inject, PLATFORM_ID, provideAppInitializer, TransferState } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { catchError, firstValueFrom, of, tap } from 'rxjs';
 
-import { AUTH_TSTATE_KEY } from '@auth/auth-ssr';
-import { AuthActions } from '@auth/store';
-import type { AuthResponse } from '@auth/types';
+import { AUTH_TSTATE_KEY } from './auth-ssr';
+import { AuthService } from './auth.service';
+import { AuthActions } from './store';
 
 export async function authBrowserInitializer() {
   const platformId = inject(PLATFORM_ID);
   const transfer = inject(TransferState);
-  const http = inject(HttpClient);
   const store = inject(Store);
+  const auth = inject(AuthService);
 
   if (!isPlatformBrowser(platformId)) return;
 
@@ -24,7 +23,7 @@ export async function authBrowserInitializer() {
   }
 
   await firstValueFrom(
-    http.get<AuthResponse>('/auth/me').pipe(
+    auth.getCurrentUser().pipe(
       tap((user) => {
         store.dispatch(AuthActions.initializeSuccess({ user }));
       }),

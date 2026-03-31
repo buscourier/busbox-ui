@@ -6,13 +6,12 @@ import { TuiButton, TuiIcon, TuiNotification } from '@taiga-ui/core';
 import { TuiCopy } from '@taiga-ui/kit';
 import type { Observable } from 'rxjs';
 
+import { AuthFacade } from '@core/auth';
 import { NavigationService } from '@core/services';
 import { CONTACT_INFO } from '@core/tokens';
 import { formatDateToString } from '@core/utils';
 
 import { ContactLinkPipe } from '@shared/pipes';
-
-import { AuthFacade } from '@auth';
 
 import { BookingFacade } from '../../booking.facade';
 import type { BookingResult } from '../../types';

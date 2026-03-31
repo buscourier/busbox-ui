@@ -5,12 +5,11 @@ import { provideTranslocoScope } from '@jsverse/transloco';
 import { TuiNotification } from '@taiga-ui/core';
 import type { Observable } from 'rxjs';
 
+import { AuthFacade } from '@core/auth';
 import { PageContentService, type PageViewModel } from '@core/services';
 
 import { PageLayoutComponent } from '@shared/layouts/page-layout';
 import type { ApiError } from '@shared/types';
-
-import { AuthFacade } from './auth.facade';
 
 @Component({
   selector: 'app-auth',
@@ -31,10 +30,10 @@ export class AuthComponent implements OnInit {
   error$!: Observable<ApiError | null>;
 
   private readonly pageContentService = inject(PageContentService);
-  private readonly authFacade = inject(AuthFacade);
+  private readonly auth = inject(AuthFacade);
 
   ngOnInit(): void {
-    this.error$ = this.authFacade.getError();
+    this.error$ = this.auth.error$;
     this.pageViewModel$ = this.pageContentService.getPageViewModel();
   }
 }

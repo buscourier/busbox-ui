@@ -1,3 +1,5 @@
+@let currentUser = auth.currentUser$ | async;
+
 <header class="">
   <div class="container mx-auto px-4">
     <div class="flex h-20 items-center justify-between gap-4">
@@ -41,7 +43,7 @@
 
         <!-- User Menu -->
         <div class="relative">
-          @if (currentUser | async; as currentUser) {
+          @if (currentUser) {
             <button
               type="button"
               tuiDropdownLimitWidth="min"

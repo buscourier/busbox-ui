@@ -12,9 +12,9 @@ import { TuiButton, TuiHint, TuiLabel, TuiTextfield } from '@taiga-ui/core';
 import { TUI_VALIDATION_ERRORS, TuiButtonLoading, TuiFieldErrorContentPipe } from '@taiga-ui/kit';
 import { type Observable, withLatestFrom } from 'rxjs';
 
-import type { ApiError } from '@shared/types';
+import { AuthFacade } from '@core/auth';
 
-import { AuthFacade } from '../../auth.facade';
+import type { ApiError } from '@shared/types';
 
 import { validationErrors } from './forgot-password.constants';
 import type { ForgotPasswordForm } from './forgot-password.types';
@@ -46,7 +46,7 @@ import type { ForgotPasswordForm } from './forgot-password.types';
 export class ForgotPasswordComponent implements OnInit {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly authFacade = inject(AuthFacade);
+  private readonly auth = inject(AuthFacade);
 
   isLoading$!: Observable<boolean>;
   error$!: Observable<ApiError | null>;
@@ -58,8 +58,8 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isLoading$ = this.authFacade.isLoading();
-    this.error$ = this.authFacade.getError();
+    this.isLoading$ = this.auth.isLoading$;
+    this.error$ = this.auth.error$;
 
     this.initializeForm();
     this.clearError();
@@ -78,7 +78,7 @@ export class ForgotPasswordComponent implements OnInit {
     }
 
     const email = this.email.value;
-    this.authFacade.forgotPassword(email);
+    this.auth.forgotPassword(email);
   }
 
   clearError(): void {
@@ -86,7 +86,7 @@ export class ForgotPasswordComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef), withLatestFrom(this.error$))
       .subscribe(([, error]) => {
         if (error) {
-          this.authFacade.clearError();
+          this.auth.clearError();
         }
       });
   }

@@ -1,8 +1,5 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import type { Observable } from 'rxjs';
-
-import type { ApiError } from '@shared/types';
 
 import {
   AuthActions,
@@ -12,7 +9,7 @@ import {
   selectIsLoading,
   selectUser,
 } from './store';
-import type { AuthResponse, LoginCredentials, RegisterPayload } from './types';
+import type { LoginCredentials, RegisterPayload } from './types';
 
 @Injectable({
   providedIn: 'root',
@@ -20,9 +17,11 @@ import type { AuthResponse, LoginCredentials, RegisterPayload } from './types';
 export class AuthFacade {
   private readonly store = inject(Store);
 
-  initialize(): void {
-    this.store.dispatch(AuthActions.initialize());
-  }
+  readonly isLoading$ = this.store.select(selectIsLoading);
+  readonly isAuthenticated$ = this.store.select(selectIsAuthenticated);
+  readonly isInitialized$ = this.store.select(selectIsInitialized);
+  readonly currentUser$ = this.store.select(selectUser);
+  readonly error$ = this.store.select(selectError);
 
   login(credentials: LoginCredentials): void {
     this.store.dispatch(AuthActions.login({ credentials }));
@@ -38,30 +37,6 @@ export class AuthFacade {
 
   logout(): void {
     this.store.dispatch(AuthActions.logout());
-  }
-
-  isLoading(): Observable<boolean> {
-    return this.store.select(selectIsLoading);
-  }
-
-  isAuthenticated(): Observable<boolean> {
-    return this.store.select(selectIsAuthenticated);
-  }
-
-  isInitialized(): Observable<boolean> {
-    return this.store.select(selectIsInitialized);
-  }
-
-  loadCurrentUser(): void {
-    this.store.dispatch(AuthActions.getCurrentUser());
-  }
-
-  getCurrentUser(): Observable<AuthResponse | null> {
-    return this.store.select(selectUser);
-  }
-
-  getError(): Observable<ApiError | null> {
-    return this.store.select(selectError);
   }
 
   clearError(): void {
