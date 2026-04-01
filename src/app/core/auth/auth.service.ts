@@ -1,14 +1,16 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, type Observable, of, switchMap, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+import type { ApiError } from '@shared/types';
 
 import type {
   AuthResponse,
   LoginCredentials,
   RegisterPayload,
   ResetPasswordPayload,
-} from '../types';
+} from './types';
 
 interface SessionPayload {
   access_token: string;
@@ -35,14 +37,14 @@ export class AuthService {
 
         return this.http.post('/auth/session', payload).pipe(map(() => resp));
       }),
-      catchError((error) => this.handleError('Неверный логин или пароль', error)),
+      catchError((error: HttpErrorResponse) => throwError(() => this.toApiError(error))),
     );
   }
 
   register(userData: RegisterPayload): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(`${this.baseUrl}/users`, userData)
-      .pipe(catchError((error) => this.handleError('Registration Failed', error)));
+      .pipe(catchError((error: HttpErrorResponse) => throwError(() => this.toApiError(error))));
   }
 
   logout(): Observable<void> {
@@ -52,28 +54,21 @@ export class AuthService {
   forgotPassword(email: string): Observable<{ message: string }> {
     return this.http
       .post<{ message: string }>(`${this.baseUrl}/account/forgot-password`, { email })
-      .pipe(catchError((error) => this.handleError('Forgot password request failed', error)));
+      .pipe(catchError((error: HttpErrorResponse) => throwError(() => this.toApiError(error))));
   }
 
   resetPassword(payload: ResetPasswordPayload): Observable<{ message: string }> {
     return this.http
       .post<{ message: string }>(`${this.baseUrl}/reset-password`, payload)
-      .pipe(catchError((error) => this.handleError('Password reset failed', error)));
+      .pipe(catchError((error: HttpErrorResponse) => throwError(() => this.toApiError(error))));
   }
 
-  // getCurrentUser(): Observable<AuthResponse | null> {
-  //   return this.http.get<AuthResponse | { user: AuthResponse }>(`/auth/me`).pipe(
-  //     map((resp: any) => (resp?.user ?? resp) as AuthResponse),
-  //     catchError(() => of(null)),
-  //   );
-  // }
-
-  getCurrentUser(): Observable<AuthResponse | null> {
-    return this.http.get<AuthResponse>(`/auth/me`).pipe(catchError(() => of(null)));
+  getCurrentUser(): Observable<AuthResponse> {
+    return this.http.get<AuthResponse>(`/auth/me`);
   }
 
-  private handleError(message: string, error: string): Observable<never> {
-    console.error(`${message}:`, error);
-    return throwError(() => new Error(message));
+  private toApiError(error: HttpErrorResponse): ApiError {
+    const message: string = error.error?.message ?? error.message;
+    return { message, statusCode: error.status };
   }
 }

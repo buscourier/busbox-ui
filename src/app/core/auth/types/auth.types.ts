@@ -29,24 +29,3 @@ export interface AuthResponse {
   access_expires_in?: number;
   refresh_expires_in?: number;
 }
-
-// export interface UserProfile {
-//   id: string;
-//   email: string;
-//   firstName: string;
-//   lastName: string;
-//   phone?: string;
-//   isEmailVerified: boolean;
-//   createdAt: string;
-//   updatedAt: string;
-// }
-//
-// export interface AuthValidationErrors {
-//   email?: string[];
-//   password?: string[];
-//   confirmPassword?: string[];
-//   firstName?: string[];
-//   lastName?: string[];
-//   phone?: string[];
-//   general?: string[];
-// }

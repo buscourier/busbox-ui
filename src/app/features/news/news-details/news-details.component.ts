@@ -16,6 +16,7 @@ import { map } from 'rxjs/operators';
 import { cn } from '@core/utils';
 
 import { NewsFacade } from '@news';
+
 import type { NewsDetailsViewModel } from '@news/types';
 
 @Component({

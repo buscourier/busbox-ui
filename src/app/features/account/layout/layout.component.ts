@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TuiButton, TuiIcon } from '@taiga-ui/core';
 
+import { AuthFacade } from '@core/auth';
 import { NavigationService } from '@core/services/navigation.service';
 
 import { PageLayoutComponent } from '@shared/layouts/page-layout';
 
 import { BalanceComponent } from '@account/balance';
-import { AuthFacade } from '@auth';
 
 @Component({
   selector: 'app-layout',

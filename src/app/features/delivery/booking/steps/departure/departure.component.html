@@ -1,6 +1,6 @@
 @let currentStep = currentStep$ | async;
 @let departure = departure$ | async;
-@let currentUser = auth.getCurrentUser() | async;
+@let currentUser = auth.currentUser$ | async;
 
 @if (currentStep) {
   @if (currentUser) {

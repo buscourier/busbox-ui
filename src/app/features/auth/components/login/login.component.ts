@@ -24,10 +24,9 @@ import {
 } from '@taiga-ui/kit';
 import { type Observable, withLatestFrom } from 'rxjs';
 
-import type { ApiError } from '@shared/types';
+import { AuthFacade, type LoginCredentials } from '@core/auth';
 
-import { AuthFacade } from '../../auth.facade';
-import type { LoginCredentials } from '../../types';
+import type { ApiError } from '@shared/types';
 
 import { loginValidationErrors } from './login.constants';
 import type { LoginForm } from './login.types';
@@ -62,7 +61,7 @@ import type { LoginForm } from './login.types';
 export class LoginComponent implements OnInit {
   fb = inject(NonNullableFormBuilder);
   destroyRef = inject(DestroyRef);
-  authFacade = inject(AuthFacade);
+  auth = inject(AuthFacade);
 
   form!: LoginForm;
   isLoading$!: Observable<boolean>;
@@ -77,8 +76,8 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isLoading$ = this.authFacade.isLoading();
-    this.error$ = this.authFacade.getError();
+    this.isLoading$ = this.auth.isLoading$;
+    this.error$ = this.auth.error$;
 
     this.initializeForm();
     this.clearError();
@@ -98,7 +97,7 @@ export class LoginComponent implements OnInit {
     }
 
     const credentials: LoginCredentials = this.form.getRawValue();
-    this.authFacade.login(credentials);
+    this.auth.login(credentials);
   }
 
   clearError(): void {
@@ -106,7 +105,7 @@ export class LoginComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef), withLatestFrom(this.error$))
       .subscribe(([, error]) => {
         if (error) {
-          this.authFacade.clearError();
+          this.auth.clearError();
         }
       });
   }

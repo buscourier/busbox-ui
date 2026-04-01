@@ -17,11 +17,10 @@ import {
 } from '@taiga-ui/kit';
 import { type Observable, withLatestFrom } from 'rxjs';
 
+import { AuthFacade, type RegisterPayload } from '@core/auth';
+
 import type { ApiError } from '@shared/types';
 
-import type { RegisterPayload } from '@auth/types';
-
-import { AuthFacade } from '../../auth.facade';
 import { passwordsMatchValidator } from '../../validators';
 
 import { registerValidationErrors } from './register.constants';
@@ -56,7 +55,7 @@ import type { RegisterForm } from './register.types';
 export class RegisterComponent implements OnInit {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly authFacade = inject(AuthFacade);
+  private readonly auth = inject(AuthFacade);
 
   isLoading$!: Observable<boolean>;
   error$!: Observable<ApiError | null>;
@@ -84,8 +83,8 @@ export class RegisterComponent implements OnInit {
   // }
 
   ngOnInit(): void {
-    this.isLoading$ = this.authFacade.isLoading();
-    this.error$ = this.authFacade.getError();
+    this.isLoading$ = this.auth.isLoading$;
+    this.error$ = this.auth.error$;
 
     this.initializeForm();
     this.clearError();
@@ -113,7 +112,7 @@ export class RegisterComponent implements OnInit {
     }
 
     const userData: RegisterPayload = this.form.getRawValue();
-    this.authFacade.register(userData);
+    this.auth.register(userData);
   }
 
   clearError(): void {
@@ -121,7 +120,7 @@ export class RegisterComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef), withLatestFrom(this.error$))
       .subscribe(([, error]) => {
         if (error) {
-          this.authFacade.clearError();
+          this.auth.clearError();
         }
       });
   }

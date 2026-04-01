@@ -87,22 +87,6 @@ export const authReducer = createReducer(
       isInitialized: true,
     }),
   ),
-  // on(
-  //   AuthActions.logoutSuccess,
-  //   (): AuthState => ({
-  //     ...initialState,
-  //   }),
-  // ),
-  // on(
-  //   AuthActions.logoutFailure,
-  //   (state, { error }): AuthState => ({
-  //     ...state,
-  //     isLoading: false,
-  //     // isAuthenticated: false,
-  //     error,
-  //   }),
-  // ),
-
   on(
     AuthActions.forgotPassword,
     (state): AuthState => ({
@@ -150,35 +134,6 @@ export const authReducer = createReducer(
     AuthActions.resetPasswordFailure,
     (state, { error }): AuthState => ({
       ...state,
-      isLoading: false,
-      error,
-    }),
-  ),
-
-  on(
-    AuthActions.getCurrentUser,
-    (state): AuthState => ({
-      ...state,
-      isLoading: true,
-      error: null,
-    }),
-  ),
-  on(
-    AuthActions.getCurrentUserSuccess,
-    (state, { user }): AuthState => ({
-      ...state,
-      user,
-      isAuthenticated: true,
-      isLoading: false,
-      error: null,
-    }),
-  ),
-  on(
-    AuthActions.getCurrentUserFailure,
-    (state, { error }): AuthState => ({
-      ...state,
-      user: null,
-      isAuthenticated: false,
       isLoading: false,
       error,
     }),

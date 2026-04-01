@@ -6,7 +6,6 @@
 @let isDeliveryPointValid = deliveryPoint.isValid() | async;
 @let isAllOrdersValid = deliveryDetails.isAllOrdersValid() | async;
 @let canBooking = isPickupPointValid && isDeliveryPointValid && isAllOrdersValid;
-@let currentUser = auth.getCurrentUser() | async;
 @let totalWithDiscount = totalWithDiscount$ | async;
 
 @if (vm) {

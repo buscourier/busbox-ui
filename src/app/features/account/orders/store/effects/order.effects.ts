@@ -1,11 +1,11 @@
 import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { mapResponse } from '@ngrx/operators';
-import { filter, first, of, switchMap } from 'rxjs';
+import { concatLatestFrom, mapResponse } from '@ngrx/operators';
+import { filter, of, switchMap } from 'rxjs';
+
+import { AuthFacade } from '@core/auth';
 
 import type { ApiError } from '@shared/types';
-
-import { AuthFacade } from '@auth';
 
 import { OrdersService } from '../../services/orders.service';
 import type { CancelOrderPayload } from '../../types';
@@ -32,38 +32,34 @@ export const orderEffects = {
   cancelOrder: createEffect(
     (
       actions$ = inject(Actions),
-      authFacade = inject(AuthFacade),
+      auth = inject(AuthFacade),
       ordersService = inject(OrdersService),
     ) => {
       return actions$.pipe(
         ofType(OrdersActions.cancelOrder),
-        switchMap(({ orderId }) =>
-          authFacade.getCurrentUser().pipe(
-            filter((user) => !!user),
-            first(),
-            switchMap((user) => {
-              if (!orderId) {
-                return of(
-                  OrdersActions.cancelOrderFailure({
-                    error: { message: 'Order ID is required' } as ApiError,
-                  }),
-                );
-              }
+        concatLatestFrom(() => auth.currentUser$),
+        filter(([, user]) => !!user),
+        switchMap(([{ orderId }, user]) => {
+          if (!orderId) {
+            return of(
+              OrdersActions.cancelOrderFailure({
+                error: { message: 'Order ID is required' } as ApiError,
+              }),
+            );
+          }
 
-              const payload: CancelOrderPayload = {
-                'user-id': user.id,
-                'order-id': orderId,
-              };
+          const payload: CancelOrderPayload = {
+            'user-id': user!.id,
+            'order-id': orderId,
+          };
 
-              return ordersService.cancelOrder(payload).pipe(
-                mapResponse({
-                  next: (response) => OrdersActions.cancelOrderSuccess({ response }),
-                  error: (error: ApiError) => OrdersActions.cancelOrderFailure({ error }),
-                }),
-              );
+          return ordersService.cancelOrder(payload).pipe(
+            mapResponse({
+              next: (response) => OrdersActions.cancelOrderSuccess({ response }),
+              error: (error: ApiError) => OrdersActions.cancelOrderFailure({ error }),
             }),
-          ),
-        ),
+          );
+        }),
       );
     },
     { functional: true },

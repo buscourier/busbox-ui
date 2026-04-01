@@ -3,12 +3,12 @@ import { Router, RouterOutlet } from '@angular/router';
 import { TuiRoot } from '@taiga-ui/core';
 import type { Observable } from 'rxjs';
 
+import { AuthFacade } from '@core/auth';
+
 import { FooterComponent } from '@shared/components/footer';
 import { HeaderComponent } from '@shared/components/header';
 
 import { LocationsFacade } from '@store';
-
-import { AuthFacade } from '@auth';
 
 @Component({
   selector: 'app-root',
@@ -18,15 +18,15 @@ import { AuthFacade } from '@auth';
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  private readonly authFacade = inject(AuthFacade);
-  private readonly locationsFacade = inject(LocationsFacade);
+  private readonly auth = inject(AuthFacade);
+  private readonly locations = inject(LocationsFacade);
 
   private readonly router = inject(Router);
 
   isInitialized$!: Observable<boolean>;
 
   ngOnInit(): void {
-    this.isInitialized$ = this.authFacade.isInitialized();
+    this.isInitialized$ = this.auth.isInitialized$;
 
     this.initializeGlobalData();
   }
@@ -77,8 +77,7 @@ export class AppComponent implements OnInit {
   }
 
   private initializeGlobalData() {
-    this.authFacade.initialize();
-    this.locationsFacade.loadPickupCities();
-    this.locationsFacade.loadOffices();
+    this.locations.loadPickupCities();
+    this.locations.loadOffices();
   }
 }

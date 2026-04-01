@@ -9,11 +9,10 @@ import { TuiButtonLoading } from '@taiga-ui/kit';
 import { type Observable, take, distinctUntilChanged } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
+import { AuthFacade } from '@core/auth';
 import { PageContentService } from '@core/services';
 
 import type { SeoMeta } from '@shared/types';
-
-import { AuthFacade } from '@auth';
 
 import { DeliveryLayoutService } from '@delivery/services';
 
@@ -58,7 +57,6 @@ export class BookingComponent implements OnInit {
 
   public bookingFacade = inject(BookingFacade);
 
-  private authFacade = inject(AuthFacade);
   private layoutService = inject(DeliveryLayoutService);
   private readonly pageContentService = inject(PageContentService);
   private readonly router = inject(Router);
@@ -122,9 +120,9 @@ export class BookingComponent implements OnInit {
     this.bookingFacade.submitOrder();
   }
 
+  // double authenticated check
   private setApplicantType(): void {
-    this.authFacade
-      .isAuthenticated()
+    this.auth.isAuthenticated$
       .pipe(distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
       .subscribe((isAuth) => {
         this.bookingFacade.updateApplicantType(

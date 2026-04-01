@@ -12,7 +12,6 @@ import type {
 export const AuthActions = createActionGroup({
   source: 'Auth',
   events: {
-    Initialize: emptyProps(),
     InitializeSuccess: props<{ user: AuthResponse }>(),
     InitializeFailure: emptyProps(),
 
@@ -35,10 +34,6 @@ export const AuthActions = createActionGroup({
     'Reset Password': props<{ payload: ResetPasswordPayload }>(),
     'Reset Password Success': props<{ message: string }>(),
     'Reset Password Failure': props<{ error: ApiError }>(),
-
-    'Get Current User': emptyProps(),
-    'Get Current User Success': props<{ user: AuthResponse }>(),
-    'Get Current User Failure': props<{ error: ApiError }>(),
 
     'Clear Error': emptyProps(),
   },

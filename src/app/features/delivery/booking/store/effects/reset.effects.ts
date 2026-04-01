@@ -2,7 +2,8 @@ import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { map } from 'rxjs/operators';
 
-import { AuthActions } from '@auth/store';
+// eslint-disable-next-line import/no-internal-modules
+import { AuthActions } from '@core/auth/store';
 
 import { DeliveryActions } from '@delivery/store';
 

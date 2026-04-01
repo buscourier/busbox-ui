@@ -18,7 +18,7 @@ import { BehaviorSubject, type Observable, of, switchMap } from 'rxjs';
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { AuthFacade } from '@auth';
+import { AuthFacade } from '@core/auth';
 
 import { DeliveryDetailsFacade } from '@delivery/delivery-details';
 import { DeliveryPointFacade } from '@delivery/delivery-point';
@@ -110,8 +110,8 @@ export class DeliverySummaryComponent implements OnInit {
 
     this.totalWithDiscount$ = combineLatest([
       this.vm$,
-      this.auth.isAuthenticated(),
-      this.auth.getCurrentUser(),
+      this.auth.isAuthenticated$,
+      this.auth.currentUser$,
     ]).pipe(
       map(([vm, isAuthenticated, currentUser]) => {
         const discountRaw = currentUser?.user_discount ?? '0';

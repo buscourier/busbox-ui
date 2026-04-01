@@ -18,6 +18,7 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideEventPlugins } from '@taiga-ui/event-plugins';
 import { provideYConfig } from 'angular-yandex-maps-v3';
 
+import { provideAuth } from '@core/auth';
 import {
   getMapConfig,
   getScrollConfig,
@@ -41,11 +42,6 @@ import { DocumentsEffects, documentsFeature } from '@shared/features/documents';
 
 import { LocationsEffects, locationsFeature } from '@store';
 
-import { AuthEffects, authFeature } from '@auth';
-
-import { AUTH_BROWSER_PROVIDERS } from '@auth/auth-browser';
-import { AUTH_SSR_PROVIDERS } from '@auth/auth-ssr';
-
 import { NewsEffects, newsFeature } from '@news/store';
 
 import { routes } from './app.routes';
@@ -65,22 +61,17 @@ export const appConfig: ApplicationConfig = {
         includePostRequests: false,
       }),
     ),
+    ...provideAuth(),
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideStore(),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     provideRouterStore(),
     provideState(locationsFeature),
-    provideState(authFeature),
+
     provideState(documentsFeature),
     provideState(newsFeature),
-    provideEffects(
-      LocationsEffects,
-      AuthEffects,
-      DocumentsEffects,
-      NewsEffects,
-      NotificationsEffects,
-    ),
+    provideEffects(LocationsEffects, DocumentsEffects, NewsEffects, NotificationsEffects),
     provideIconResolver(),
     ...provideRuntimeConfig(),
     provideImageLoader(),
@@ -107,7 +98,5 @@ export const appConfig: ApplicationConfig = {
     ...CONTACTS_PROVIDERS,
     ...PDF_PROVIDERS,
     ...UI_PROVIDERS,
-    AUTH_SSR_PROVIDERS,
-    AUTH_BROWSER_PROVIDERS,
   ],
 };

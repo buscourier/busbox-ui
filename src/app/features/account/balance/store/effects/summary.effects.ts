@@ -1,14 +1,13 @@
 import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { mapResponse } from '@ngrx/operators';
-import { filter, first, switchMap } from 'rxjs';
+import { concatLatestFrom, mapResponse } from '@ngrx/operators';
+import { filter, switchMap } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { AuthFacade } from '@core/auth';
 import { NotificationsActions } from '@core/notifications';
 
 import type { ApiError } from '@shared/types';
-
-import { AuthFacade } from '@auth';
 
 import { BalanceService } from '../../services';
 
@@ -18,23 +17,19 @@ export const summaryEffects = {
   loadSummary: createEffect(
     (
       actions$ = inject(Actions),
-      authFacade = inject(AuthFacade),
+      auth = inject(AuthFacade),
       balanceService = inject(BalanceService),
     ) => {
       return actions$.pipe(
         ofType(BalanceActions.loadSummary),
-        switchMap(() =>
-          authFacade.getCurrentUser().pipe(
-            filter((user) => !!user),
-            first(),
-            switchMap((user) =>
-              balanceService.getBalanceSummary(user.id).pipe(
-                mapResponse({
-                  next: (data) => BalanceActions.loadSummarySuccess({ data }),
-                  error: (error: ApiError) => BalanceActions.loadSummaryFailure({ error }),
-                }),
-              ),
-            ),
+        concatLatestFrom(() => auth.currentUser$),
+        filter(([, user]) => !!user),
+        switchMap(([, user]) =>
+          balanceService.getBalanceSummary(user!.id).pipe(
+            mapResponse({
+              next: (data) => BalanceActions.loadSummarySuccess({ data }),
+              error: (error: ApiError) => BalanceActions.loadSummaryFailure({ error }),
+            }),
           ),
         ),
       );

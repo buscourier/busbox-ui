@@ -1,26 +1,18 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { TuiButton } from '@taiga-ui/core';
 import type { Observable } from 'rxjs';
 
 import { CAROUSEL_BREAKPOINTS } from '@core/tokens';
 
 import { CarouselComponent } from '@shared/components/carousel';
 
-import { NewsBannerComponent, NewsCardComponent, NewsFacade } from '@news';
+import { NewsBannerComponent, NewsFacade } from '@news';
+
 import type { NewsItem } from '@news/types';
 
 @Component({
   selector: 'app-news',
-  imports: [
-    AsyncPipe,
-    TuiButton,
-    RouterLink,
-    NewsCardComponent,
-    CarouselComponent,
-    NewsBannerComponent,
-  ],
+  imports: [AsyncPipe, CarouselComponent, NewsBannerComponent],
   templateUrl: './news.component.html',
   styleUrl: './news.component.css',
   providers: [

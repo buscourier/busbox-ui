@@ -1,5 +1,4 @@
 import { isPlatformServer } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import {
   inject,
   makeStateKey,
@@ -10,21 +9,22 @@ import {
 import { Store } from '@ngrx/store';
 import { catchError, firstValueFrom, of, tap } from 'rxjs';
 
-import { AuthActions } from '@auth/store';
-import type { AuthResponse } from '@auth/types';
+import { AuthService } from './auth.service';
+import { AuthActions } from './store';
+import type { AuthResponse } from './types';
 
 export const AUTH_TSTATE_KEY = makeStateKey<{ user: AuthResponse }>('AUTH_SSR');
 
 export async function authSsrInitializer() {
   const platformId = inject(PLATFORM_ID);
-  const http = inject(HttpClient);
   const store = inject(Store);
+  const auth = inject(AuthService);
   const transfer = inject(TransferState);
 
   if (!isPlatformServer(platformId)) return;
 
   await firstValueFrom(
-    http.get<AuthResponse>('/auth/me').pipe(
+    auth.getCurrentUser().pipe(
       tap((user) => {
         transfer.set(AUTH_TSTATE_KEY, { user });
         store.dispatch(AuthActions.initializeSuccess({ user }));

@@ -6,7 +6,7 @@ import { switchMap, tap } from 'rxjs';
 
 import type { ApiError } from '@shared/types';
 
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../auth.service';
 
 import { AuthActions } from '../actions';
 
@@ -25,7 +25,7 @@ export const passwordEffects = {
         ),
       );
     },
-    { functional: true, dispatch: false },
+    { functional: true },
   ),
   resetPassword: createEffect(
     (actions$ = inject(Actions), authService = inject(AuthService)) => {

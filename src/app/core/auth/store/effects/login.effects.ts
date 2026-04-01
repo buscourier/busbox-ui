@@ -1,12 +1,12 @@
 import { inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { mapResponse } from '@ngrx/operators';
 import { switchMap, tap } from 'rxjs';
 
 import type { ApiError } from '@shared/types';
 
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../auth.service';
 
 import { AuthActions } from '../actions';
 
@@ -28,29 +28,12 @@ export const loginEffects = {
     { functional: true },
   ),
 
-  // loginSuccess: createEffect(
-  //   (
-  //     actions$ = inject(Actions),
-  //     tokenService = inject(TokenService),
-  //     persistenceService = inject(PersistenceService),
-  //   ) => {
-  //     return actions$.pipe(
-  //       ofType(AuthActions.loginSuccess),
-  //       tap(({ response }) => {
-  //         tokenService.setTokens(response.auth_key);
-  //         persistenceService.save<'user', { user: AuthResponse }>('user', response);
-  //       }),
-  //     );
-  //   },
-  //   { functional: true, dispatch: false },
-  // ),
-
   redirectAfterLogin: createEffect(
-    (actions$ = inject(Actions), router = inject(Router), route = inject(ActivatedRoute)) => {
+    (actions$ = inject(Actions), router = inject(Router)) => {
       return actions$.pipe(
         ofType(AuthActions.loginSuccess),
         tap(() => {
-          const returnUrl = route.snapshot.queryParams['returnUrl'] || '/';
+          const returnUrl = router.parseUrl(router.url).queryParams['returnUrl'] ?? '/';
           router.navigateByUrl(returnUrl);
         }),
       );

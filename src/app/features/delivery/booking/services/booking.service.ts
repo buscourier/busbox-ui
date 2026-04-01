@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import type { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import type { DeliveryCity, PickupCity } from '@shared/types';
+import type { AuthResponse } from '@core/auth';
 
-import type { AuthResponse } from '@auth/types';
+import type { DeliveryCity, PickupCity } from '@shared/types';
 
 import type { AutoParts, Order, Parcels } from '@delivery/delivery-details/types';
 import { CargoType, CargoTypeId } from '@delivery/delivery-details/types';

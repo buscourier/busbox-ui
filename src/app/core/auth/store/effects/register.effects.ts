@@ -6,7 +6,7 @@ import { switchMap, tap } from 'rxjs';
 
 import type { ApiError } from '@shared/types';
 
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../auth.service';
 
 import { AuthActions } from '../actions';
 
